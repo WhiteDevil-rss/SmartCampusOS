@@ -1,116 +1,141 @@
-# 🎓 NEP-Scheduler (VNSGU Scale)
+# 🎓 VNSGU Timetable Management Platform (NEP-Scheduler)
 
-**NEVER Endure Painful Scheduling Again!**
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Stack: Monorepo](https://img.shields.io/badge/Structure-PNPM--Monorepo-blue)](https://pnpm.io/)
+[![Engine: Google OR-Tools](https://img.shields.io/badge/Engine-Google_OR--Tools-brightgreen)](https://developers.google.com/optimization)
 
-NEP-Scheduler is a high-performance, intelligent university timetable generation and management system built on a microservice architecture. Engineered specifically to handle complex NEP guidelines like Primary/Secondary workloads, Special Shifts, parallel lab assignments, and interconnected multi-role RBAC access. 
-
-This platform seamlessly orchestrates a React/Next.js frontend, a Node.js REST API with WebSockets for real-time reactivity, and a standalone Python-powered AI Engine using Google OR-Tools.
-
-## 🌟 Key Features
-
-*   **Intelligent AI Scheduling:** Solves mathematically complex constraint maps (Hard & Soft constraints) via Google OR-Tools in seconds.
-*   **Multi-Role RBAC:** Dedicated panels for Superadmins, University Admins, Department Admins, and Faculty members.
-*   **Real-Time Subscriptions:** Powered by `Socket.io` — instant timetable refresh notifications across relevant department modules.
-*   **Special Contingency Mode:** Dynamically re-route active schedules excluding specific unavailable faculties and visually highlighting substitution matrices.
-*   **Workload Tracking:** Automated detection of max hours per week against assigned Primary and Secondary subjects.
-*   **Export Ready:** Browser-native PDF grid printing formatted for official university notices.
+**NEP-Scheduler** is a high-performance, AI-driven academic scheduling platform designed for large-scale universities like VNSGU. It automates the complex task of generating conflict-free, workload-balanced timetables while adhering to **NEP 2020** mandates.
 
 ---
 
-## 🏗️ Architecture Stack
+## 🏗️ System Architecture
 
-NEP-Scheduler operates on a 3-tier structure managed within a PNPM Monorepo:
+The project is structured as a **Polyglot Monorepo**, isolating concerns while maintaining strong type safety across the stack.
 
-### 1. `apps/web` (Frontend)
-*   **Framework:** Next.js 14 (App Router)
-*   **Styling:** Tailwind CSS + Shadcn UI
-*   **State:** Zustand (Auth) + TanStack Query (Data)
-*   **Realtime:** Socket.io-Client
-
-### 2. `apps/api` (Backend)
-*   **Runtime:** Node.js 20 + Express (TypeScript)
-*   **Database ORM:** Prisma
-*   **Realtime Pub/Sub:** Socket.io
-*   **Authentication:** JWT + bcrypt
-
-### 3. `apps/ai-engine` (Solver Microservice)
-*   **Runtime:** Python 3.10 + FastAPI
-*   **Solver API:** Google OR-Tools (CP-SAT Solver)
-*   **Schema Validation:** Pydantic models aligning exactly to Node.js interfaces.
-
-### 4. Infrastructure Services
-*   **PostgreSQL 15:** Primary transactional dataset.
-*   **Redis:** In-memory caching layer enforcing concurrent timetable generation locks.
-
----
-
-## 🚀 Quick Start (Production via Docker Compose)
-
-The easiest way to spin up the entire application stack is via our consolidated Docker Compose file. This instantiates PostgreSQL, Redis, the Python AI Engine, and the Node.js API simultaneously.
-
-Ensure you have [Docker](https://docs.docker.com/get-docker/) installed.
-
-### 1. Fire up the Stack
-```bash
-docker-compose up --build -d
+```mermaid
+graph TD
+    User((User)) --> Web[Next.js Frontend]
+    Web --> API[Node.js / Express API]
+    API --> DB[(PostgreSQL)]
+    API --> Redis[(Redis Cache)]
+    API --> AI[Python AI Engine]
+    AI --> Solver[Google OR-Tools]
+    
+    subgraph "Real-Time Updates"
+    API <--> Socket[Socket.io]
+    Socket <--> Web
+    end
 ```
-*   The Database will spin up on `:5432`
-*   The Redis cache will spin up on `:6379`
-*   The AI Engine will deploy to `:5000`
-*   The API Server will deploy to `:8000`
 
-> Note: On initial launch, the API container might restart once while waiting for PostgreSQL to become fully healthy.
+### Microservices Breakdown
+| Service | Tech Stack | Responsibility |
+| :--- | :--- | :--- |
+| **`apps/web`** | Next.js 14, Tailwind, Shadcn | Multi-role responsive dashboard (4 Panels). |
+| **`apps/api`** | Node.js, TypeScript, Prisma | Business logic, RBAC, and AI orchestration. |
+| **`apps/ai-engine`**| Python 3.10, FastAPI | Constraint solving and optimization logic. |
+| **`packages/types`** | TypeScript | Shared Zod schemas and TypeScript interfaces. |
 
-### 2. Seed Initial University Data
-Once the stack is running, you must push the Prisma Schema and seed the database with the VNSGU demo environment.
+---
+
+## 🧠 The AI Scheduling Engine
+
+The "brain" of the platform uses **Google OR-Tools CP-SAT Solver** to resolve billions of possible scheduling combinations in seconds.
+
+### 🛡️ Hard Constraints (Immutable)
+- **Faculty Availability**: No faculty can be in two rooms at once.
+- **Room Conflict**: No classroom can host two different batches simultaneously.
+- **Batch Integrity**: A student batch cannot have overlapping lectures.
+- **Capacity**: Batch strength must not exceed room capacity.
+- **Lab Requirements**: Lab sessions must be assigned to Lab-type resources.
+
+### 📈 Soft Constraints (Optimized)
+- **Workload Balance**: Distribute hours evenly across faculty members.
+- **No Gaps**: Minimize "empty slots" in faculty and student daily schedules.
+- **Preferred Slots**: Prioritize major subjects for morning hours.
+
+---
+
+## 🛠️ Feature Matrix
+
+The platform is divided into 4 specialized panels to handle the university hierarchy:
+
+### 1. Global Superadmin
+- Managing multiple university tenants.
+- Global user credential control and audit logging.
+- Cross-university timetable monitoring.
+
+### 2. University Admin
+- Full infrastructure management (Classrooms, Labs, Departments).
+- Faculty pool coordination and primary/secondary workload assignment.
+- Global university-level scheduling parameters.
+
+### 3. Department Admin
+- Granular control over department-specific courses and batches.
+- **Standard Generation**: AI-triggered master schedules.
+- **Special Contingency**: Regenerate schedules on-the-fly when faculty are absent.
+
+### 4. Faculty Portal
+- Personalized weekly schedule view.
+- Real-time updates on room changes or substitutions.
+- Profile and credential management.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- [Node.js 20+](https://nodejs.org/)
+- [Python 3.10+](https://www.python.org/)
+- [pnpm 8+](https://pnpm.io/)
+- [Docker & Docker Compose](https://www.docker.com/)
+
+### 📦 Local Installation (Docker)
+The entire stack (DB, Redis, AI Engine, API) can be started with a single command:
 
 ```bash
+# 1. Clone the repository
+git clone https://github.com/WhiteDevil-rss/TimeTableGenerator.git
+cd TimeTableGenerator
+
+# 2. Start the infrastructure
+docker-compose up -d
+
+# 3. Seed the database (from apps/api)
 cd apps/api
 pnpm install
 npx prisma db push
 npx prisma db seed
-```
 
-### 3. Launch Frontend (Local)
-In a new terminal window:
-```bash
-cd apps/web
+# 4. Run the frontend
+cd ../web
 pnpm install
 pnpm run dev
 ```
-Navigate to `http://localhost:3000`.
 
 ---
 
-## 🔑 Demo Access Credentials
+## 🔑 Demo Credentials
 
-The database seeding script populates standard demo accounts bridging across roles. Use these to verify RBAC access:
-
-| Role | Email | Password | Panel URL |
-| :--- | :--- | :--- | :--- |
-| **Superadmin** | `admin@nepscheduler.com` | `password123` | `/superadmin` |
-| **Uni Admin** | `admin@vnsgu.ac.in` | `password123` | `/dashboard` |
-| **Dept Admin** | `admin.cs@vnsgu.ac.in` | `password123` | `/department` |
-| **Faculty (CS)**| `dshah@vnsgu.ac.in` | `password123` | `/faculty-panel` |
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Superadmin** | `admin@nepscheduler.com` | `password123` |
+| **Uni Admin** | `admin@vnsgu.ac.in` | `password123` |
+| **Dept Admin** | `admin.cs@vnsgu.ac.in` | `password123` |
 
 ---
 
-## 🧪 Testing Matrices
+## ☁️ Deployment
 
-The ecosystem uses `ts-node` for exhaustive end-to-end (E2E) integration matrices spanning across all microservice instances simulating real UI clicks via backend endpoint sequences.
+This project is optimized for **Google Cloud Platform (GCP)** using:
+- **Cloud Run** for horizontal scaling of microservices.
+- **Cloud SQL** for managed PostgreSQL.
+- **Memorystore** for managed Redis.
 
-To invoke the E2E verification test pipeline:
-```bash
-cd apps/api
-pnpx ts-node test-e2e.ts
-```
-Expected output:
-*   Authentication Token Exchanges
-*   Verification of RBAC scopes
-*   A mathematical payload execution targeting the Python AI Engine
-*   A WebSocket connection validation trigger
+See the [In-depth GCP Deployment Guide](./gcp_deployment_guide.md) for step-by-step instructions.
 
-## 📜 Development Guidelines
-- Always prioritize running `pnpm run lint` and `pnpm run build` from the frontend workspaces prior to pushing.
-- Prisma Schema modifications requiring migrations must be pushed via `npx prisma db push`.
-# TimeTableGenerator
+---
+
+## 📄 License
+Distributed under the MIT License. See `LICENSE` for more information.
+
+*Built with ❤️ for VNSGU by Antigravity AI.*
