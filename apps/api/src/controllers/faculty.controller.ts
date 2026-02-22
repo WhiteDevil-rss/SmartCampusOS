@@ -1,0 +1,167 @@
+import { Request, Response } from 'express';
+import prisma from '../lib/prisma';
+import bcrypt from 'bcrypt';
+import { AuthRequest } from '../middlewares/auth.middleware';
+
+const hashPassword = async (password: string) => bcrypt.hash(password, 12);
+
+export const getFaculty = async (req: AuthRequest, res: Response) => {
+    try {
+        const { universityId, departmentId } = req.query as { universityId?: string, departmentId?: string };
+
+        // Authorization checks
+        if (req.user!.role === 'UNI_ADMIN' && req.user!.universityId !== universityId && universityId) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        if (req.user!.role === 'DEPT_ADMIN' && req.user!.entityId !== departmentId && departmentId) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+
+        const filters: any = {};
+        if (universityId) filters.universityId = universityId;
+        if (departmentId) filters.departmentId = departmentId;
+
+        // Default fallback to user's scope if no query params
+        if (req.user!.role === 'UNI_ADMIN' && !universityId) filters.universityId = req.user!.universityId;
+        if (req.user!.role === 'DEPT_ADMIN' && !departmentId) filters.departmentId = req.user!.entityId;
+
+        const faculty = await prisma.faculty.findMany({
+            where: filters,
+            include: {
+                subjects: { include: { course: true } }
+            }
+        });
+        res.json(faculty);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch faculty' });
+    }
+};
+
+export const getFacultyById = async (req: AuthRequest, res: Response) => {
+    try {
+        const faculty = await prisma.faculty.findUnique({
+            where: { id: req.params.id },
+            include: {
+                subjects: { include: { course: true } }
+            }
+        });
+
+        if (!faculty) return res.status(404).json({ error: 'Not found' });
+
+        // Authorization checks
+        if (req.user!.role === 'UNI_ADMIN' && String(req.user!.universityId) !== String(faculty.universityId)) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        if (req.user!.role === 'DEPT_ADMIN' && String(req.user!.entityId) !== String(faculty.departmentId)) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        if (req.user!.role === 'FACULTY' && String(req.user!.entityId) !== String(faculty.id)) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+
+        res.json(faculty);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch faculty' });
+    }
+};
+
+export const createFaculty = async (req: AuthRequest, res: Response) => {
+    try {
+        const { universityId, departmentId, name, email, designation, maxHrsPerDay, maxHrsPerWeek, password } = req.body;
+
+        // Authorization checks
+        if (req.user!.role === 'UNI_ADMIN' && req.user!.universityId !== universityId) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        if (req.user!.role === 'DEPT_ADMIN' && req.user!.entityId !== departmentId) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+
+        const faculty = await prisma.$transaction(async (tx: any) => {
+            const pwdHash = await hashPassword(password);
+
+            const user = await tx.user.create({
+                data: {
+                    username: email.split('@')[0], // simple username init
+                    email,
+                    passwordHash: pwdHash,
+                    role: 'FACULTY',
+                    universityId
+                }
+            });
+
+            const fac = await tx.faculty.create({
+                data: {
+                    universityId,
+                    departmentId,
+                    name,
+                    email,
+                    designation,
+                    maxHrsPerDay: maxHrsPerDay || 4,
+                    maxHrsPerWeek: maxHrsPerWeek || 20,
+                    userId: user.id
+                }
+            });
+
+            await tx.user.update({
+                where: { id: user.id },
+                data: { entityId: fac.id }
+            });
+
+            return fac;
+        });
+
+        res.status(201).json(faculty);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create faculty' });
+    }
+};
+
+export const updateFaculty = async (req: AuthRequest, res: Response) => {
+    try {
+        const { name, email, phone, designation, maxHrsPerDay, maxHrsPerWeek } = req.body;
+
+        const targetFac = await prisma.faculty.findUnique({ where: { id: req.params.id } });
+        if (!targetFac) return res.status(404).json({ error: 'Not found' });
+
+        // Authorization checks
+        if (req.user!.role === 'UNI_ADMIN' && req.user!.universityId !== targetFac.universityId) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        if (req.user!.role === 'DEPT_ADMIN' && req.user!.entityId !== targetFac.departmentId) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+
+        const faculty = await prisma.faculty.update({
+            where: { id: req.params.id },
+            data: { name, email, phone, designation, maxHrsPerDay, maxHrsPerWeek }
+        });
+
+        res.json(faculty);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update faculty' });
+    }
+};
+
+export const deleteFaculty = async (req: AuthRequest, res: Response) => {
+    try {
+        const targetFac = await prisma.faculty.findUnique({ where: { id: req.params.id } });
+        if (!targetFac) return res.status(404).json({ error: 'Not found' });
+
+        if (req.user!.role === 'UNI_ADMIN' && req.user!.universityId !== targetFac.universityId) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        if (req.user!.role === 'DEPT_ADMIN' && req.user!.entityId !== targetFac.departmentId) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+
+        await prisma.faculty.delete({ where: { id: req.params.id } });
+        if (targetFac.userId) {
+            await prisma.user.delete({ where: { id: targetFac.userId } });
+        }
+
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete faculty' });
+    }
+};

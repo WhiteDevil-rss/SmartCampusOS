@@ -1,0 +1,22 @@
+{
+    "name": "nep-scheduler",
+    "private": true,
+    "version": "1.0.0",
+    "scripts": {
+        "build": "turbo run build",
+        "dev": "turbo run dev",
+        "lint": "turbo run lint",
+        "test": "turbo run test",
+        "type-check": "turbo run type-check",
+        "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    },
+    "devDependencies": {
+        "prettier": "^3.2.5",
+        "turbo": "^1.12.4",
+        "typescript": "^5.4.2"
+    },
+    "packageManager": "pnpm@8.15.5",
+    "engines": {
+        "node": ">=18"
+    }
+}

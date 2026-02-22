@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model University {
+  id           String       @id @default(uuid())
+  name         String
+  shortName    String       @unique
+  location     String?
+  email        String?
+  estYear      Int?
+  website      String?
+  adminUserId  String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  departments  Department[]
+  programs     Program[]
+  resources    Resource[]
+  faculty      Faculty[]
+  batches      Batch[]
+  courses      Course[]
+  timetables   Timetable[]
+  users        User[]
+
+  @@map("universities")
+}
+
+model Department {
+  id           String      @id @default(uuid())
+  universityId String
+  university   University  @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  name         String
+  shortName    String
+  hod          String?
+  email        String?
+  adminUserId  String?
+  createdAt    DateTime    @default(now())
+  faculty      Faculty[]
+  courses      Course[]
+  batches      Batch[]
+  timetables   Timetable[]
+
+  @@map("departments")
+}
+
+model Faculty {
+  id              String          @id @default(uuid())
+  departmentId    String
+  universityId    String
+  department      Department      @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  university      University      @relation(fields: [universityId], references: [id])
+  name            String
+  email           String          @unique
+  phone           String?
+  designation     String?
+  maxHrsPerDay    Int             @default(4)
+  maxHrsPerWeek   Int             @default(20)
+  userId          String?
+  user            User?           @relation(fields: [userId], references: [id])
+  createdAt       DateTime        @default(now())
+  subjects        FacultySubject[]
+  timetableSlots  TimetableSlot[]
+
+  @@map("faculty")
+}
+
+model FacultySubject {
+  id              String   @id @default(uuid())
+  facultyId       String
+  courseId        String
+  faculty         Faculty  @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  course          Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  isPrimary       Boolean  @default(true)
+  proficiencyLevel Int     @default(5)
+
+  @@unique([facultyId, courseId])
+  @@map("faculty_subjects")
+}
+
+model Course {
+  id             String          @id @default(uuid())
+  departmentId   String?
+  universityId   String
+  department     Department?     @relation(fields: [departmentId], references: [id])
+  university     University      @relation(fields: [universityId], references: [id])
+  name           String
+  code           String
+  program        String?
+  credits        Int             @default(4)
+  weeklyHrs      Int             @default(4)
+  semester       Int?            // e.g. 1, 2, 3, 4 — which semester this subject belongs to
+  type           String          @default("Theory")  // Theory | Lab | Theory+Lab
+  createdAt      DateTime        @default(now())
+  facultySubjects FacultySubject[]
+  timetableSlots TimetableSlot[]
+
+  @@map("courses")
+}
+
+model Batch {
+  id             String          @id @default(uuid())
+  departmentId   String?
+  universityId   String
+  department     Department?     @relation(fields: [departmentId], references: [id])
+  university     University      @relation(fields: [universityId], references: [id])
+  name           String
+  program        String?
+  semester       Int?
+  division       String?
+  year           String?
+  strength       Int             @default(30)   // students in this specific division
+  totalStudents  Int             @default(0)    // total capacity for the whole batch
+  createdAt      DateTime        @default(now())
+  timetableSlots TimetableSlot[]
+  timetables     Timetable[]
+
+  @@map("batches")
+}
+
+model Resource {
+  id             String          @id @default(uuid())
+  universityId   String
+  university     University      @relation(fields: [universityId], references: [id])
+  name           String
+  type           String          // Classroom | Lab | Seminar Hall | Auditorium
+  capacity       Int             @default(30)
+  floor          String?
+  building       String?
+  createdAt      DateTime        @default(now())
+  timetableSlots TimetableSlot[]
+
+  @@map("resources")
+}
+
+model Program {
+  id           String     @id @default(uuid())
+  universityId String
+  university   University @relation(fields: [universityId], references: [id])
+  name         String
+  shortName    String
+  type         String     // UG | PG | Diploma | Ph.D
+  duration     Int        @default(2)
+  totalSems    Int        @default(4)
+
+  @@map("programs")
+}
+
+model Timetable {
+  id              String          @id @default(uuid())
+  universityId    String
+  departmentId    String?
+  batchId         String?
+  university      University      @relation(fields: [universityId], references: [id])
+  department      Department?     @relation(fields: [departmentId], references: [id])
+  batch           Batch?          @relation(fields: [batchId], references: [id])
+  name            String?
+  isSpecial       Boolean         @default(false)
+  status          String          @default("ACTIVE")  // ACTIVE | ARCHIVED | DRAFT
+  configJson      Json?
+  generatedBy     String          @default("AI")
+  version         Int             @default(1)
+  conflictCount   Int             @default(0)
+  generationMs    Int?
+  createdAt       DateTime        @default(now())
+  slots           TimetableSlot[]
+
+  @@map("timetables")
+}
+
+model TimetableSlot {
+  id           String     @id @default(uuid())
+  timetableId  String
+  timetable    Timetable  @relation(fields: [timetableId], references: [id], onDelete: Cascade)
+  dayOfWeek    Int        // 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+  slotNumber   Int
+  startTime    String     // "09:00"
+  endTime      String     // "10:00"
+  courseId     String?
+  facultyId    String?
+  roomId       String?
+  batchId      String
+  course       Course?    @relation(fields: [courseId], references: [id])
+  faculty      Faculty?   @relation(fields: [facultyId], references: [id])
+  room         Resource?  @relation(fields: [roomId], references: [id])
+  batch        Batch      @relation(fields: [batchId], references: [id])
+  isBreak      Boolean    @default(false)
+  slotType     String     @default("THEORY")  // THEORY | LAB | BREAK
+
+  @@map("timetable_slots")
+}
+
+model User {
+  id           String     @id @default(uuid())
+  username     String     @unique
+  email        String?    @unique
+  passwordHash String
+  role         String     // SUPERADMIN | UNI_ADMIN | DEPT_ADMIN | FACULTY
+  entityId     String?    // universityId | departmentId | facultyId
+  universityId String?
+  university   University? @relation(fields: [universityId], references: [id])
+  faculty      Faculty[]
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  lastLogin    DateTime?
+
+  @@map("users")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String
+  entityType String?
+  entityId   String?
+  changes    Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@map("audit_logs")
+}
