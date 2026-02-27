@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import Cookies from 'js-cookie';
 
 export interface User {
     id: string;
     username: string;
+    email: string;
     role: 'SUPERADMIN' | 'UNI_ADMIN' | 'DEPT_ADMIN' | 'FACULTY';
     entityId: string | null;
     universityId: string | null;
@@ -14,8 +14,10 @@ interface AuthState {
     user: User | null;
     isAuthenticated: boolean;
     hasHydrated: boolean;
+    isAuthReady: boolean;
     setHasHydrated: (state: boolean) => void;
-    login: (user: User, token: string) => void;
+    setAuthReady: (state: boolean) => void;
+    login: (user: User) => void;
     logout: () => void;
 }
 
@@ -25,14 +27,14 @@ export const useAuthStore = create<AuthState>()(
             user: null,
             isAuthenticated: false,
             hasHydrated: false,
+            isAuthReady: false,
             setHasHydrated: (state) => set({ hasHydrated: state }),
-            login: (user, token) => {
-                Cookies.set('token', token, { expires: 1 }); // 1 day
-                set({ user, isAuthenticated: true });
+            setAuthReady: (state) => set({ isAuthReady: state }),
+            login: (user) => {
+                set({ user, isAuthenticated: true, isAuthReady: true });
             },
             logout: () => {
-                Cookies.remove('token');
-                set({ user: null, isAuthenticated: false });
+                set({ user: null, isAuthenticated: false, isAuthReady: true });
             },
         }),
         {

@@ -2,7 +2,7 @@
 
 import { ProtectedRoute } from '@/components/protected-route';
 import { DashboardLayout } from '@/components/dashboard-layout';
-import { GraduationCap, Plus, LayoutDashboard, Users, BookOpen, Network, Calendar, Trash2, Edit, Clock, Layers, Monitor, Search } from 'lucide-react';
+import { LuPlus, LuTrash2, LuPencil, LuClock, LuLayers, LuSearch, LuGraduationCap } from 'react-icons/lu';
 import { useEffect, useState, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/lib/store/useAuthStore';
@@ -91,9 +91,18 @@ const typeColors: Record<string, string> = {
 
 import { DEPT_ADMIN_NAV } from '@/lib/constants/nav-config';
 
+interface Program {
+    id: string;
+    name: string;
+    shortName: string;
+    type: string;
+    duration: number;
+    totalSems: number;
+}
+
 export default function DeptProgramsDashboard() {
     const { user } = useAuthStore();
-    const [programs, setPrograms] = useState<any[]>([]);
+    const [programs, setPrograms] = useState<Program[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -111,8 +120,8 @@ export default function DeptProgramsDashboard() {
         try {
             const { data } = await api.get('/programs');
             setPrograms(data);
-        } catch (e) {
-            console.error(e);
+        } catch (err) {
+            console.error(err);
         } finally {
             setLoading(false);
         }
@@ -133,8 +142,8 @@ export default function DeptProgramsDashboard() {
             setIsAddOpen(false);
             setAddForm({ ...emptyForm });
             fetchData();
-        } catch (e: any) {
-            setError(e.response?.data?.error || 'Failed to create program.');
+        } catch (e) {
+            setError((e as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to create program.');
         }
     };
 
@@ -145,8 +154,8 @@ export default function DeptProgramsDashboard() {
             await api.put(`/programs/${selectedId}`, editForm);
             setIsEditOpen(false);
             fetchData();
-        } catch (e: any) {
-            setError(e.response?.data?.error || 'Failed to update program.');
+        } catch (e) {
+            setError((e as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to update program.');
         }
     };
 
@@ -158,8 +167,8 @@ export default function DeptProgramsDashboard() {
                 try {
                     await api.delete(`/programs/${id}`);
                     fetchData();
-                } catch (e: any) {
-                    showToast('error', e.response?.data?.error || 'Failed to delete program.');
+                } catch (e) {
+                    showToast('error', (e as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to delete program.');
                 }
             },
         });
@@ -177,7 +186,7 @@ export default function DeptProgramsDashboard() {
                     </div>
                     <div className="flex gap-2 w-full sm:w-auto">
                         <div className="flex items-center gap-2 bg-white border rounded-lg px-3 py-2 shadow-sm w-full sm:w-64">
-                            <Search className="w-4 h-4 text-slate-400 shrink-0" />
+                            <LuSearch className="w-4 h-4 text-slate-400 shrink-0" />
                             <Input
                                 placeholder="Search programs..."
                                 className="border-0 p-0 h-auto focus-visible:ring-0 text-sm placeholder:text-slate-400"
@@ -186,7 +195,7 @@ export default function DeptProgramsDashboard() {
                             />
                         </div>
                         <Button onClick={() => { setError(''); setIsAddOpen(true); }} className="bg-primary shadow-md hover:bg-primary/90">
-                            <Plus className="w-4 h-4 mr-2" /> Add Program
+                            <LuPlus className="w-4 h-4 mr-2" /> Add Program
                         </Button>
                     </div>
                 </div>
@@ -211,14 +220,14 @@ export default function DeptProgramsDashboard() {
                                 <CardContent className="pt-4 pb-4">
                                     <div className="grid grid-cols-2 gap-3 mb-4">
                                         <div className="flex items-center gap-2 text-slate-600">
-                                            <Clock className="w-4 h-4 text-slate-400" />
+                                            <LuClock className="w-4 h-4 text-slate-400" />
                                             <div>
                                                 <div className="text-[10px] text-slate-400 font-bold uppercase">Duration</div>
                                                 <div className="text-sm font-semibold">{prog.duration} {prog.duration === 1 ? 'Year' : 'Years'}</div>
                                             </div>
                                         </div>
                                         <div className="flex items-center gap-2 text-slate-600">
-                                            <Layers className="w-4 h-4 text-slate-400" />
+                                            <LuLayers className="w-4 h-4 text-slate-400" />
                                             <div>
                                                 <div className="text-[10px] text-slate-400 font-bold uppercase">Semesters</div>
                                                 <div className="text-sm font-semibold">{prog.totalSems} Sem</div>
@@ -233,11 +242,11 @@ export default function DeptProgramsDashboard() {
                                                 setError('');
                                                 setIsEditOpen(true);
                                             }}>
-                                            <Edit className="w-4 h-4 mr-1" /> Edit
+                                            <LuPencil className="w-4 h-4 mr-1" /> Edit
                                         </Button>
                                         <Button variant="outline" size="sm" className="w-1/2 text-red-600 border-red-200 hover:bg-red-50"
                                             onClick={() => handleDelete(prog.id)}>
-                                            <Trash2 className="w-4 h-4 mr-1" /> Delete
+                                            <LuTrash2 className="w-4 h-4 mr-1" /> Delete
                                         </Button>
                                     </div>
                                 </CardContent>
@@ -245,7 +254,7 @@ export default function DeptProgramsDashboard() {
                         ))}
                         {filtered.length === 0 && (
                             <div className="col-span-full py-16 text-center text-slate-500 bg-white rounded-xl border-dashed border-2 border-slate-200">
-                                <GraduationCap className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+                                <LuGraduationCap className="w-12 h-12 text-slate-300 mx-auto mb-3" />
                                 <h3 className="text-lg font-semibold text-slate-700">{searchTerm ? `No results for "${searchTerm}"` : 'No programs added yet'}</h3>
                                 <p className="text-sm mt-1">{searchTerm ? 'Try a different search term' : 'Add your first degree program (e.g. MCA, BCA) to get started.'}</p>
                             </div>

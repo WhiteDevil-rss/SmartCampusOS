@@ -22,12 +22,11 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    // If has token and trying to access login -> dashboard (or home)
-    if (token && pathname === '/login') {
-        // Ideally we redirect to the correct dashboard based on role, 
-        // but middleware can't easily read the JWT payload without a library.
-        // For now, redirecting to a generic entry or just home.
-        return NextResponse.redirect(new URL('/', request.url));
+    // If has token and trying to access login or home -> correct dashboard
+    if (token && (pathname === '/login' || pathname === '/')) {
+        // Since middleware can't easily parse JWT, we redirect to a unified /dashboard
+        // which then redirects the user to their specific panel based on client-side state.
+        return NextResponse.redirect(new URL('/dashboard', request.url));
     }
 
     return NextResponse.next();

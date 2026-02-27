@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/useAuthStore';
-import { Loader2 } from 'lucide-react';
+import { LuLoader } from 'react-icons/lu';
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
@@ -11,12 +11,12 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
-    const { user, isAuthenticated, hasHydrated } = useAuthStore();
+    const { user, isAuthenticated, hasHydrated, isAuthReady } = useAuthStore();
     const router = useRouter();
 
     useEffect(() => {
-        // Wait for hydration before doing anything
-        if (!hasHydrated) return;
+        // Wait for hydration and Firebase initialization before doing anything
+        if (!hasHydrated || !isAuthReady) return;
 
         if (!isAuthenticated || !user) {
             router.push('/login');
@@ -33,13 +33,42 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
                 default: router.push('/login');
             }
         }
-    }, [isAuthenticated, user, router, allowedRoles, hasHydrated]);
+    }, [isAuthenticated, user, router, allowedRoles, hasHydrated, isAuthReady]);
 
-    if (!hasHydrated || !isAuthenticated || !user || !allowedRoles.includes(user.role)) {
+    // If auth is strictly known to be failed or unauthorized, show specific states
+    if (hasHydrated && isAuthReady) {
+        if (!isAuthenticated || !user) {
+            // This will trigger the redirect in useEffect, but let's show a loader for now
+            return (
+                <div className="min-h-screen flex items-center justify-center bg-gray-50">
+                    <LuLoader className="h-8 w-8 text-primary animate-spin" />
+                </div>
+            );
+        }
+
+        if (!allowedRoles.includes(user.role)) {
+            return (
+                <div className="min-h-screen flex items-center justify-center bg-red-50 p-4">
+                    <div className="text-center space-y-4">
+                        <div className="text-red-600 font-bold text-lg">Access Denied</div>
+                        <p className="text-sm text-red-500">You don't have permission to access this area.</p>
+                        <button
+                            onClick={() => router.push('/login')}
+                            className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold"
+                        >
+                            Return to Login
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    if (!hasHydrated || !isAuthReady) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="flex flex-col items-center gap-4">
-                    <Loader2 className="h-8 w-8 text-primary animate-spin" />
+                    <LuLoader className="h-8 w-8 text-primary animate-spin" />
                     <p className="text-sm text-gray-500 animate-pulse font-medium">Verifying Session...</p>
                 </div>
             </div>

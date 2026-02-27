@@ -5,7 +5,7 @@ import { useAuthStore } from '@/lib/store/useAuthStore';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { AlertTriangle, Users, BookOpen, UserX, Loader2, LayoutDashboard, GraduationCap, Network, Calendar, Monitor, Zap, Search, ChevronRight, XCircle } from 'lucide-react';
+import { LuTriangleAlert, LuUsers, LuUserX, LuLoader2, LuNetwork, LuCalendar, LuMonitor, LuZap, LuSearch, LuXCircle, LuShieldCheck } from 'react-icons/lu';
 import { api } from '@/lib/api';
 import { TimetableGrid } from '@/components/timetable/timetable-grid';
 import { WorkloadSummary } from '@/components/timetable/workload-summary';
@@ -15,48 +15,76 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
+interface Faculty {
+    id: string;
+    name: string;
+    designation?: string;
+}
+
+interface Resource {
+    id: string;
+    name: string;
+    type: string;
+    building?: string;
+}
+
+interface Batch {
+    id: string;
+    name: string;
+    semester: number;
+    program?: string;
+}
+
+interface Timetable {
+    slots: Record<string, unknown>[];
+    configJson: Record<string, unknown>;
+    generationMs?: number;
+}
+
 export default function SpecialTimetablePage() {
     const { user } = useAuthStore();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [faculty, setFaculty] = useState<any[]>([]);
-    const [resources, setResources] = useState<any[]>([]);
+    const [faculty, setFaculty] = useState<Faculty[]>([]);
+    const [resources, setResources] = useState<Resource[]>([]);
+    const [batches, setBatches] = useState<Batch[]>([]);
     const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
     const [excludedRoomIds, setExcludedRoomIds] = useState<Set<string>>(new Set());
     const [excludedDayIds, setExcludedDayIds] = useState<Set<number>>(new Set());
+    const [selectedBatchIds, setSelectedBatchIds] = useState<Set<string>>(new Set());
     const [loading, setLoading] = useState(false);
     const [generating, setGenerating] = useState(false);
     const [error, setError] = useState('');
-    const [semesterFilter, setSemesterFilter] = useState('all');
-    const [activeTab, setActiveTab] = useState<'faculty' | 'resources' | 'days'>('faculty');
+    const [semesterFilter, setSemesterFilter] = useState('odd'); // Default to odd
+    const [activeTab, setActiveTab] = useState<'faculty' | 'resources' | 'batches' | 'days'>('faculty');
     const [facultySearch, setFacultySearch] = useState('');
     const [resourceSearch, setResourceSearch] = useState('');
+    const [batchSearch, setBatchSearch] = useState('');
 
     // Result views
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [specialTimetable, setSpecialTimetable] = useState<any>(null);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [baselineTimetable, setBaselineTimetable] = useState<any>(null);
+    const [specialTimetable, setSpecialTimetable] = useState<Timetable | null>(null);
+    const [baselineTimetable, setBaselineTimetable] = useState<Timetable | null>(null);
 
     const fetchInitialData = useCallback(async () => {
         setLoading(true);
         try {
-            const [facRes, resRes] = await Promise.all([
+            const [facRes, resRes, batRes] = await Promise.all([
                 api.get(`/faculty`), // DEPT_ADMIN auto-scoped by backend to their department
                 api.get(`/resources`), // university-wide resources
+                api.get(`/batches`),
             ]);
             setFaculty(facRes.data);
             setResources(resRes.data);
-        } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-            setError('Failed to load faculty and resources. Please refresh.');
+            setBatches(batRes.data);
+        } catch {
+            setError('Failed to load faculty, resources and batches. Please refresh.');
         }
 
         // Fetch latest timetable separately so a 404 is non-fatal
         try {
             const ttRes = await api.get(`/departments/${user!.entityId}/timetables/latest`);
             setBaselineTimetable(ttRes.data);
-        } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-            if (err.response?.status !== 404) {
-                console.warn('Could not load baseline timetable:', err.message);
+        } catch (err) {
+            if ((err as { response?: { status?: number } }).response?.status !== 404) {
+                console.warn('Could not load baseline timetable:', (err as { message?: string }).message);
             }
             // 404 is expected if no timetable has been generated yet
         } finally {
@@ -70,23 +98,32 @@ export default function SpecialTimetablePage() {
         }
     }, [user, fetchInitialData]);
 
-    const toggleExclusion = (id: any, type: 'faculty' | 'room' | 'day') => {
-        if (type === 'faculty') {
-            const next = new Set(excludedIds);
-            if (next.has(id)) next.delete(id);
-            else next.add(id);
-            setExcludedIds(next);
-        } else if (type === 'room') {
-            const next = new Set(excludedRoomIds);
-            if (next.has(id)) next.delete(id);
-            else next.add(id);
-            setExcludedRoomIds(next);
-        } else {
-            const next = new Set(excludedDayIds);
-            if (next.has(id)) next.delete(id);
-            else next.add(id);
-            setExcludedDayIds(next);
-        }
+    const toggleFacultyExclusion = (id: string) => {
+        const next = new Set(excludedIds);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        setExcludedIds(next);
+    };
+
+    const toggleRoomExclusion = (id: string) => {
+        const next = new Set(excludedRoomIds);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        setExcludedRoomIds(next);
+    };
+
+    const toggleBatchSelection = (id: string) => {
+        const next = new Set(selectedBatchIds);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        setSelectedBatchIds(next);
+    };
+
+    const toggleDayExclusion = (id: number) => {
+        const next = new Set(excludedDayIds);
+        if (next.has(id)) next.delete(id);
+        else next.add(id);
+        setExcludedDayIds(next);
     };
 
     const handleGenerateSpecial = async () => {
@@ -110,14 +147,15 @@ export default function SpecialTimetablePage() {
                 excludedFacultyIds: Array.from(excludedIds),
                 excludedRoomIds: Array.from(excludedRoomIds),
                 excludedDayIds: Array.from(excludedDayIds),
+                selectedBatchIds: Array.from(selectedBatchIds),
                 semesterFilter
             };
 
             const response = await api.post(`/departments/${user!.entityId}/timetables/generate`, payload);
             setSpecialTimetable(response.data.timetable);
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            if (err.response?.status === 422) {
+        } catch (err) {
+            if ((err as { response?: { status?: number } }).response?.status === 422) {
                 setError('AI Engine: Impossible to generate a valid timetable with these exclusions (Constraint Failure).');
             } else {
                 setError('Failed to generate special timetable.');
@@ -130,7 +168,7 @@ export default function SpecialTimetablePage() {
     if (loading) return (
         <DashboardLayout navItems={DEPT_ADMIN_NAV} title="Special Schedule">
             <div className="flex flex-col items-center justify-center h-[60vh] text-slate-400">
-                <Loader2 className="w-10 h-10 animate-spin mb-4" />
+                <LuLoader2 className="w-10 h-10 animate-spin mb-4" />
                 <p className="animate-pulse">Loading university configuration...</p>
             </div>
         </DashboardLayout>
@@ -153,7 +191,7 @@ export default function SpecialTimetablePage() {
                     <Card className="border-slate-200 shadow-sm overflow-hidden flex flex-col h-[calc(100vh-12rem)]">
                         <CardHeader className="bg-slate-50/50 border-b pb-4 px-4 pt-4">
                             <CardTitle className="flex items-center gap-2 text-slate-800 text-lg">
-                                <AlertTriangle className="w-5 h-5 text-amber-500" />
+                                <LuTriangleAlert className="w-5 h-5 text-amber-500" />
                                 Exclusions
                             </CardTitle>
                             <CardDescription className="text-xs leading-relaxed">
@@ -162,45 +200,58 @@ export default function SpecialTimetablePage() {
                         </CardHeader>
 
                         {/* Custom Tabs */}
-                        <div className="flex border-b">
+                        <div className="flex border-b overflow-x-auto scrollbar-none bg-slate-50/50">
                             <button
                                 onClick={() => setActiveTab('faculty')}
                                 className={cn(
-                                    "flex-1 py-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2",
-                                    activeTab === 'faculty' ? "border-indigo-500 text-indigo-600 bg-white" : "border-transparent text-slate-400 hover:text-slate-600 bg-slate-50/30"
+                                    "flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 px-2 whitespace-nowrap",
+                                    activeTab === 'faculty' ? "border-indigo-500 text-indigo-600 bg-white" : "border-transparent text-slate-400 hover:text-slate-600"
                                 )}
                             >
-                                Faculty <Badge variant="secondary" className="ml-1 px-1.5 py-0 min-w-[1.2rem] h-4 bg-slate-100">{excludedIds.size}</Badge>
+                                Faculty <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80">{excludedIds.size}</Badge>
                             </button>
                             <button
                                 onClick={() => setActiveTab('resources')}
                                 className={cn(
-                                    "flex-1 py-3 text-[10px] font-bold uppercase tracking-wider transition-all border-b-2",
-                                    activeTab === 'resources' ? "border-indigo-500 text-indigo-600 bg-white" : "border-transparent text-slate-400 hover:text-slate-600 bg-slate-50/30"
+                                    "flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 px-2 whitespace-nowrap",
+                                    activeTab === 'resources' ? "border-indigo-500 text-indigo-600 bg-white" : "border-transparent text-slate-400 hover:text-slate-600"
                                 )}
                             >
-                                Rooms <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100">{excludedRoomIds.size}</Badge>
+                                Rooms <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80">{excludedRoomIds.size}</Badge>
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('batches')}
+                                className={cn(
+                                    "flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 px-2 whitespace-nowrap",
+                                    activeTab === 'batches' ? "border-indigo-500 text-indigo-600 bg-white" : "border-transparent text-slate-400 hover:text-slate-600"
+                                )}
+                            >
+                                Batches <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80">{selectedBatchIds.size}</Badge>
                             </button>
                             <button
                                 onClick={() => setActiveTab('days')}
                                 className={cn(
-                                    "flex-1 py-3 text-[10px] font-bold uppercase tracking-wider transition-all border-b-2",
-                                    activeTab === 'days' ? "border-indigo-500 text-indigo-600 bg-white" : "border-transparent text-slate-400 hover:text-slate-600 bg-slate-50/30"
+                                    "flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 px-2 whitespace-nowrap",
+                                    activeTab === 'days' ? "border-indigo-500 text-indigo-600 bg-white" : "border-transparent text-slate-400 hover:text-slate-600"
                                 )}
                             >
-                                Days <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100">{excludedDayIds.size}</Badge>
+                                Days <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80">{excludedDayIds.size}</Badge>
                             </button>
                         </div>
 
                         {activeTab !== 'days' && (
                             <div className="p-3 border-b bg-white">
                                 <div className="relative">
-                                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                                    <LuSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
                                     <Input
-                                        placeholder={activeTab === 'faculty' ? "Search faculty..." : "Search rooms..."}
+                                        placeholder={activeTab === 'faculty' ? "Filter faculty..." : activeTab === 'resources' ? "Filter rooms..." : "Filter batches..."}
                                         className="pl-9 h-9 text-xs"
-                                        value={activeTab === 'faculty' ? facultySearch : resourceSearch}
-                                        onChange={(e) => activeTab === 'faculty' ? setFacultySearch(e.target.value) : setResourceSearch(e.target.value)}
+                                        value={activeTab === 'faculty' ? facultySearch : activeTab === 'resources' ? resourceSearch : batchSearch}
+                                        onChange={(e) => {
+                                            if (activeTab === 'faculty') setFacultySearch(e.target.value);
+                                            else if (activeTab === 'resources') setResourceSearch(e.target.value);
+                                            else setBatchSearch(e.target.value);
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -212,67 +263,134 @@ export default function SpecialTimetablePage() {
                                     {filteredFaculty.map(f => (
                                         <div
                                             key={f.id}
-                                            onClick={() => toggleExclusion(f.id, 'faculty')}
+                                            onClick={() => toggleFacultyExclusion(f.id)}
                                             className={cn(
-                                                "group flex items-center justify-between p-2.5 rounded-lg border cursor-pointer transition-all",
+                                                "group flex items-center justify-between p-2 rounded border cursor-pointer transition-all",
                                                 excludedIds.has(f.id)
                                                     ? "bg-red-50/80 border-red-200 text-red-900 shadow-sm"
                                                     : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50"
                                             )}
                                         >
-                                            <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-2">
                                                 <div className={cn(
-                                                    "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold",
+                                                    "w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black uppercase",
                                                     excludedIds.has(f.id) ? "bg-red-100 text-red-600" : "bg-slate-100 text-slate-500"
                                                 )}>
                                                     {f.name.charAt(0)}
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[13px] font-semibold">{f.name}</span>
-                                                    <span className="text-[10px] text-slate-400 uppercase tracking-tighter">{f.designation || 'Staff'}</span>
+                                                    <span className="text-[12px] font-bold leading-tight">{f.name}</span>
+                                                    <span className="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">{f.designation || 'Staff'}</span>
                                                 </div>
                                             </div>
-                                            {excludedIds.has(f.id) && <XCircle className="w-4 h-4 text-red-400" />}
+                                            {excludedIds.has(f.id) && <LuXCircle className="w-3.5 h-3.5 text-red-400" />}
                                         </div>
                                     ))}
-                                    {filteredFaculty.length === 0 && <div className="p-8 text-center text-slate-400 text-xs italic">No matching faculty found.</div>}
+                                    {filteredFaculty.length === 0 && <div className="p-8 text-center text-slate-400 text-[10px] italic font-medium uppercase tracking-widest">No matching faculty.</div>}
                                 </div>
                             ) : activeTab === 'resources' ? (
                                 <div className="space-y-1">
                                     {filteredResources.map(r => (
                                         <div
                                             key={r.id}
-                                            onClick={() => toggleExclusion(r.id, 'room')}
+                                            onClick={() => toggleRoomExclusion(r.id)}
                                             className={cn(
-                                                "group flex items-center justify-between p-2.5 rounded-lg border cursor-pointer transition-all",
+                                                "group flex items-center justify-between p-2 rounded border cursor-pointer transition-all",
                                                 excludedRoomIds.has(r.id)
                                                     ? "bg-red-50/80 border-red-200 text-red-900 shadow-sm"
                                                     : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50"
                                             )}
                                         >
-                                            <div className="flex items-center gap-3">
+                                            <div className="flex items-center gap-2">
                                                 <div className={cn(
-                                                    "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold",
+                                                    "w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black uppercase",
                                                     excludedRoomIds.has(r.id) ? "bg-red-100 text-red-600" : "bg-slate-100 text-slate-500"
                                                 )}>
-                                                    <Monitor className="w-4 h-4" />
+                                                    <LuMonitor className="w-3.5 h-3.5" />
                                                 </div>
                                                 <div className="flex flex-col">
-                                                    <span className="text-[13px] font-semibold">{r.name}</span>
-                                                    <span className="text-[10px] text-slate-400 uppercase tracking-tighter">{r.type} • {r.building || 'Main'}</span>
+                                                    <span className="text-[12px] font-bold leading-tight">{r.name}</span>
+                                                    <span className="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">{r.type} • {r.building || 'Main'}</span>
                                                 </div>
                                             </div>
-                                            {excludedRoomIds.has(r.id) && <XCircle className="w-4 h-4 text-red-400" />}
+                                            {excludedRoomIds.has(r.id) && <LuXCircle className="w-3.5 h-3.5 text-red-400" />}
                                         </div>
                                     ))}
-                                    {filteredResources.length === 0 && <div className="p-8 text-center text-slate-400 text-xs italic">No matching rooms found.</div>}
+                                    {filteredResources.length === 0 && <div className="p-8 text-center text-slate-400 text-[10px] italic font-medium uppercase tracking-widest">No matching rooms.</div>}
+                                </div>
+                            ) : activeTab === 'batches' ? (
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between px-1 mb-2">
+                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Filter: {semesterFilter} semesters</span>
+                                        <button
+                                            onClick={() => {
+                                                const currentMatching = batches.filter(b =>
+                                                    (semesterFilter === 'all' ||
+                                                        (semesterFilter === 'odd' && [1, 3, 5, 7, 9].includes(b.semester)) ||
+                                                        (semesterFilter === 'even' && [2, 4, 6, 8, 10].includes(b.semester))) &&
+                                                    b.name.toLowerCase().includes(batchSearch.toLowerCase())
+                                                );
+                                                const allSelected = currentMatching.every(b => selectedBatchIds.has(b.id));
+                                                const next = new Set(selectedBatchIds);
+                                                if (allSelected) {
+                                                    currentMatching.forEach(b => next.delete(b.id));
+                                                } else {
+                                                    currentMatching.forEach(b => next.add(b.id));
+                                                }
+                                                setSelectedBatchIds(next);
+                                            }}
+                                            className="text-[10px] font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest"
+                                        >
+                                            {batches.filter(b =>
+                                                (semesterFilter === 'all' ||
+                                                    (semesterFilter === 'odd' && [1, 3, 5, 7, 9].includes(b.semester)) ||
+                                                    (semesterFilter === 'even' && [2, 4, 6, 8, 10].includes(b.semester))) &&
+                                                b.name.toLowerCase().includes(batchSearch.toLowerCase())
+                                            ).every(b => selectedBatchIds.has(b.id)) ? 'Deselect All' : 'Select All'}
+                                        </button>
+                                    </div>
+                                    <div className="space-y-1">
+                                        {batches
+                                            .filter(b =>
+                                            (semesterFilter === 'all' ||
+                                                (semesterFilter === 'odd' && [1, 3, 5, 7, 9].includes(b.semester)) ||
+                                                (semesterFilter === 'even' && [2, 4, 6, 8, 10].includes(b.semester)))
+                                            )
+                                            .filter(b => b.name.toLowerCase().includes(batchSearch.toLowerCase()))
+                                            .map(b => (
+                                                <div
+                                                    key={b.id}
+                                                    onClick={() => toggleBatchSelection(b.id)}
+                                                    className={cn(
+                                                        "group flex items-center justify-between p-2 rounded border cursor-pointer transition-all",
+                                                        selectedBatchIds.has(b.id)
+                                                            ? "bg-indigo-50/80 border-indigo-200 text-indigo-900 shadow-sm"
+                                                            : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50"
+                                                    )}
+                                                >
+                                                    <div className="flex items-center gap-2">
+                                                        <div className={cn(
+                                                            "w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black uppercase",
+                                                            selectedBatchIds.has(b.id) ? "bg-indigo-100 text-indigo-600" : "bg-slate-100 text-slate-500"
+                                                        )}>
+                                                            <LuUsers className="w-3.5 h-3.5" />
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="text-[12px] font-bold leading-tight">{b.name}</span>
+                                                            <span className="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">Sem {b.semester} • {b.program || 'Gen'}</span>
+                                                        </div>
+                                                    </div>
+                                                    {selectedBatchIds.has(b.id) && <LuShieldCheck className="w-3.5 h-3.5 text-indigo-400" />}
+                                                </div>
+                                            ))}
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="space-y-1">
-                                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].slice(0, baselineTimetable?.configJson?.daysPerWeek || 6).map((day, idx) => (
+                                    {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].slice(0, (baselineTimetable?.configJson?.daysPerWeek as number) || 6).map((day, idx) => (
                                         <div
                                             key={day}
-                                            onClick={() => toggleExclusion(idx + 1, 'day')}
+                                            onClick={() => toggleDayExclusion(idx + 1)}
                                             className={cn(
                                                 "group flex items-center justify-between p-2.5 rounded-lg border cursor-pointer transition-all",
                                                 excludedDayIds.has(idx + 1)
@@ -285,14 +403,14 @@ export default function SpecialTimetablePage() {
                                                     "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold",
                                                     excludedDayIds.has(idx + 1) ? "bg-red-100 text-red-600" : "bg-slate-100 text-slate-500"
                                                 )}>
-                                                    <Calendar className="w-4 h-4" />
+                                                    <LuCalendar className="w-4 h-4" />
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-[13px] font-semibold">{day}</span>
                                                     <span className="text-[10px] text-slate-400 uppercase tracking-tighter">Full Day Block</span>
                                                 </div>
                                             </div>
-                                            {excludedDayIds.has(idx + 1) && <XCircle className="w-4 h-4 text-red-400" />}
+                                            {excludedDayIds.has(idx + 1) && <LuXCircle className="w-4 h-4 text-red-400" />}
                                         </div>
                                     ))}
                                 </div>
@@ -320,7 +438,7 @@ export default function SpecialTimetablePage() {
                                 onClick={handleGenerateSpecial}
                                 disabled={generating || (excludedIds.size === 0 && excludedRoomIds.size === 0)}
                             >
-                                {generating ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Remapping Engine...</> : <><Zap className="w-4 h-4 mr-2" /> Generate Special TT</>}
+                                {generating ? <><LuLoader2 className="w-4 h-4 mr-2 animate-spin" /> Remapping Engine...</> : <><LuZap className="w-4 h-4 mr-2" /> Generate Special TT</>}
                             </Button>
                         </div>
                     </Card>
@@ -335,21 +453,21 @@ export default function SpecialTimetablePage() {
                                 <div className="space-y-1">
                                     <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
                                         <div className="p-1.5 bg-indigo-50 rounded-lg text-indigo-600">
-                                            <Calendar className="w-5 h-5" />
+                                            <LuCalendar className="w-5 h-5" />
                                         </div>
                                         Active Contingency Plan
                                     </h3>
                                     <div className="flex items-center gap-4 mt-2">
                                         <Badge variant="outline" className="bg-red-50 text-red-700 border-red-100 py-1 px-3">
-                                            <UserX className="w-3 h-3 mr-1" />
+                                            <LuUserX className="w-3 h-3 mr-1" />
                                             {excludedIds.size} Substituted Staff
                                         </Badge>
                                         <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-100 py-1 px-3">
-                                            <Monitor className="w-3 h-3 mr-1" />
+                                            <LuMonitor className="w-3 h-3 mr-1" />
                                             {excludedRoomIds.size} Blocked Rooms
                                         </Badge>
                                         <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-100 py-1 px-3">
-                                            <Calendar className="w-3 h-3 mr-1" />
+                                            <LuCalendar className="w-3 h-3 mr-1" />
                                             {excludedDayIds.size} Blocked Days
                                         </Badge>
                                         <span className="text-[11px] font-bold text-slate-400 uppercase tracking-widest hidden sm:inline">
@@ -375,7 +493,6 @@ export default function SpecialTimetablePage() {
                                     slots={specialTimetable.slots}
                                     config={specialTimetable.configJson}
                                     viewMode="admin"
-                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                     baselineSlots={baselineTimetable?.slots}
                                 />
                             </div>
@@ -386,7 +503,7 @@ export default function SpecialTimetablePage() {
                         <div className="h-full flex flex-col">
                             <Card className="flex-1 flex flex-col items-center justify-center p-12 border-dashed border-2 bg-slate-50/50">
                                 <div className="w-24 h-24 bg-white rounded-3xl shadow-sm flex items-center justify-center mb-6 border border-slate-100 group hover:scale-110 transition-transform duration-500">
-                                    <Zap className="w-10 h-10 text-indigo-200 group-hover:text-indigo-500 transition-colors" />
+                                    <LuZap className="w-10 h-10 text-indigo-200 group-hover:text-indigo-500 transition-colors" />
                                 </div>
                                 <h3 className="text-xl font-black text-slate-800 mb-2">Matrix Ready for Generation</h3>
                                 <p className="text-slate-500 text-sm max-w-sm text-center mb-8">
@@ -395,7 +512,7 @@ export default function SpecialTimetablePage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg">
                                     <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
                                         <div className="p-3 bg-indigo-50 rounded-lg text-indigo-600">
-                                            <Users className="w-5 h-5" />
+                                            <LuUsers className="w-5 h-5" />
                                         </div>
                                         <div>
                                             <div className="text-[10px] uppercase font-black text-slate-400 tracking-wider">Baseline Staff</div>
@@ -404,7 +521,7 @@ export default function SpecialTimetablePage() {
                                     </div>
                                     <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
                                         <div className="p-3 bg-amber-50 rounded-lg text-amber-600">
-                                            <Network className="w-5 h-5" />
+                                            <LuNetwork className="w-5 h-5" />
                                         </div>
                                         <div>
                                             <div className="text-[10px] uppercase font-black text-slate-400 tracking-wider">Active Slots</div>
@@ -418,7 +535,7 @@ export default function SpecialTimetablePage() {
                         <div className="h-full flex flex-col">
                             <Card className="flex-1 flex flex-col items-center justify-center p-12 border-dashed border-2 bg-slate-50/50">
                                 <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mb-6">
-                                    <AlertTriangle className="w-10 h-10 text-red-300" />
+                                    <LuTriangleAlert className="w-10 h-10 text-red-300" />
                                 </div>
                                 <h3 className="text-xl font-black text-slate-800 mb-2 font-display">No Baseline Matrix Found</h3>
                                 <p className="text-slate-500 text-sm max-w-md text-center">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { User, Building, Users } from 'lucide-react';
+import { LuUser, LuBuilding, LuUsers } from 'react-icons/lu';
 
 interface TimetableCellProps {
     slot: any; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -70,22 +70,22 @@ export const TimetableCell: React.FC<TimetableCellProps> = ({ slot, viewMode, cl
                 {viewMode === 'admin' ? (
                     <>
                         <div className="flex items-center gap-1.5 font-medium">
-                            <User className={`w-3 h-3 ${iconClass}`} />
+                            <LuUser className={`w-3 h-3 ${iconClass}`} />
                             <span className="truncate">{slot.faculty?.name}</span>
                         </div>
                         <div className="flex items-center gap-1.5 opacity-80">
-                            <Building className={`w-3 h-3 ${iconClass}`} />
+                            <LuBuilding className={`w-3 h-3 ${iconClass}`} />
                             <span className="truncate">{slot.room?.name}</span>
                         </div>
                     </>
                 ) : (
                     <>
                         <div className="flex items-center gap-1.5 font-medium">
-                            <Users className={`w-3 h-3 ${iconClass}`} />
+                            <LuUsers className={`w-3 h-3 ${iconClass}`} />
                             <span className="truncate">{slot.batch?.name}</span>
                         </div>
                         <div className="flex items-center gap-1.5 opacity-80">
-                            <Building className={`w-3 h-3 ${iconClass}`} />
+                            <LuBuilding className={`w-3 h-3 ${iconClass}`} />
                             <span className="truncate">{slot.room?.name}</span>
                         </div>
                     </>

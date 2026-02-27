@@ -3,7 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { TimetableCell } from './timetable-cell';
 import { Card } from '@/components/ui/card';
-import { Users } from 'lucide-react';
+import { LuUsers } from 'react-icons/lu';
 
 interface TimetableGridProps {
     slots: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -82,7 +82,7 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
             {viewMode === 'admin' && uniqueBatches.length > 0 && (
                 <div className="flex items-center gap-4 p-4 bg-white/80 backdrop-blur-md border border-slate-200 rounded-xl shadow-sm sticky top-0 z-30 mb-2">
                     <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-indigo-500" />
+                        <LuUsers className="w-4 h-4 text-indigo-500" />
                         <span className="text-sm font-semibold text-slate-700">Display Batch:</span>
                     </div>
                     <select
@@ -117,7 +117,6 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
                         <div className="divide-y divide-slate-100 bg-slate-50/30">
                             {Array.from({ length: maxSlots }).map((_, pIdx) => {
                                 const p = pIdx + 1;
-                                let timeLabel = `P${p}`;
                                 let startTime = "";
                                 let endTime = "";
 
