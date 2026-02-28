@@ -25,6 +25,7 @@ Thumbs.db
 *.swo
 
 # Project specific
+.github/
 .turbo/
 .claude/
 .gemini/
@@ -50,9 +51,19 @@ firebase-key.json
 !tsconfig.json
 !turbo.json
 !components.json
-!prd.json
 !firebase.json
 !firestore.indexes.json
 !firestore.rules.json
 !database.rules.json
 !storage.rules.json
+
+#Others
+.engineering/
+PROJECT.md
+REQUIREMENTS.md
+ROADMAP.md
+STATE.md
+AGENTS.md
+prd.json
+run-ai-evals.sh
+progress.txt
