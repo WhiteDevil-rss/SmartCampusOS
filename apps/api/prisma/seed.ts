@@ -189,20 +189,17 @@ async function main() {
     );
     console.log(`Created ${createdCourses.length} Courses`);
 
-    // Helper to find course ID by name
-    const getCourse = (name: string) => createdCourses.find(c => c.name === name)!.id;
-
-    // 9. Faculty Members & Subject Mapping
+    // 9. Faculty Members
     const facultyList = [
-        { name: 'Rustam Morena', email: 'rustam@vnsgu.ac.in', subjects: ['Blockchain'] },
-        { name: 'Ravi Gulati', email: 'ravi@vnsgu.ac.in', subjects: ['Python'] },
-        { name: 'Dharmen Shah', email: 'dharmen@vnsgu.ac.in', subjects: ['.Net using C#', 'iOS Development'] },
-        { name: 'Nimisha', email: 'nimisha@vnsgu.ac.in', subjects: ['Android Development'] },
-        { name: 'Jayshree Patel', email: 'jayshree@vnsgu.ac.in', subjects: ['.Net using C#'] },
-        { name: 'Mayur', email: 'mayur@vnsgu.ac.in', subjects: ['Android Development'] },
-        { name: 'Prakash Rana', email: 'prakash@vnsgu.ac.in', subjects: ['Artificial Intelligence'] },
-        { name: 'Vimal', email: 'vimal@vnsgu.ac.in', subjects: ['Frontend Technologies'] },
-        { name: 'Rinku', email: 'rinku@vnsgu.ac.in', subjects: ['Frontend Technologies'] },
+        { name: 'Rustam Morena', email: 'rustam@vnsgu.ac.in' },
+        { name: 'Ravi Gulati', email: 'ravi@vnsgu.ac.in' },
+        { name: 'Dharmen Shah', email: 'dharmen@vnsgu.ac.in' },
+        { name: 'Nimisha', email: 'nimisha@vnsgu.ac.in' },
+        { name: 'Jayshree Patel', email: 'jayshree@vnsgu.ac.in' },
+        { name: 'Mayur', email: 'mayur@vnsgu.ac.in' },
+        { name: 'Prakash Rana', email: 'prakash@vnsgu.ac.in' },
+        { name: 'Vimal', email: 'vimal@vnsgu.ac.in' },
+        { name: 'Rinku', email: 'rinku@vnsgu.ac.in' },
     ];
 
     for (const f of facultyList) {
@@ -268,15 +265,11 @@ async function main() {
             data: { entityId: faculty.id }
         });
 
-        // Map subjects
-        for (const sub of f.subjects) {
-            await prisma.facultySubject.create({
-                data: {
-                    facultyId: faculty.id,
-                    courseId: getCourse(sub)
-                }
-            });
-        }
+        // Update entityId in User
+        await prisma.user.update({
+            where: { id: user.id },
+            data: { entityId: faculty.id }
+        });
     }
     console.log(`Created ${facultyList.length} Faculty Members & Assigned Subjects`);
 

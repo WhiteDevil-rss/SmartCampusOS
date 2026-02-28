@@ -66,12 +66,13 @@ export default function DeptFacultyDashboard() {
     const [departments, setDepartments] = useState<Department[]>([]);
     const [courses, setCourses] = useState<Course[]>([]);
     const [newFacForm, setNewFacForm] = useState({
-        name: '', email: '', designation: '', password: ''
+        name: '', email: '', designation: '', password: '', phone: ''
     });
     const [editFacForm, setEditFacForm] = useState({
         name: '', email: '', designation: '', departmentIds: [] as string[]
     });
     const [assignSubjectsForm, setAssignSubjectsForm] = useState<string[]>([]);
+    const [subjectSearchTerm, setSubjectSearchTerm] = useState('');
 
     const fetchData = useCallback(async () => {
         if (!user?.entityId) return;
@@ -114,7 +115,7 @@ export default function DeptFacultyDashboard() {
             const payload = { ...newFacForm, departmentIds: [user?.entityId], universityId: user?.universityId };
             await api.post(`/faculty`, payload);
             setIsAddOpen(false);
-            setNewFacForm({ name: '', email: '', designation: '', password: '' });
+            setNewFacForm({ name: '', email: '', designation: '', password: '', phone: '' });
             fetchData();
             showToast('success', 'Faculty provisioned successfully!');
         } catch (e) {
@@ -299,6 +300,15 @@ export default function DeptFacultyDashboard() {
                                 />
                             </div>
                             <div className="space-y-2">
+                                <label className="text-sm font-medium dark:text-slate-300">Contact Number <span className="text-red-500">*</span></label>
+                                <Input
+                                    placeholder="+91 9876543210"
+                                    value={newFacForm.phone}
+                                    onChange={(e) => setNewFacForm({ ...newFacForm, phone: e.target.value })}
+                                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white"
+                                />
+                            </div>
+                            <div className="space-y-2">
                                 <label className="text-sm font-medium dark:text-slate-300">Designation</label>
                                 <Input
                                     placeholder="e.g. Associate Professor"
@@ -319,7 +329,7 @@ export default function DeptFacultyDashboard() {
                         <DialogFooter className="border-t dark:border-white/5 pt-4">
                             <Button variant="outline" className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setIsAddOpen(false)}>Cancel</Button>
                             <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleCreateFaculty}
-                                disabled={!newFacForm.name || !newFacForm.email || !newFacForm.password}>
+                                disabled={!newFacForm.name || !newFacForm.email || !newFacForm.password || !newFacForm.phone}>
                                 Provision Faculty
                             </Button>
                         </DialogFooter>
@@ -394,29 +404,51 @@ export default function DeptFacultyDashboard() {
                         <div className="space-y-4 py-4">
                             <div className="space-y-2">
                                 <label className="text-sm font-medium dark:text-slate-300">Available Courses</label>
+                                <div className="flex items-center gap-2 glass border rounded-lg px-3 py-2 mb-2">
+                                    <LuSearch className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
+                                    <Input
+                                        placeholder="Search subjects by name or code..."
+                                        className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:text-white"
+                                        value={subjectSearchTerm}
+                                        onChange={(e) => setSubjectSearchTerm(e.target.value)}
+                                    />
+                                </div>
                                 <div className="grid grid-cols-1 gap-2 p-3 border dark:border-white/10 rounded-md bg-slate-50/50 dark:bg-slate-900/50 max-h-64 overflow-y-auto">
-                                    {courses.map(course => (
-                                        <label key={course.id} className="flex items-center gap-3 text-sm cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded transition-colors text-slate-700 dark:text-slate-300">
-                                            <input
-                                                type="checkbox"
-                                                className="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-primary focus:ring-primary dark:bg-slate-800 shrink-0"
-                                                checked={assignSubjectsForm.includes(course.id)}
-                                                onChange={(e) => {
-                                                    const ids = e.target.checked
-                                                        ? [...assignSubjectsForm, course.id]
-                                                        : assignSubjectsForm.filter(id => id !== course.id);
-                                                    setAssignSubjectsForm(ids);
-                                                }}
-                                            />
-                                            <div className="flex flex-col min-w-0">
-                                                <span className="font-semibold truncate">{course.name}</span>
-                                                <span className="text-xs text-slate-500 dark:text-slate-400 truncate">{course.code} • {course.credits} Credits</span>
-                                            </div>
-                                        </label>
-                                    ))}
+                                    {courses
+                                        .filter(course =>
+                                            !subjectSearchTerm ||
+                                            course.name.toLowerCase().includes(subjectSearchTerm.toLowerCase()) ||
+                                            course.code.toLowerCase().includes(subjectSearchTerm.toLowerCase())
+                                        )
+                                        .map(course => (
+                                            <label key={course.id} className="flex items-center gap-3 text-sm cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded transition-colors text-slate-700 dark:text-slate-300">
+                                                <input
+                                                    type="checkbox"
+                                                    className="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-primary focus:ring-primary dark:bg-slate-800 shrink-0"
+                                                    checked={assignSubjectsForm.includes(course.id)}
+                                                    onChange={(e) => {
+                                                        const ids = e.target.checked
+                                                            ? [...assignSubjectsForm, course.id]
+                                                            : assignSubjectsForm.filter(id => id !== course.id);
+                                                        setAssignSubjectsForm(ids);
+                                                    }}
+                                                />
+                                                <div className="flex flex-col min-w-0">
+                                                    <span className="font-semibold truncate">{course.name}</span>
+                                                    <span className="text-xs text-slate-500 dark:text-slate-400 truncate">{course.code} • {course.credits} Credits</span>
+                                                </div>
+                                            </label>
+                                        ))}
                                     {courses.length === 0 && (
                                         <span className="text-slate-500 dark:text-slate-400 text-sm italic">No courses available.</span>
                                     )}
+                                    {courses.length > 0 && courses.filter(course =>
+                                        !subjectSearchTerm ||
+                                        course.name.toLowerCase().includes(subjectSearchTerm.toLowerCase()) ||
+                                        course.code.toLowerCase().includes(subjectSearchTerm.toLowerCase())
+                                    ).length === 0 && (
+                                            <span className="text-slate-500 dark:text-slate-400 text-sm italic text-center py-4">No results for "{subjectSearchTerm}"</span>
+                                        )}
                                 </div>
                             </div>
                         </div>

@@ -52,6 +52,8 @@ export const getUsers = async (req: Request, res: Response) => {
                 username: true,
                 email: true,
                 role: true,
+                phoneNumber: true,
+                address: true,
                 isActive: true,
                 createdAt: true,
                 lastLogin: true,
@@ -71,7 +73,7 @@ export const getUsers = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
     try {
         const actor = (req as any).user;
-        const { username, email, password, role, universityId, entityId } = req.body;
+        const { username, email, password, role, universityId, entityId, phoneNumber, address } = req.body;
 
         // Scoping for creation
         if (actor.role === 'UNI_ADMIN' && universityId !== actor.universityId) {
@@ -82,7 +84,7 @@ export const createUser = async (req: Request, res: Response) => {
         }
 
         const user = await userService.createUser({
-            username, email, password, role, universityId, entityId
+            username, email, password, role, universityId, entityId, phoneNumber, address
         }, actor.id);
 
         res.status(201).json(user);
@@ -192,5 +194,43 @@ export const deleteUser = async (req: Request, res: Response) => {
     } catch (err: any) {
         console.error(err);
         res.status(400).json({ error: err.message || 'Failed to delete user' });
+    }
+};
+
+export const getProfile = async (req: Request, res: Response) => {
+    try {
+        const currentUser = (req as any).user;
+        if (!currentUser) return res.status(401).json({ error: 'Unauthorized' });
+
+        const user = await prisma.user.findUnique({
+            where: { id: currentUser.id },
+            include: {
+                university: {
+                    select: { name: true, shortName: true }
+                }
+            }
+        });
+
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        // If user is faculty, fetch faculty details too
+        let facultyDetails = null;
+        if (user.role === 'FACULTY' && user.entityId) {
+            facultyDetails = await prisma.faculty.findUnique({
+                where: { id: user.entityId },
+                include: {
+                    departments: { include: { department: true } },
+                    subjects: { include: { course: true } }
+                }
+            });
+        }
+
+        res.json({
+            ...user,
+            facultyDetails
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to retrieve profile' });
     }
 };

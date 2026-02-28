@@ -3,6 +3,7 @@
 import { ProtectedRoute } from '@/components/protected-route';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { LuBuilding2, LuUsers, LuLayoutDashboard, LuClipboardList } from 'react-icons/lu';
+import { SUPERADMIN_NAV } from '@/lib/constants/nav-config';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
@@ -25,12 +26,7 @@ export default function SuperAdminOverview() {
     }, []);
 
 
-    const navItems = [
-        { title: 'Overview', href: '/superadmin', icon: <LuLayoutDashboard className="w-5 h-5" /> },
-        { title: 'Universities', href: '/superadmin/universities', icon: <LuBuilding2 className="w-5 h-5" /> },
-        { title: 'Users', href: '/superadmin/users', icon: <LuUsers className="w-5 h-5" /> },
-        { title: 'Audit Logs', href: '/superadmin/logs', icon: <LuClipboardList className="w-5 h-5" /> },
-    ];
+    const navItems = SUPERADMIN_NAV;
 
     return (
         <ProtectedRoute allowedRoles={['SUPERADMIN']}>

@@ -9,9 +9,11 @@ class SocketService {
     initialize(server: HttpServer) {
         this.io = new Server(server, {
             cors: {
-                origin: '*',
-                methods: ['GET', 'POST']
-            }
+                origin: true, // Reflect request origin
+                methods: ['GET', 'POST'],
+                credentials: true
+            },
+            allowEIO3: true // Allow compatibility with older clients if needed
         });
 
         const timetablesNs = this.io.of('/timetables');

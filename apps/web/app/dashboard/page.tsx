@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useAuthStore } from '@/lib/store/useAuthStore';
+import { UNI_ADMIN_NAV } from '@/lib/constants/nav-config';
 
 export default function UniAdminDashboard() {
     const { user } = useAuthStore();
@@ -40,12 +41,7 @@ export default function UniAdminDashboard() {
         }
     }, [user, fetchData]);
 
-    const navItems = [
-        { title: 'Dashboard', href: '/dashboard', icon: <LuLayoutDashboard className="w-5 h-5" /> },
-        { title: 'Departments', href: '/dashboard/departments', icon: <LuBuilding2 className="w-5 h-5" /> },
-        { title: 'Faculty', href: '/dashboard/faculty', icon: <LuUsers className="w-5 h-5" /> },
-        { title: 'Resources', href: '/dashboard/resources', icon: <LuMonitor className="w-5 h-5" /> },
-    ];
+    const navItems = UNI_ADMIN_NAV;
 
     return (
         <ProtectedRoute allowedRoles={['UNI_ADMIN']}>

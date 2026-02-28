@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { useAuthStore } from '@/lib/store/useAuthStore';
+import { FACULTY_NAV } from '@/lib/constants/nav-config';
 
 export default function FacultyDashboard() {
     const { user } = useAuthStore();
@@ -31,10 +32,7 @@ export default function FacultyDashboard() {
         }
     }, [user, fetchData]);
 
-    const navItems = [
-        { title: 'My Profile', href: '/faculty-panel', icon: <LuUser className="w-5 h-5" /> },
-        { title: 'My Schedule', href: '/faculty-panel/schedule', icon: <LuCalendar className="w-5 h-5 text-indigo-500" /> },
-    ];
+    const navItems = FACULTY_NAV;
 
     return (
         <ProtectedRoute allowedRoles={['FACULTY']}>

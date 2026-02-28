@@ -7,6 +7,8 @@ import { logAction } from '../lib/logger';
 export interface CreateUserData {
     username: string;
     email: string;
+    phoneNumber: string; // Mandatory for new users
+    address?: string;
     password?: string;
     role: string;
     universityId?: string;
@@ -16,6 +18,8 @@ export interface CreateUserData {
 export interface UpdateUserData {
     username?: string;
     email?: string;
+    phoneNumber?: string;
+    address?: string;
     role?: string;
     universityId?: string;
     entityId?: string;
@@ -31,7 +35,11 @@ export class UserService {
 
 
     async createUser(data: CreateUserData, actorId: string) {
-        const { username, email, password, role, universityId, entityId } = data;
+        const { username, email, password, role, universityId, entityId, phoneNumber, address } = data;
+
+        if (!phoneNumber) {
+            throw new Error('Contact number is mandatory for all new users');
+        }
 
         // Check for existing user
         const existingUser = await this.prisma.user.findFirst({
@@ -68,6 +76,8 @@ export class UserService {
                     passwordHash,
                     firebaseUid,
                     role,
+                    phoneNumber,
+                    address,
                     universityId: universityId || null,
                     entityId: entityId || null,
                 }
@@ -96,28 +106,44 @@ export class UserService {
         const currentUser = await this.prisma.user.findUnique({ where: { id } });
         if (!currentUser) throw new Error('User not found');
 
-        // Check uniqueness if username/email changed
-        if (data.username || data.email) {
+        // Clean data: replace empty strings with null for nullable fields
+        if (data.email === '') data.email = undefined; // Don't update to empty string
+        if (data.phoneNumber === '') data.phoneNumber = undefined;
+        if (data.address === '') data.address = undefined;
+
+        // Check uniqueness if username/email changed and are different from current
+        const usernameChanged = data.username && data.username !== currentUser.username;
+        const emailChanged = data.email && data.email !== currentUser.email;
+
+        if (usernameChanged || emailChanged) {
             const existing = await this.prisma.user.findFirst({
                 where: {
                     id: { not: id },
                     OR: [
-                        ...(data.username ? [{ username: data.username }] : []),
-                        ...(data.email ? [{ email: data.email }] : [])
+                        ...(usernameChanged ? [{ username: data.username }] : []),
+                        ...(emailChanged ? [{ email: data.email }] : [])
                     ]
                 }
             });
             if (existing) throw new Error('Username or email already in use');
         }
 
-        // Sync with Firebase if needed
-        if (data.email || data.username || data.isActive !== undefined) {
-            if (currentUser.firebaseUid) {
-                await firebaseAdmin.auth().updateUser(currentUser.firebaseUid, {
-                    email: data.email,
-                    displayName: data.username,
-                    disabled: data.isActive === false
-                });
+        // Sync with Firebase only if relevant fields changed
+        if (currentUser.firebaseUid && (usernameChanged || emailChanged || data.isActive !== undefined)) {
+            try {
+                const firebaseUpdate: any = {};
+                if (usernameChanged) firebaseUpdate.displayName = data.username;
+                if (emailChanged && data.email) firebaseUpdate.email = data.email;
+                if (data.isActive !== undefined) firebaseUpdate.disabled = !data.isActive;
+
+                if (Object.keys(firebaseUpdate).length > 0) {
+                    console.log(`UserService: Syncing with Firebase for user ${currentUser.firebaseUid}`, firebaseUpdate);
+                    await firebaseAdmin.auth().updateUser(currentUser.firebaseUid, firebaseUpdate);
+                    console.log('UserService: Firebase sync successful');
+                }
+            } catch (fbError: any) {
+                console.error('UserService: Firebase sync failed:', fbError);
+                throw new Error(`Firebase synchronization failed: ${fbError.message}`);
             }
         }
 

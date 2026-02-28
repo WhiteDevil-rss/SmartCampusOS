@@ -1,4 +1,4 @@
-import { LuLayoutDashboard, LuUsers, LuGraduationCap, LuBookOpen, LuNetwork, LuMonitor, LuCalendar, LuShieldCheck, LuBuilding2 } from 'react-icons/lu';
+import { LuLayoutDashboard, LuUsers, LuGraduationCap, LuBookOpen, LuNetwork, LuMonitor, LuCalendar, LuShieldCheck, LuBuilding2, LuUser } from 'react-icons/lu';
 import { ReactNode } from 'react';
 
 export interface NavItem {
@@ -15,6 +15,7 @@ export const DEPT_ADMIN_NAV: NavItem[] = [
     { title: 'Batches', href: '/department/batches', icon: <LuNetwork className="w-5 h-5" /> },
     { title: 'Resources', href: '/department/resources', icon: <LuMonitor className="w-5 h-5" /> },
     { title: 'Timetables', href: '/department/timetables', icon: <LuCalendar className="w-5 h-5" /> },
+    { title: 'Profile', href: '/profile', icon: <LuUser className="w-5 h-5" /> },
 ];
 
 export const UNI_ADMIN_NAV: NavItem[] = [
@@ -22,9 +23,18 @@ export const UNI_ADMIN_NAV: NavItem[] = [
     { title: 'Departments', href: '/dashboard/departments', icon: <LuBuilding2 className="w-5 h-5" /> },
     { title: 'Faculty', href: '/dashboard/faculty', icon: <LuUsers className="w-5 h-5" /> },
     { title: 'Resources', href: '/dashboard/resources', icon: <LuMonitor className="w-5 h-5" /> },
+    { title: 'Profile', href: '/profile', icon: <LuUser className="w-5 h-5" /> },
 ];
 
 export const SUPERADMIN_NAV: NavItem[] = [
     { title: 'Universities', href: '/superadmin/universities', icon: <LuBuilding2 className="w-5 h-5" /> },
     { title: 'Global Settings', href: '/superadmin/settings', icon: <LuShieldCheck className="w-5 h-5" /> },
+    { title: 'Users', href: '/superadmin/users', icon: <LuUsers className="w-5 h-5" /> },
+    { title: 'Profile', href: '/profile', icon: <LuUser className="w-5 h-5" /> },
+];
+
+export const FACULTY_NAV: NavItem[] = [
+    { title: 'Dashboard', href: '/faculty-panel', icon: <LuLayoutDashboard className="w-5 h-5" /> },
+    { title: 'My Schedule', href: '/faculty-panel/schedule', icon: <LuCalendar className="w-5 h-5" /> },
+    { title: 'Profile', href: '/profile', icon: <LuUser className="w-5 h-5" /> },
 ];

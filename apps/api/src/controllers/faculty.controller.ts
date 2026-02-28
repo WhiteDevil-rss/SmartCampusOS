@@ -79,7 +79,11 @@ export const getFacultyById = async (req: AuthRequest, res: Response) => {
 
 export const createFaculty = async (req: AuthRequest, res: Response) => {
     try {
-        const { universityId, departmentIds, name, email, designation, password } = req.body;
+        const { universityId, departmentIds, name, email, designation, password, phone } = req.body;
+
+        if (!phone) {
+            return res.status(400).json({ error: 'Contact number is mandatory' });
+        }
 
         // Authorization checks
         if (req.user!.role === 'UNI_ADMIN' && req.user!.universityId !== universityId) {
@@ -101,6 +105,7 @@ export const createFaculty = async (req: AuthRequest, res: Response) => {
                     email,
                     passwordHash: pwdHash,
                     role: 'FACULTY',
+                    phoneNumber: phone,
                     universityId
                 }
             });
@@ -141,7 +146,7 @@ export const createFaculty = async (req: AuthRequest, res: Response) => {
 
 export const updateFaculty = async (req: AuthRequest, res: Response) => {
     try {
-        const { name, email, phone, designation, departmentIds, subjectIds } = req.body;
+        const { name, email, phone, designation, departmentIds, subjectIds, qualifications, experience } = req.body;
 
         const targetFac = await prisma.faculty.findUnique({
             where: { id: req.params.id as string },
@@ -157,6 +162,11 @@ export const updateFaculty = async (req: AuthRequest, res: Response) => {
             const hasAccess = targetFac.departments.some((d: any) => d.departmentId === req.user!.entityId);
             if (!hasAccess) return res.status(403).json({ error: 'Forbidden' });
         }
+        if (req.user!.role === 'FACULTY' && String(req.user!.entityId) !== String(targetFac.id)) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+
+        const isSelfFaculty = req.user!.role === 'FACULTY' && String(req.user!.entityId) === String(targetFac.id);
 
         const faculty = await prisma.faculty.update({
             where: { id: req.params.id as string },
@@ -165,11 +175,13 @@ export const updateFaculty = async (req: AuthRequest, res: Response) => {
                 email,
                 phone,
                 designation,
+                qualifications,
+                experience,
                 departments: departmentIds ? {
                     deleteMany: {},
                     create: departmentIds.map((id: string) => ({ departmentId: id }))
                 } : undefined,
-                subjects: subjectIds ? {
+                subjects: (subjectIds && !isSelfFaculty) ? {
                     deleteMany: {},
                     create: subjectIds.map((courseId: string) => ({ courseId }))
                 } : undefined

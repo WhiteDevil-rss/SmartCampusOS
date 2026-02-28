@@ -66,6 +66,8 @@ model Faculty {
   email           String          @unique
   phone           String?
   designation     String?
+  qualifications  String?
+  experience      String?
   userId          String?
   user            User?           @relation(fields: [userId], references: [id])
   createdAt       DateTime        @default(now())
@@ -212,6 +214,8 @@ model User {
   universityId String?
   university   University? @relation(fields: [universityId], references: [id], onDelete: Cascade)
   faculty      Faculty[]
+  phoneNumber  String?    // Mandatory for new users, enforced in API
+  address      String?
   isActive     Boolean    @default(true)
   createdAt    DateTime   @default(now())
   lastLogin    DateTime?

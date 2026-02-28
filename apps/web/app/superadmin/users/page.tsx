@@ -2,7 +2,8 @@
 
 import { ProtectedRoute } from '@/components/protected-route';
 import { DashboardLayout } from '@/components/dashboard-layout';
-import { LuBuilding2, LuUsers, LuLayoutDashboard, LuUserPlus, LuShieldAlert, LuKeyRound, LuPower, LuPowerOff, LuClipboardList } from 'react-icons/lu';
+import { LuBuilding2, LuUsers, LuLayoutDashboard, LuUserPlus, LuShieldAlert, LuKeyRound, LuPower, LuPowerOff, LuClipboardList, LuUser } from 'react-icons/lu';
+import { SUPERADMIN_NAV } from '@/lib/constants/nav-config';
 import { useEffect, useState, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -43,8 +44,8 @@ export default function SuperAdminUsers() {
     const [universitiesList, setUniversitiesList] = useState<University[]>([]);
 
     // Form inputs
-    const [newUserForm, setNewUserForm] = useState({ username: '', email: '', password: '', role: 'SUPERADMIN', universityId: '' });
-    const [editUserForm, setEditUserForm] = useState({ username: '', email: '', role: 'SUPERADMIN', universityId: '' });
+    const [newUserForm, setNewUserForm] = useState({ username: '', email: '', password: '', role: 'SUPERADMIN', universityId: '', phoneNumber: '' });
+    const [editUserForm, setEditUserForm] = useState({ username: '', email: '', role: 'SUPERADMIN', universityId: '', phoneNumber: '', address: '' });
     const [newPassword, setNewPassword] = useState('');
 
 
@@ -79,7 +80,7 @@ export default function SuperAdminUsers() {
             const payload = { ...newUserForm, entityId: newUserForm.universityId || null };
             await api.post('/users', payload);
             setIsAddUserOpen(false);
-            setNewUserForm({ username: '', email: '', password: '', role: 'SUPERADMIN', universityId: '' });
+            setNewUserForm({ username: '', email: '', password: '', role: 'SUPERADMIN', universityId: '', phoneNumber: '' });
             fetchUsers();
         } catch {
             showToast('error', 'Failed to create user. Ensure username/email are unique.');
@@ -140,12 +141,7 @@ export default function SuperAdminUsers() {
     };
 
 
-    const navItems = [
-        { title: 'Overview', href: '/superadmin', icon: <LuLayoutDashboard className="w-5 h-5" /> },
-        { title: 'Universities', href: '/superadmin/universities', icon: <LuBuilding2 className="w-5 h-5" /> },
-        { title: 'Users', href: '/superadmin/users', icon: <LuUsers className="w-5 h-5" /> },
-        { title: 'Audit Logs', href: '/superadmin/logs', icon: <LuClipboardList className="w-5 h-5" /> },
-    ];
+    const navItems = SUPERADMIN_NAV;
 
     return (
         <ProtectedRoute allowedRoles={['SUPERADMIN']}>
@@ -219,7 +215,9 @@ export default function SuperAdminUsers() {
                                                                 username: user.username,
                                                                 email: user.email || '',
                                                                 role: user.role,
-                                                                universityId: user.universityId || ''
+                                                                universityId: user.universityId || '',
+                                                                phoneNumber: (user as any).phoneNumber || '',
+                                                                address: (user as any).address || ''
                                                             });
                                                             setIsEditUserOpen(true);
                                                         }}
@@ -293,6 +291,14 @@ export default function SuperAdminUsers() {
                                 />
                             </div>
                             <div className="space-y-2">
+                                <label className="text-sm font-medium">Contact Number <span className="text-red-500">*</span></label>
+                                <Input
+                                    placeholder="+91 9876543210"
+                                    value={newUserForm.phoneNumber}
+                                    onChange={(e) => setNewUserForm({ ...newUserForm, phoneNumber: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-2">
                                 <label className="text-sm font-medium">Temporary Password</label>
                                 <Input
                                     type="password"
@@ -332,7 +338,7 @@ export default function SuperAdminUsers() {
                         </div>
                         <DialogFooter>
                             <Button variant="outline" onClick={() => setIsAddUserOpen(false)}>Cancel</Button>
-                            <Button onClick={handleCreateUser} disabled={!newUserForm.username || !newUserForm.password}>Provision Account</Button>
+                            <Button onClick={handleCreateUser} disabled={!newUserForm.username || !newUserForm.password || !newUserForm.phoneNumber}>Provision Account</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
@@ -359,6 +365,22 @@ export default function SuperAdminUsers() {
                                     placeholder="admin@example.com"
                                     value={editUserForm.email}
                                     onChange={(e) => setEditUserForm({ ...editUserForm, email: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium">Contact Number</label>
+                                <Input
+                                    placeholder="+91 9876543210"
+                                    value={editUserForm.phoneNumber}
+                                    onChange={(e) => setEditUserForm({ ...editUserForm, phoneNumber: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium">Address</label>
+                                <Input
+                                    placeholder="Enter physical address"
+                                    value={editUserForm.address}
+                                    onChange={(e) => setEditUserForm({ ...editUserForm, address: e.target.value })}
                                 />
                             </div>
                             <div className="space-y-2">
