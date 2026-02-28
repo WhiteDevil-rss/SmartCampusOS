@@ -35,8 +35,23 @@ apps/ai-engine/__pycache__/
 *.pyc
 
 
-# Firebase Service Accounts (Security/Privacy)
+# Firebase Service Accounts & Private Keys (Security/Privacy)
 *-firebase-adminsdk-*.json
 firebase-adminsdk-*.json
-apps/api/*.json
-*.json
+*firebase-adminsdk*.json
+service-account.json
+serviceAccount.json
+firebase-key.json
+# Protect standard configuration files
+!package.json
+!package-lock.json
+!pnpm-lock.yaml
+!tsconfig.json
+!turbo.json
+!components.json
+!prd.json
+!firebase.json
+!firestore.indexes.json
+!firestore.rules.json
+!database.rules.json
+!storage.rules.json

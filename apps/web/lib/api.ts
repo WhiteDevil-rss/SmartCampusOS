@@ -22,13 +22,34 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(
     (response) => response,
     async (error) => {
-        console.warn('API Error Response:', error.response?.status, error.response?.data);
-        if (error.response?.status === 401) {
+        const originalRequest = error.config;
+
+        // If 401 and it hasn't been retried yet
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+
+            try {
+                const user = auth.currentUser;
+                if (user) {
+                    console.log('API: Token expired, attempting refresh...');
+                    // Force refresh the token
+                    const newToken = await user.getIdToken(true);
+
+                    // Update the authorization header
+                    originalRequest.headers.Authorization = `Bearer ${newToken}`;
+
+                    // Retry the original request
+                    return api(originalRequest);
+                }
+            } catch (refreshError) {
+                console.error('API: Token refresh failed:', refreshError);
+            }
+
+            // If refresh fails or no user, sign out
             console.warn('Unauthorized access detected. Current path:', typeof window !== 'undefined' ? window.location.pathname : 'unknown');
-            // Sign out from Firebase if the backend rejects the token
             await auth.signOut();
             if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
-                console.log('Redirecting to login due to 401...');
+                console.log('Redirecting to login due to failed auth/token...');
                 window.location.href = '/login';
             }
         }
