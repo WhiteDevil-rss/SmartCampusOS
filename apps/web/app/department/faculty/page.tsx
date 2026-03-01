@@ -154,6 +154,7 @@ export default function DeptFacultyDashboard() {
         askConfirm({
             title: 'Delete Faculty',
             message: 'Are you sure you want to completely de-provision this faculty account? This cannot be undone.',
+            requireTypedConfirm: true,
             onConfirm: async () => {
                 try {
                     await api.delete(`/faculty/${id}`);
@@ -176,11 +177,11 @@ export default function DeptFacultyDashboard() {
                         <p className="text-slate-500 dark:text-slate-400">Manage all registered teaching bodies and workload capacities for your department.</p>
                     </div>
                     <div className="flex gap-2 w-full sm:w-auto">
-                        <div className="flex items-center gap-2 glass border rounded-lg px-3 py-2 shadow-sm w-full sm:w-64">
+                        <div className="flex items-center gap-2 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 shadow-sm w-full sm:w-64">
                             <LuSearch className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
                             <Input
                                 placeholder="Search faculty..."
-                                className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:text-white"
+                                className="border-0 bg-transparent p-0 flex-1 w-full outline-none focus:outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-800 dark:text-white caret-slate-900 dark:caret-white"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -404,11 +405,11 @@ export default function DeptFacultyDashboard() {
                         <div className="space-y-4 py-4">
                             <div className="space-y-2">
                                 <label className="text-sm font-medium dark:text-slate-300">Available Courses</label>
-                                <div className="flex items-center gap-2 glass border rounded-lg px-3 py-2 mb-2">
+                                <div className="flex items-center gap-2 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 mb-2">
                                     <LuSearch className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
                                     <Input
                                         placeholder="Search subjects by name or code..."
-                                        className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:text-white"
+                                        className="border-0 bg-transparent p-0 flex-1 w-full outline-none focus:outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-800 dark:text-white caret-slate-900 dark:caret-white"
                                         value={subjectSearchTerm}
                                         onChange={(e) => setSubjectSearchTerm(e.target.value)}
                                     />

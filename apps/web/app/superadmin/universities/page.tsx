@@ -92,6 +92,7 @@ export default function SuperAdminDashboard() {
             title: `Delete ${name}?`,
             message: 'This will permanently delete ALL associated data including departments, courses, faculty, and users. This action cannot be undone.',
             danger: true,
+            requireTypedConfirm: true,
             confirmLabel: 'Yes, Delete Everything',
             onConfirm: async () => {
                 try {

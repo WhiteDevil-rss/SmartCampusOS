@@ -215,6 +215,7 @@ export default function DeptSubjectsDashboard() {
         askConfirm({
             title: 'Delete Subject',
             message: 'Delete this subject? Faculty assignments for this subject will also be removed. This cannot be undone.',
+            requireTypedConfirm: true,
             onConfirm: async () => {
                 try {
                     await api.delete(`/courses/${id}`);

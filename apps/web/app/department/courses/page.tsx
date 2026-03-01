@@ -167,6 +167,7 @@ export default function DeptProgramsDashboard() {
         askConfirm({
             title: 'Delete Program',
             message: 'Delete this program? All linked batches and subjects may be affected. This cannot be undone.',
+            requireTypedConfirm: true,
             onConfirm: async () => {
                 try {
                     await api.delete(`/programs/${id}`);

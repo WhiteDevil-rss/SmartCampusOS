@@ -9,3 +9,4 @@ router.get('/', authenticate, getSettings);
 router.patch('/', authenticate, updateSettings);
 
 export default router;
+

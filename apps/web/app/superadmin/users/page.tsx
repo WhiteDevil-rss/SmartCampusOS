@@ -105,6 +105,7 @@ export default function SuperAdminUsers() {
         askConfirm({
             title: 'Delete User',
             message: 'Permanently delete this user account? This action cannot be undone.',
+            requireTypedConfirm: true,
             onConfirm: async () => {
                 try {
                     await api.delete(`/users/${id}`);

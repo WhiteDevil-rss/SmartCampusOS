@@ -1,0 +1,560 @@
+{
+  "meta": {
+    "version": "v2026-03-01T21-52-10-866Z",
+    "filename": "seed-backup-2026-03-01T21-52-10-866Z.json",
+    "createdAt": "2026-03-01T21:52:10.867Z",
+    "createdById": "7c19b47c-66ff-474f-b29e-cf9e469c0ee1",
+    "createdByName": "admin@nep-scheduler.com",
+    "totalRecords": 47,
+    "tableCount": 13,
+    "applicationVersion": "1.0.0"
+  },
+  "data": {
+    "users": [
+      {
+        "id": "6539aa26-a39c-4b36-b958-8c35cbf0f344",
+        "username": "admin_vnsgu",
+        "email": "admin@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "f619592b-5346-4c9f-a297-e44dbc7d68cd",
+        "role": "UNI_ADMIN",
+        "entityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:26.788Z",
+        "lastLogin": null
+      },
+      {
+        "id": "58e33215-105d-497d-ab7c-55afc0e0c512",
+        "username": "admin_dcs_vnsgu",
+        "email": "admin_dcs@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "905f2f80-049e-4d67-9e10-5ab1a5f3650e",
+        "role": "DEPT_ADMIN",
+        "entityId": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:29.191Z",
+        "lastLogin": null
+      },
+      {
+        "id": "c49aeb18-4f4f-427b-b5d9-73130a089e09",
+        "username": "rustam",
+        "email": "rustam@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "046a5cfd-7647-432e-b48e-33545345c0ce",
+        "role": "FACULTY",
+        "entityId": "736f0a47-5f53-4b76-9d2b-293710e1d2b0",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:30.949Z",
+        "lastLogin": null
+      },
+      {
+        "id": "f63ec671-17c2-4d99-a536-7d844360619e",
+        "username": "rinku",
+        "email": "rinku@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "2ab031b2-f2fe-4a4a-afd9-fb701ec0fd83",
+        "role": "FACULTY",
+        "entityId": "8db64c7d-438b-4f18-82d7-3e51a84d0017",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:45.995Z",
+        "lastLogin": null
+      },
+      {
+        "id": "52dfa70a-7357-4c7e-a040-56a7c225e76d",
+        "username": "ravi",
+        "email": "ravi@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "80fbc928-99c3-41e9-b8ff-2a257d66c524",
+        "role": "FACULTY",
+        "entityId": "854ef762-8d2c-4c55-b0a6-0e3aea768015",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:32.723Z",
+        "lastLogin": null
+      },
+      {
+        "id": "e0fc7eec-be67-4bcc-87b2-f6494e4596e6",
+        "username": "dharmen",
+        "email": "dharmen@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "9ec603a1-3525-4adb-a14c-88535c2ce629",
+        "role": "FACULTY",
+        "entityId": "ee4ab0b2-d0a8-4820-83d5-3c45e70d23d3",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:34.412Z",
+        "lastLogin": null
+      },
+      {
+        "id": "7c19b47c-66ff-474f-b29e-cf9e469c0ee1",
+        "username": "superadmin",
+        "email": "admin@nep-scheduler.com",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "Y8NGW0U8k8gvndrhNTc4d9pN84D2",
+        "role": "SUPERADMIN",
+        "entityId": null,
+        "universityId": null,
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:24.151Z",
+        "lastLogin": "2026-03-01T21:48:56.931Z"
+      },
+      {
+        "id": "6be63718-95cf-40c7-96ab-c30bfaa18784",
+        "username": "nimisha",
+        "email": "nimisha@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "844298ba-b7b7-4d84-8743-0dd23986fe0c",
+        "role": "FACULTY",
+        "entityId": "11050e66-09cf-4331-b869-53674640f290",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:36.153Z",
+        "lastLogin": null
+      },
+      {
+        "id": "ebae4afc-dddd-4f64-abb3-d2a5a630c05b",
+        "username": "jayshree",
+        "email": "jayshree@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "619ccc57-cb22-4b51-bdc5-cbcf62938558",
+        "role": "FACULTY",
+        "entityId": "8f529d53-be08-43e0-9296-b82e33928dfe",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:37.939Z",
+        "lastLogin": null
+      },
+      {
+        "id": "36dd0b8a-c7bd-4008-86a4-c98cea3dd0fa",
+        "username": "mayur",
+        "email": "mayur@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "0c39d70e-10fc-4595-b44b-d7087a047368",
+        "role": "FACULTY",
+        "entityId": "2c1cd915-c59c-4c44-8a50-671bf925e6f8",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:39.638Z",
+        "lastLogin": null
+      },
+      {
+        "id": "ea9d0a6c-f87c-431a-b76d-a0134bedfb9b",
+        "username": "prakash",
+        "email": "prakash@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "87009e75-9add-4a0c-8f99-493d9de5c217",
+        "role": "FACULTY",
+        "entityId": "90317640-ca48-4fc3-897c-c9495c450b27",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:41.488Z",
+        "lastLogin": null
+      },
+      {
+        "id": "1958787e-40c3-4ce0-9c70-df1c2c82482c",
+        "username": "vimal",
+        "email": "vimal@vnsgu.ac.in",
+        "passwordHash": "$2b$12$MRljiArAh/jfalT9ryKFwuIXMk2UfuXmeurwk5IbWtg4OAngSoEI.",
+        "firebaseUid": "5adf2bc2-bbf6-4fef-b67c-a0650bd1848e",
+        "role": "FACULTY",
+        "entityId": "3a5940d5-6d18-4757-b5ac-001c22f3b498",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "phoneNumber": null,
+        "address": null,
+        "isActive": true,
+        "createdAt": "2026-03-01T21:36:43.277Z",
+        "lastLogin": null
+      }
+    ],
+    "universities": [
+      {
+        "id": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Veer Narmad South Gujarat University",
+        "shortName": "vnsgu",
+        "location": "Surat, Gujarat",
+        "email": "vc@vnsgu.ac.in",
+        "estYear": 1965,
+        "website": "vnsgu.ac.in",
+        "adminUserId": "6539aa26-a39c-4b36-b958-8c35cbf0f344",
+        "createdAt": "2026-03-01T21:36:24.170Z",
+        "updatedAt": "2026-03-01T21:36:26.803Z"
+      }
+    ],
+    "departments": [
+      {
+        "id": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Department of Computer Science",
+        "shortName": "DCS",
+        "hod": "Dr. Apurva Desai",
+        "email": "dcs@vnsgu.ac.in",
+        "adminUserId": "58e33215-105d-497d-ab7c-55afc0e0c512",
+        "createdAt": "2026-03-01T21:36:26.807Z"
+      }
+    ],
+    "faculty": [
+      {
+        "id": "736f0a47-5f53-4b76-9d2b-293710e1d2b0",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Rustam Morena",
+        "email": "rustam@vnsgu.ac.in",
+        "phone": null,
+        "designation": "Assistant Professor",
+        "qualifications": null,
+        "experience": null,
+        "userId": "c49aeb18-4f4f-427b-b5d9-73130a089e09",
+        "createdAt": "2026-03-01T21:36:30.966Z"
+      },
+      {
+        "id": "854ef762-8d2c-4c55-b0a6-0e3aea768015",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Ravi Gulati",
+        "email": "ravi@vnsgu.ac.in",
+        "phone": null,
+        "designation": "Assistant Professor",
+        "qualifications": null,
+        "experience": null,
+        "userId": "52dfa70a-7357-4c7e-a040-56a7c225e76d",
+        "createdAt": "2026-03-01T21:36:32.737Z"
+      },
+      {
+        "id": "ee4ab0b2-d0a8-4820-83d5-3c45e70d23d3",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Dharmen Shah",
+        "email": "dharmen@vnsgu.ac.in",
+        "phone": null,
+        "designation": "Assistant Professor",
+        "qualifications": null,
+        "experience": null,
+        "userId": "e0fc7eec-be67-4bcc-87b2-f6494e4596e6",
+        "createdAt": "2026-03-01T21:36:34.416Z"
+      },
+      {
+        "id": "11050e66-09cf-4331-b869-53674640f290",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Nimisha",
+        "email": "nimisha@vnsgu.ac.in",
+        "phone": null,
+        "designation": "Assistant Professor",
+        "qualifications": null,
+        "experience": null,
+        "userId": "6be63718-95cf-40c7-96ab-c30bfaa18784",
+        "createdAt": "2026-03-01T21:36:36.163Z"
+      },
+      {
+        "id": "8f529d53-be08-43e0-9296-b82e33928dfe",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Jayshree Patel",
+        "email": "jayshree@vnsgu.ac.in",
+        "phone": null,
+        "designation": "Assistant Professor",
+        "qualifications": null,
+        "experience": null,
+        "userId": "ebae4afc-dddd-4f64-abb3-d2a5a630c05b",
+        "createdAt": "2026-03-01T21:36:37.945Z"
+      },
+      {
+        "id": "2c1cd915-c59c-4c44-8a50-671bf925e6f8",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Mayur",
+        "email": "mayur@vnsgu.ac.in",
+        "phone": null,
+        "designation": "Assistant Professor",
+        "qualifications": null,
+        "experience": null,
+        "userId": "36dd0b8a-c7bd-4008-86a4-c98cea3dd0fa",
+        "createdAt": "2026-03-01T21:36:39.647Z"
+      },
+      {
+        "id": "90317640-ca48-4fc3-897c-c9495c450b27",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Prakash Rana",
+        "email": "prakash@vnsgu.ac.in",
+        "phone": null,
+        "designation": "Assistant Professor",
+        "qualifications": null,
+        "experience": null,
+        "userId": "ea9d0a6c-f87c-431a-b76d-a0134bedfb9b",
+        "createdAt": "2026-03-01T21:36:41.494Z"
+      },
+      {
+        "id": "3a5940d5-6d18-4757-b5ac-001c22f3b498",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Vimal",
+        "email": "vimal@vnsgu.ac.in",
+        "phone": null,
+        "designation": "Assistant Professor",
+        "qualifications": null,
+        "experience": null,
+        "userId": "1958787e-40c3-4ce0-9c70-df1c2c82482c",
+        "createdAt": "2026-03-01T21:36:43.285Z"
+      },
+      {
+        "id": "8db64c7d-438b-4f18-82d7-3e51a84d0017",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Rinku",
+        "email": "rinku@vnsgu.ac.in",
+        "phone": null,
+        "designation": "Assistant Professor",
+        "qualifications": null,
+        "experience": null,
+        "userId": "f63ec671-17c2-4d99-a536-7d844360619e",
+        "createdAt": "2026-03-01T21:36:46.009Z"
+      }
+    ],
+    "facultyDepartments": [
+      {
+        "facultyId": "736f0a47-5f53-4b76-9d2b-293710e1d2b0",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30"
+      },
+      {
+        "facultyId": "854ef762-8d2c-4c55-b0a6-0e3aea768015",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30"
+      },
+      {
+        "facultyId": "ee4ab0b2-d0a8-4820-83d5-3c45e70d23d3",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30"
+      },
+      {
+        "facultyId": "11050e66-09cf-4331-b869-53674640f290",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30"
+      },
+      {
+        "facultyId": "8f529d53-be08-43e0-9296-b82e33928dfe",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30"
+      },
+      {
+        "facultyId": "2c1cd915-c59c-4c44-8a50-671bf925e6f8",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30"
+      },
+      {
+        "facultyId": "90317640-ca48-4fc3-897c-c9495c450b27",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30"
+      },
+      {
+        "facultyId": "3a5940d5-6d18-4757-b5ac-001c22f3b498",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30"
+      },
+      {
+        "facultyId": "8db64c7d-438b-4f18-82d7-3e51a84d0017",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30"
+      }
+    ],
+    "facultySubjects": [],
+    "courses": [
+      {
+        "id": "bee97096-fcd7-4889-8ac4-5b65b9557ad4",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Artificial Intelligence",
+        "code": "201",
+        "program": "MCA",
+        "credits": 4,
+        "weeklyHrs": 4,
+        "semester": null,
+        "type": "Theory",
+        "createdAt": "2026-03-01T21:36:29.244Z"
+      },
+      {
+        "id": "6f425cfd-857c-452f-b7e0-64c80fe849c7",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": ".Net using C#",
+        "code": "203",
+        "program": "MCA",
+        "credits": 4,
+        "weeklyHrs": 6,
+        "semester": null,
+        "type": "Theory+Lab",
+        "createdAt": "2026-03-01T21:36:29.244Z"
+      },
+      {
+        "id": "3d8c371d-bdc9-4399-a75f-c7057835bb46",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Blockchain",
+        "code": "204",
+        "program": "MCA",
+        "credits": 4,
+        "weeklyHrs": 4,
+        "semester": null,
+        "type": "Theory",
+        "createdAt": "2026-03-01T21:36:29.245Z"
+      },
+      {
+        "id": "aeab0d24-3101-4271-8134-6487582c3bc5",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Android Development",
+        "code": "Android-205",
+        "program": "MCA",
+        "credits": 4,
+        "weeklyHrs": 6,
+        "semester": null,
+        "type": "Theory+Lab",
+        "createdAt": "2026-03-01T21:36:29.245Z"
+      },
+      {
+        "id": "5973668c-7a59-471c-af88-64bfc9988a11",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Python",
+        "code": "Python-204",
+        "program": "MCA",
+        "credits": 4,
+        "weeklyHrs": 6,
+        "semester": null,
+        "type": "Theory+Lab",
+        "createdAt": "2026-03-01T21:36:29.245Z"
+      },
+      {
+        "id": "25e2f147-f9d8-4bc0-9406-6156d7728261",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "iOS Development",
+        "code": "205",
+        "program": "MCA",
+        "credits": 4,
+        "weeklyHrs": 6,
+        "semester": null,
+        "type": "Theory+Lab",
+        "createdAt": "2026-03-01T21:36:29.245Z"
+      },
+      {
+        "id": "41952e56-e31a-4839-8d94-dd78a648f217",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "Frontend Technologies",
+        "code": "202",
+        "program": "MCA",
+        "credits": 4,
+        "weeklyHrs": 6,
+        "semester": null,
+        "type": "Theory+Lab",
+        "createdAt": "2026-03-01T21:36:29.244Z"
+      }
+    ],
+    "batches": [
+      {
+        "id": "9d1a3a4d-fb64-4ec1-970e-064a30aea73c",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "MCA Sem 2 Div A 2025-26",
+        "program": "MCA",
+        "semester": 2,
+        "division": "A",
+        "year": "2025-26",
+        "strength": 30,
+        "totalStudents": 0,
+        "createdAt": "2026-03-01T21:36:29.241Z"
+      },
+      {
+        "id": "1f681d4b-67e0-4f5a-b1e6-fa7c63e6bb3b",
+        "departmentId": "9d430341-4f78-489d-93e3-6e54240c7f30",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "MCA Sem 2 Div B 2025-26",
+        "program": "MCA",
+        "semester": 2,
+        "division": "B",
+        "year": "2025-26",
+        "strength": 30,
+        "totalStudents": 0,
+        "createdAt": "2026-03-01T21:36:29.243Z"
+      }
+    ],
+    "resources": [
+      {
+        "id": "c565ef6c-b994-4ec8-9385-7e9b92d8dfd4",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "CS Classroom 101",
+        "type": "Classroom",
+        "capacity": 60,
+        "floor": "1st",
+        "building": null,
+        "createdAt": "2026-03-01T21:36:29.204Z"
+      },
+      {
+        "id": "c9492df6-016a-404b-84f4-b61f047ae2b3",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "CS Classroom 102",
+        "type": "Classroom",
+        "capacity": 60,
+        "floor": "1st",
+        "building": null,
+        "createdAt": "2026-03-01T21:36:29.208Z"
+      },
+      {
+        "id": "d37094dd-6077-41b4-9a38-4d3c35941baa",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "CS Classroom 201",
+        "type": "Classroom",
+        "capacity": 40,
+        "floor": "2nd",
+        "building": null,
+        "createdAt": "2026-03-01T21:36:29.212Z"
+      },
+      {
+        "id": "3d2f83fd-154c-43bf-ab76-dce6ea39fc0d",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "CS Lab A",
+        "type": "Lab",
+        "capacity": 30,
+        "floor": "Ground",
+        "building": null,
+        "createdAt": "2026-03-01T21:36:29.233Z"
+      },
+      {
+        "id": "6068a2f0-a4b9-4283-b259-d150581aabbd",
+        "universityId": "28aa044c-49eb-4324-89e9-0fbf1bbf6dcc",
+        "name": "CS Lab B",
+        "type": "Lab",
+        "capacity": 30,
+        "floor": "Ground",
+        "building": null,
+        "createdAt": "2026-03-01T21:36:29.238Z"
+      }
+    ],
+    "programs": [],
+    "settings": [
+      {
+        "id": "system-config",
+        "platformName": "Zembaa.AI Scheduler",
+        "supportEmail": "support@zembaa.ai",
+        "maintenanceMode": false,
+        "sessionTimeout": 600,
+        "mfaEnabled": false,
+        "logRetention": "30",
+        "autoBackups": false,
+        "updatedAt": "2026-03-01T21:36:24.163Z"
+      }
+    ],
+    "timetables": [],
+    "timetableSlots": []
+  }
+}

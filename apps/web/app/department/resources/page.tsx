@@ -185,6 +185,7 @@ export default function DeptResourcesDashboard() {
         askConfirm({
             title: 'Delete Resource',
             message: `Delete "${name}"? It will be removed from all timetable slot assignments.`,
+            requireTypedConfirm: true,
             onConfirm: async () => {
                 try {
                     await api.delete(`/resources/${id}`);

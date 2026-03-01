@@ -43,6 +43,8 @@ app.get('/v1/ai-health', async (req: express.Request, res: express.Response) => 
 
 import auditLogRoutes from './routes/audit-log.routes';
 import settingsRoutes from './routes/settings.routes';
+import firebaseSyncRoutes from './routes/firebase-sync.routes';
+import seedManagementRoutes from './routes/seed-management.routes';
 
 app.use('/v1/auth', authRoutes);
 app.use('/v1/universities/:universityId/departments', departmentRoutes);
@@ -57,6 +59,8 @@ app.use('/v1/users', userRoutes);
 app.use('/v1/programs', programRoutes);
 app.use('/v1/logs', auditLogRoutes);
 app.use('/v1/settings', settingsRoutes);
+app.use('/v1/firebase-sync', firebaseSyncRoutes);
+app.use('/v1/seed', seedManagementRoutes);
 
 const server = createServer(app);
 socketService.initialize(server);

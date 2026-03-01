@@ -36,7 +36,7 @@ async function main() {
         update: { firebaseUid: saUid },
         create: {
             username: 'superadmin',
-            email: 'admin@nep-scheduler.com',
+            email: 'admin@zembaa.com',
             passwordHash,
             firebaseUid: saUid,
             role: 'SUPERADMIN',

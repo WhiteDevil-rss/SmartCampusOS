@@ -26,8 +26,6 @@ export const getDepartments = async (req: AuthRequest, res: Response) => {
             }
         });
 
-        // Cache for 60 seconds at browser/CDN level
-        res.setHeader('Cache-Control', 'public, max-age=60');
         res.json(departments);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch departments' });
@@ -154,7 +152,13 @@ export const updateDepartment = async (req: AuthRequest, res: Response) => {
                 });
 
                 if (adminUser.firebaseUid) {
-                    await firebaseAdmin.auth().updateUser(adminUser.firebaseUid, { email });
+                    try {
+                        await firebaseAdmin.auth().updateUser(adminUser.firebaseUid, { email });
+                    } catch (fbErr: any) {
+                        console.error(`[Firebase Sync Warning] Failed to update email for ${adminUser.firebaseUid}:`, fbErr.message);
+                        // Do not throw — allow the DB transaction to complete.
+                        // The manual Firebase Sync tool can resolve this desync later.
+                    }
                 }
             }
 
@@ -180,11 +184,7 @@ export const deleteDepartment = async (req: AuthRequest, res: Response) => {
 
         const targetDept = await prisma.department.findUnique({
             where: { id },
-            include: {
-                _count: {
-                    select: { courses: true, batches: true, faculty: true, timetables: true }
-                }
-            }
+            include: { _count: { select: { courses: true, batches: true, faculty: true, timetables: true } } }
         }) as any;
         if (!targetDept) return res.status(404).json({ error: 'Not found' });
 
@@ -192,48 +192,44 @@ export const deleteDepartment = async (req: AuthRequest, res: Response) => {
             return res.status(403).json({ error: 'Forbidden' });
         }
 
-        const { courses, batches, faculty, timetables } = targetDept._count;
-        if (courses > 0 || batches > 0 || faculty > 0 || timetables > 0) {
-            const deps = [];
-            if (faculty > 0) deps.push(`${faculty} faculty member(s)`);
-            if (courses > 0) deps.push(`${courses} course(s)`);
-            if (batches > 0) deps.push(`${batches} batch(es)`);
-            if (timetables > 0) deps.push(`${timetables} timetable(s)`);
-
-            const errorMsg = `Cannot delete '${targetDept.name}' because it has ${deps.join(', ')}. Please remove or reassign them first.`;
-
-            logActivity(
-                req.user!.id,
-                req.user!.role,
-                'DEPARTMENT_DELETE_FAILED',
-                { departmentId: id, name: targetDept.name, reason: errorMsg }
-            );
-
-            return res.status(400).json({ error: errorMsg });
-        }
-
+        // Cascade-delete all dependencies in correct FK order, then delete the department
         await prisma.$transaction(async (tx) => {
+            // 1. Delete all timetables for this department
+            await tx.timetable.deleteMany({ where: { departmentId: id } });
+
+            // 2. Delete all batches for this department
+            await tx.batch.deleteMany({ where: { departmentId: id } });
+
+            // 3. Delete all courses for this department
+            await tx.course.deleteMany({ where: { departmentId: id } });
+
+            // 4. Remove faculty associations (the FacultyDepartment join records)
+            await tx.facultyDepartment.deleteMany({ where: { departmentId: id } });
+
+            // 5. Delete the department admin user from DB + Firebase
             if (targetDept.adminUserId) {
                 const adminUser = await tx.user.findUnique({ where: { id: targetDept.adminUserId } });
-
                 await tx.department.update({ where: { id }, data: { adminUserId: null } }); // break FK safely
                 await tx.user.delete({ where: { id: targetDept.adminUserId } });
-
                 if (adminUser?.firebaseUid) {
                     await firebaseAdmin.auth().deleteUser(adminUser.firebaseUid);
                 }
             }
+
+            // 6. Finally delete the department itself
             await tx.department.delete({ where: { id } });
         });
+
         res.status(204).send();
 
         logActivity(
             req.user!.id,
             req.user!.role,
-            'DEPARTMENT_DELETE',
+            'DEPARTMENT_DELETE_CASCADE',
             { departmentId: id, name: targetDept.name }
         );
     } catch (error) {
+        console.error('Delete Department Error:', error);
         res.status(500).json({ error: 'Failed to delete department' });
     }
 };

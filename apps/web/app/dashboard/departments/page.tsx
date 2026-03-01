@@ -89,13 +89,16 @@ export default function DepartmentsDashboard() {
     const handleDeleteDepartment = (id: string) => {
         askConfirm({
             title: 'Delete Department',
-            message: 'Permanently delete this department? All child associations (faculty, batches, timetables) will be affected. This cannot be undone.',
+            message: 'Permanently delete this department and ALL associated data (courses, batches, timetables, faculty links)? This cannot be undone.',
+            requireTypedConfirm: true,
             onConfirm: async () => {
                 try {
                     await api.delete(`/universities/${user?.universityId}/departments/${id}`);
                     fetchDepartments();
-                } catch {
-                    showToast('error', 'Failed to delete department. Dependencies may still exist.');
+                    showToast('success', 'Department heavily removed.');
+                } catch (e: any) {
+                    const errorMsg = e.response?.data?.error || 'Failed to delete department. Dependencies may still exist.';
+                    showToast('error', errorMsg);
                 }
             },
         });

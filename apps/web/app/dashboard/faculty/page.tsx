@@ -104,6 +104,7 @@ export default function FacultyDashboard() {
         askConfirm({
             title: 'Delete Faculty',
             message: 'Are you sure you want to completely de-provision this faculty account? This cannot be undone.',
+            requireTypedConfirm: true,
             onConfirm: async () => {
                 try {
                     await api.delete(`/faculty/${id}`);
