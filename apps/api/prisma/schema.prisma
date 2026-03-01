@@ -242,3 +242,17 @@ model AuditLog {
 
   @@map("audit_logs")
 }
+
+model GlobalSettings {
+  id              String   @id @default("system-config")
+  platformName    String   @default("Zembaa.AI Scheduler")
+  supportEmail    String   @default("support@zembaa.ai")
+  maintenanceMode Boolean  @default(false)
+  sessionTimeout  Int      @default(600)
+  mfaEnabled      Boolean  @default(false)
+  logRetention    String   @default("30")
+  autoBackups     Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
+
+  @@map("global_settings")
+}

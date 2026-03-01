@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import prisma from '../lib/prisma';
-import { logActivity } from '../utils/activity-logger';
+import { logAction } from '../lib/logger';
 import { AuthRequest } from '../middlewares/auth.middleware';
 
 /**
@@ -18,13 +18,15 @@ export const login = async (req: AuthRequest, res: Response) => {
             data: { lastLogin: new Date() },
         });
 
-        // Persistent Activity Log
-        logActivity(
-            user.id,
-            user.role,
-            'USER_LOGIN_FIREBASE',
-            { method: 'firebase-auth', email: user.email, ip: req.ip }
-        );
+        // Persistent Activity Log Map to Enterprise Logger
+        logAction({
+            userId: user.id,
+            action: 'USER_LOGIN_FIREBASE',
+            changes: { email: user.email },
+            status: 'SUCCESS',
+            ipAddress: req.ip,
+            userAgent: req.headers['user-agent']
+        });
 
         res.json({
             user: {

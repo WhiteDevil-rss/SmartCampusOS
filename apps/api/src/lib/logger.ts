@@ -45,37 +45,59 @@ export interface LogParams {
 }
 
 /**
- * Enterprise Logger: Writes to both winston (files) and Prisma (database)
+ * Enterprise Logger: Writes to both winston (files) and Prisma (database).
+ * Executes asynchronously to prevent blocking the main API response thread.
  */
-export async function logAction(params: LogParams) {
-    try {
-        // 1. Log to Database
-        await (prisma.auditLog.create as any)({
-            data: {
-                userId: params.userId,
-                action: params.action,
-                entityType: params.entityType,
-                entityId: params.entityId,
-                changes: params.changes || {},
-                status: params.status,
-                endpoint: params.endpoint,
-                method: params.method,
-                durationMs: params.durationMs,
-                ipAddress: params.ipAddress,
-                userAgent: params.userAgent,
-            }
-        });
+export function logAction(params: LogParams) {
+    // Fire-and-forget execution to ensure zero performance hit on HTTP responses
+    setImmediate(async () => {
+        try {
+            // 1. Log to File
+            const logLevel = params.status === 'SUCCESS' ? 'info' : 'error';
+            winstonLogger.log(logLevel, params.action, {
+                ...params,
+                timestamp: new Date().toISOString()
+            });
 
-        // 2. Log to File
-        const logLevel = params.status === 'SUCCESS' ? 'info' : 'error';
-        winstonLogger.log(logLevel, params.action, {
-            ...params,
-            timestamp: new Date().toISOString()
-        });
+            // 2. Log to Database
+            await (prisma.auditLog.create as any)({
+                data: {
+                    userId: params.userId,
+                    action: params.action,
+                    entityType: params.entityType,
+                    entityId: params.entityId,
+                    changes: params.changes || {},
+                    status: params.status,
+                    endpoint: params.endpoint,
+                    method: params.method,
+                    durationMs: params.durationMs,
+                    ipAddress: params.ipAddress,
+                    userAgent: params.userAgent,
+                }
+            });
 
-    } catch (error) {
-        // Fallback if DB logging fails
-        console.error('CRITICAL: Audit logging to database failed!', error);
-        winstonLogger.error('Audit logging failed', { error, originalParams: params });
-    }
+        } catch (error) {
+            // Fallback if DB logging fails
+            console.error('CRITICAL: Audit logging to database failed!', error);
+            winstonLogger.error('Audit logging failed', { error, originalParams: params });
+        }
+    });
 }
+
+/**
+ * Backward-compatible adapter for legacy modules using `logActivity`.
+ * Automatically maps to the enterprise `logAction` function.
+ */
+export const logActivity = (
+    userId: string | undefined,
+    role: string,
+    action: string,
+    details?: any
+) => {
+    logAction({
+        userId,
+        action,
+        changes: { role, ...details },
+        status: action.includes('FAILED') || action.includes('ERROR') ? 'FAILURE' : 'SUCCESS',
+    });
+};

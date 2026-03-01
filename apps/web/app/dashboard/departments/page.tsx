@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { ConfirmDialog, useConfirm } from '@/components/ui/confirm-dialog';
 import { Toast, useToast } from '@/components/ui/toast-alert';
+import { UNI_ADMIN_NAV } from '@/lib/constants/nav-config';
 
 interface Department {
     id: string;
@@ -100,12 +101,13 @@ export default function DepartmentsDashboard() {
         });
     };
 
-    const navItems = [
-        { title: 'Dashboard', href: '/dashboard', icon: <LuLayoutDashboard className="w-5 h-5" /> },
-        { title: 'Departments', href: '/dashboard/departments', icon: <LuBuilding2 className="w-5 h-5 text-indigo-500" /> },
-        { title: 'Faculty', href: '/dashboard/faculty', icon: <LuUsers className="w-5 h-5" /> },
-        { title: 'Resources', href: '/dashboard/resources', icon: <LuMonitor className="w-5 h-5" /> },
-    ];
+    const navItems = UNI_ADMIN_NAV;
+    // [
+    //     { title: 'Dashboard', href: '/dashboard', icon: <LuLayoutDashboard className="w-5 h-5" /> },
+    //     { title: 'Departments', href: '/dashboard/departments', icon: <LuBuilding2 className="w-5 h-5 text-indigo-500" /> },
+    //     { title: 'Faculty', href: '/dashboard/faculty', icon: <LuUsers className="w-5 h-5" /> },
+    //     { title: 'Resources', href: '/dashboard/resources', icon: <LuMonitor className="w-5 h-5" /> },
+    // ];
 
     return (
         <ProtectedRoute allowedRoles={['UNI_ADMIN']}>

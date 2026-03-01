@@ -45,7 +45,7 @@ export default function UniAdminDashboard() {
 
     return (
         <ProtectedRoute allowedRoles={['UNI_ADMIN']}>
-            <DashboardLayout navItems={navItems} title="University Admin Dashboard">
+            <DashboardLayout navItems={navItems} title={`Welcome, ${user?.username || 'User'}`}>
                 {loading ? (
                     <div className="flex justify-center p-12"><div className="w-8 h-8 border-4 border-primary border-t-transparent animate-spin rounded-full"></div></div>
                 ) : (

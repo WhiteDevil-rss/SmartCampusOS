@@ -12,15 +12,15 @@ export type ToastState = {
 };
 
 const icons = {
-    success: <LuCircleCheck className="w-5 h-5 text-emerald-600 shrink-0" />,
-    error: <LuCircleX className="w-5 h-5 text-red-500 shrink-0" />,
-    info: <LuInfo className="w-5 h-5 text-blue-500 shrink-0" />,
+    success: <LuCircleCheck className="w-5 h-5 text-neon-cyan shrink-0 glow-cyan" />,
+    error: <LuCircleX className="w-5 h-5 text-rose-500 shrink-0 shadow-[0_0_10px_rgba(244,63,94,0.3)]" />,
+    info: <LuInfo className="w-5 h-5 text-blue-400 shrink-0" />,
 };
 
 const styles = {
-    success: 'border-emerald-200 bg-emerald-50 text-emerald-800',
-    error: 'border-red-200 bg-red-50 text-red-800',
-    info: 'border-blue-200 bg-blue-50 text-blue-800',
+    success: 'border-neon-cyan/30 bg-white dark:bg-black/90 text-slate-900 dark:text-white shadow-lg dark:shadow-[0_0_20px_rgba(57,193,239,0.1)]',
+    error: 'border-rose-500/30 bg-white dark:bg-black/90 text-slate-900 dark:text-white shadow-lg dark:shadow-[0_0_20px_rgba(244,63,94,0.1)]',
+    info: 'border-blue-500/30 bg-white dark:bg-black/90 text-slate-900 dark:text-white shadow-lg',
 };
 
 // ── Toast display component ───────────────────────────────────────────────────

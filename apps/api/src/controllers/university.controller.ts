@@ -14,6 +14,9 @@ export const getAllUniversities = async (req: Request, res: Response) => {
                 }
             }
         });
+
+        // Cache for 60 seconds at browser/CDN level
+        res.setHeader('Cache-Control', 'public, max-age=60');
         res.json(universities);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch universities' });

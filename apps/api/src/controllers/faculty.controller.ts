@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
 import bcrypt from 'bcrypt';
 import { AuthRequest } from '../middlewares/auth.middleware';
-import { logActivity } from '../utils/activity-logger';
+import { logActivity } from '../lib/logger';
+import { firebaseAdmin } from '../lib/firebase-admin';
 
 const hashPassword = async (password: string) => bcrypt.hash(password, 12);
 
@@ -53,7 +54,8 @@ export const getFacultyById = async (req: AuthRequest, res: Response) => {
             where: { id: req.params.id as string },
             include: {
                 subjects: { include: { course: true } },
-                departments: { include: { department: true } }
+                departments: { include: { department: true } },
+                user: true
             }
         }) as any;
 
@@ -96,40 +98,58 @@ export const createFaculty = async (req: AuthRequest, res: Response) => {
             }
         }
 
-        const faculty = await prisma.$transaction(async (tx) => {
-            const pwdHash = await hashPassword(password);
+        let firebaseUid: string | undefined;
+        let faculty;
 
-            const user = await tx.user.create({
-                data: {
-                    username: email.split('@')[0],
-                    email,
-                    passwordHash: pwdHash,
-                    role: 'FACULTY',
-                    phoneNumber: phone,
-                    universityId
-                }
+        try {
+            const firebaseRecord = await firebaseAdmin.auth().createUser({
+                email,
+                password: password,
+                displayName: name,
             });
+            firebaseUid = firebaseRecord.uid;
 
-            const fac = await tx.faculty.create({
-                data: {
-                    universityId,
-                    name,
-                    email,
-                    designation,
-                    userId: user.id,
-                    departments: {
-                        create: departmentIds.map((id: string) => ({ departmentId: id }))
+            faculty = await prisma.$transaction(async (tx: any) => {
+                const pwdHash = await hashPassword(password);
+
+                const user = await tx.user.create({
+                    data: {
+                        username: email.split('@')[0],
+                        email,
+                        passwordHash: pwdHash,
+                        firebaseUid,
+                        role: 'FACULTY',
+                        phoneNumber: phone,
+                        universityId
                     }
-                }
-            });
+                });
 
-            await tx.user.update({
-                where: { id: user.id },
-                data: { entityId: fac.id }
-            });
+                const fac = await tx.faculty.create({
+                    data: {
+                        universityId,
+                        name,
+                        email,
+                        designation,
+                        userId: user.id,
+                        departments: {
+                            create: departmentIds.map((id: string) => ({ departmentId: id }))
+                        }
+                    }
+                });
 
-            return fac;
-        });
+                await tx.user.update({
+                    where: { id: user.id },
+                    data: { entityId: fac.id }
+                });
+
+                return fac;
+            });
+        } catch (transactionError) {
+            if (firebaseUid) {
+                await firebaseAdmin.auth().deleteUser(firebaseUid).catch(console.error);
+            }
+            throw transactionError;
+        }
 
         res.status(201).json(faculty);
 
@@ -150,7 +170,7 @@ export const updateFaculty = async (req: AuthRequest, res: Response) => {
 
         const targetFac = await prisma.faculty.findUnique({
             where: { id: req.params.id as string },
-            include: { departments: true }
+            include: { departments: true, user: true }
         }) as any;
         if (!targetFac) return res.status(404).json({ error: 'Not found' });
 
@@ -168,24 +188,46 @@ export const updateFaculty = async (req: AuthRequest, res: Response) => {
 
         const isSelfFaculty = req.user!.role === 'FACULTY' && String(req.user!.entityId) === String(targetFac.id);
 
-        const faculty = await prisma.faculty.update({
-            where: { id: req.params.id as string },
-            data: {
-                name,
-                email,
-                phone,
-                designation,
-                qualifications,
-                experience,
-                departments: departmentIds ? {
-                    deleteMany: {},
-                    create: departmentIds.map((id: string) => ({ departmentId: id }))
-                } : undefined,
-                subjects: (subjectIds && !isSelfFaculty) ? {
-                    deleteMany: {},
-                    create: subjectIds.map((courseId: string) => ({ courseId }))
-                } : undefined
+        const faculty = await prisma.$transaction(async (tx) => {
+            const fac = await tx.faculty.update({
+                where: { id: req.params.id as string },
+                data: {
+                    name,
+                    email,
+                    phone,
+                    designation,
+                    qualifications,
+                    experience,
+                    departments: departmentIds ? {
+                        deleteMany: {},
+                        create: departmentIds.map((id: string) => ({ departmentId: id }))
+                    } : undefined,
+                    subjects: (subjectIds && !isSelfFaculty) ? {
+                        deleteMany: {},
+                        create: subjectIds.map((courseId: string) => ({ courseId }))
+                    } : undefined
+                }
+            });
+
+            // Update associated User record for consistent login credentials
+            if (targetFac.userId && (email !== targetFac.email || phone !== targetFac.phone)) {
+                await tx.user.update({
+                    where: { id: targetFac.userId },
+                    data: { email, phoneNumber: phone }
+                });
             }
+
+            // Push updates to Firebase Auth
+            if (targetFac.user?.firebaseUid && (name !== targetFac.name || email !== targetFac.email)) {
+                const firebaseUpdate: any = {};
+                if (name && name !== targetFac.name) firebaseUpdate.displayName = name;
+                if (email && email !== targetFac.email) firebaseUpdate.email = email;
+                if (Object.keys(firebaseUpdate).length > 0) {
+                    await firebaseAdmin.auth().updateUser(targetFac.user.firebaseUid, firebaseUpdate);
+                }
+            }
+
+            return fac;
         });
 
         res.json(faculty);
@@ -205,7 +247,7 @@ export const deleteFaculty = async (req: AuthRequest, res: Response) => {
     try {
         const targetFac = await prisma.faculty.findUnique({
             where: { id: req.params.id as string },
-            include: { departments: true }
+            include: { departments: true, user: true }
         }) as any;
         if (!targetFac) return res.status(404).json({ error: 'Not found' });
 
@@ -217,10 +259,16 @@ export const deleteFaculty = async (req: AuthRequest, res: Response) => {
             if (!hasAccess) return res.status(403).json({ error: 'Forbidden' });
         }
 
-        await prisma.faculty.delete({ where: { id: req.params.id as string } });
-        if (targetFac.userId) {
-            await prisma.user.delete({ where: { id: targetFac.userId } });
-        }
+        await prisma.$transaction(async (tx) => {
+            if (targetFac.userId) {
+                await tx.user.delete({ where: { id: targetFac.userId } });
+            }
+            await tx.faculty.delete({ where: { id: req.params.id as string } });
+
+            if (targetFac.user?.firebaseUid) {
+                await firebaseAdmin.auth().deleteUser(targetFac.user.firebaseUid);
+            }
+        });
 
         res.status(204).send();
 

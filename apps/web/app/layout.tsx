@@ -27,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${spaceGrotesk.variable} ${manrope.variable} font-sans antialiased overflow-x-hidden max-w-[100vw] min-h-screen`}
       >
         <AuthProvider>

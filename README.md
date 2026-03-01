@@ -1,14 +1,23 @@
-# Timetable Management Platform (NEP-Scheduler)
+# Zembaa.AI Scheduler (Timetable Management Platform)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Stack: Monorepo](https://img.shields.io/badge/Structure-PNPM--Monorepo-blue)](https://pnpm.io/)
 [![Engine: Google OR-Tools](https://img.shields.io/badge/Engine-Google_OR--Tools-brightgreen)](https://developers.google.com/optimization)
 
-**NEP-Scheduler** is a high-performance, AI-driven academic scheduling platform designed for large-scale universities. It automates the complex task of generating conflict-free, workload-balanced timetables while adhering to **NEP 2020** mandates.
+**Zembaa.AI Scheduler** is a high-performance, AI-driven academic scheduling platform designed for large-scale universities. It automates the complex task of generating conflict-free, workload-balanced timetables while adhering to **NEP 2020** mandates.
 
 ---
 
-## System Architecture
+## 🚀 Key Enterprise Features
+
+- **Robust Firebase Auth Synchronization**: Fully automated, two-way sync between PostgreSQL and Firebase Authentication for all CRUD user operations (Super Admins, University Admins, Department Admins, and Faculty). Ensures no orphaned users and tight login integrity.
+- **Enterprise Activity Logging**: Dual-storage (Database + Filesystem) asynchronous activity monitoring. Critical mutations automatically track execution timestamps, explicit changes, IP Addresses, and Device Headers using extreme high-throughput pipelines. 
+- **Graceful Deletion Safeguards**: Highly descriptive, user-friendly dependency trapping blocks the deletion of core entities (like Departments or Universities) if they harbor orphaned records like active courses, batches, timetables, or faculty.
+- **High-Performance Architecture**: Next.js App Router wrapped in Turbopack for ultra-fast compilation, Brotli-compressed Express.js REST APIs caching heavy responses through an integrated Redis Layer.
+
+---
+
+## 🏗️ System Architecture
 
 The project is structured as a **Polyglot Monorepo**, isolating concerns while maintaining strong type safety across the stack.
 
@@ -31,43 +40,33 @@ graph TD
 | Service | Tech Stack | Responsibility |
 | :--- | :--- | :--- |
 | **`apps/web`** | Next.js 14, Tailwind, Shadcn | Multi-role responsive dashboard (4 Panels). |
-| **`apps/api`** | Node.js, TypeScript, Prisma | Business logic, RBAC, and AI orchestration. |
-| **`apps/ai-engine`**| Python 3.10, FastAPI | Constraint solving and optimization logic. |
+| **`apps/api`** | Node.js, TypeScript, Prisma | Business logic, RBAC, Firebase integrations and AI orchestration. |
+| **`apps/ai-engine`**| Python 3.10, FastAPI | Constraint solving and optimization logic using OR-Tools. |
 | **`packages/types`** | TypeScript | Shared Zod schemas and TypeScript interfaces. |
 
 ---
 
-## The AI Scheduling Engine
+## 🧠 The AI Scheduling Engine
 
 The "brain" of the platform uses **Google OR-Tools CP-SAT Solver** to resolve billions of possible scheduling combinations in seconds.
 
-### Hard Constraints (Immutable)
-- **Faculty Availability**: No faculty can be in two rooms at once.
-- **Room Conflict**: No classroom can host two different batches simultaneously.
-- **Batch Integrity**: A student batch cannot have overlapping lectures.
-- **Capacity**: Batch strength must not exceed room capacity.
-- **Lab Requirements**: Lab sessions must be assigned to Lab-type resources.
-
-### Soft Constraints (Optimised)
-- **Workload Balance**: Distribute hours evenly across faculty members.
-- **No Gaps**: Minimise "empty slots" in faculty and student daily schedules.
-- **Preferred Slots**: Prioritise major subjects for morning hours.
+### Constraints & Optimizations
+- **Hard Constraints**: Faculty separation (no clones), un-overlappable room assignments, batch integrity, and strict capacity checks. 
+- **Soft Constraints**: Heavy workload balancing, minimized slot gaps, preferred daily slot prioritization.
 
 ---
 
-## Feature Matrix
+## 👥 Feature Matrix
 
 The platform is divided into 4 specialised panels to handle the university hierarchy:
 
 ### 1. Global Superadmin
-- Managing multiple university tenants.
-- Global user credential control and audit logging.
-- Cross-university timetable monitoring.
+- Managing multiple university tenants and configuring platform-wide settings.
+- Security oversight natively backed by Enterprise Audit Logging.
 
 ### 2. University Admin
 - Full infrastructure management (Classrooms, Labs, Departments).
 - Faculty pool coordination and primary/secondary workload assignment.
-- Global university-level scheduling parameters.
 
 ### 3. Department Admin
 - Granular control over department-specific courses and batches.
@@ -77,11 +76,10 @@ The platform is divided into 4 specialised panels to handle the university hiera
 ### 4. Faculty Portal
 - Personalised weekly schedule view.
 - Real-time updates on room changes or substitutions.
-- Profile and credential management.
 
 ---
 
-## Step-by-Step Project Start
+## 🏁 Step-by-Step Project Start
 
 Follow these exact steps to launch the entire ecosystem in under 2 minutes:
 
@@ -97,7 +95,7 @@ Initialise the database schema and seed the environment with VNSGU demo data:
 cd apps/api
 pnpm install
 npx prisma db push
-npx prisma db seed # This creates Ravi's account!
+npx prisma db seed # This creates demo accounts!
 # Start the API
 pnpm run dev
 ```
@@ -116,7 +114,7 @@ Open `http://localhost:3000` and log in.
 
 ---
 
-## Demo Credentials
+## 🔑 Demo Credentials
 
 | Role | Email | Password |
 | :--- | :--- | :--- |
@@ -127,7 +125,7 @@ Open `http://localhost:3000` and log in.
 
 ---
 
-## Deployment
+## ☁️ Deployment
 
 This project is optimised for **Google Cloud Platform (GCP)** using:
 - **Cloud Run** for horizontal scaling of microservices.

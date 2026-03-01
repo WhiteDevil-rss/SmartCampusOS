@@ -12,7 +12,12 @@ import { TimetableExport } from '@/components/timetable/timetable-export';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { WorkloadChart } from '@/components/timetable/workload-chart';
+import dynamic from 'next/dynamic';
+
+const WorkloadChart = dynamic(() => import('@/components/timetable/workload-chart').then(mod => mod.WorkloadChart), {
+    ssr: false,
+    loading: () => <div className="h-64 flex items-center justify-center text-slate-400 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-200">Loading chart optimization...</div>
+});
 import { Badge } from '@/components/ui/badge';
 
 export default function TimetableDetailView({ params }: { params: Promise<{ id: string }> }) {

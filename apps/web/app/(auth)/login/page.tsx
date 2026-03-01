@@ -12,8 +12,12 @@ import { ThemeToggle } from '@/components/theme-toggle';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { useSessionStore } from '@/lib/store/useSessionStore';
+import { useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
+    const searchParams = useSearchParams();
+    const isExpired = searchParams.get('expired') === 'true';
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -61,8 +65,10 @@ export default function LoginPage() {
                 throw new Error('User data missing from response');
             }
 
-            // 3. Update Store and Redirect Forcefully
+            // 3. Update Store and Start Session Timer
+            const startSession = useSessionStore.getState().startSession;
             console.log('Updating auth store for role:', user.role);
+            startSession(); // Start the 10-minute countdown
             loginStore(user);
 
             const roleRedirects: Record<string, string> = {
@@ -126,8 +132,14 @@ export default function LoginPage() {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleLogin} className="space-y-5">
+                        {isExpired && !error && (
+                            <div className="p-4 bg-amber-500/10 text-amber-500 text-sm rounded-xl border border-amber-500/20 animate-fade-in flex items-center gap-2 mb-4">
+                                <LuShieldAlert className="w-4 h-4 shrink-0" />
+                                <span>Your session has expired. Please log in again to continue.</span>
+                            </div>
+                        )}
                         {error && (
-                            <div className="p-4 bg-red-50 text-red-600 text-sm rounded-xl border border-red-100 animate-fade-in flex items-center gap-2">
+                            <div className="p-4 bg-red-500/10 text-red-500 text-sm rounded-xl border border-red-500/20 animate-fade-in flex items-center gap-2 mb-4">
                                 <LuShieldAlert className="w-4 h-4 shrink-0" />
                                 <span>{error}</span>
                             </div>

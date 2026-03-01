@@ -7,7 +7,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useAuthStore } from '@/lib/store/useAuthStore';
-import { WorkloadChart } from '@/components/timetable/workload-chart';
+import dynamic from 'next/dynamic';
+
+const WorkloadChart = dynamic(() => import('@/components/timetable/workload-chart').then(mod => mod.WorkloadChart), {
+    ssr: false,
+    loading: () => <div className="h-64 flex items-center justify-center text-slate-400 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-200">Loading chart optimization...</div>
+});
 
 import { DEPT_ADMIN_NAV } from '@/lib/constants/nav-config';
 
@@ -53,7 +58,7 @@ export default function DeptAdminDashboard() {
 
     return (
         <ProtectedRoute allowedRoles={['DEPT_ADMIN']}>
-            <DashboardLayout navItems={DEPT_ADMIN_NAV} title="Department Admin Dashboard">
+            <DashboardLayout navItems={DEPT_ADMIN_NAV} title={`Welcome, ${user?.username || 'User'}`}>
                 {loading ? (
                     <div className="flex justify-center p-12"><div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent animate-spin rounded-full"></div></div>
                 ) : (

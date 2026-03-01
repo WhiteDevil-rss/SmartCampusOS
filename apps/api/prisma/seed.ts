@@ -44,6 +44,23 @@ async function main() {
     });
     console.log(`Created SuperAdmin: ${superadmin.username} (Firebase UID: ${saUid})`);
 
+    // 1.5 Global Settings
+    const settings = await prisma.globalSettings.upsert({
+        where: { id: 'system-config' },
+        update: {},
+        create: {
+            id: 'system-config',
+            platformName: 'Zembaa.AI Scheduler',
+            supportEmail: 'support@zembaa.ai',
+            maintenanceMode: false,
+            sessionTimeout: 600,
+            mfaEnabled: false,
+            logRetention: '30',
+            autoBackups: false,
+        },
+    });
+    console.log(`Initialized Global Settings: ${settings.platformName}`);
+
     // 2. University
     const university = await prisma.university.upsert({
         where: { shortName: 'vnsgu' },

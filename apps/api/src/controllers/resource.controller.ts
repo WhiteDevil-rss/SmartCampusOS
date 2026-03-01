@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
-import { logActivity } from '../utils/activity-logger';
+import { logActivity } from '../lib/logger';
 
 export const getResources = async (req: AuthRequest, res: Response) => {
     try {

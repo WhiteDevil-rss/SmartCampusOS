@@ -112,8 +112,8 @@ export default function ProfilePage() {
 
                 <div className="max-w-4xl mx-auto space-y-8 pb-12">
                     {/* Header Section */}
-                    <div className="flex flex-col md:flex-row items-center gap-6 p-8 rounded-3xl bg-gradient-to-br from-primary/5 via-primary/[0.02] to-transparent border border-primary/10 shadow-sm relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-10">
+                    <div className="flex flex-col md:flex-row items-center gap-6 p-8 rounded-3xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/10 shadow-sm relative overflow-hidden backdrop-blur-md">
+                        <div className="absolute top-0 right-0 p-4 opacity-5 dark:opacity-10">
                             <LuBadgeCheck className="w-32 h-32 text-primary" />
                         </div>
                         <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary to-indigo-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg relative z-10">
@@ -138,8 +138,8 @@ export default function ProfilePage() {
                                 <CardHeader className="bg-slate-50/50 dark:bg-white/5 border-b dark:border-white/10 px-8 py-6">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <CardTitle className="text-xl">Personal Details</CardTitle>
-                                            <CardDescription>Update your contact and identification information</CardDescription>
+                                            <CardTitle className="text-xl text-slate-900 dark:text-white">Personal Details</CardTitle>
+                                            <CardDescription className="text-slate-500 dark:text-slate-400">Update your contact and identification information</CardDescription>
                                         </div>
                                         <LuUser className="w-6 h-6 text-primary/40" />
                                     </div>
@@ -154,7 +154,7 @@ export default function ProfilePage() {
                                                 value={formData.username}
                                                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                                                 placeholder="johndoe"
-                                                className="bg-slate-50/50 focus:bg-white transition-all dark:bg-white/5"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -165,7 +165,7 @@ export default function ProfilePage() {
                                                 value={formData.email}
                                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                                 placeholder="john@vnsgu.ac.in"
-                                                className="bg-slate-50/50 focus:bg-white transition-all dark:bg-white/5"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -176,7 +176,7 @@ export default function ProfilePage() {
                                                 value={formData.phoneNumber}
                                                 onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                                                 placeholder="+91 9876543210"
-                                                className="bg-slate-50/50 focus:bg-white transition-all dark:bg-white/5"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -187,7 +187,7 @@ export default function ProfilePage() {
                                                 value={formData.address}
                                                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                                                 placeholder="City, State, Country"
-                                                className="bg-slate-50/50 focus:bg-white transition-all dark:bg-white/5"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
                                             />
                                         </div>
                                     </div>
@@ -216,7 +216,7 @@ export default function ProfilePage() {
                                                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, qualifications: e.target.value })}
                                                 placeholder="e.g. Ph.D. in Computer Science, M.Tech, etc."
                                                 rows={3}
-                                                className="bg-slate-50/50 focus:bg-white transition-all dark:bg-white/5 resize-none shadow-inner"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium resize-none shadow-inner"
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -228,7 +228,7 @@ export default function ProfilePage() {
                                                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, experience: e.target.value })}
                                                 placeholder="Describe your previous academic and industrial experience..."
                                                 rows={4}
-                                                className="bg-slate-50/50 focus:bg-white transition-all dark:bg-white/5 resize-none shadow-inner"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium resize-none shadow-inner"
                                             />
                                         </div>
                                     </CardContent>

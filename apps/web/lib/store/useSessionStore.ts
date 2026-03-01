@@ -1,36 +1,27 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface SessionState {
-    timeLeft: number;
-    lastReset: number;
+    expiryTimestamp: number;
     hasHydrated: boolean;
-    setTimeLeft: (time: number) => void;
-    decrementTime: () => void;
-    resetTimer: () => void;
+    startSession: () => void;
     forceReset: () => void;
 }
 
 export const useSessionStore = create<SessionState>()(
     persist(
-        (set, get) => ({
-            timeLeft: 600, // 10 minutes default
-            lastReset: Date.now(),
+        (set) => ({
+            expiryTimestamp: 0, // Reset on start
             hasHydrated: false,
-            setTimeLeft: (time) => set({ timeLeft: time }),
-            decrementTime: () => set((state) => ({ timeLeft: Math.max(0, state.timeLeft - 1) })),
-            resetTimer: () => {
+            startSession: () => {
                 const now = Date.now();
-                const state = get();
-                // Only reset if at least 60 seconds have passed OR timer is critical (< 2 mins)
-                if (now - state.lastReset > 60000 || state.timeLeft < 120) {
-                    set({ timeLeft: 600, lastReset: now });
-                }
+                set({ expiryTimestamp: now + 600000 }); // Strict 10 minutes
             },
-            forceReset: () => set({ timeLeft: 600, lastReset: Date.now() }),
+            forceReset: () => set({ expiryTimestamp: 0 }),
         }),
         {
             name: 'session-storage',
+            storage: createJSONStorage(() => localStorage),
             onRehydrateStorage: () => (state) => {
                 if (state) {
                     state.hasHydrated = true;

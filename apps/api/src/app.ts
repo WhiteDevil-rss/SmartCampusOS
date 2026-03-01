@@ -4,6 +4,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import compression from 'compression';
 import { ScheduleConfig } from '@nep-scheduler/types';
 import { generateRequestSchema } from '@nep-scheduler/validation';
 import authRoutes from './routes/auth.routes';
@@ -26,6 +27,7 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 app.use(helmet());
+app.use(compression());
 app.use(cors());
 app.use(express.json());
 app.use(auditLogger);
@@ -40,6 +42,7 @@ app.get('/v1/ai-health', async (req: express.Request, res: express.Response) => 
 });
 
 import auditLogRoutes from './routes/audit-log.routes';
+import settingsRoutes from './routes/settings.routes';
 
 app.use('/v1/auth', authRoutes);
 app.use('/v1/universities/:universityId/departments', departmentRoutes);
@@ -53,6 +56,7 @@ app.use('/v1/batches', batchRoutes);
 app.use('/v1/users', userRoutes);
 app.use('/v1/programs', programRoutes);
 app.use('/v1/logs', auditLogRoutes);
+app.use('/v1/settings', settingsRoutes);
 
 const server = createServer(app);
 socketService.initialize(server);

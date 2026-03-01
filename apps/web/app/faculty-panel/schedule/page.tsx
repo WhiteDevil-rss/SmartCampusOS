@@ -7,6 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/lib/store/useAuthStore';
 import { TimetableGrid } from '@/components/timetable/timetable-grid';
+import { FACULTY_NAV } from '@/lib/constants/nav-config';
 
 export default function FacultySchedulePage() {
     const { user } = useAuthStore();
@@ -37,10 +38,11 @@ export default function FacultySchedulePage() {
         }
     }, [user, fetchSchedule]);
 
-    const navItems = [
-        { title: 'My Profile', href: '/faculty-panel', icon: <LuUser className="w-5 h-5" /> },
-        { title: 'My Schedule', href: '/faculty-panel/schedule', icon: <LuCalendar className="w-5 h-5 text-indigo-500" /> },
-    ];
+    const navItems = FACULTY_NAV;
+    // [
+    //     { title: 'My Profile', href: '/faculty-panel', icon: <LuUser className="w-5 h-5" /> },
+    //     { title: 'My Schedule', href: '/faculty-panel/schedule', icon: <LuCalendar className="w-5 h-5 text-indigo-500" /> },
+    // ];
 
     return (
         <ProtectedRoute allowedRoles={['FACULTY']}>
@@ -49,11 +51,12 @@ export default function FacultySchedulePage() {
                     <div className="flex justify-center p-12"><div className="w-8 h-8 rounded-full border-4 border-indigo-600 dark:border-neon-cyan border-t-transparent animate-spin" /></div>
                 ) : latestTimetable ? (
                     <div className="space-y-4">
-                        <div className="flex justify-between items-center bg-white dark:bg-[#0a0a0c] p-4 rounded-lg shadow-sm border border-slate-200 dark:border-white/10 glass-card">
-                            <div>
-                                <h3 className="text-xl font-bold text-slate-800 dark:text-white">Your Current Schedule</h3>
-                                <p className="text-sm text-slate-500 dark:text-slate-400">
-                                    Generated on {new Date(latestTimetable.createdAt).toLocaleDateString()}
+                        <div className="flex justify-between items-center bg-slate-900/40 border border-white/5 backdrop-blur-md p-8 rounded-[1.5rem] shadow-2xl relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/5 blur-[40px] rounded-full group-hover:bg-neon-cyan/15 transition-all duration-500" />
+                            <div className="relative z-10">
+                                <h3 className="text-2xl font-black text-white glow-sm tracking-tight">Active Schedule Matrix</h3>
+                                <p className="text-sm text-slate-400 font-medium mt-1">
+                                    Generated Dynamic Matrix: {new Date(latestTimetable.createdAt).toLocaleDateString()}
                                 </p>
                             </div>
                         </div>
@@ -66,9 +69,12 @@ export default function FacultySchedulePage() {
                         />
                     </div>
                 ) : (
-                    <div className="text-center p-12 border border-dashed rounded-xl bg-slate-50 dark:bg-white/5 dark:border-white/10">
-                        <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 mb-2">No active schedule found</h3>
-                        <p className="text-slate-500 dark:text-slate-400">Your specific department has not generated or published an active timetable yet.</p>
+                    <div className="text-center p-20 border border-dashed rounded-[2rem] bg-slate-900/20 border-white/10 backdrop-blur-sm">
+                        <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <LuCalendar className="w-8 h-8 text-slate-600" />
+                        </div>
+                        <h3 className="text-xl font-black text-white mb-2 tracking-tight">Vortex Sync Pending</h3>
+                        <p className="text-slate-500 font-medium max-w-sm mx-auto">Your specific department has not generated or published an active timetable matrix yet. Please stand by for synchronization.</p>
                     </div>
                 )}
             </DashboardLayout>

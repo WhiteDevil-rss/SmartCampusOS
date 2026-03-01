@@ -27,7 +27,7 @@ export const auditLogger = (req: Request, res: Response, next: NextFunction) => 
                 userAgent: req.get('user-agent'),
                 // Note: We don't log passwords or sensitive data here for security
                 changes: req.method !== 'GET' ? { body: filterSensitiveData(req.body) } : undefined
-            }).catch(err => console.error('Audit logging error:', err));
+            });
         }
     });
 

@@ -4,7 +4,7 @@ import { AuthRequest } from '../middlewares/auth.middleware';
 import { callAiEngine } from '../services/ai.service';
 import { createClient } from 'redis';
 import { socketService } from '../services/socket.service';
-import { logActivity } from '../utils/activity-logger';
+import { logActivity } from '../lib/logger';
 
 const redisClient = createClient({ url: process.env.REDIS_URL || 'redis://localhost:6379' });
 redisClient.connect().catch(console.error);
@@ -269,10 +269,10 @@ export const getLatestTimetable = async (req: AuthRequest, res: Response) => {
                         ...(facultyId ? { facultyId: String(facultyId) } : {})
                     },
                     include: {
-                        course: true,
-                        faculty: true,
-                        room: true,
-                        batch: true
+                        course: { select: { id: true, code: true, type: true } },
+                        faculty: { select: { id: true, name: true } },
+                        room: { select: { id: true, name: true, type: true } },
+                        batch: { select: { id: true, name: true } }
                     },
                     orderBy: [
                         { dayOfWeek: 'asc' },
@@ -367,10 +367,10 @@ export const getTimetableById = async (req: AuthRequest, res: Response) => {
                         ...(facultyId ? { facultyId: String(facultyId) } : {})
                     },
                     include: {
-                        course: true,
-                        faculty: true,
-                        room: true,
-                        batch: true
+                        course: { select: { id: true, code: true, type: true } },
+                        faculty: { select: { id: true, name: true } },
+                        room: { select: { id: true, name: true, type: true } },
+                        batch: { select: { id: true, name: true } }
                     },
                     orderBy: [
                         { dayOfWeek: 'asc' },

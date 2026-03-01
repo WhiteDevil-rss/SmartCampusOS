@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Input } from '@/components/ui/input';
 import { useToast, Toast } from '@/components/ui/toast-alert';
 import { useConfirm, ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { SUPERADMIN_NAV } from '@/lib/constants/nav-config';
 
 interface University {
     id: string;
@@ -117,12 +118,13 @@ export default function SuperAdminDashboard() {
     };
 
 
-    const navItems = [
-        { title: 'Overview', href: '/superadmin', icon: <LuLayoutDashboard className="w-5 h-5" /> },
-        { title: 'Universities', href: '/superadmin/universities', icon: <LuBuilding2 className="w-5 h-5" /> },
-        { title: 'Users', href: '/superadmin/users', icon: <LuUsers className="w-5 h-5" /> },
-        { title: 'Audit Logs', href: '/superadmin/logs', icon: <LuClipboardList className="w-5 h-5" /> },
-    ];
+    const navItems = SUPERADMIN_NAV;
+    // [
+    //     { title: 'Overview', href: '/superadmin', icon: <LuLayoutDashboard className="w-5 h-5" /> },
+    //     { title: 'Universities', href: '/superadmin/universities', icon: <LuBuilding2 className="w-5 h-5" /> },
+    //     { title: 'Users', href: '/superadmin/users', icon: <LuUsers className="w-5 h-5" /> },
+    //     { title: 'Audit Logs', href: '/superadmin/logs', icon: <LuClipboardList className="w-5 h-5" /> },
+    // ];
 
     return (
         <ProtectedRoute allowedRoles={['SUPERADMIN']}>
@@ -130,28 +132,31 @@ export default function SuperAdminDashboard() {
 
                 <div className="flex justify-between items-center mb-10 relative z-20">
                     <div>
-                        <h2 className="text-3xl font-heading font-extrabold tracking-tight text-slate-900 dark:text-white glow-cyan">Universities Overview</h2>
-                        <p className="text-slate-600 dark:text-slate-400 font-light mt-1">Manage global university partitions securely via the Neural Constraint Solver matrix.</p>
+                        <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white glow-sm">Institutions Matrix</h2>
+                        <p className="text-slate-600 dark:text-slate-400 mt-1 font-medium">Manage global university partitions securely via the Neural Constraint Solver matrix.</p>
                     </div>
-                    <Button onClick={() => setIsAddUniOpen(true)} className="bg-neon-cyan text-white dark:text-slate-900 shadow-md dark:shadow-[0_0_15px_rgba(57,193,239,0.4)] hover:shadow-lg hover:bg-cyan-600 dark:hover:bg-white font-bold transition-all px-6">
-                        <LuPlus className="w-5 h-5 mr-2" /> Provision Partition
+                    <Button
+                        onClick={() => setIsAddUniOpen(true)}
+                        className="bg-neon-cyan text-slate-900 font-black shadow-[0_0_20px_rgba(57,193,239,0.4)] hover:shadow-[0_0_35px_rgba(57,193,239,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 h-11 px-6 rounded-xl border border-transparent hover:border-white/20"
+                    >
+                        <LuPlus className="w-5 h-5 mr-1.5" /> Provision Partition
                     </Button>
                 </div>
 
                 {loading ? (
-                    <div className="flex justify-center p-12"><div className="w-10 h-10 rounded-full border-4 border-neon-cyan border-t-transparent animate-spin shadow-[0_0_15px_rgba(57,193,239,0.5)]" /></div>
+                    <div className="flex justify-center p-12"><div className="w-12 h-12 rounded-full border-4 border-neon-cyan border-t-transparent animate-spin shadow-[0_0_20px_rgba(57,193,239,0.3)]" /></div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-20">
                         {universities.map(uni => (
-                            <div key={uni.id} className="glass-card rounded-[1.5rem] overflow-hidden group hover:border-cyan-500/30 dark:hover:border-neon-cyan/40 transition-all duration-500 hover:shadow-lg dark:hover:shadow-[0_0_30px_rgba(57,193,239,0.15)] relative">
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/10 blur-[40px] rounded-full group-hover:bg-neon-cyan/25 dark:bg-neon-cyan/5 dark:group-hover:bg-neon-cyan/15 transition-colors duration-500" />
+                            <div key={uni.id} className="bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/5 backdrop-blur-md rounded-[2rem] overflow-hidden group hover:border-neon-cyan/30 transition-all duration-500 hover:shadow-[0_0_40px_rgba(57,193,239,0.1)] relative">
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/5 blur-[40px] rounded-full group-hover:bg-neon-cyan/15 transition-all duration-500" />
 
-                                <div className="p-6 border-b border-slate-200 dark:border-white/5 relative z-10">
-                                    <div className="absolute right-4 top-4 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <div className="p-8 border-b border-slate-100 dark:border-white/5 relative z-10">
+                                    <div className="absolute right-6 top-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-8 w-8 text-slate-500 dark:text-slate-400 hover:text-cyan-700 dark:hover:text-neon-cyan hover:bg-cyan-50 dark:hover:bg-neon-cyan/10 rounded-lg"
+                                            className="h-10 w-10 text-slate-400 hover:text-neon-cyan hover:bg-neon-cyan/10 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5"
                                             onClick={() => openEditDialog(uni)}
                                         >
                                             <LuPencil className="h-4 w-4" />
@@ -159,26 +164,26 @@ export default function SuperAdminDashboard() {
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-8 w-8 text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg"
+                                            className="h-10 w-10 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5"
                                             onClick={() => handleDeleteUniversity(uni.id, uni.name)}
                                         >
                                             <LuTrash2 className="h-4 w-4" />
                                         </Button>
                                     </div>
-                                    <div className="flex items-start justify-between pr-16 text-slate-900 dark:text-white mb-2">
-                                        <span className="font-heading font-extrabold text-2xl tracking-tight">{uni.shortName}</span>
-                                        <span className="px-3 py-1 bg-cyan-100 dark:bg-neon-cyan/10 border border-cyan-200 dark:border-neon-cyan/20 text-cyan-700 dark:text-neon-cyan text-xs font-bold uppercase rounded-full shrink-0 shadow-sm dark:shadow-[0_0_10px_rgba(57,193,239,0.1)]">ACTIVE</span>
+                                    <div className="flex items-start justify-between pr-20 text-slate-900 dark:text-white mb-3">
+                                        <span className="font-black text-3xl tracking-tighter text-slate-900 dark:text-white">{uni.shortName}</span>
+                                        <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase rounded-full tracking-widest shadow-[0_0_15px_rgba(16,185,129,0.1)]">ACTIVE</span>
                                     </div>
-                                    <p className="line-clamp-1 text-slate-600 dark:text-slate-400 font-medium text-sm">{uni.name}</p>
+                                    <p className="line-clamp-1 text-slate-500 dark:text-slate-400 font-bold text-sm tracking-tight">{uni.name}</p>
                                 </div>
-                                <div className="p-6 pt-4 relative z-10">
-                                    <div className="flex justify-between items-center text-sm mb-3 group/stat">
-                                        <span className="flex items-center text-slate-600 dark:text-slate-400 font-medium group-hover/stat:text-cyan-600 dark:group-hover/stat:text-neon-cyan transition-colors"><LuBuilding2 className="w-4 h-4 mr-2" /> Topology Sectors</span>
-                                        <span className="font-bold text-slate-900 dark:text-white px-2.5 py-1 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg group-hover/stat:border-cyan-300 dark:group-hover/stat:border-neon-cyan/30 transition-colors">{uni._count?.departments || 0}</span>
+                                <div className="p-8 space-y-4 relative z-10 bg-slate-50 dark:bg-white/[0.02]">
+                                    <div className="flex justify-between items-center text-sm group/stat">
+                                        <span className="flex items-center text-slate-600 dark:text-slate-400 font-bold group-hover/stat:text-neon-cyan transition-colors"><LuBuilding2 className="w-4 h-4 mr-3 opacity-50" /> Topology Sectors</span>
+                                        <span className="font-black text-slate-900 dark:text-white px-3 py-1.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-xl group-hover/stat:border-neon-cyan/30 transition-all">{uni._count?.departments || 0}</span>
                                     </div>
                                     <div className="flex justify-between items-center text-sm group/stat">
-                                        <span className="flex items-center text-slate-600 dark:text-slate-400 font-medium group-hover/stat:text-cyan-600 dark:group-hover/stat:text-neon-cyan transition-colors"><LuUsers className="w-4 h-4 mr-2" /> Active Resources</span>
-                                        <span className="font-bold text-slate-900 dark:text-white px-2.5 py-1 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg group-hover/stat:border-cyan-300 dark:group-hover/stat:border-neon-cyan/30 transition-colors">{uni._count?.faculty || 0}</span>
+                                        <span className="flex items-center text-slate-600 dark:text-slate-400 font-bold group-hover/stat:text-neon-cyan transition-colors"><LuUsers className="w-4 h-4 mr-3 opacity-50" /> Active Resources</span>
+                                        <span className="font-black text-slate-900 dark:text-white px-3 py-1.5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 rounded-xl group-hover/stat:border-neon-cyan/30 transition-all">{uni._count?.faculty || 0}</span>
                                     </div>
                                 </div>
                             </div>
@@ -194,74 +199,90 @@ export default function SuperAdminDashboard() {
 
                 {/* Add University Modal */}
                 <Dialog open={isAddUniOpen} onOpenChange={setIsAddUniOpen}>
-                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
-                        <DialogHeader>
-                            <DialogTitle>Register New University</DialogTitle>
+                    <DialogContent className="sm:max-w-xl bg-white dark:bg-[#0a0a0c] border border-slate-200 dark:border-white/5 shadow-2xl dark:shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-[2rem] p-0 overflow-hidden">
+                        <DialogHeader className="p-8 pb-0">
+                            <DialogTitle className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Provision Partition</DialogTitle>
+                            <p className="text-slate-600 dark:text-slate-400 font-medium">Initialize a new secure matrix sector for institutional data.</p>
                         </DialogHeader>
-                        <div className="space-y-4 py-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Institution Name</label>
-                                <Input
-                                    placeholder="e.g. Veer Narmad South Gujarat University"
-                                    value={newUniForm.name}
-                                    onChange={(e) => setNewUniForm({ ...newUniForm, name: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Short Name (Identifier)</label>
-                                <Input
-                                    placeholder="e.g. VNSGU"
-                                    value={newUniForm.shortName}
-                                    onChange={(e) => setNewUniForm({ ...newUniForm, shortName: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Location</label>
-                                <Input
-                                    placeholder="e.g. Surat, Gujarat"
-                                    value={newUniForm.location}
-                                    onChange={(e) => setNewUniForm({ ...newUniForm, location: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Contact Email</label>
-                                <Input
-                                    type="email"
-                                    placeholder="admin@vnsgu.ac.in"
-                                    value={newUniForm.email}
-                                    onChange={(e) => setNewUniForm({ ...newUniForm, email: e.target.value })}
-                                />
+                        <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Institution Name</label>
+                                    <Input
+                                        className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-slate-900 dark:text-white font-medium"
+                                        placeholder="Veer Narmad South Gujarat University"
+                                        value={newUniForm.name}
+                                        onChange={(e) => setNewUniForm({ ...newUniForm, name: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Short Name</label>
+                                    <Input
+                                        className="bg-white/5 border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-white font-medium"
+                                        placeholder="VNSGU"
+                                        value={newUniForm.shortName}
+                                        onChange={(e) => setNewUniForm({ ...newUniForm, shortName: e.target.value })}
+                                    />
+                                </div>
                             </div>
 
-                            <hr className="my-4" />
-                            <h4 className="text-sm font-semibold text-slate-800">Root Admin Account</h4>
-                            <p className="text-xs text-slate-500 mb-2">This account will have total control over the newly provisioned university.</p>
-
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Admin Username</label>
-                                <Input
-                                    placeholder="admin_vnsgu"
-                                    value={newUniForm.adminUsername}
-                                    onChange={(e) => setNewUniForm({ ...newUniForm, adminUsername: e.target.value })}
-                                />
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black text-slate-700 dark:text-slate-500 tracking-widest ml-1">Location</label>
+                                    <Input
+                                        className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-slate-900 dark:text-white font-medium"
+                                        placeholder="Surat, Gujarat"
+                                        value={newUniForm.location}
+                                        onChange={(e) => setNewUniForm({ ...newUniForm, location: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black text-slate-700 dark:text-slate-500 tracking-widest ml-1">Support Email</label>
+                                    <Input
+                                        className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-slate-900 dark:text-white font-medium"
+                                        type="email"
+                                        placeholder="admin@vnsgu.ac.in"
+                                        value={newUniForm.email}
+                                        onChange={(e) => setNewUniForm({ ...newUniForm, email: e.target.value })}
+                                    />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Temporary Password</label>
-                                <Input
-                                    type="password"
-                                    placeholder="••••••••"
-                                    value={newUniForm.adminPassword}
-                                    onChange={(e) => setNewUniForm({ ...newUniForm, adminPassword: e.target.value })}
-                                />
+
+                            <div className="relative py-4">
+                                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200 dark:border-white/5" /></div>
+                                <div className="relative flex justify-center text-[10px] uppercase font-black"><span className="bg-white dark:bg-[#0a0a0c] px-4 text-slate-500 tracking-widest">Root Matrix Credentials</span></div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black text-slate-700 dark:text-slate-500 tracking-widest ml-1">Admin Identity</label>
+                                    <Input
+                                        className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-slate-900 dark:text-white font-medium"
+                                        placeholder="sys_admin_vnsgu"
+                                        value={newUniForm.adminUsername}
+                                        onChange={(e) => setNewUniForm({ ...newUniForm, adminUsername: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black text-slate-700 dark:text-slate-500 tracking-widest ml-1">Access Key</label>
+                                    <Input
+                                        className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-slate-900 dark:text-white font-medium"
+                                        type="password"
+                                        placeholder="••••••••"
+                                        value={newUniForm.adminPassword}
+                                        onChange={(e) => setNewUniForm({ ...newUniForm, adminPassword: e.target.value })}
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <DialogFooter>
-                            <Button variant="outline" onClick={() => setIsAddUniOpen(false)}>Cancel</Button>
+                        <DialogFooter className="p-8 bg-slate-50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/5">
+                            <Button variant="ghost" onClick={() => setIsAddUniOpen(false)} className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl px-6 h-12 font-bold">Discard</Button>
                             <Button
                                 onClick={handleCreateUniversity}
                                 disabled={!newUniForm.name || !newUniForm.shortName || !newUniForm.adminUsername || !newUniForm.adminPassword}
+                                className="bg-neon-cyan text-slate-900 font-black rounded-xl px-8 h-12 shadow-[0_0_20px_rgba(57,193,239,0.3)] hover:shadow-[0_0_30px_rgba(57,193,239,0.5)] transition-all"
                             >
-                                Provision Tenant
+                                Authorize Matrix
                             </Button>
                         </DialogFooter>
                     </DialogContent>
@@ -269,52 +290,62 @@ export default function SuperAdminDashboard() {
 
                 {/* Edit University Modal */}
                 <Dialog open={isEditUniOpen} onOpenChange={setIsEditUniOpen}>
-                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
-                        <DialogHeader>
-                            <DialogTitle>Edit University Details</DialogTitle>
+                    <DialogContent className="sm:max-w-lg bg-white dark:bg-[#0a0a0c] border border-slate-200 dark:border-white/5 shadow-2xl dark:shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-[2rem] p-0 overflow-hidden">
+                        <DialogHeader className="p-8 pb-0">
+                            <DialogTitle className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Reconfigure Sector</DialogTitle>
+                            <p className="text-slate-600 dark:text-slate-400 font-medium">Modify parameters for the selected institutional partition.</p>
                         </DialogHeader>
-                        <div className="space-y-4 py-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Institution Name</label>
-                                <Input
-                                    placeholder="e.g. Veer Narmad South Gujarat University"
-                                    value={editUniForm.name}
-                                    onChange={(e) => setEditUniForm({ ...editUniForm, name: e.target.value })}
-                                />
+                        <div className="p-8 space-y-6">
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black text-slate-700 dark:text-slate-500 tracking-widest ml-1">Institution Name</label>
+                                    <Input
+                                        className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-slate-900 dark:text-white font-medium"
+                                        placeholder="Institution Name"
+                                        value={editUniForm.name}
+                                        onChange={(e) => setEditUniForm({ ...editUniForm, name: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black text-slate-700 dark:text-slate-500 tracking-widest ml-1">Short Name</label>
+                                    <Input
+                                        className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-slate-900 dark:text-white font-medium"
+                                        placeholder="Short Name"
+                                        value={editUniForm.shortName}
+                                        onChange={(e) => setEditUniForm({ ...editUniForm, shortName: e.target.value })}
+                                    />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Short Name (Identifier)</label>
-                                <Input
-                                    placeholder="e.g. VNSGU"
-                                    value={editUniForm.shortName}
-                                    onChange={(e) => setEditUniForm({ ...editUniForm, shortName: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Location</label>
-                                <Input
-                                    placeholder="e.g. Surat, Gujarat"
-                                    value={editUniForm.location}
-                                    onChange={(e) => setEditUniForm({ ...editUniForm, location: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Contact Email</label>
-                                <Input
-                                    type="email"
-                                    placeholder="admin@vnsgu.ac.in"
-                                    value={editUniForm.email}
-                                    onChange={(e) => setEditUniForm({ ...editUniForm, email: e.target.value })}
-                                />
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black text-slate-700 dark:text-slate-500 tracking-widest ml-1">Location</label>
+                                    <Input
+                                        className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-slate-900 dark:text-white font-medium"
+                                        placeholder="Location"
+                                        value={editUniForm.location}
+                                        onChange={(e) => setEditUniForm({ ...editUniForm, location: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] uppercase font-black text-slate-700 dark:text-slate-500 tracking-widest ml-1">Support Email</label>
+                                    <Input
+                                        className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-slate-900 dark:text-white font-medium"
+                                        type="email"
+                                        placeholder="Contact Email"
+                                        value={editUniForm.email}
+                                        onChange={(e) => setEditUniForm({ ...editUniForm, email: e.target.value })}
+                                    />
+                                </div>
                             </div>
                         </div>
-                        <DialogFooter>
-                            <Button variant="outline" onClick={() => setIsEditUniOpen(false)}>Cancel</Button>
+                        <DialogFooter className="p-8 bg-slate-50 dark:bg-white/[0.02] border-t border-slate-200 dark:border-white/5">
+                            <Button variant="ghost" onClick={() => setIsEditUniOpen(false)} className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl px-6 h-12 font-bold">Cancel</Button>
                             <Button
                                 onClick={handleUpdateUniversity}
                                 disabled={!editUniForm.name || !editUniForm.shortName}
+                                className="bg-neon-cyan text-slate-900 font-black rounded-xl px-8 h-12 shadow-[0_0_20px_rgba(57,193,239,0.3)] hover:shadow-[0_0_30px_rgba(57,193,239,0.5)] transition-all"
                             >
-                                Save Changes
+                                Commit Changes
                             </Button>
                         </DialogFooter>
                     </DialogContent>
