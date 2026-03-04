@@ -7,12 +7,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useAuthStore } from '@/lib/store/useAuthStore';
-import dynamic from 'next/dynamic';
-
-const WorkloadChart = dynamic(() => import('@/components/timetable/workload-chart').then(mod => mod.WorkloadChart), {
-    ssr: false,
-    loading: () => <div className="h-64 flex items-center justify-center text-slate-400 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-200">Loading chart optimization...</div>
-});
 
 import { DEPT_ADMIN_NAV } from '@/lib/constants/nav-config';
 
@@ -105,10 +99,8 @@ export default function DeptAdminDashboard() {
                         </div>
 
                         <div className="mt-8">
-                            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Latest Workload Summary</h2>
-                            {latestTimetable ? (
-                                <WorkloadChart slots={latestTimetable.slots} />
-                            ) : (
+                            <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Latest Schedule Overview</h2>
+                            {!latestTimetable && (
                                 <Card className="glass-card border-dashed">
                                     <CardContent className="flex flex-col items-center justify-center p-8 text-slate-500 dark:text-slate-400">
                                         <LuCalendar className="w-12 h-12 text-slate-300 dark:text-slate-600 mb-3" />

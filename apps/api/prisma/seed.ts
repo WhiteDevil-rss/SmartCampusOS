@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import fs from 'fs';
+import path from 'path';
 import { firebaseAdmin } from '../src/lib/firebase-admin';
 
 const prisma = new PrismaClient();
@@ -24,28 +26,19 @@ async function syncFirebaseUser(email: string, password: string, displayName: st
 }
 
 async function main() {
-    console.log('Seeding VNSGU Demo Environment... Syncing with Firebase!');
+    console.log('Seeding from seed-data.json... Syncing with Firebase!');
+
+    const dataPath = path.join(__dirname, 'seed-data.json');
+    const rawData = fs.readFileSync(dataPath, 'utf8');
+    const data = JSON.parse(rawData);
 
     // Hash standard password for seed users
-    const passwordHash = await bcrypt.hash('password123', 12);
+    const standardPassword = 'password123';
+    const passwordHash = await bcrypt.hash(standardPassword, 12);
 
-    // 1. Superadmin User
-    const saUid = await syncFirebaseUser('admin@nep-scheduler.com', 'password123', 'superadmin');
-    const superadmin = await prisma.user.upsert({
-        where: { username: 'superadmin' },
-        update: { firebaseUid: saUid },
-        create: {
-            username: 'superadmin',
-            email: 'admin@zembaa.com',
-            passwordHash,
-            firebaseUid: saUid,
-            role: 'SUPERADMIN',
-        },
-    });
-    console.log(`Created SuperAdmin: ${superadmin.username} (Firebase UID: ${saUid})`);
-
-    // 1.5 Global Settings
-    const settings = await prisma.globalSettings.upsert({
+    // 1. Global Settings (Not in JSON, keeping from previous seed)
+    console.log('Initializing Global Settings...');
+    await prisma.globalSettings.upsert({
         where: { id: 'system-config' },
         update: {},
         create: {
@@ -59,236 +52,257 @@ async function main() {
             autoBackups: false,
         },
     });
-    console.log(`Initialized Global Settings: ${settings.platformName}`);
 
-    // 2. University
-    const university = await prisma.university.upsert({
-        where: { shortName: 'vnsgu' },
-        update: {},
-        create: {
-            name: 'Veer Narmad South Gujarat University',
-            shortName: 'vnsgu',
-            location: 'Surat, Gujarat',
-            email: 'vc@vnsgu.ac.in',
-            estYear: 1965,
-            website: 'vnsgu.ac.in',
-        },
-    });
-    console.log(`Created University: ${university.name}`);
-
-    // 3. University Admin User
-    const uaUid = await syncFirebaseUser('admin@vnsgu.ac.in', 'password123', 'admin_vnsgu');
-    const uniAdmin = await prisma.user.upsert({
-        where: { username: 'admin_vnsgu' },
-        update: { firebaseUid: uaUid },
-        create: {
-            username: 'admin_vnsgu',
-            email: 'admin@vnsgu.ac.in',
-            passwordHash,
-            firebaseUid: uaUid,
-            role: 'UNI_ADMIN',
-            universityId: university.id,
-            entityId: university.id,
-        },
-    });
-    console.log(`Created Uni Admin: ${uniAdmin.username} (Firebase UID: ${uaUid})`);
-
-    // Update University with Admin User
-    await prisma.university.update({
-        where: { id: university.id },
-        data: { adminUserId: uniAdmin.id },
-    });
-
-    // 4. Department
-    const department = await prisma.department.create({
-        data: {
-            universityId: university.id,
-            name: 'Department of Computer Science',
-            shortName: 'DCS',
-            hod: 'Dr. Apurva Desai',
-            email: 'dcs@vnsgu.ac.in',
-        },
-    });
-    console.log(`Created Department: ${department.name}`);
-
-    // 5. Department Admin User
-    const daUid = await syncFirebaseUser('admin_dcs@vnsgu.ac.in', 'password123', 'admin_dcs_vnsgu');
-    const deptAdmin = await prisma.user.upsert({
-        where: { username: 'admin_dcs_vnsgu' },
-        update: { firebaseUid: daUid },
-        create: {
-            username: 'admin_dcs_vnsgu',
-            email: 'admin_dcs@vnsgu.ac.in',
-            passwordHash,
-            firebaseUid: daUid,
-            role: 'DEPT_ADMIN',
-            universityId: university.id,
-            entityId: department.id,
-        },
-    });
-    console.log(`Created Dept Admin: ${deptAdmin.username} (Firebase UID: ${daUid})`);
-
-    // Update Department with Admin User
-    await prisma.department.update({
-        where: { id: department.id },
-        data: { adminUserId: deptAdmin.id },
-    });
-
-    // 6. Resources (Classrooms & Labs)
-    const resources = [
-        { name: 'CS Classroom 101', type: 'Classroom', capacity: 60, floor: '1st' },
-        { name: 'CS Classroom 102', type: 'Classroom', capacity: 60, floor: '1st' },
-        { name: 'CS Classroom 201', type: 'Classroom', capacity: 40, floor: '2nd' },
-        { name: 'CS Lab A', type: 'Lab', capacity: 30, floor: 'Ground' },
-        { name: 'CS Lab B', type: 'Lab', capacity: 30, floor: 'Ground' },
-    ];
-
-    for (const res of resources) {
-        await prisma.resource.create({
-            data: {
-                ...res,
-                universityId: university.id,
+    // 2. Universities
+    console.log(`Seeding ${data.universities.length} Universities...`);
+    for (const uni of data.universities) {
+        await prisma.university.upsert({
+            where: { id: uni.id },
+            update: {
+                name: uni.name,
+                shortName: uni.shortName,
+                location: uni.location,
+                email: uni.email,
+                estYear: uni.estYear,
+                website: uni.website,
+            },
+            create: {
+                id: uni.id,
+                name: uni.name,
+                shortName: uni.shortName,
+                location: uni.location,
+                email: uni.email,
+                estYear: uni.estYear,
+                website: uni.website,
             },
         });
     }
-    console.log(`Created ${resources.length} Resources`);
 
-    // 7. Batches (MCA Sem 2)
-    const batchA = await prisma.batch.create({
-        data: {
-            universityId: university.id,
-            departmentId: department.id,
-            name: 'MCA Sem 2 Div A 2025-26',
-            program: 'MCA',
-            semester: 2,
-            division: 'A',
-            year: '2025-26',
-            strength: 30,
-        },
-    });
+    // 3. Users
+    console.log(`Seeding ${data.users.length} Users...`);
+    for (const user of data.users) {
+        // Sync with Firebase
+        const fUid = await syncFirebaseUser(user.email, standardPassword, user.username);
 
-    const batchB = await prisma.batch.create({
-        data: {
-            universityId: university.id,
-            departmentId: department.id,
-            name: 'MCA Sem 2 Div B 2025-26',
-            program: 'MCA',
-            semester: 2,
-            division: 'B',
-            year: '2025-26',
-            strength: 30,
-        },
-    });
-    console.log(`Created 2 Batches`);
-
-    // 8. Courses for MCA Sem 2
-    const coursesData = [
-        { name: 'Artificial Intelligence', code: '201', type: 'Theory', credits: 4, weeklyHrs: 4 },
-        { name: 'Frontend Technologies', code: '202', type: 'Theory+Lab', credits: 4, weeklyHrs: 6 },
-        { name: '.Net using C#', code: '203', type: 'Theory+Lab', credits: 4, weeklyHrs: 6 },
-        { name: 'Blockchain', code: '204', type: 'Theory', credits: 4, weeklyHrs: 4 },
-        { name: 'Python', code: 'Python-204', type: 'Theory+Lab', credits: 4, weeklyHrs: 6 },
-        { name: 'iOS Development', code: '205', type: 'Theory+Lab', credits: 4, weeklyHrs: 6 },
-        { name: 'Android Development', code: 'Android-205', type: 'Theory+Lab', credits: 4, weeklyHrs: 6 },
-    ];
-
-    const createdCourses = await Promise.all(
-        coursesData.map(c =>
-            prisma.course.create({
-                data: {
-                    ...c,
-                    universityId: university.id,
-                    departmentId: department.id,
-                    program: 'MCA'
-                }
-            })
-        )
-    );
-    console.log(`Created ${createdCourses.length} Courses`);
-
-    // 9. Faculty Members
-    const facultyList = [
-        { name: 'Rustam Morena', email: 'rustam@vnsgu.ac.in' },
-        { name: 'Ravi Gulati', email: 'ravi@vnsgu.ac.in' },
-        { name: 'Dharmen Shah', email: 'dharmen@vnsgu.ac.in' },
-        { name: 'Nimisha', email: 'nimisha@vnsgu.ac.in' },
-        { name: 'Jayshree Patel', email: 'jayshree@vnsgu.ac.in' },
-        { name: 'Mayur', email: 'mayur@vnsgu.ac.in' },
-        { name: 'Prakash Rana', email: 'prakash@vnsgu.ac.in' },
-        { name: 'Vimal', email: 'vimal@vnsgu.ac.in' },
-        { name: 'Rinku', email: 'rinku@vnsgu.ac.in' },
-    ];
-
-    for (const f of facultyList) {
-        const username = f.email.split('@')[0];
-
-        // Ensure user is in Firebase Context
-        const fUid = await syncFirebaseUser(f.email, 'password123', f.name);
-
-        // Upsert User for Faculty
-        const user = await prisma.user.upsert({
-            where: { username },
+        await prisma.user.upsert({
+            where: { id: user.id },
             update: {
-                email: f.email,
-                role: 'FACULTY',
+                username: user.username,
+                email: user.email,
+                passwordHash: user.passwordHash || passwordHash,
                 firebaseUid: fUid,
-                universityId: university.id,
+                role: user.role,
+                universityId: user.universityId,
+                entityId: user.entityId,
+                isActive: user.isActive,
             },
             create: {
-                username,
-                email: f.email,
-                passwordHash,
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                passwordHash: user.passwordHash || passwordHash,
                 firebaseUid: fUid,
-                role: 'FACULTY',
-                universityId: university.id,
+                role: user.role,
+                universityId: user.universityId,
+                entityId: user.entityId,
+                isActive: user.isActive,
             },
         });
+    }
 
-        const faculty = await prisma.faculty.upsert({
-            where: { email: f.email },
+    // Update University adminUserId
+    for (const uni of data.universities) {
+        if (uni.adminUserId) {
+            await prisma.university.update({
+                where: { id: uni.id },
+                data: { adminUserId: uni.adminUserId },
+            });
+        }
+    }
+
+    // 4. Departments
+    console.log(`Seeding ${data.departments.length} Departments...`);
+    for (const dept of data.departments) {
+        await prisma.department.upsert({
+            where: { id: dept.id },
             update: {
-                universityId: university.id,
-                name: f.name,
-                userId: user.id,
-                designation: 'Assistant Professor'
+                name: dept.name,
+                shortName: dept.shortName,
+                hod: dept.hod,
+                email: dept.email,
+                universityId: dept.universityId,
+                adminUserId: dept.adminUserId,
             },
             create: {
-                universityId: university.id,
-                name: f.name,
-                email: f.email,
-                userId: user.id,
-                designation: 'Assistant Professor'
+                id: dept.id,
+                name: dept.name,
+                shortName: dept.shortName,
+                hod: dept.hod,
+                email: dept.email,
+                universityId: dept.universityId,
+                adminUserId: dept.adminUserId,
             },
         });
+    }
 
-        // Ensure Faculty is mapped to the department
+    // 5. Resources
+    console.log(`Seeding ${data.resources.length} Resources...`);
+    for (const res of data.resources) {
+        await prisma.resource.upsert({
+            where: { id: res.id },
+            update: {
+                name: res.name,
+                type: res.type,
+                capacity: res.capacity,
+                floor: res.floor,
+                building: res.building,
+                universityId: res.universityId,
+            },
+            create: {
+                id: res.id,
+                name: res.name,
+                type: res.type,
+                capacity: res.capacity,
+                floor: res.floor,
+                building: res.building,
+                universityId: res.universityId,
+            },
+        });
+    }
+
+    // 6. Batches
+    console.log(`Seeding ${data.batches.length} Batches...`);
+    for (const batch of data.batches) {
+        await prisma.batch.upsert({
+            where: { id: batch.id },
+            update: {
+                name: batch.name,
+                program: batch.program,
+                semester: batch.semester,
+                division: batch.division,
+                year: batch.year,
+                strength: batch.strength,
+                totalStudents: batch.totalStudents,
+                universityId: batch.universityId,
+                departmentId: batch.departmentId,
+            },
+            create: {
+                id: batch.id,
+                name: batch.name,
+                program: batch.program,
+                semester: batch.semester,
+                division: batch.division,
+                year: batch.year,
+                strength: batch.strength,
+                totalStudents: batch.totalStudents,
+                universityId: batch.universityId,
+                departmentId: batch.departmentId,
+            },
+        });
+    }
+
+    // 7. Courses
+    console.log(`Seeding ${data.courses.length} Courses...`);
+    for (const course of data.courses) {
+        await prisma.course.upsert({
+            where: { id: course.id },
+            update: {
+                name: course.name,
+                code: course.code,
+                program: course.program,
+                credits: course.credits,
+                weeklyHrs: course.weeklyHrs,
+                semester: course.semester,
+                type: course.type,
+                labDuration: course.labDuration,
+                isElective: course.isElective,
+                universityId: course.universityId,
+                departmentId: course.departmentId,
+            },
+            create: {
+                id: course.id,
+                name: course.name,
+                code: course.code,
+                program: course.program,
+                credits: course.credits,
+                weeklyHrs: course.weeklyHrs,
+                semester: course.semester,
+                type: course.type,
+                labDuration: course.labDuration,
+                isElective: course.isElective,
+                universityId: course.universityId,
+                departmentId: course.departmentId,
+            },
+        });
+    }
+
+    // 8. Faculty
+    console.log(`Seeding ${data.faculty.length} Faculty Members...`);
+    for (const fac of data.faculty) {
+        await prisma.faculty.upsert({
+            where: { id: fac.id },
+            update: {
+                name: fac.name,
+                email: fac.email,
+                phone: fac.phone,
+                designation: fac.designation,
+                qualifications: fac.qualifications,
+                experience: fac.experience,
+                userId: fac.userId,
+                universityId: fac.universityId,
+            },
+            create: {
+                id: fac.id,
+                name: fac.name,
+                email: fac.email,
+                phone: fac.phone,
+                designation: fac.designation,
+                qualifications: fac.qualifications,
+                experience: fac.experience,
+                userId: fac.userId,
+                universityId: fac.universityId,
+            },
+        });
+    }
+
+    // 9. Faculty-Department Mapping
+    console.log(`Seeding ${data.facultyDepartments.length} Faculty-Department Mappings...`);
+    for (const fd of data.facultyDepartments) {
         await prisma.facultyDepartment.upsert({
             where: {
                 facultyId_departmentId: {
-                    facultyId: faculty.id,
-                    departmentId: department.id
-                }
+                    facultyId: fd.facultyId,
+                    departmentId: fd.departmentId,
+                },
             },
             update: {},
             create: {
-                facultyId: faculty.id,
-                departmentId: department.id
-            }
-        });
-
-        // Update entityId in User
-        await prisma.user.update({
-            where: { id: user.id },
-            data: { entityId: faculty.id }
-        });
-
-        // Update entityId in User
-        await prisma.user.update({
-            where: { id: user.id },
-            data: { entityId: faculty.id }
+                facultyId: fd.facultyId,
+                departmentId: fd.departmentId,
+            },
         });
     }
-    console.log(`Created ${facultyList.length} Faculty Members & Assigned Subjects`);
+
+    // 10. Faculty-Subject Mapping
+    console.log(`Seeding ${data.facultySubjects.length} Faculty-Subject Mappings...`);
+    for (const fs of data.facultySubjects) {
+        await prisma.facultySubject.upsert({
+            where: { id: fs.id },
+            update: {
+                facultyId: fs.facultyId,
+                courseId: fs.courseId,
+                isPrimary: fs.isPrimary,
+                proficiencyLevel: fs.proficiencyLevel,
+            },
+            create: {
+                id: fs.id,
+                facultyId: fs.facultyId,
+                courseId: fs.courseId,
+                isPrimary: fs.isPrimary,
+                proficiencyLevel: fs.proficiencyLevel,
+            },
+        });
+    }
 
     console.log('Seeding Complete! 🎉');
 }

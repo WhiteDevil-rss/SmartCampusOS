@@ -1,377 +1,377 @@
 {
   "universities": [
     {
-      "id": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Veer Narmad South Gujarat University",
       "shortName": "vnsgu",
       "location": "Surat, Gujarat",
       "email": "vc@vnsgu.ac.in",
       "estYear": 1965,
       "website": "vnsgu.ac.in",
-      "adminUserId": "e96ecc59-db3a-4741-8516-7c85fa883bbb",
-      "createdAt": "2026-03-01T22:00:10.550Z",
-      "updatedAt": "2026-03-01T22:00:11.648Z"
+      "adminUserId": "0c2a2e5a-cb7a-46a3-bc1c-54879f7d54b3",
+      "createdAt": "2026-03-04T16:08:20.974Z",
+      "updatedAt": "2026-03-04T16:08:22.878Z"
     }
   ],
   "users": [
     {
-      "id": "e96ecc59-db3a-4741-8516-7c85fa883bbb",
+      "id": "0c2a2e5a-cb7a-46a3-bc1c-54879f7d54b3",
       "username": "admin_vnsgu",
       "email": "admin@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
       "firebaseUid": "XboYpGZ6vGaZsJRxSzQRAWFbj4x2",
       "role": "UNI_ADMIN",
-      "entityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "entityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "phoneNumber": null,
       "address": null,
       "isActive": true,
-      "createdAt": "2026-03-01T22:00:11.636Z",
+      "createdAt": "2026-03-04T16:08:22.866Z",
       "lastLogin": null
     },
     {
-      "id": "97e72c0a-bddc-48df-bcaa-a2bebcf2b28e",
-      "username": "rustam",
-      "email": "rustam@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "8RbzbmiEYvXg6L8LlR3w06bzVc52",
-      "role": "FACULTY",
-      "entityId": "670764ac-f6a7-46e7-898d-386bffc90cdf",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "phoneNumber": null,
-      "address": null,
-      "isActive": true,
-      "createdAt": "2026-03-01T22:00:13.781Z",
-      "lastLogin": null
-    },
-    {
-      "id": "a5fdae99-403c-476c-a8ef-08f17d766877",
-      "username": "rinku",
-      "email": "rinku@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "mHBmGrbeghNVOAQRsMpfn6rrcrj2",
-      "role": "FACULTY",
-      "entityId": "1f51a258-8a9e-4405-8a93-c3d3b6f42422",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "phoneNumber": null,
-      "address": null,
-      "isActive": true,
-      "createdAt": "2026-03-01T22:00:22.792Z",
-      "lastLogin": null
-    },
-    {
-      "id": "bc3ef6eb-6b94-4f6c-bd9d-29340648d4f9",
-      "username": "ravi",
-      "email": "ravi@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "klg1HhDa7NZ01fwdlituGtI0ono1",
-      "role": "FACULTY",
-      "entityId": "f766b2c2-ee10-4024-9674-60581f6f79d4",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "phoneNumber": null,
-      "address": null,
-      "isActive": true,
-      "createdAt": "2026-03-01T22:00:14.891Z",
-      "lastLogin": null
-    },
-    {
-      "id": "0d5e91f1-a026-4d39-afb1-415a47cbcfa7",
-      "username": "dharmen",
-      "email": "dharmen@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "xIhkquzSRrRY60Sk4z960a2asja2",
-      "role": "FACULTY",
-      "entityId": "2cfe0df3-445a-4905-96a4-76997956f03b",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "phoneNumber": null,
-      "address": null,
-      "isActive": true,
-      "createdAt": "2026-03-01T22:00:16.077Z",
-      "lastLogin": null
-    },
-    {
-      "id": "8fbea77e-b43f-46f4-b25c-791c20ab253d",
-      "username": "nimisha",
-      "email": "nimisha@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "Hqp7KSHcytfkYFeOe5e6PIfZu9f2",
-      "role": "FACULTY",
-      "entityId": "f9575e92-f61b-446a-ab40-2eea49b9f265",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "phoneNumber": null,
-      "address": null,
-      "isActive": true,
-      "createdAt": "2026-03-01T22:00:17.189Z",
-      "lastLogin": null
-    },
-    {
-      "id": "375a115a-0159-4124-8001-1f56324fcf27",
-      "username": "jayshree",
-      "email": "jayshree@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "FWhgofSLK7QhC3kmdGlsO71jOQT2",
-      "role": "FACULTY",
-      "entityId": "87d9cf38-4a98-4578-9a62-93f3f716f918",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "phoneNumber": null,
-      "address": null,
-      "isActive": true,
-      "createdAt": "2026-03-01T22:00:18.287Z",
-      "lastLogin": null
-    },
-    {
-      "id": "143405af-50a1-420b-914d-a4222ecac71a",
-      "username": "mayur",
-      "email": "mayur@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "E9yaik3ApEQz4lSO1BZXQyneS3w2",
-      "role": "FACULTY",
-      "entityId": "8d4bac13-254f-4bd2-9ece-76b99519ccbc",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "phoneNumber": null,
-      "address": null,
-      "isActive": true,
-      "createdAt": "2026-03-01T22:00:19.344Z",
-      "lastLogin": null
-    },
-    {
-      "id": "d7ea3fd7-86e5-4068-bf9e-4ffb3ddc3b48",
-      "username": "prakash",
-      "email": "prakash@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "KiJDQRaj2pT9bAbSQAlhIuOD1nF2",
-      "role": "FACULTY",
-      "entityId": "d8684dc4-f732-4397-8a30-bf5754ad537f",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "phoneNumber": null,
-      "address": null,
-      "isActive": true,
-      "createdAt": "2026-03-01T22:00:20.384Z",
-      "lastLogin": null
-    },
-    {
-      "id": "d80ccd30-6362-498d-ba0a-4f935ea0db2f",
-      "username": "Superadmin",
+      "id": "9be572c4-1fc9-48c3-9b30-631316853799",
+      "username": "superadmin",
       "email": "admin@zembaa.com",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "Mr9xgrWpMQWjv1Hel4YCtR2S30w2",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "53Wc97Zg31gcX9Il9ODs7pkfEVt2",
       "role": "SUPERADMIN",
       "entityId": null,
       "universityId": null,
       "phoneNumber": null,
       "address": null,
       "isActive": true,
-      "createdAt": "2026-03-01T22:00:10.514Z",
-      "lastLogin": "2026-03-02T17:39:17.844Z"
+      "createdAt": "2026-03-04T16:08:20.955Z",
+      "lastLogin": "2026-03-04T16:08:46.591Z"
     },
     {
-      "id": "12d3d723-5842-4f8c-8e27-3f93df2afe3c",
-      "username": "vimal",
-      "email": "vimal@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "K6YVEsVGfpPvS60ttd2xCx52Vir2",
+      "id": "742545d4-5cdd-4fdf-9a3a-f977737a0f6e",
+      "username": "dharmen",
+      "email": "dharmen@vnsgu.ac.in",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "xIhkquzSRrRY60Sk4z960a2asja2",
       "role": "FACULTY",
-      "entityId": "be2a75ef-1db6-469b-84f2-77757ac41ab1",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "entityId": "f2ebbdd8-9ec3-4562-8df7-ca3526975fb6",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "phoneNumber": null,
       "address": null,
       "isActive": true,
-      "createdAt": "2026-03-01T22:00:21.569Z",
+      "createdAt": "2026-03-04T16:08:30.267Z",
       "lastLogin": null
     },
     {
-      "id": "5cb7aec2-3991-4890-b8db-113cf8ceb420",
-      "username": "admin_dcs_vnsgu",
-      "email": "admin_dcs@vnsgu.ac.in",
-      "passwordHash": "$2b$12$rM55/aW8oZw.YwNL.WPfLu1PBOEOL24mC1K9ds/JmMcuQ2UJBADV6",
-      "firebaseUid": "lxXsUVIbf1MuH4cgIdJAhEQXAbX2",
-      "role": "DEPT_ADMIN",
-      "entityId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "8f89baf5-6fd3-4181-a275-64d4f3550cbf",
+      "username": "jayshree",
+      "email": "jayshree@vnsgu.ac.in",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "FWhgofSLK7QhC3kmdGlsO71jOQT2",
+      "role": "FACULTY",
+      "entityId": "0a838706-7f61-4024-9d20-6b1e55000899",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "phoneNumber": null,
       "address": null,
       "isActive": true,
-      "createdAt": "2026-03-01T22:00:12.655Z",
-      "lastLogin": "2026-03-02T19:26:41.532Z"
+      "createdAt": "2026-03-04T16:08:33.652Z",
+      "lastLogin": null
+    },
+    {
+      "id": "8ffdb2af-383a-436d-8dd0-a6c0e29aa571",
+      "username": "mayur",
+      "email": "mayur@vnsgu.ac.in",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "E9yaik3ApEQz4lSO1BZXQyneS3w2",
+      "role": "FACULTY",
+      "entityId": "dd1baa3b-082f-4dab-8da4-6162a106854c",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "phoneNumber": null,
+      "address": null,
+      "isActive": true,
+      "createdAt": "2026-03-04T16:08:35.266Z",
+      "lastLogin": null
+    },
+    {
+      "id": "e6778d8e-532c-4d29-bfbd-c1ecdac3eb37",
+      "username": "prakash",
+      "email": "prakash@vnsgu.ac.in",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "KiJDQRaj2pT9bAbSQAlhIuOD1nF2",
+      "role": "FACULTY",
+      "entityId": "013beb75-af32-40f2-922a-60d64787317a",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "phoneNumber": null,
+      "address": null,
+      "isActive": true,
+      "createdAt": "2026-03-04T16:08:36.997Z",
+      "lastLogin": null
+    },
+    {
+      "id": "021e63b8-d418-45ee-acaf-8f2216236a29",
+      "username": "nimisha",
+      "email": "nimisha@vnsgu.ac.in",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "Hqp7KSHcytfkYFeOe5e6PIfZu9f2",
+      "role": "FACULTY",
+      "entityId": "28daefbf-62ac-4489-aa41-3815a80298cb",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "phoneNumber": null,
+      "address": null,
+      "isActive": true,
+      "createdAt": "2026-03-04T16:08:31.876Z",
+      "lastLogin": null
+    },
+    {
+      "id": "b39a21f5-7aec-4fc9-82ce-67b95b0a9e97",
+      "username": "rustam",
+      "email": "rustam@vnsgu.ac.in",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "8RbzbmiEYvXg6L8LlR3w06bzVc52",
+      "role": "FACULTY",
+      "entityId": "506de1b6-5553-405b-bcd1-ce843badb848",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "phoneNumber": null,
+      "address": null,
+      "isActive": true,
+      "createdAt": "2026-03-04T16:08:26.482Z",
+      "lastLogin": null
+    },
+    {
+      "id": "0e2981d5-d5f1-4a45-9a12-857daa7466bd",
+      "username": "ravi",
+      "email": "ravi@vnsgu.ac.in",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "klg1HhDa7NZ01fwdlituGtI0ono1",
+      "role": "FACULTY",
+      "entityId": "4fbd0c14-dcb0-4324-b791-9433a45abbdc",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "phoneNumber": null,
+      "address": null,
+      "isActive": true,
+      "createdAt": "2026-03-04T16:08:28.498Z",
+      "lastLogin": null
+    },
+    {
+      "id": "d31bddd3-dea8-4c30-92cc-6c6cd16fda74",
+      "username": "vimal",
+      "email": "vimal@vnsgu.ac.in",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "K6YVEsVGfpPvS60ttd2xCx52Vir2",
+      "role": "FACULTY",
+      "entityId": "f06a1425-82ae-4bbf-9b5b-f20db72bc283",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "phoneNumber": null,
+      "address": null,
+      "isActive": true,
+      "createdAt": "2026-03-04T16:08:38.644Z",
+      "lastLogin": null
+    },
+    {
+      "id": "bd85cb4b-4959-4c47-b1b0-6d5f591b171a",
+      "username": "rinku",
+      "email": "rinku@vnsgu.ac.in",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "mHBmGrbeghNVOAQRsMpfn6rrcrj2",
+      "role": "FACULTY",
+      "entityId": "8693f0e8-2bc9-4d94-a340-12929a32d514",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "phoneNumber": null,
+      "address": null,
+      "isActive": true,
+      "createdAt": "2026-03-04T16:08:40.309Z",
+      "lastLogin": null
+    },
+    {
+      "id": "f93f5f15-6a4e-4e2d-b880-2c23854aa141",
+      "username": "admin_dcs_vnsgu",
+      "email": "admin_dcs@vnsgu.ac.in",
+      "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
+      "firebaseUid": "lxXsUVIbf1MuH4cgIdJAhEQXAbX2",
+      "role": "DEPT_ADMIN",
+      "entityId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "phoneNumber": null,
+      "address": null,
+      "isActive": true,
+      "createdAt": "2026-03-04T16:08:24.539Z",
+      "lastLogin": "2026-03-04T17:14:59.439Z"
     }
   ],
   "departments": [
     {
-      "id": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Department of Computer Science",
       "shortName": "DCS",
       "hod": "Dr. Apurva Desai",
       "email": "dcs@vnsgu.ac.in",
-      "adminUserId": "5cb7aec2-3991-4890-b8db-113cf8ceb420",
-      "createdAt": "2026-03-01T22:00:11.655Z"
+      "adminUserId": "f93f5f15-6a4e-4e2d-b880-2c23854aa141",
+      "createdAt": "2026-03-04T16:08:22.883Z"
     }
   ],
   "resources": [
     {
-      "id": "ad79e067-9350-4e11-8a4d-20ae0eaa57d1",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "bd8c8e98-17fb-4192-9354-ba46317670d9",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Lecture Hall 1",
       "type": "Classroom",
       "capacity": 60,
       "floor": "1st",
       "building": "",
-      "createdAt": "2026-03-01T22:00:12.668Z"
+      "createdAt": "2026-03-04T16:08:24.554Z"
     },
     {
-      "id": "2a31ee02-e290-4d90-918c-7046e3b01922",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "f3684810-d0d4-49f9-97cf-401b60a2aed0",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Lecture Hall 2",
       "type": "Classroom",
       "capacity": 60,
       "floor": "1st",
       "building": "",
-      "createdAt": "2026-03-01T22:00:12.673Z"
+      "createdAt": "2026-03-04T16:08:24.559Z"
     },
     {
-      "id": "a4818727-001a-4da7-88bb-27d950087ae3",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "4e0fa5a8-65ba-431d-bfdb-e736d6d446d3",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Lecture Hall 3",
       "type": "Classroom",
-      "capacity": 40,
-      "floor": "1nd",
+      "capacity": 60,
+      "floor": "1st",
       "building": "",
-      "createdAt": "2026-03-01T22:00:12.675Z"
+      "createdAt": "2026-03-04T16:08:24.562Z"
     },
     {
-      "id": "ee398e01-c847-47cc-9eeb-ba610965c574",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "3c622832-b342-481f-b3d5-831f65d50a39",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Lecture Hall 4",
       "type": "Classroom",
       "capacity": 60,
       "floor": "1st",
       "building": "",
-      "createdAt": "2026-03-02T19:02:43.011Z"
+      "createdAt": "2026-03-04T17:05:06.129Z"
     },
     {
-      "id": "5b2cf9df-fb9e-4cc0-9c91-8b7b0a7d0eff",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "499d2bf1-1cb2-4011-9dd9-c9b00ad856aa",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Lecture Hall 5",
       "type": "Classroom",
       "capacity": 60,
       "floor": "1st",
       "building": "",
-      "createdAt": "2026-03-02T19:02:57.234Z"
+      "createdAt": "2026-03-04T17:05:19.560Z"
     },
     {
-      "id": "5161ad54-8fb3-453d-a3fd-4b81bffde5ea",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "dc2f7547-942a-4c7f-abdb-e0e6cc80fbfa",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Major Lab A",
       "type": "Lab",
       "capacity": 60,
       "floor": "Ground",
       "building": "",
-      "createdAt": "2026-03-01T22:00:12.676Z"
+      "createdAt": "2026-03-04T16:08:24.564Z"
     },
     {
-      "id": "4af8ce96-95f6-4c77-b865-aec83a283d5d",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "793a3107-179a-4cfb-a6cd-2b801af8fd5b",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Major Lab B",
       "type": "Lab",
       "capacity": 60,
       "floor": "Ground",
       "building": "",
-      "createdAt": "2026-03-01T22:00:12.678Z"
+      "createdAt": "2026-03-04T16:08:24.568Z"
     },
     {
-      "id": "605674cf-8637-486b-8f35-21c37724ada3",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "d0db7a33-2d33-461c-bb36-e24e3d5a2887",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Minor Lab A",
       "type": "Lab",
       "capacity": 30,
       "floor": "Ground",
       "building": "",
-      "createdAt": "2026-03-02T19:04:12.270Z"
+      "createdAt": "2026-03-04T17:05:55.377Z"
     },
     {
-      "id": "5fffe828-577b-4da4-87f4-4e9b4ebcc418",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Minor Lab B",
+      "id": "e929bddf-6153-4d5d-982f-86ad11456de7",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Minor Lab B ",
       "type": "Lab",
       "capacity": 30,
-      "floor": "Ground",
+      "floor": "Ground ",
       "building": "",
-      "createdAt": "2026-03-02T19:04:34.807Z"
+      "createdAt": "2026-03-04T17:06:14.574Z"
     },
     {
-      "id": "7675dbe1-aaec-45fb-8f3f-44180d7878c4",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "62e12338-66d4-400f-97c8-32f4b7a1beaf",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Theater Hall 1",
       "type": "Classroom",
-      "capacity": 60,
+      "capacity": 100,
       "floor": "Ground",
       "building": "",
-      "createdAt": "2026-03-02T19:05:19.306Z"
+      "createdAt": "2026-03-04T17:06:32.148Z"
     },
     {
-      "id": "7185cb2c-9206-4c53-9a85-c40ba2e166cb",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "dbd7bd5f-06d2-475d-9b10-0dbcf65c46d8",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Theater Hall 2",
       "type": "Classroom",
-      "capacity": 60,
+      "capacity": 100,
       "floor": "Ground",
       "building": "",
-      "createdAt": "2026-03-02T19:05:45.863Z"
+      "createdAt": "2026-03-04T17:06:46.625Z"
     },
     {
-      "id": "6b0967bd-beb7-4d8f-8370-c3cd7a7f4ce5",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "778be4ed-6de9-4e4b-8618-f442d729df6f",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Theater Hall 3",
       "type": "Classroom",
-      "capacity": 60,
+      "capacity": 100,
       "floor": "1st",
       "building": "",
-      "createdAt": "2026-03-02T19:08:15.562Z"
+      "createdAt": "2026-03-04T17:06:58.000Z"
     },
     {
-      "id": "dcb67545-0d78-4ea4-96c8-acf81624bc25",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "f483fa1e-cd24-4cc1-a704-86a1c264fc43",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Theater Hall 4",
       "type": "Classroom",
-      "capacity": 60,
+      "capacity": 100,
       "floor": "1st",
       "building": "",
-      "createdAt": "2026-03-02T19:08:27.606Z"
+      "createdAt": "2026-03-04T17:07:06.545Z"
     }
   ],
   "batches": [
     {
-      "id": "3b7708d8-8de8-4936-854e-d6fcb3513772",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "MCA Sem 2 Div A 2025-26",
+      "id": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "MCA Sem 2 - 2025-26",
       "program": "MCA",
       "semester": 2,
       "division": "A",
       "year": "2025-26",
       "strength": 60,
       "totalStudents": 120,
-      "createdAt": "2026-03-01T22:00:12.680Z"
+      "createdAt": "2026-03-04T16:08:24.571Z"
     },
     {
-      "id": "34dc01f7-b143-4ad9-80ea-9fb0e6567497",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "MCA Sem 2 Div A 2025-26",
+      "id": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "MCA Sem 2 - 2025-26",
       "program": "MCA",
       "semester": 2,
       "division": "B",
       "year": "2025-26",
       "strength": 60,
       "totalStudents": 120,
-      "createdAt": "2026-03-02T19:26:14.902Z"
+      "createdAt": "2026-03-04T17:15:30.904Z"
     }
   ],
   "courses": [
     {
-      "id": "ba79af4d-e60a-4d95-81d7-33654a87fef2",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "cf7699ac-7616-45fa-9d78-0e292e63ff11",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Artificial Intelligence",
       "code": "201",
       "program": "MCA",
@@ -379,27 +379,16 @@
       "weeklyHrs": 4,
       "semester": 2,
       "type": "Theory",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
       "isElective": false,
-      "createdAt": "2026-03-01T22:00:12.685Z"
+      "createdAt": "2026-03-04T16:08:24.579Z"
     },
     {
-      "id": "79cbe1cc-04c3-47dc-a57a-10aa5575eace",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Frontend Technologies",
-      "code": "202",
-      "program": "MCA",
-      "credits": 4,
-      "weeklyHrs": 4,
-      "semester": 2,
-      "type": "Theory",
-      "isElective": false,
-      "createdAt": "2026-03-01T22:00:12.685Z"
-    },
-    {
-      "id": "5177f45a-26bb-4ebd-82fa-23e753fb902c",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "3c741ea7-7f5c-425a-a572-0865ddc556ae",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": ".Net using C#",
       "code": "203",
       "program": "MCA",
@@ -407,69 +396,118 @@
       "weeklyHrs": 4,
       "semester": 2,
       "type": "Theory",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
       "isElective": false,
-      "createdAt": "2026-03-01T22:00:12.685Z"
+      "createdAt": "2026-03-04T16:08:24.579Z"
     },
     {
-      "id": "80695027-3fe2-4c13-9df3-d00edd29af22",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Android Development",
-      "code": "Android-205",
+      "id": "6cc0fd49-6adf-49b6-a1c2-db0f41517b6e",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Blockchain",
+      "code": "204",
       "program": "MCA",
       "credits": 4,
       "weeklyHrs": 4,
       "semester": 2,
       "type": "Theory",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
       "isElective": false,
-      "createdAt": "2026-03-01T22:00:12.685Z"
+      "createdAt": "2026-03-04T16:08:24.579Z"
     },
     {
-      "id": "afe16ff3-14a0-48dd-b5b2-ad57c63c9776",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "d213198f-9f77-44ec-acd5-d49921e0ec03",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Frontend Technologies",
+      "code": "202",
+      "program": "MCA",
+      "credits": 4,
+      "weeklyHrs": 4,
+      "semester": 2,
+      "type": "Theory",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
+      "isElective": false,
+      "createdAt": "2026-03-04T16:08:24.579Z"
+    },
+    {
+      "id": "a42d4be8-801e-4a2d-96e9-ee15f87e5d64",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "iOS Development",
-      "code": "iOS-205",
+      "code": "205",
       "program": "MCA",
       "credits": 4,
       "weeklyHrs": 4,
       "semester": 2,
       "type": "Theory",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
       "isElective": false,
-      "createdAt": "2026-03-01T22:00:12.685Z"
+      "createdAt": "2026-03-04T16:08:24.579Z"
     },
     {
-      "id": "d28f8dca-763d-4870-99d6-fea3c0b243e2",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "98a69bf8-460c-4dbd-ae1d-c476a6e42e14",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Android Development",
+      "code": "205",
+      "program": "MCA",
+      "credits": 4,
+      "weeklyHrs": 4,
+      "semester": 2,
+      "type": "Theory",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
+      "isElective": false,
+      "createdAt": "2026-03-04T16:08:24.579Z"
+    },
+    {
+      "id": "685ede86-0b05-479c-93be-335adf54c478",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Python",
+      "code": "204",
+      "program": "MCA",
+      "credits": 4,
+      "weeklyHrs": 4,
+      "semester": 2,
+      "type": "Theory",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
+      "isElective": false,
+      "createdAt": "2026-03-04T16:08:24.579Z"
+    },
+    {
+      "id": "594b6824-213f-40bb-83a9-2e0583e1cd43",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Programming Skills - IV",
       "code": "206",
       "program": "MCA",
       "credits": 3,
       "weeklyHrs": 3,
       "semester": 2,
-      "type": "Lab",
+      "type": "Theory+Lab",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
       "isElective": false,
-      "createdAt": "2026-03-02T19:14:25.397Z"
+      "createdAt": "2026-03-04T16:58:37.705Z"
     },
     {
-      "id": "ffe3a8c6-e9d5-443c-bc8a-cb492e7485c1",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Blockchain",
-      "code": "Blockchain-204",
-      "program": "MCA",
-      "credits": 4,
-      "weeklyHrs": 4,
-      "semester": 2,
-      "type": "Theory",
-      "isElective": false,
-      "createdAt": "2026-03-01T22:00:12.685Z"
-    },
-    {
-      "id": "a834304e-4fef-4758-8f69-5166798f3188",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "9f18da47-3673-40d3-87f3-34a9d9d5bd77",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Programming Skills - V",
       "code": "207",
       "program": "MCA",
@@ -477,13 +515,16 @@
       "weeklyHrs": 2,
       "semester": 2,
       "type": "Lab",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
       "isElective": false,
-      "createdAt": "2026-03-02T19:17:04.729Z"
+      "createdAt": "2026-03-04T16:58:54.361Z"
     },
     {
-      "id": "9c5ba6dc-f0c7-4762-845c-72493f14806e",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "098f2a41-1377-4dd9-addf-8ca09efd7ac1",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Programming Skills - VI",
       "code": "208",
       "program": "MCA",
@@ -491,13 +532,16 @@
       "weeklyHrs": 2,
       "semester": 2,
       "type": "Lab",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
       "isElective": false,
-      "createdAt": "2026-03-02T19:17:20.093Z"
+      "createdAt": "2026-03-04T16:59:35.577Z"
     },
     {
-      "id": "f8c65348-eae6-4bd1-8d39-68aaf04beeb3",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "72294edc-af8a-48b0-ae0e-9d10871bf102",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Programming Skills - VII",
       "code": "209",
       "program": "MCA",
@@ -505,200 +549,305 @@
       "weeklyHrs": 3,
       "semester": 2,
       "type": "Lab",
+      "sessionTypeId": null,
+      "labDuration": 60,
+      "requiredRoomType": null,
       "isElective": false,
-      "createdAt": "2026-03-02T19:17:39.003Z"
-    },
-    {
-      "id": "8143df58-8f3d-4f6c-9e22-027004d53e79",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Python",
-      "code": "Python-204",
-      "program": "MCA",
-      "credits": 4,
-      "weeklyHrs": 4,
-      "semester": 2,
-      "type": "Theory",
-      "isElective": false,
-      "createdAt": "2026-03-01T22:00:12.685Z"
+      "createdAt": "2026-03-04T16:59:48.757Z"
     }
   ],
   "faculty": [
     {
-      "id": "670764ac-f6a7-46e7-898d-386bffc90cdf",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Rustam Morena",
-      "email": "rustam@vnsgu.ac.in",
-      "phone": null,
-      "designation": "Assistant Professor",
-      "qualifications": null,
-      "experience": null,
-      "userId": "97e72c0a-bddc-48df-bcaa-a2bebcf2b28e",
-      "availability": null,
-      "maxHrsPerDay": 6,
-      "maxHrsPerWeek": 30,
-      "createdAt": "2026-03-01T22:00:13.789Z"
-    },
-    {
-      "id": "f766b2c2-ee10-4024-9674-60581f6f79d4",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Ravi Gulati",
-      "email": "ravi@vnsgu.ac.in",
-      "phone": null,
-      "designation": "Assistant Professor",
-      "qualifications": null,
-      "experience": null,
-      "userId": "bc3ef6eb-6b94-4f6c-bd9d-29340648d4f9",
-      "availability": null,
-      "maxHrsPerDay": 6,
-      "maxHrsPerWeek": 30,
-      "createdAt": "2026-03-01T22:00:14.908Z"
-    },
-    {
-      "id": "2cfe0df3-445a-4905-96a4-76997956f03b",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "f2ebbdd8-9ec3-4562-8df7-ca3526975fb6",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Dharmen Shah",
       "email": "dharmen@vnsgu.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
       "experience": null,
-      "userId": "0d5e91f1-a026-4d39-afb1-415a47cbcfa7",
+      "userId": "742545d4-5cdd-4fdf-9a3a-f977737a0f6e",
       "availability": null,
-      "maxHrsPerDay": 6,
-      "maxHrsPerWeek": 30,
-      "createdAt": "2026-03-01T22:00:16.081Z"
+      "createdAt": "2026-03-04T16:08:30.269Z"
     },
     {
-      "id": "f9575e92-f61b-446a-ab40-2eea49b9f265",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Nimisha",
-      "email": "nimisha@vnsgu.ac.in",
-      "phone": null,
-      "designation": "Assistant Professor",
-      "qualifications": null,
-      "experience": null,
-      "userId": "8fbea77e-b43f-46f4-b25c-791c20ab253d",
-      "availability": null,
-      "maxHrsPerDay": 6,
-      "maxHrsPerWeek": 30,
-      "createdAt": "2026-03-01T22:00:17.192Z"
-    },
-    {
-      "id": "87d9cf38-4a98-4578-9a62-93f3f716f918",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "0a838706-7f61-4024-9d20-6b1e55000899",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Jayshree Patel",
       "email": "jayshree@vnsgu.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
       "experience": null,
-      "userId": "375a115a-0159-4124-8001-1f56324fcf27",
+      "userId": "8f89baf5-6fd3-4181-a275-64d4f3550cbf",
       "availability": null,
-      "maxHrsPerDay": 6,
-      "maxHrsPerWeek": 30,
-      "createdAt": "2026-03-01T22:00:18.297Z"
+      "createdAt": "2026-03-04T16:08:33.661Z"
     },
     {
-      "id": "8d4bac13-254f-4bd2-9ece-76b99519ccbc",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Mayur",
-      "email": "mayur@vnsgu.ac.in",
-      "phone": null,
-      "designation": "Assistant Professor",
-      "qualifications": null,
-      "experience": null,
-      "userId": "143405af-50a1-420b-914d-a4222ecac71a",
-      "availability": null,
-      "maxHrsPerDay": 6,
-      "maxHrsPerWeek": 30,
-      "createdAt": "2026-03-01T22:00:19.351Z"
-    },
-    {
-      "id": "d8684dc4-f732-4397-8a30-bf5754ad537f",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
+      "id": "013beb75-af32-40f2-922a-60d64787317a",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Prakash Rana",
       "email": "prakash@vnsgu.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
       "experience": null,
-      "userId": "d7ea3fd7-86e5-4068-bf9e-4ffb3ddc3b48",
+      "userId": "e6778d8e-532c-4d29-bfbd-c1ecdac3eb37",
       "availability": null,
-      "maxHrsPerDay": 6,
-      "maxHrsPerWeek": 30,
-      "createdAt": "2026-03-01T22:00:20.390Z"
+      "createdAt": "2026-03-04T16:08:37.005Z"
     },
     {
-      "id": "be2a75ef-1db6-469b-84f2-77757ac41ab1",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Vimal",
+      "id": "dd1baa3b-082f-4dab-8da4-6162a106854c",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Mayur Gohil",
+      "email": "mayur@vnsgu.ac.in",
+      "phone": null,
+      "designation": "Assistant Professor",
+      "qualifications": null,
+      "experience": null,
+      "userId": "8ffdb2af-383a-436d-8dd0-a6c0e29aa571",
+      "availability": null,
+      "createdAt": "2026-03-04T16:08:35.275Z"
+    },
+    {
+      "id": "28daefbf-62ac-4489-aa41-3815a80298cb",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Nimisha Modi",
+      "email": "nimisha@vnsgu.ac.in",
+      "phone": null,
+      "designation": "Assistant Professor",
+      "qualifications": null,
+      "experience": null,
+      "userId": "021e63b8-d418-45ee-acaf-8f2216236a29",
+      "availability": null,
+      "createdAt": "2026-03-04T16:08:31.882Z"
+    },
+    {
+      "id": "506de1b6-5553-405b-bcd1-ce843badb848",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Rustam Morena",
+      "email": "rustam@vnsgu.ac.in",
+      "phone": null,
+      "designation": "Professor",
+      "qualifications": null,
+      "experience": null,
+      "userId": "b39a21f5-7aec-4fc9-82ce-67b95b0a9e97",
+      "availability": null,
+      "createdAt": "2026-03-04T16:08:26.492Z"
+    },
+    {
+      "id": "4fbd0c14-dcb0-4324-b791-9433a45abbdc",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Ravi Gulati",
+      "email": "ravi@vnsgu.ac.in",
+      "phone": null,
+      "designation": "Professor",
+      "qualifications": null,
+      "experience": null,
+      "userId": "0e2981d5-d5f1-4a45-9a12-857daa7466bd",
+      "availability": null,
+      "createdAt": "2026-03-04T16:08:28.502Z"
+    },
+    {
+      "id": "f06a1425-82ae-4bbf-9b5b-f20db72bc283",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Vimal Chaoudhary",
       "email": "vimal@vnsgu.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
       "experience": null,
-      "userId": "12d3d723-5842-4f8c-8e27-3f93df2afe3c",
+      "userId": "d31bddd3-dea8-4c30-92cc-6c6cd16fda74",
       "availability": null,
-      "maxHrsPerDay": 6,
-      "maxHrsPerWeek": 30,
-      "createdAt": "2026-03-01T22:00:21.575Z"
+      "createdAt": "2026-03-04T16:08:38.650Z"
     },
     {
-      "id": "1f51a258-8a9e-4405-8a93-c3d3b6f42422",
-      "universityId": "e3e20ac6-34b5-4cc7-a51d-57be2c8bf9cc",
-      "name": "Rinku",
+      "id": "8693f0e8-2bc9-4d94-a340-12929a32d514",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Rinku Patel",
       "email": "rinku@vnsgu.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
       "experience": null,
-      "userId": "a5fdae99-403c-476c-a8ef-08f17d766877",
+      "userId": "bd85cb4b-4959-4c47-b1b0-6d5f591b171a",
       "availability": null,
-      "maxHrsPerDay": 6,
-      "maxHrsPerWeek": 30,
-      "createdAt": "2026-03-01T22:00:22.800Z"
+      "createdAt": "2026-03-04T16:08:40.317Z"
     }
   ],
   "facultyDepartments": [
     {
-      "facultyId": "670764ac-f6a7-46e7-898d-386bffc90cdf",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375"
+      "facultyId": "f2ebbdd8-9ec3-4562-8df7-ca3526975fb6",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592"
     },
     {
-      "facultyId": "f766b2c2-ee10-4024-9674-60581f6f79d4",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375"
+      "facultyId": "0a838706-7f61-4024-9d20-6b1e55000899",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592"
     },
     {
-      "facultyId": "2cfe0df3-445a-4905-96a4-76997956f03b",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375"
+      "facultyId": "013beb75-af32-40f2-922a-60d64787317a",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592"
     },
     {
-      "facultyId": "f9575e92-f61b-446a-ab40-2eea49b9f265",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375"
+      "facultyId": "dd1baa3b-082f-4dab-8da4-6162a106854c",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592"
     },
     {
-      "facultyId": "87d9cf38-4a98-4578-9a62-93f3f716f918",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375"
+      "facultyId": "28daefbf-62ac-4489-aa41-3815a80298cb",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592"
     },
     {
-      "facultyId": "8d4bac13-254f-4bd2-9ece-76b99519ccbc",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375"
+      "facultyId": "506de1b6-5553-405b-bcd1-ce843badb848",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592"
     },
     {
-      "facultyId": "d8684dc4-f732-4397-8a30-bf5754ad537f",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375"
+      "facultyId": "4fbd0c14-dcb0-4324-b791-9433a45abbdc",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592"
     },
     {
-      "facultyId": "be2a75ef-1db6-469b-84f2-77757ac41ab1",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375"
+      "facultyId": "f06a1425-82ae-4bbf-9b5b-f20db72bc283",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592"
     },
     {
-      "facultyId": "1f51a258-8a9e-4405-8a93-c3d3b6f42422",
-      "departmentId": "123cdda3-0837-4f7c-9409-b2aec0ac6375"
+      "facultyId": "8693f0e8-2bc9-4d94-a340-12929a32d514",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592"
     }
   ],
-  "facultySubjects": [],
+  "facultySubjects": [
+    {
+      "id": "7ab2cf26-25c0-4327-98ab-560af5bd7787",
+      "facultyId": "506de1b6-5553-405b-bcd1-ce843badb848",
+      "courseId": "6cc0fd49-6adf-49b6-a1c2-db0f41517b6e",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "449b21f2-7f5e-4052-8f2e-ec299cae759b",
+      "facultyId": "506de1b6-5553-405b-bcd1-ce843badb848",
+      "courseId": "098f2a41-1377-4dd9-addf-8ca09efd7ac1",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "46b6e516-c4dc-4171-96d8-63e7d6d4145b",
+      "facultyId": "4fbd0c14-dcb0-4324-b791-9433a45abbdc",
+      "courseId": "685ede86-0b05-479c-93be-335adf54c478",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "02a98acb-ec06-42ad-8221-f26fa4d39972",
+      "facultyId": "4fbd0c14-dcb0-4324-b791-9433a45abbdc",
+      "courseId": "098f2a41-1377-4dd9-addf-8ca09efd7ac1",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "a849bf3e-f129-4abd-b235-edcb96da5b8b",
+      "facultyId": "f2ebbdd8-9ec3-4562-8df7-ca3526975fb6",
+      "courseId": "3c741ea7-7f5c-425a-a572-0865ddc556ae",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "1978e42a-215e-4741-875c-5d8d24fe5308",
+      "facultyId": "f2ebbdd8-9ec3-4562-8df7-ca3526975fb6",
+      "courseId": "a42d4be8-801e-4a2d-96e9-ee15f87e5d64",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "71818d7b-ebe0-4878-a739-4d6dc1ee9478",
+      "facultyId": "f2ebbdd8-9ec3-4562-8df7-ca3526975fb6",
+      "courseId": "9f18da47-3673-40d3-87f3-34a9d9d5bd77",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "f80a868e-9c54-4be0-9383-613474642b19",
+      "facultyId": "f2ebbdd8-9ec3-4562-8df7-ca3526975fb6",
+      "courseId": "72294edc-af8a-48b0-ae0e-9d10871bf102",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "bef0238e-17aa-46e4-a930-2df5d64fe3d4",
+      "facultyId": "28daefbf-62ac-4489-aa41-3815a80298cb",
+      "courseId": "98a69bf8-460c-4dbd-ae1d-c476a6e42e14",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "52ee12b2-5a4f-47b2-9f53-1b79722b258b",
+      "facultyId": "28daefbf-62ac-4489-aa41-3815a80298cb",
+      "courseId": "72294edc-af8a-48b0-ae0e-9d10871bf102",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "3831d6ef-4376-4467-81d8-d9e23207b02c",
+      "facultyId": "0a838706-7f61-4024-9d20-6b1e55000899",
+      "courseId": "3c741ea7-7f5c-425a-a572-0865ddc556ae",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "6dc8dbc5-cf3d-4fa9-8b2e-14798dce17d8",
+      "facultyId": "0a838706-7f61-4024-9d20-6b1e55000899",
+      "courseId": "9f18da47-3673-40d3-87f3-34a9d9d5bd77",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "be794b9a-7ce3-4274-9136-b72b9893a216",
+      "facultyId": "dd1baa3b-082f-4dab-8da4-6162a106854c",
+      "courseId": "98a69bf8-460c-4dbd-ae1d-c476a6e42e14",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "ed921b95-d9ad-412b-b2d8-bd707df3b329",
+      "facultyId": "dd1baa3b-082f-4dab-8da4-6162a106854c",
+      "courseId": "72294edc-af8a-48b0-ae0e-9d10871bf102",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "98a7016e-b39b-4d43-ade5-34e128a94d49",
+      "facultyId": "013beb75-af32-40f2-922a-60d64787317a",
+      "courseId": "cf7699ac-7616-45fa-9d78-0e292e63ff11",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "14ae5c34-2f0f-4a9e-a47c-da7221104362",
+      "facultyId": "f06a1425-82ae-4bbf-9b5b-f20db72bc283",
+      "courseId": "d213198f-9f77-44ec-acd5-d49921e0ec03",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "fef26799-72c8-4fc8-bb76-6370d2e2c366",
+      "facultyId": "f06a1425-82ae-4bbf-9b5b-f20db72bc283",
+      "courseId": "594b6824-213f-40bb-83a9-2e0583e1cd43",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "a03a27a9-caba-473a-a491-9b442c57eb0e",
+      "facultyId": "8693f0e8-2bc9-4d94-a340-12929a32d514",
+      "courseId": "d213198f-9f77-44ec-acd5-d49921e0ec03",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    },
+    {
+      "id": "11527224-c8b3-4e81-a720-63518f0fec4f",
+      "facultyId": "8693f0e8-2bc9-4d94-a340-12929a32d514",
+      "courseId": "594b6824-213f-40bb-83a9-2e0583e1cd43",
+      "isPrimary": true,
+      "proficiencyLevel": 5
+    }
+  ],
   "timetables": [],
-  "exportedAt": "2026-03-02T19:43:08.155Z"
+  "exportedAt": "2026-03-04T17:20:07.259Z"
 }

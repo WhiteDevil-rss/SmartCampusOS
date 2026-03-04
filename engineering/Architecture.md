@@ -23,7 +23,7 @@
 
 ## 1. Executive Summary
 
-NEP-Scheduler is a cloud-native, AI-powered timetable scheduling platform purpose-built for Indian universities operating under the **National Education Policy 2020**. The system combines **Google OR-Tools Constraint Programming** with a layered Machine Learning engine to produce conflict-free, workload-balanced academic schedules for FYUP, B.Ed., M.Ed., ITEP, and multidisciplinary programs.
+NEP-Scheduler is a cloud-native, AI-powered timetable scheduling platform purpose-built for Indian universities operating under the **National Education Policy 2020**. The system combines **Google OR-Tools Constraint Programming** with a layered Machine Learning engine to produce conflict-free, optimized academic schedules for FYUP, B.Ed., M.Ed., ITEP, and multidisciplinary programs.
 
 > **Architecture Philosophy:** The architecture follows a Domain-Driven Design (DDD) approach with microservices decomposition, event-driven communication via Apache Kafka, a multi-tenant data isolation model, and a progressive AI pipeline that continuously learns from scheduling feedback.
 
@@ -97,8 +97,8 @@ Security is enforced at multiple layers following OWASP guidelines and **DPDP Ac
 | `auth-service` | Node.js + Keycloak | 8001 | Login, JWT issuance, password management, RBAC |
 | `tenant-service` | Node.js | 8002 | University/department provisioning, multi-tenancy |
 | `scheduling-engine` | Python (FastAPI) | 8003 | OR-Tools CP-SAT constraint solving, timetable generation |
-| `ai-ml-service` | Python (FastAPI) | 8004 | ML predictions, workload balancing, fairness scoring |
-| `faculty-service` | Node.js | 8005 | Faculty CRUD, workload tracking, availability |
+| `ai-ml-service` | Python (FastAPI) | 8004 | ML predictions, slot optimization, conflict risk |
+| `faculty-service` | Node.js | 8005 | Faculty CRUD, availability management |
 | `course-service` | Node.js | 8006 | Course/subject management, batch assignment |
 | `resource-service` | Node.js | 8007 | Classroom/lab inventory, availability matrix |
 | `notification-service` | Node.js | 8008 | Real-time alerts via WebSocket, email, SMS |
@@ -120,8 +120,7 @@ Security is enforced at multiple layers following OWASP guidelines and **DPDP Ac
 | HC-04 | Subject must be taught by a faculty qualified for that subject |
 | HC-05 | Lab sessions must use lab-type rooms; theory uses classrooms |
 | HC-06 | Room capacity must be ≥ batch strength |
-| HC-07 | Daily faculty hours must not exceed `maxHrsPerDay` constraint |
-| HC-08 | Weekly faculty hours must not exceed `maxHrsPerWeek` constraint |
+| HC-06 | Room capacity must be ≥ batch strength |
 
 #### Soft Constraints (Optimized via Objective Function)
 
@@ -130,7 +129,7 @@ Security is enforced at multiple layers following OWASP guidelines and **DPDP Ac
 | SC-01 | Minimize gaps in faculty daily schedule (back-to-back preference) |
 | SC-02 | Distribute subjects evenly across weekdays |
 | SC-03 | Prefer morning slots for high-cognitive subjects (AI, Mathematics) |
-| SC-04 | Minimize faculty workload variance (fairness index < 2 hrs/week) |
+
 | SC-05 | Lab sessions preferably in 2-hour contiguous blocks |
 | SC-06 | Senior faculty (HOD) gets preferred timing windows |
 
@@ -139,12 +138,12 @@ Security is enforced at multiple layers following OWASP guidelines and **DPDP Ac
 | ML Module | Algorithm | Purpose |
 |---|---|---|
 | Slot Preference Predictor | Gradient Boosted Trees (XGBoost) | Predict optimal time slots per subject type |
-| Workload Fairness Scorer | Multi-objective LP Relaxation | Score and balance faculty load equity |
+
 | Conflict Risk Classifier | Random Forest Classifier | Pre-screen high-risk constraint combinations |
 | Substitute Recommender | Collaborative Filtering + Cosine Similarity | Suggest substitutes when faculty absent |
 | Room Utilization Optimizer | Bin Packing Heuristic + RL | Maximize room utilization efficiency |
 | Schedule Quality Ranker | Learning to Rank (LambdaMART) | Rank alternative timetable solutions |
-| Anomaly Detector | Isolation Forest | Detect unusual workload or scheduling patterns |
+
 | NEP Compliance Checker | Rule-based + NLP | Validate against NEP 2020 hour requirements |
 
 ---
@@ -201,8 +200,6 @@ CREATE TABLE faculty (
   name            TEXT NOT NULL,
   email           TEXT UNIQUE NOT NULL,
   designation     TEXT,
-  max_hrs_per_day INT DEFAULT 4,
-  max_hrs_per_week INT DEFAULT 20,
   user_id         UUID REFERENCES users(id),
   created_at      TIMESTAMPTZ DEFAULT NOW()
 );

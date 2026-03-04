@@ -10,71 +10,73 @@ const config: Config = {
 	theme: {
 		extend: {
 			colors: {
-				background: 'hsl(var(--background))',
-				foreground: 'hsl(var(--foreground))',
-				card: {
-					DEFAULT: 'hsl(var(--card))',
-					foreground: 'hsl(var(--card-foreground))'
-				},
-				popover: {
-					DEFAULT: 'hsl(var(--popover))',
-					foreground: 'hsl(var(--popover-foreground))'
-				},
+				background: 'var(--background)',
+				surface: 'var(--surface)',
+				card: 'var(--card)',
+				'card-hover': 'var(--card-hover)',
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					DEFAULT: 'var(--primary)',
+					dark: 'var(--primary-dark)',
+					light: 'var(--primary-light)',
+					glow: 'var(--primary-glow)',
 				},
 				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
-				},
-				muted: {
-					DEFAULT: 'hsl(var(--muted))',
-					foreground: 'hsl(var(--muted-foreground))'
+					DEFAULT: 'var(--secondary)',
+					dark: 'var(--secondary-dark)',
+					light: 'var(--secondary-light)',
+					glow: 'var(--secondary-glow)',
 				},
 				accent: {
-					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
+					red: 'var(--accent-red)',
+					yellow: 'var(--accent-yellow)',
+					green: 'var(--accent-green)',
+					orange: 'var(--accent-orange)',
+				},
+				border: {
+					DEFAULT: 'var(--border)',
+					hover: 'var(--border-hover)',
+				},
+				text: {
+					primary: 'var(--text-primary)',
+					secondary: 'var(--text-secondary)',
+					muted: 'var(--text-muted)',
+					disabled: 'var(--text-disabled)',
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
 				},
-				border: 'hsl(var(--border))',
-				input: 'hsl(var(--input))',
-				ring: 'hsl(var(--ring))',
-				chart: {
-					'1': 'hsl(var(--chart-1))',
-					'2': 'hsl(var(--chart-2))',
-					'3': 'hsl(var(--chart-3))',
-					'4': 'hsl(var(--chart-4))',
-					'5': 'hsl(var(--chart-5))'
-				},
-				'neon-cyan': 'hsl(var(--neon-cyan))',
-				'neon-purple': 'hsl(var(--neon-purple))',
-				'neon-pink': 'hsl(var(--neon-pink))',
-				sidebar: {
-					bg: 'hsl(var(--sidebar-bg))',
-					fg: 'hsl(var(--sidebar-fg))',
-					border: 'hsl(var(--sidebar-border))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-fg': 'hsl(var(--sidebar-accent-fg))'
-				}
+				ring: 'var(--primary)',
+				// StitchMCP design tokens
+				'neon-cyan': '#00f5ff',
+				'neon-purple': '#9D4EDD',
+				'background-dark': '#030712',
+				'surface-dark': '#111827',
+				'card-bg': 'rgba(255, 255, 255, 0.03)',
+				'card-border': 'rgba(255, 255, 255, 0.1)',
+				'accent-purple': '#8b5cf6',
 			},
 			borderRadius: {
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				lg: 'var(--radius-l)',
+				md: 'var(--radius-m)',
+				sm: 'var(--radius-s)',
+				xl: 'var(--radius-xl)',
+				full: '9999px',
 			},
 			boxShadow: {
-				'premium': '0px 8px 40px rgba(0, 0, 0, 0.05), 0px 1px 3px rgba(0, 0, 0, 0.03)',
-				'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
-				'glow': '0 0 20px rgba(79, 70, 229, 0.4)',
+				'card': '0 4px 24px rgba(108, 99, 255, 0.08)',
+				'card-hover': '0 8px 40px rgba(108, 99, 255, 0.15)',
+				'button': '0 4px 16px rgba(108, 99, 255, 0.2)',
+				'glow': '0 0 60px rgba(108, 99, 255, 0.3)',
+				'cta-glow': '0 0 80px rgba(255, 107, 107, 0.3)',
+				'input-glow': '0 0 20px rgba(108, 99, 255, 0.15)',
 			},
 			animation: {
-				'fade-in': 'fadeIn 0.5s ease-out',
-				'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+				'fade-in': 'fadeIn 0.5s ease-out forwards',
+				'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
 				'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+				'float': 'float 6s ease-in-out infinite',
+				'spin-slow': 'spin 8s linear infinite',
 			},
 			keyframes: {
 				fadeIn: {
@@ -85,9 +87,13 @@ const config: Config = {
 					'0%': { transform: 'translateY(20px)', opacity: '0' },
 					'100%': { transform: 'translateY(0)', opacity: '1' },
 				},
+				float: {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-20px)' },
+				}
 			},
 			fontFamily: {
-				sans: ['var(--font-manrope)', 'var(--font-space-grotesk)', 'sans-serif'],
+				sans: ['var(--font-inter)', 'sans-serif'],
 				heading: ['var(--font-space-grotesk)', 'sans-serif'],
 			},
 		}

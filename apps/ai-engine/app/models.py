@@ -33,13 +33,14 @@ class Course(BaseModel):
     id: str
     code: str
     name: str
-    type: str = "Theory"                           # Theory | Lab | Theory+Lab
+    type: str = "Theory"                           # Theory | Lab | Theory+Lab | Practical | Project
     weeklyHrs: int = 1
     program: Optional[str] = None
     semester: Optional[int] = None
     isElective: bool = False
     requiredRoomType: Optional[str] = None         # "Lab" | "Classroom" | None
     labDuration: int = 1                           # consecutive slots for lab (≥2 = lab block)
+    sessionTypeId: Optional[str] = None
 
 
 class Batch(BaseModel):
@@ -57,6 +58,20 @@ class Resource(BaseModel):
     type: str = "Classroom"                        # Classroom | Lab | Seminar | etc.
 
 
+class TimeBlock(BaseModel):
+    id: str
+    name: str
+    startTime: str
+    endTime: str
+    duration: int
+    isBreak: bool = False
+
+class SessionType(BaseModel):
+    id: str
+    name: str
+    durationRule: int = 60
+    roomTypeRequired: Optional[str] = None
+
 class ScheduleConfig(BaseModel):
     startTime: str = "09:00"
     endTime: str = "17:00"
@@ -65,6 +80,8 @@ class ScheduleConfig(BaseModel):
     numberOfBreaks: int = 1
     daysPerWeek: int = 5
     continuousMode: str = "balanced"               # "off" | "balanced" | "strict"
+    useCustomBlocks: bool = False
+    timeBlocks: List[TimeBlock] = []
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -87,6 +104,11 @@ class ElectiveOption(BaseModel):
     subgroups: List[ElectiveSubgroup] = []         # Splits for room capacities
 
 
+class FacultyPair(BaseModel):
+    faculty1Id: str
+    faculty2Id: str
+    dayOfWeek: int
+
 class ElectiveBasket(BaseModel):
     """A group of parallel elective options sharing the SAME time slot."""
     basketId: str
@@ -97,6 +119,7 @@ class ElectiveBasket(BaseModel):
     weeklyHrs: int = 2
     divisionIds: List[str] = []                    # Parent batches (divisions) this basket belongs to
     options: List[ElectiveOption] = []
+    facultyPairs: List[FacultyPair] = []           # NEW: rotating pairs
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -131,6 +154,7 @@ class GenerateRequest(BaseModel):
 
     # ── NEW v3.1 ──────────────────────────────────────────────────────────
     electiveBaskets: List[ElectiveBasket] = []
+    sessionTypes: List[SessionType] = []
 
 
 class SlotResult(BaseModel):
@@ -153,6 +177,10 @@ class SlotResult(BaseModel):
     basketId: Optional[str] = None
     isElective: bool = False
     optionId: Optional[str] = None
+    # NEW v4.0
+    faculty2Id: Optional[str] = None
+    blockId: Optional[str] = None
+    sessionTypeId: Optional[str] = None
 
 
 class GenerateResponse(BaseModel):
@@ -160,7 +188,6 @@ class GenerateResponse(BaseModel):
     message: str = ""
     slots: List[SlotResult] = []
     solveTimeMs: int = 0
-    workloadVariance: float = 0.0
     utilizationScore: float = 0.0
     # ── NEW v3.1 ──────────────────────────────────────────────────────────
     gapScore: float = 0.0                          # avg idle slots per batch per day (lower = better)

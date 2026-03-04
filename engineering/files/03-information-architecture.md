@@ -261,10 +261,10 @@ PLATFORM (Global)
 | `/superadmin/timetables` | TimetableListTable, UniversityFilter, DeptFilter, DateFilter |
 | `/dashboard` | StatsCard ×4, DeptBreakdownTable, QuickActions |
 | `/dashboard/faculty` | DataTable, FacultyFormModal, SubjectAssignment |
-| `/dashboard/timetables/[id]` | TimetableGrid, BatchSelector, WorkloadBadge, TimetableExport |
+| `/dashboard/timetables/[id]` | TimetableGrid, BatchSelector, TimetableExport |
 | `/department/generate` | GenerateForm (time config), GenerateButton, ProgressIndicator |
 | `/department/special` | FacultyCheckboxList, RoomCheckboxList, SpecialTTForm, ConflictPreview |
-| `/department/timetables/[id]` | TimetableGrid, TimetableExport, WorkloadSummary, UnassignableAlert |
+| `/department/timetables/[id]` | TimetableGrid, TimetableExport, UnassignableAlert |
 | `/faculty-panel` | TimetableGrid (faculty view), RealtimeUpdateBanner |
 | `/faculty-panel/profile` | ProfileCard, EditProfileForm |
 | `/faculty-panel/credentials` | PasswordChangeForm |

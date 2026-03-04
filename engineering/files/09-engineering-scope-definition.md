@@ -41,7 +41,7 @@ The MVP is designed to fully support the **VNSGU Computer Science Department use
 |---|---|
 | Department CRUD | Create departments with auto-generated dept admin credentials |
 | Program management | UG, PG, Diploma, Ph.D, FYUP program types |
-| Faculty pool management | Add faculty, assign subjects, set max hours per day/week |
+| Faculty pool management | Add faculty, assign subjects |
 | Resource management | Classrooms and labs with type and capacity |
 | Batch management | Student groups with program, semester, division, strength |
 | Course management | Theory, Lab, Theory+Lab types with credits and weekly hours |
@@ -58,7 +58,7 @@ The MVP is designed to fully support the **VNSGU Computer Science Department use
 | Timetable grid view | Day × slot grid per batch with color-coded slot types |
 | PDF export | Client-side jsPDF + html2canvas; A4 landscape; university branding |
 | Print support | Print-optimized CSS layout |
-| Workload summary | Hours per faculty vs. max allowed; utilization percentage |
+
 
 ### 2.5 Faculty Portal
 
@@ -75,7 +75,7 @@ The MVP is designed to fully support the **VNSGU Computer Science Department use
 |---|---|
 | OR-Tools CP-SAT solver | Google OR-Tools 9.9.x; CP-SAT (Constraint Programming + SAT) |
 | All 8 hard constraints | HC-01 through HC-09 (faculty, room, batch, capacity, type, hours) |
-| Soft constraint optimization | Workload variance minimization via objective function |
+
 | Configurable time slots | Start/end time, lecture duration, break duration, break position, days per week |
 | Special timetable mode | Faculty and room exclusion; unassignable course identification |
 | Conflict guarantee | Generation fails (422) if any hard constraint violated; 0 conflicts guaranteed |

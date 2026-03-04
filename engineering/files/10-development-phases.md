@@ -105,7 +105,7 @@ Implement the Python OR-Tools CP-SAT scheduling engine and integrate it with the
 - FastAPI app with `POST /solve` endpoint
 - `generate_time_slots()` function based on config parameters
 - `TimetableScheduler` class with all 9 hard constraints implemented
-- Soft constraint: workload variance minimization (`Minimize(max_load - min_load)`)
+
 - Solution extractor: convert solver output to structured slot list
 - Unassignable course detection and reporting
 - Solver time limit: 30 seconds (configurable)
@@ -116,7 +116,7 @@ Implement the Python OR-Tools CP-SAT scheduling engine and integrate it with the
 - Redis distributed lock (TTL 60s) to prevent concurrent generation
 - Fetch dept data from PostgreSQL → call AI Engine → save result to DB
 - Publish `timetable.generated` event (Redis pub/sub for MVP)
-- Response: timetableId, slots[], workloadStats, timeSlots[]
+- Response: timetableId, slots[], timeSlots[]
 - Error handling: solver infeasible → 422 with conflict details
 
 #### Database
@@ -126,7 +126,7 @@ Implement the Python OR-Tools CP-SAT scheduling engine and integrate it with the
 ### Acceptance Criteria
 - VNSGU CS test case generates successfully (7 courses, 9 faculty, 2 batches) in < 30 seconds
 - Zero hard constraint violations (no faculty/room/batch double-booking)
-- Workload variance across 9 faculty < 2 hours/week
+
 - Redis lock prevents duplicate generation for same department
 - Dharmen Shah assigned iOS (Div A) and .Net (Div B) without overlap — HC-01 verified
 
@@ -157,10 +157,7 @@ Build the visual timetable display components, PDF export, and print functionali
 - `@media print` CSS: hide sidebar, topbar, export buttons
 - Print-ready layout on A4 landscape
 
-#### Workload Display
-- `WorkloadBadge.tsx`: faculty workload indicator (hours/max)
-- Workload summary table below timetable grid
-- Color-coded: green (under 70%), amber (70–90%), red (>90%)
+
 
 #### Faculty Personal Schedule View
 - `/faculty-panel` page renders `TimetableGrid` in faculty mode

@@ -65,7 +65,7 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
             const semesterCondition = buildSemesterCondition();
 
             // Parallel Data Fetching
-            const [batches, faculty, targetDept, electiveBaskets] = await Promise.all([
+            const [batches, faculty, targetDept, electiveBaskets, timeBlocks, sessionTypes] = await Promise.all([
                 prisma.batch.findMany({
                     where: {
                         departmentId,
@@ -81,19 +81,21 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
                     }
                 }),
                 prisma.department.findUnique({ where: { id: departmentId } }),
-                // Fetch elective baskets for this department
+                // Fetch elective baskets for this department with Faculty Pairs
                 prisma.electiveBasket.findMany({
                     where: { departmentId },
                     include: {
+                        facultyPairs: true,
                         options: {
                             include: {
-                                course: { select: { id: true, code: true, name: true, type: true } },
-                                faculty: { select: { id: true } },
+                                course: { select: { id: true, code: true, name: true, type: true, sessionTypeId: true, labDuration: true, requiredRoomType: true } },
                                 subgroups: true,
                             },
                         },
                     },
                 }),
+                prisma.timeBlock.findMany({ where: { departmentId }, orderBy: { slotNumber: 'asc' } }),
+                prisma.sessionType.findMany({ where: { departmentId } }),
             ]);
 
             if (batches.length === 0) {
@@ -136,7 +138,18 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
             const payload = {
                 departmentId,
                 generationType,
-                config: { ...(config || {}), continuousMode },
+                config: {
+                    ...(config || {}),
+                    continuousMode,
+                    timeBlocks: timeBlocks.map(tb => ({
+                        id: tb.id,
+                        startTime: tb.startTime,
+                        endTime: tb.endTime,
+                        isBreak: tb.isBreak,
+                        slotNumber: tb.slotNumber
+                    })),
+                    useCustomBlocks: timeBlocks.length > 0
+                },
                 faculty: faculty.map((f: any) => ({
                     id: f.id,
                     name: f.name,
@@ -151,7 +164,10 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
                     type: c.type,
                     isElective: c.isElective || electiveCourseIds.has(c.id),
                     program: c.program,
-                    semester: c.semester
+                    semester: c.semester,
+                    sessionTypeId: c.sessionTypeId,
+                    requiredRoomType: c.requiredRoomType,
+                    labDuration: c.labDuration
                 })),
                 batches: batches.map((b: any) => ({
                     id: b.id,
@@ -191,11 +207,16 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
                         program: derivedProgram,
                         weeklyHrs: firstOpt?.course?.weeklyHrs ?? bk.weeklyHrs,
                         divisionIds,
+                        facultyPairs: bk.facultyPairs.map((fp: any) => ({
+                            id: fp.id,
+                            faculty1Id: fp.faculty1Id,
+                            faculty2Id: fp.faculty2Id,
+                            dayOfWeek: fp.dayOfWeek
+                        })),
                         options: bk.options.map((opt: any) => ({
                             optionId: opt.id,
                             courseId: opt.course.id,
                             enrollmentCount: opt.enrollmentCount,
-                            facultyId: opt.facultyId ?? null,
                             subgroups: (opt.subgroups || []).map((sg: any) => ({
                                 subgroupId: sg.id,
                                 name: sg.subgroupId,
@@ -225,7 +246,6 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
                             ...(config || {}),
                             continuousMode,
                             metrics: {
-                                workloadVariance: aiResponse.workloadVariance,
                                 utilizationScore: aiResponse.utilizationScore,
                                 gapScore: aiResponse.gapScore,
                                 electiveGroupCount: aiResponse.electiveGroupCount,
@@ -241,6 +261,8 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
                 // Bulk Insert Slots
                 const slotsData: any[] = [];
                 aiResponse.slots.forEach((s: any) => {
+                    const blockId = s.blockId || (s.isBreak && timeBlocks.find(tb => tb.slotNumber === s.slotNumber)?.id) || null;
+
                     if (s.isBreak && !s.batchId) {
                         // Create a break slot for EVERY regular batch
                         batches.forEach((b: any) => {
@@ -252,6 +274,7 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
                                 endTime: s.endTime,
                                 courseId: null,
                                 facultyId: null,
+                                faculty2Id: null,
                                 roomId: null,
                                 batchId: b.id,
                                 isBreak: true,
@@ -259,6 +282,8 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
                                 isElective: false,
                                 basketId: null,
                                 optionId: null,
+                                blockId: blockId,
+                                sessionTypeId: null
                             });
                         });
                     } else {
@@ -270,14 +295,17 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
                             endTime: s.endTime,
                             courseId: s.courseId || null,
                             facultyId: s.facultyId || null,
+                            faculty2Id: s.faculty2Id || null,
                             roomId: s.roomId || null,
                             batchId: s.batchId,
                             isBreak: s.isBreak || false,
                             slotType: s.slotType || "THEORY",
-                            // Elective Metadata
+                            // Metadata
                             isElective: s.isElective || false,
                             basketId: s.basketId || null,
                             optionId: s.optionId || null,
+                            blockId: blockId,
+                            sessionTypeId: s.sessionTypeId || null
                         });
                     }
                 });
@@ -377,10 +405,13 @@ export const getLatestTimetable = async (req: AuthRequest, res: Response) => {
                         ...(facultyId ? { facultyId: String(facultyId) } : {})
                     },
                     include: {
-                        course: { select: { id: true, code: true, type: true } },
+                        course: { select: { id: true, code: true, name: true, type: true } },
                         faculty: { select: { id: true, name: true } },
+                        faculty2: { select: { id: true, name: true } },
                         room: { select: { id: true, name: true, type: true } },
-                        batch: { select: { id: true, name: true } }
+                        batch: { select: { id: true, name: true } },
+                        block: true,
+                        sessionType: true
                     },
                     orderBy: [
                         { dayOfWeek: 'asc' },
@@ -475,10 +506,13 @@ export const getTimetableById = async (req: AuthRequest, res: Response) => {
                         ...(facultyId ? { facultyId: String(facultyId) } : {})
                     },
                     include: {
-                        course: { select: { id: true, code: true, type: true } },
+                        course: { select: { id: true, code: true, name: true, type: true } },
                         faculty: { select: { id: true, name: true } },
+                        faculty2: { select: { id: true, name: true } },
                         room: { select: { id: true, name: true, type: true } },
-                        batch: { select: { id: true, name: true } }
+                        batch: { select: { id: true, name: true } },
+                        block: true,
+                        sessionType: true
                     },
                     orderBy: [
                         { dayOfWeek: 'asc' },

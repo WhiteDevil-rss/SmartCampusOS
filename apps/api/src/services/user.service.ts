@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/client';
 import bcrypt from 'bcrypt';
 import { firebaseAdmin } from '../lib/firebase-admin';
 import prisma from '../lib/prisma';

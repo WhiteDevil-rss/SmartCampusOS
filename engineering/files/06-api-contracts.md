@@ -116,7 +116,7 @@
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
 | `GET` | `/v1/analytics/dashboard` | UNI_ADMIN, SUPERADMIN | Dashboard stats |
-| `GET` | `/v1/analytics/workload` | DEPT_ADMIN, UNI_ADMIN | Faculty workload report |
+
 
 ---
 
@@ -225,10 +225,7 @@
   "status": "OPTIMAL",
   "conflictCount": 0,
   "generationMs": 4250,
-  "workloadStats": {
-    "faculty-rustam": { "weeklyHrs": 3, "maxAllowed": 20, "utilizationPct": 15 },
-    "faculty-dharmen": { "weeklyHrs": 6, "maxAllowed": 18, "utilizationPct": 33 }
-  },
+
   "slots": [
     {
       "dayOfWeek": 1,

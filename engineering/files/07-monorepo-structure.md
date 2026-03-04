@@ -74,8 +74,7 @@ nep-scheduler/                              # Root monorepo
 │   │   │   ├── timetable/
 │   │   │   │   ├── TimetableGrid.tsx       # Main grid component (days × slots)
 │   │   │   │   ├── TimetableCell.tsx       # Individual time slot cell
-│   │   │   │   ├── TimetableExport.tsx     # PDF download + print controls
-│   │   │   │   └── WorkloadBadge.tsx       # Faculty workload indicator
+│   │   │   │   └── TimetableExport.tsx     # PDF download + print controls
 │   │   │   │
 │   │   │   ├── forms/
 │   │   │   │   ├── GenerateForm.tsx        # TT generation config form
@@ -168,8 +167,7 @@ nep-scheduler/                              # Root monorepo
 │       │   │   └── solution_extractor.py # Convert solver output to timetable JSON
 │       │   │
 │       │   ├── ml/
-│       │   │   ├── slot_predictor.py     # XGBoost: predict optimal time slots
-│       │   │   └── workload_scorer.py    # LP relaxation: fairness scoring
+│       │   │   └── slot_predictor.py     # XGBoost: predict optimal time slots
 │       │   │
 │       │   ├── api/
 │       │   │   ├── solve.py              # POST /solve endpoint
@@ -282,8 +280,6 @@ export interface Faculty {
   designation?: string;
   departmentId: string;
   universityId: string;
-  maxHrsPerDay: number;
-  maxHrsPerWeek: number;
   subjects: FacultySubject[];
 }
 

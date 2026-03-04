@@ -1,0 +1,393 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model University {
+  id          String       @id @default(uuid())
+  name        String
+  shortName   String       @unique
+  location    String?
+  email       String?
+  estYear     Int?
+  website     String?
+  adminUserId String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  departments Department[]
+  programs    Program[]
+  resources   Resource[]
+  faculty     Faculty[]
+  batches     Batch[]
+  courses     Course[]
+  timetables  Timetable[]
+  users       User[]
+
+  @@map("universities")
+}
+
+model Department {
+  id              String              @id @default(uuid())
+  universityId    String
+  university      University          @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  name            String
+  shortName       String
+  hod             String?
+  email           String?
+  adminUserId     String?
+  createdAt       DateTime            @default(now())
+  faculty         FacultyDepartment[]
+  courses         Course[]
+  batches         Batch[]
+  timetables      Timetable[]
+  electiveBaskets ElectiveBasket[]
+  programs        Program[]
+  timeBlocks      TimeBlock[]
+  sessionTypes    SessionType[]
+
+  @@map("departments")
+}
+
+model FacultyDepartment {
+  facultyId    String
+  departmentId String
+  faculty      Faculty    @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@id([facultyId, departmentId])
+  @@map("faculty_departments")
+}
+
+model Faculty {
+  id             String     @id @default(uuid())
+  universityId   String
+  university     University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  name           String
+  email          String     @unique
+  phone          String?
+  designation    String?
+  qualifications String?
+  experience     String?
+  userId         String?
+  user           User?      @relation(fields: [userId], references: [id])
+
+  // Advanced Constraints for AI Engine
+  availability Json? // Blocked slot map: { "Monday": [1, 2], "Friday": [5, 6] }
+
+  createdAt       DateTime              @default(now())
+  subjects        FacultySubject[]
+  departments     FacultyDepartment[]
+  timetableSlots  TimetableSlot[]
+  faculty2Slots   TimetableSlot[]       @relation("Faculty2Slots")
+  electiveOptions ElectiveOption[]
+  faculty1Pairs   ElectiveFacultyPair[] @relation("Faculty1Pairs")
+  faculty2Pairs   ElectiveFacultyPair[] @relation("Faculty2Pairs")
+
+  @@map("faculty")
+}
+
+model FacultySubject {
+  id               String  @id @default(uuid())
+  facultyId        String
+  courseId         String
+  faculty          Faculty @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  course           Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  isPrimary        Boolean @default(true)
+  proficiencyLevel Int     @default(5)
+
+  @@unique([facultyId, courseId])
+  @@map("faculty_subjects")
+}
+
+model Course {
+  id               String           @id @default(uuid())
+  departmentId     String?
+  universityId     String
+  department       Department?      @relation(fields: [departmentId], references: [id])
+  university       University       @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  name             String
+  code             String
+  program          String?
+  credits          Int              @default(4)
+  weeklyHrs        Int              @default(4)
+  semester         Int? // e.g. 1, 2, 3, 4 — which semester this subject belongs to
+  type             String           @default("Theory") // Theory | Lab | Theory+Lab
+  sessionTypeId    String?
+  sessionType      SessionType?     @relation("CourseToSessionType", fields: [sessionTypeId], references: [id])
+  labDuration      Int              @default(60) // in minutes
+  requiredRoomType String? // Classroom | Lab
+  isElective       Boolean          @default(false) // Used for parallel track matching
+  createdAt        DateTime         @default(now())
+  facultySubjects  FacultySubject[]
+  timetableSlots   TimetableSlot[]
+  electiveOptions  ElectiveOption[]
+
+  @@map("courses")
+}
+
+model Batch {
+  id             String          @id @default(uuid())
+  departmentId   String?
+  universityId   String
+  department     Department?     @relation(fields: [departmentId], references: [id])
+  university     University      @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  name           String
+  program        String?
+  semester       Int?
+  division       String?
+  year           String?
+  strength       Int             @default(30) // students in this specific division
+  totalStudents  Int             @default(0) // total capacity for the whole batch
+  createdAt      DateTime        @default(now())
+  timetableSlots TimetableSlot[]
+  timetables     Timetable[]
+
+  @@map("batches")
+}
+
+model Resource {
+  id             String          @id @default(uuid())
+  universityId   String
+  university     University      @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  name           String
+  type           String // Classroom | Lab | Seminar Hall | Auditorium
+  capacity       Int             @default(30)
+  floor          String?
+  building       String?
+  createdAt      DateTime        @default(now())
+  timetableSlots TimetableSlot[]
+
+  @@map("resources")
+}
+
+model Program {
+  id           String      @id @default(uuid())
+  universityId String
+  university   University  @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id])
+  name         String
+  shortName    String
+  type         String // UG | PG | Diploma | Ph.D
+  duration     Int         @default(2)
+  totalSems    Int         @default(4)
+
+  @@map("programs")
+}
+
+model TimeBlock {
+  id             String          @id @default(uuid())
+  departmentId   String
+  department     Department      @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  name           String // e.g. "Block 1"
+  startTime      String // "10:30"
+  endTime        String // "12:30"
+  duration       Int // in minutes
+  isBreak        Boolean         @default(false)
+  slotNumber     Int             @default(1)
+  createdAt      DateTime        @default(now())
+  timetableSlots TimetableSlot[]
+
+  @@map("time_blocks")
+}
+
+model SessionType {
+  id               String          @id @default(uuid())
+  departmentId     String
+  department       Department      @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  name             String // Theory | Lab | Practical | Project
+  durationRule     Int             @default(60) // Recommended duration in minutes
+  roomTypeRequired String? // Classroom | Lab
+  createdAt        DateTime        @default(now())
+  courses          Course[]        @relation("CourseToSessionType")
+  timetableSlots   TimetableSlot[]
+
+  @@map("session_types")
+}
+
+model ElectiveBasket {
+  id           String                @id @default(uuid())
+  departmentId String
+  department   Department            @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  subjectCode  String // e.g. "204" – groups elective options under one umbrella
+  name         String // e.g. "Semester 4 – Elective Set A"
+  semester     Int?
+  program      String?
+  weeklyHrs    Int                   @default(2)
+  createdAt    DateTime              @default(now())
+  options      ElectiveOption[]
+  facultyPairs ElectiveFacultyPair[]
+
+  @@map("elective_baskets")
+}
+
+model ElectiveFacultyPair {
+  id         String         @id @default(uuid())
+  basketId   String
+  basket     ElectiveBasket @relation(fields: [basketId], references: [id], onDelete: Cascade)
+  faculty1Id String
+  faculty2Id String
+  faculty1   Faculty        @relation("Faculty1Pairs", fields: [faculty1Id], references: [id])
+  faculty2   Faculty        @relation("Faculty2Pairs", fields: [faculty2Id], references: [id])
+  dayOfWeek  Int // 1=Mon...6=Sat
+  createdAt  DateTime       @default(now())
+
+  @@map("elective_faculty_pairs")
+}
+
+model ElectiveOption {
+  id              String             @id @default(uuid())
+  basketId        String
+  basket          ElectiveBasket     @relation(fields: [basketId], references: [id], onDelete: Cascade)
+  courseId        String
+  course          Course             @relation(fields: [courseId], references: [id])
+  facultyId       String? // preferred faculty (optional)
+  faculty         Faculty?           @relation(fields: [facultyId], references: [id])
+  enrollmentCount Int                @default(30) // sub-batch size for room assignment
+  createdAt       DateTime           @default(now())
+  subgroups       ElectiveSubgroup[]
+
+  @@map("elective_options")
+}
+
+model ElectiveSubgroup {
+  id              String         @id @default(uuid())
+  optionId        String
+  option          ElectiveOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  subgroupId      String // e.g. "Group 1", "Group 2", or "Div A"
+  enrollmentCount Int            @default(30) // Splitted size
+  createdAt       DateTime       @default(now())
+
+  @@map("elective_subgroups")
+}
+
+model Timetable {
+  id            String          @id @default(uuid())
+  universityId  String
+  departmentId  String?
+  batchId       String?
+  university    University      @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  department    Department?     @relation(fields: [departmentId], references: [id])
+  batch         Batch?          @relation(fields: [batchId], references: [id])
+  name          String?
+  isSpecial     Boolean         @default(false)
+  status        String          @default("ACTIVE") // ACTIVE | ARCHIVED | DRAFT
+  configJson    Json?
+  generatedBy   String          @default("AI")
+  version       Int             @default(1)
+  conflictCount Int             @default(0)
+  generationMs  Int?
+  createdAt     DateTime        @default(now())
+  slots         TimetableSlot[]
+
+  @@map("timetables")
+}
+
+model TimetableSlot {
+  id            String    @id @default(uuid())
+  timetableId   String
+  timetable     Timetable @relation(fields: [timetableId], references: [id], onDelete: Cascade)
+  dayOfWeek     Int // 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+  slotNumber    Int
+  startTime     String // "09:00"
+  endTime       String // "10:00"
+  courseId      String?
+  facultyId     String?
+  faculty2Id    String? // For elective pairs
+  roomId        String?
+  batchId       String
+  blockId       String? // Reference to TimeBlock
+  sessionTypeId String? // Reference to SessionType
+
+  course      Course?      @relation(fields: [courseId], references: [id])
+  faculty     Faculty?     @relation(fields: [facultyId], references: [id])
+  faculty2    Faculty?     @relation("Faculty2Slots", fields: [faculty2Id], references: [id])
+  room        Resource?    @relation(fields: [roomId], references: [id])
+  batch       Batch        @relation(fields: [batchId], references: [id])
+  block       TimeBlock?   @relation(fields: [blockId], references: [id])
+  sessionType SessionType? @relation(fields: [sessionTypeId], references: [id])
+
+  isBreak  Boolean @default(false)
+  slotType String  @default("THEORY") // THEORY | LAB | BREAK | PRACTICAL | PROJECT
+
+  // Elective Metadata
+  isElective Boolean @default(false)
+  basketId   String?
+  optionId   String?
+
+  @@map("timetable_slots")
+}
+
+model User {
+  id           String      @id @default(uuid())
+  username     String      @unique
+  email        String?     @unique
+  passwordHash String? // Optional now because Firebase handles password
+  firebaseUid  String?     @unique
+  role         String // SUPERADMIN | UNI_ADMIN | DEPT_ADMIN | FACULTY
+  entityId     String? // universityId | departmentId | facultyId
+  universityId String?
+  university   University? @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  faculty      Faculty[]
+  phoneNumber  String? // Mandatory for new users, enforced in API
+  address      String?
+  isActive     Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  lastLogin    DateTime?
+  logs         AuditLog[]
+
+  @@map("users")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  action     String
+  entityType String?
+  entityId   String?
+  changes    Json?
+  status     String   @default("SUCCESS") // SUCCESS | FAILURE
+  endpoint   String?
+  method     String?
+  durationMs Int?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@map("audit_logs")
+}
+
+model GlobalSettings {
+  id              String   @id @default("system-config")
+  platformName    String   @default("Zembaa.AI Scheduler")
+  supportEmail    String   @default("support@zembaa.ai")
+  maintenanceMode Boolean  @default(false)
+  sessionTimeout  Int      @default(600)
+  mfaEnabled      Boolean  @default(false)
+  logRetention    String   @default("30")
+  autoBackups     Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
+
+  @@map("global_settings")
+}
+
+model Inquiry {
+  id            String   @id @default(uuid())
+  name          String
+  email         String
+  contactNumber String
+  organization  String?
+  message       String?
+  status        String   @default("NEW") // NEW | CONTACTED | CONVERTED
+  ipAddress     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("inquiries")
+}

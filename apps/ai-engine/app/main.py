@@ -69,9 +69,13 @@ def _preflight_errors(req: GenerateRequest) -> list[str]:
 
     # 2. Convert weeklyHrs to slot counts
     for c in req.courses:
+        # weeklyHrs is already normalized if coming from some sources, but usually it's hours.
+        # If it's hours (e.g. 4), then (4 * 60) / 60 = 4 slots.
         c.weeklyHrs = math.ceil((c.weeklyHrs * 60) / cfg.lectureDuration)
         if hasattr(c, 'labDuration') and c.labDuration > 0:
-            c.labDuration = math.ceil((c.labDuration * 60) / cfg.lectureDuration)
+            # labDuration is in minutes (e.g. 120). 
+            # 120 / 60 = 2 slots.
+            c.labDuration = math.ceil(c.labDuration / cfg.lectureDuration)
     for basket in req.electiveBaskets:
         basket.weeklyHrs = math.ceil((basket.weeklyHrs * 60) / cfg.lectureDuration)
 
@@ -145,24 +149,7 @@ def _preflight_errors(req: GenerateRequest) -> list[str]:
                     f"enrollment={opt.enrollmentCount} but no room has sufficient capacity."
                 )
 
-    # 7. Faculty workload feasibility
-    faculty_loads: dict[str, int] = {}
-    for f in req.faculty:
-        f_load = sum(
-            c.weeklyHrs for c in req.courses
-            if any(s.courseId == c.id for s in f.subjects)
-        )
-        faculty_loads[f.id] = f_load
-
-    for fac in req.faculty:
-        load = faculty_loads.get(fac.id, 0)
-        if load > total_slots_week:
-            errors.append(
-                f"Faculty '{fac.name}' has {load} required slots/week but only "
-                f"{total_slots_week} slots exist."
-            )
-
-    # 8. Unassigned course checks (Mandatory courses MUST have at least 1 faculty)
+    # 7. Unassigned course checks (Mandatory courses MUST have at least 1 faculty)
     for c in req.courses:
         if not c.isElective:
             assigned = any(

@@ -140,7 +140,7 @@ export default function FacultyDashboard() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 relative z-20">
                     <div>
                         <h2 className="text-3xl font-heading font-extrabold tracking-tight text-slate-900 dark:text-white glow-cyan">Faculty Directory</h2>
-                        <p className="text-slate-600 dark:text-slate-400 font-light mt-1">Manage all registered teaching bodies and their workload capacities.</p>
+                        <p className="text-slate-600 dark:text-slate-400 font-light mt-1">Manage all registered teaching bodies and their scheduling constraints.</p>
                     </div>
                     <Button onClick={() => setIsAddOpen(true)} className="bg-neon-cyan text-white dark:text-slate-900 shadow-md dark:shadow-[0_0_15px_rgba(57,193,239,0.4)] hover:shadow-lg hover:bg-cyan-600 dark:hover:bg-white font-bold transition-all px-6 shrink-0">
                         <LuPlus className="w-5 h-5 mr-2" /> Register Faculty

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Zembaa.AI Platform Technical Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25c0f4",
+                        "accent-purple": "#a855f7",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#101e22",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(27, 36, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(37, 192, 244, 0.2);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at center, rgba(37, 192, 244, 0.15) 0%, rgba(16, 30, 34, 1) 70%);
+        }
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(37, 192, 244, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-center px-4 py-4">
+<nav class="flex w-full max-w-[1200px] items-center justify-between glass-card rounded-xl px-6 py-3">
+<div class="flex items-center gap-3">
+<div class="flex size-8 items-center justify-center rounded-lg bg-primary text-background-dark">
+<span class="material-symbols-outlined text-xl font-bold">account_tree</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight text-slate-100">Zembaa<span class="text-primary">.AI</span></h2>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors text-slate-300" href="#">Platform</a>
+<a class="text-sm font-medium hover:text-primary transition-colors text-slate-300" href="#">Features</a>
+<a class="text-sm font-medium hover:text-primary transition-colors text-slate-300" href="#">Developers</a>
+<a class="text-sm font-medium hover:text-primary transition-colors text-slate-300" href="#">Pricing</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="hidden sm:flex px-4 py-2 text-sm font-bold text-slate-300 hover:text-white transition-colors">Login</button>
+<button class="neon-glow flex items-center justify-center rounded-lg bg-primary px-5 py-2 text-sm font-bold text-background-dark transition-all hover:scale-105 active:scale-95">
+                    Get Started
+                </button>
+</div>
+</nav>
+</header>
+<main class="flex flex-1 flex-col pt-24">
+<!-- Hero Section -->
+<section class="hero-gradient relative flex min-h-[80vh] flex-col items-center justify-center px-6 text-center">
+<div class="absolute inset-0 z-0 opacity-20" data-alt="Abstract deep space tech background with network nodes" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCHVdqFzDhpnaZe7uGzo0NZ5GTIlY8A3XDp1XUwAUlt_jUksZpujD4ktcbxJh0mEs2JxEeb_HLTvnENFFdH7BxgCYbpafw6sWtTdBgRvrEGuP5U2lZUuV_zHjn_KwutrxzkhZBlBxis-Q36v2kX19JPQP24d_jkabvH7cSi6BRjMkOyxJ5MDD5EpmrLnj0mlEzKI98Cp-VFihli72in7aDZ4e2m4eIbeK5oeaFZN_kkXzLEaLW5eglLUuwq1iF-5HtdKUxGYrZV_G0'); background-size: cover;"></div>
+<div class="relative z-10 max-w-4xl space-y-8">
+<div class="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1 text-xs font-bold uppercase tracking-widest text-primary">
+                    V3.0 Enterprise Engine
+                </div>
+<h1 class="text-5xl font-black leading-tight tracking-tight sm:text-7xl text-slate-100">
+                    Hyper-Dimensional <br/>
+<span class="bg-gradient-to-r from-primary via-accent-purple to-primary bg-clip-text text-transparent">Temporal Optimization</span>
+</h1>
+<p class="mx-auto max-w-2xl text-lg text-slate-400 sm:text-xl">
+                    Experience the Neural Constraint Solver engine for solving complex university scheduling collisions with unprecedented efficiency and sub-millisecond latency.
+                </p>
+<div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+<button class="neon-glow flex h-14 min-w-[200px] items-center justify-center rounded-lg bg-primary px-8 text-lg font-bold text-background-dark transition-all hover:brightness-110">
+                        Deploy Platform
+                    </button>
+<button class="flex h-14 min-w-[200px] items-center justify-center rounded-lg border border-slate-700 bg-slate-800/50 px-8 text-lg font-bold text-slate-100 hover:bg-slate-700 transition-colors">
+                        Read Documentation
+                    </button>
+</div>
+</div>
+</section>
+<!-- Stats Section -->
+<section class="mx-auto grid w-full max-w-[1200px] grid-cols-1 gap-6 px-6 py-12 md:grid-cols-3">
+<div class="glass-card flex flex-col gap-2 rounded-xl p-8 transition-transform hover:-translate-y-1">
+<p class="text-sm font-medium uppercase tracking-wider text-slate-400">Processing Speed</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-slate-100">&lt; 2ms</span>
+<span class="text-sm font-bold text-green-400">▲ 40%</span>
+</div>
+<div class="mt-4 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 85%"></div>
+</div>
+</div>
+<div class="glass-card flex flex-col gap-2 rounded-xl p-8 transition-transform hover:-translate-y-1">
+<p class="text-sm font-medium uppercase tracking-wider text-slate-400">Constraint Solving</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-slate-100">10M+<span class="text-xl">/s</span></span>
+<span class="text-sm font-bold text-green-400">▲ 25%</span>
+</div>
+<div class="mt-4 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-accent-purple" style="width: 92%"></div>
+</div>
+</div>
+<div class="glass-card flex flex-col gap-2 rounded-xl p-8 transition-transform hover:-translate-y-1">
+<p class="text-sm font-medium uppercase tracking-wider text-slate-400">Global Uptime</p>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold text-slate-100">99.9%</span>
+<span class="text-sm font-bold text-orange-400">▼ 0.01%</span>
+</div>
+<div class="mt-4 h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 99%"></div>
+</div>
+</div>
+</section>
+<!-- Features Grid -->
+<section class="mx-auto w-full max-w-[1200px] px-6 py-20">
+<div class="mb-16 space-y-4">
+<h2 class="text-3xl font-bold text-slate-100 md:text-5xl">Enterprise-Grade Infrastructure</h2>
+<p class="max-w-2xl text-lg text-slate-400">Sophisticated architectural solutions engineered for complex institutional needs and massive scale.</p>
+</div>
+<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+<!-- Card 1 -->
+<div class="group glass-card relative flex flex-col gap-6 rounded-xl p-8 hover:border-primary/50 transition-colors">
+<div class="flex size-14 items-center justify-center rounded-xl bg-primary/20 text-primary transition-colors group-hover:bg-primary group-hover:text-background-dark">
+<span class="material-symbols-outlined text-3xl">shield_person</span>
+</div>
+<div class="space-y-3">
+<h3 class="text-xl font-bold text-slate-100">Role-Based Access Control</h3>
+<p class="text-slate-400 leading-relaxed text-sm">
+                            Granular permission management with high-gloss glassmorphic security layers. Deploy zero-trust architecture across all institutional endpoints.
+                        </p>
+</div>
+<a class="mt-auto flex items-center gap-2 text-sm font-bold text-primary hover:underline" href="#">
+                        Explore Security <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Card 2 -->
+<div class="group glass-card relative flex flex-col gap-6 rounded-xl p-8 hover:border-accent-purple/50 transition-colors">
+<div class="flex size-14 items-center justify-center rounded-xl bg-accent-purple/20 text-accent-purple transition-colors group-hover:bg-accent-purple group-hover:text-background-dark">
+<span class="material-symbols-outlined text-3xl">hub</span>
+</div>
+<div class="space-y-3">
+<h3 class="text-xl font-bold text-slate-100">Multi-Tenant Scoping</h3>
+<p class="text-slate-400 leading-relaxed text-sm">
+                            Secure data isolation across departments using advanced neural partitioning. Each tenant operates in a cryptographically sealed environment.
+                        </p>
+</div>
+<a class="mt-auto flex items-center gap-2 text-sm font-bold text-accent-purple hover:underline" href="#">
+                        Scalability Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<!-- Card 3 -->
+<div class="group glass-card relative flex flex-col gap-6 rounded-xl p-8 hover:border-primary/50 transition-colors">
+<div class="flex size-14 items-center justify-center rounded-xl bg-primary/20 text-primary transition-colors group-hover:bg-primary group-hover:text-background-dark">
+<span class="material-symbols-outlined text-3xl">cloud_done</span>
+</div>
+<div class="space-y-3">
+<h3 class="text-xl font-bold text-slate-100">Cloud Readiness</h3>
+<p class="text-slate-400 leading-relaxed text-sm">
+                            Seamless deployment across hybrid environments with 99.99% uptime guarantees. Native support for AWS, GCP, and private cloud clusters.
+                        </p>
+</div>
+<a class="mt-auto flex items-center gap-2 text-sm font-bold text-primary hover:underline" href="#">
+                        Cloud Topology <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Technical Integration CTA Section -->
+<section class="mx-auto w-full max-w-[1200px] px-6 py-20">
+<div class="glass-card flex flex-col items-center justify-between gap-8 rounded-2xl p-8 md:flex-row md:p-16">
+<div class="max-w-xl space-y-4 text-center md:text-left">
+<h2 class="text-3xl font-bold text-slate-100">Ready to optimize your institution?</h2>
+<p class="text-slate-400">Join 50+ universities worldwide using Zembaa.AI to eliminate scheduling conflicts and improve operational efficiency.</p>
+</div>
+<div class="flex flex-col gap-4 sm:flex-row">
+<button class="neon-glow flex h-12 items-center justify-center rounded-lg bg-primary px-8 font-bold text-background-dark transition-all hover:scale-105">
+                        Get Started Now
+                    </button>
+<button class="flex h-12 items-center justify-center rounded-lg border border-slate-700 bg-transparent px-8 font-bold text-slate-100 transition-colors hover:bg-slate-800">
+                        Speak to an Engineer
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="border-t border-slate-800 py-12">
+<div class="mx-auto flex w-full max-w-[1200px] flex-col gap-12 px-6">
+<div class="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5">
+<div class="col-span-2 lg:col-span-1">
+<div class="flex items-center gap-2 mb-6">
+<div class="flex size-6 items-center justify-center rounded bg-primary text-background-dark">
+<span class="material-symbols-outlined text-sm font-bold">account_tree</span>
+</div>
+<h2 class="text-lg font-bold tracking-tight text-slate-100">Zembaa<span class="text-primary">.AI</span></h2>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed">
+                        The world's most advanced temporal optimization engine for complex institutional logic.
+                    </p>
+</div>
+<div>
+<h4 class="mb-4 text-sm font-bold text-slate-100 uppercase tracking-widest">Platform</h4>
+<ul class="space-y-2 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Architecture</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Neural Solver</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Integrations</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Security</a></li>
+</ul>
+</div>
+<div>
+<h4 class="mb-4 text-sm font-bold text-slate-100 uppercase tracking-widest">Resources</h4>
+<ul class="space-y-2 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Documentation</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Reference</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Status</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Community</a></li>
+</ul>
+</div>
+<div>
+<h4 class="mb-4 text-sm font-bold text-slate-100 uppercase tracking-widest">Company</h4>
+<ul class="space-y-2 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">About</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Press</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+<div class="col-span-2 md:col-span-1">
+<h4 class="mb-4 text-sm font-bold text-slate-100 uppercase tracking-widest">Subscribe</h4>
+<div class="flex items-center overflow-hidden rounded-lg bg-slate-900 border border-slate-700">
+<input class="w-full bg-transparent px-3 py-2 text-sm outline-none text-slate-300" placeholder="Email" type="email"/>
+<button class="bg-primary px-3 py-2 text-background-dark">
+<span class="material-symbols-outlined text-sm font-bold">send</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-center justify-between border-t border-slate-800 pt-8 gap-4 md:flex-row">
+<p class="text-xs text-slate-600">© 2024 Zembaa.AI Platform. All rights reserved.</p>
+<div class="flex gap-6 text-xs text-slate-600">
+<a class="hover:text-slate-400" href="#">Privacy Policy</a>
+<a class="hover:text-slate-400" href="#">Terms of Service</a>
+<a class="hover:text-slate-400" href="#">Cookie Policy</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

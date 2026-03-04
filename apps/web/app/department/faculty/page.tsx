@@ -192,7 +192,7 @@ export default function DeptFacultyDashboard() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h2 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-white">Faculty Directory</h2>
-                        <p className="text-slate-500 dark:text-slate-400">Manage all registered teaching bodies and workload capacities for your department.</p>
+                        <p className="text-slate-500 dark:text-slate-400">Manage all registered teaching bodies and scheduling constraints for your department.</p>
                     </div>
                     <div className="flex gap-2 w-full sm:w-auto">
                         <div className="flex items-center gap-2 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 shadow-sm w-full sm:w-64">
@@ -500,7 +500,7 @@ export default function DeptFacultyDashboard() {
                         <DialogHeader>
                             <DialogTitle className="dark:text-white">Professional Constraints</DialogTitle>
                             <DialogDescription className="dark:text-slate-400">
-                                Define availability and workload limits for {faculties.find(f => f.id === selectedFacId)?.name}.
+                                Define availability constraints for {faculties.find(f => f.id === selectedFacId)?.name}.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-6 py-4">

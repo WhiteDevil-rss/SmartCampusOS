@@ -7,17 +7,11 @@ import { useState, useEffect, useCallback, use } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/lib/store/useAuthStore';
 import { TimetableGrid } from '@/components/timetable/timetable-grid';
-import { WorkloadSummary } from '@/components/timetable/workload-summary';
 import { TimetableExport } from '@/components/timetable/timetable-export';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 
-const WorkloadChart = dynamic(() => import('@/components/timetable/workload-chart').then(mod => mod.WorkloadChart), {
-    ssr: false,
-    loading: () => <div className="h-64 flex items-center justify-center text-slate-400 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-200">Loading chart optimization...</div>
-});
 import { Badge } from '@/components/ui/badge';
 
 export default function TimetableDetailView({ params }: { params: Promise<{ id: string }> }) {
@@ -96,18 +90,16 @@ export default function TimetableDetailView({ params }: { params: Promise<{ id: 
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2 relative z-10">
-                                    <TimetableExport targetId="printable-view-timetable" filename={`timetable_${id}`} />
+                                    <TimetableExport
+                                        targetId="printable-view-timetable"
+                                        filename={`timetable_${id}`}
+                                        slots={timetable.slots}
+                                        config={timetable.configJson}
+                                    />
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                                <div className="lg:col-span-3">
-                                    <WorkloadChart slots={timetable.slots} />
-                                </div>
-                                <div className="lg:col-span-2">
-                                    <WorkloadSummary slots={timetable.slots} />
-                                </div>
-                            </div>
+
 
                             <Card className="border-0 shadow-2xl overflow-hidden rounded-2xl glass-card">
                                 <CardContent className="p-0">

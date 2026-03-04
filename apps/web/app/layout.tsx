@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Manrope } from "next/font/google";
+import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/auth-provider";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -9,9 +9,9 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
-const manrope = Manrope({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-manrope",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -26,9 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+      </head>
       <body
         suppressHydrationWarning
-        className={`${spaceGrotesk.variable} ${manrope.variable} font-sans antialiased overflow-x-hidden max-w-[100vw] min-h-screen`}
+        className={`${spaceGrotesk.variable} ${inter.variable} font-sans bg-background text-text-primary antialiased overflow-x-hidden max-w-[100vw] min-h-screen`}
       >
         <AuthProvider>
           <ThemeProvider

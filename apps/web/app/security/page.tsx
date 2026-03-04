@@ -1,398 +1,138 @@
-import React from "react";
-import type { Metadata } from "next";
-import Link from "next/link";
-import {
-    LuArrowRight,
-    LuShieldCheck,
-    LuLock,
-    LuKey,
-    LuEye,
-    LuTriangleAlert,
-    LuCloud,
-    LuDatabase,
-    LuActivity,
-    LuRefreshCw,
-    LuCircleCheck,
-    LuServer,
-    LuFileText,
-    LuZap,
-} from "react-icons/lu";
+'use client';
+
+import React, { useState } from "react";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
-
-export const metadata: Metadata = {
-    title: "Security — Zembaa AI Timetable System",
-    description:
-        "Zembaa uses Firebase Authentication, RBAC, end-to-end HTTPS, dual-layer audit logging, and GCP cloud infrastructure to deliver enterprise-grade security and data protection.",
-};
-
-const authFeatures = [
-    {
-        icon: LuKey,
-        title: "Firebase Authentication",
-        description: "Google Firebase Auth powers all user identity management — securing login flows with industry-standard JWT token issuance and validation.",
-    },
-    {
-        icon: LuShieldCheck,
-        title: "Role-Based Access Control (RBAC)",
-        description: "Access is strictly scoped per role (Super Admin, University, Department, Faculty). Each JWT token carries the user's role, validated on every API request.",
-    },
-    {
-        icon: LuLock,
-        title: "Secure Login Handling",
-        description: "Passwords are never stored in plaintext. Firebase handles credential storage with bcrypt hashing and secure token exchange over HTTPS.",
-    },
-    {
-        icon: LuActivity,
-        title: "Session Timeout Management",
-        description: "Automatic session expiry with seamless token refresh on the frontend. Expired sessions are gracefully handled without exposing sensitive data.",
-    },
-];
-
-const dataProtectionFeatures = [
-    {
-        icon: LuLock,
-        title: "Encrypted Communication",
-        description: "All client-server communication is enforced over HTTPS/TLS. No sensitive data ever travels over unencrypted channels.",
-    },
-    {
-        icon: LuKey,
-        title: "Environment Variable Protection",
-        description: "API keys, Firebase credentials, and database connection strings are stored in environment variables — never hardcoded in source code.",
-    },
-    {
-        icon: LuRefreshCw,
-        title: "Secure DB ↔ Firebase Sync",
-        description: "User accounts sync bidirectionally between PostgreSQL and Firebase Auth using server-side admin SDK calls — no client-side exposure of admin credentials.",
-    },
-    {
-        icon: LuDatabase,
-        title: "Data Isolation per Tenant",
-        description: "Each university and department operates in cryptographically isolated data partitions. Cross-tenant data leakage is architecturally prevented.",
-    },
-];
-
-const auditFeatures = [
-    {
-        icon: LuFileText,
-        title: "Dual Log Storage",
-        description: "Every action is logged in two places simultaneously — the PostgreSQL database for queryable history, and rotating log files for backup and compliance.",
-    },
-    {
-        icon: LuEye,
-        title: "User Activity Tracking",
-        description: "All login events, administrative actions, timetable generation runs, and data modifications are attributed to a specific user with timestamps.",
-    },
-    {
-        icon: LuActivity,
-        title: "Real-Time Audit Trail",
-        description: "Super Admins can access a live audit trail — ideal for identifying unauthorized access attempts or debugging unexpected system state.",
-    },
-];
-
-const resetFeatures = [
-    {
-        icon: LuTriangleAlert,
-        title: "Super Admin-Only Reset",
-        description: "The factory reset operation is gated exclusively to the Super Admin role. No other role can trigger or initiate a reset — enforced at both API and role levels.",
-    },
-    {
-        icon: LuShieldCheck,
-        title: "2-Step Verification for Destructive Actions",
-        description: "Critical destructive actions require an explicit confirmation step, preventing accidental or unauthorized system-wide data deletion.",
-    },
-    {
-        icon: LuDatabase,
-        title: "Seed Backup Protection",
-        description: "Before any reset, seed data backups are preserved and secured. Restoring from seed is available to Super Admins for reliable system recovery.",
-    },
-];
-
-const cloudFeatures = [
-    {
-        icon: LuCloud,
-        title: "Google Cloud Platform (GCP)",
-        description: "Deployable on GCP with containerized services, Cloud SQL for PostgreSQL, and Google Firebase for auth and realtime features.",
-    },
-    {
-        icon: LuKey,
-        title: "Secure IAM Roles",
-        description: "GCP IAM roles control which services can access which resources. Principle of least privilege is applied to all cloud service accounts.",
-    },
-    {
-        icon: LuZap,
-        title: "Scalable Architecture",
-        description: "Docker-based containerization enables horizontal scaling. Deploy across multiple regions with load balancing and zero-downtime deployments.",
-    },
-    {
-        icon: LuServer,
-        title: "Disaster Recovery Readiness",
-        description: "Automated database backups, seed restore capabilities, and stateless service design ensure rapid recovery in case of infrastructure failure.",
-    },
-];
-
-const complianceItems = [
-    { icon: LuCircleCheck, text: "Data integrity enforced at database schema level via constraints and transactions" },
-    { icon: LuCircleCheck, text: "System resilience through containerized, stateless architecture" },
-    { icon: LuCircleCheck, text: "Disaster recovery via seed backups, export tools, and GCP backup policies" },
-    { icon: LuCircleCheck, text: "Role-based data access prevents unauthorized information disclosure" },
-    { icon: LuCircleCheck, text: "All user-identifiable data is isolated and scoped per institution" },
-    { icon: LuCircleCheck, text: "Audit logs provide non-repudiation for all administrative actions" },
-];
-
-function SecuritySection({
-    id,
-    badge,
-    badgeColor,
-    title,
-    subtitle,
-    children,
-}: {
-    id: string;
-    badge: string;
-    badgeColor: "neon-cyan" | "neon-purple" | "pink-400";
-    title: string;
-    subtitle: string;
-    children: React.ReactNode;
-}) {
-    const badgeStyles = {
-        "neon-cyan": "border-neon-cyan/30 text-neon-cyan shadow-[0_0_15px_rgba(57,193,239,0.15)] [&>span]:bg-neon-cyan",
-        "neon-purple": "border-neon-purple/30 text-neon-purple shadow-[0_0_15px_rgba(139,92,246,0.15)] [&>span]:bg-neon-purple",
-        "pink-400": "border-pink-400/30 text-pink-400 shadow-[0_0_15px_rgba(236,72,153,0.15)] [&>span]:bg-pink-400",
-    };
-    return (
-        <section id={id} className="px-6 lg:px-12 pb-28 max-w-6xl mx-auto w-full">
-            <div className="text-center mb-16">
-                <div className={`inline-flex items-center rounded-full px-4 py-1.5 glass border text-sm font-medium mb-6 backdrop-blur-md ${badgeStyles[badgeColor]}`}>
-                    <span className="flex h-2 w-2 rounded-full mr-2 animate-pulse" />
-                    {badge}
-                </div>
-                <h2 className="text-4xl font-heading font-bold text-white mb-4">{title}</h2>
-                <p className="text-slate-400 max-w-xl mx-auto">{subtitle}</p>
-            </div>
-            {children}
-        </section>
-    );
-}
-
-function FeatureCard({
-    icon: Icon,
-    title,
-    description,
-    color,
-}: {
-    icon: React.ElementType;
-    title: string;
-    description: string;
-    color: "neon-cyan" | "neon-purple" | "pink-400";
-}) {
-    const colorStyles = {
-        "neon-cyan": { card: "group-hover:border-neon-cyan/50", icon: "text-neon-cyan border-neon-cyan/30 bg-neon-cyan/10" },
-        "neon-purple": { card: "group-hover:border-neon-purple/50", icon: "text-neon-purple border-neon-purple/30 bg-neon-purple/10" },
-        "pink-400": { card: "group-hover:border-pink-500/50", icon: "text-pink-400 border-pink-400/30 bg-pink-400/10" },
-    };
-    return (
-        <div className={`glass-card p-7 rounded-[1.75rem] transition-all group ${colorStyles[color].card}`}>
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-5 border ${colorStyles[color].icon}`}>
-                <Icon className="w-6 h-6" />
-            </div>
-            <h3 className="text-lg font-heading font-bold text-white mb-2">{title}</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">{description}</p>
-        </div>
-    );
-}
+import { GetStartedModal } from "@/components/get-started-modal";
 
 export default function SecurityPage() {
-    const featureColors: Array<"neon-cyan" | "neon-purple" | "pink-400"> = ["neon-cyan", "neon-purple", "pink-400", "neon-cyan"];
+    const [showInquiryModal, setShowInquiryModal] = useState(false);
 
     return (
-        <div
-            className="dark transition-none min-h-screen bg-[#0a0a0c] text-slate-200 relative overflow-hidden flex flex-col font-sans selection:bg-neon-cyan/30"
-            style={{ colorScheme: "dark" }}
-        >
-            {/* Background blobs */}
-            <div className="absolute top-[-20%] left-[-10%] w-[55%] h-[55%] bg-pink-500/15 blur-[130px] rounded-full pointer-events-none mix-blend-screen" />
-            <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-neon-cyan/10 blur-[150px] rounded-full pointer-events-none mix-blend-screen" />
-            <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-[0.03] pointer-events-none" />
-
+        <div className="dark min-h-screen bg-background-dark text-slate-100 relative overflow-x-hidden flex flex-col font-heading selection:bg-neon-cyan/30 antialiased">
             <LandingNav />
 
-            <main className="flex-1 flex flex-col relative z-10">
-                {/* ── Hero ── */}
-                <section className="flex flex-col items-center justify-center text-center px-6 pt-24 pb-28 max-w-5xl mx-auto w-full">
-                    <div className="inline-flex items-center rounded-full px-4 py-1.5 glass border-pink-400/30 text-pink-400 text-sm font-medium mb-6 backdrop-blur-md shadow-[0_0_15px_rgba(236,72,153,0.15)]">
-                        <span className="flex h-2 w-2 rounded-full bg-pink-400 mr-2 animate-pulse" />
-                        Enterprise Security
+            <main className="flex-1 flex flex-col w-full max-w-7xl mx-auto px-6 py-12 md:py-20 gap-24">
+                {/* Hero */}
+                <section className="flex flex-col items-center text-center gap-8 relative">
+                    <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_center,rgba(0,245,255,0.1)_0%,transparent_70%)]" />
+                    <div className="w-32 h-32 rounded-full bg-neon-cyan/10 flex items-center justify-center border border-neon-cyan/30 shadow-[0_0_40px_rgba(0,245,255,0.2)]">
+                        <span className="material-symbols-outlined text-6xl text-neon-cyan">security</span>
                     </div>
-                    <h1 className="text-5xl lg:text-7xl font-heading font-extrabold tracking-tight text-white leading-[1.1] mb-6">
-                        Enterprise-Grade
-                        <br className="hidden lg:block" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-neon-purple to-neon-cyan pb-2">
-                            {" "}Security & Protection
-                        </span>
-                    </h1>
-                    <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed font-light mb-10">
-                        Zembaa is built security-first. Firebase Auth, RBAC, end-to-end encryption, dual-layer audit logging, and GCP-grade infrastructure protect your academic data at every layer.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link
-                            href="/login"
-                            className="px-8 py-4 rounded-full bg-gradient-to-r from-pink-500 to-neon-purple text-white text-lg font-bold hover:opacity-90 transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(236,72,153,0.4)] flex items-center justify-center gap-2"
-                        >
-                            Get Started <LuArrowRight className="w-5 h-5" />
-                        </Link>
-                        <Link
-                            href="/platform"
-                            className="px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-lg font-semibold transition-all flex items-center justify-center gap-2"
-                        >
-                            View Platform
-                        </Link>
-                    </div>
-
-                    {/* Security badges */}
-                    <div className="flex flex-wrap justify-center gap-3 mt-12">
-                        {[
-                            "Firebase Auth",
-                            "JWT RBAC",
-                            "HTTPS/TLS",
-                            "GCP IAM",
-                            "Dual Audit Logs",
-                            "2-Step Reset Verification",
-                        ].map((badge) => (
-                            <span key={badge} className="px-3 py-1.5 rounded-full glass border-white/10 text-slate-300 text-xs font-medium">
-                                ✓ {badge}
-                            </span>
-                        ))}
-                    </div>
-                </section>
-
-                {/* ── Auth & Authorization ── */}
-                <SecuritySection
-                    id="authentication"
-                    badge="Identity & Access"
-                    badgeColor="neon-cyan"
-                    title="Authentication & Authorization"
-                    subtitle="Every user, every request, every resource — protected by cryptographic identity management."
-                >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        {authFeatures.map((f, i) => (
-                            <FeatureCard key={f.title} icon={f.icon} title={f.title} description={f.description} color={featureColors[i]} />
-                        ))}
-                    </div>
-                </SecuritySection>
-
-                {/* ── Data Protection ── */}
-                <SecuritySection
-                    id="data-protection"
-                    badge="Data Security"
-                    badgeColor="neon-purple"
-                    title="Data Protection"
-                    subtitle="Your data is encrypted in transit, isolated per tenant, and never exposed through client-side code."
-                >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        {dataProtectionFeatures.map((f, i) => (
-                            <FeatureCard key={f.title} icon={f.icon} title={f.title} description={f.description} color={featureColors[i]} />
-                        ))}
-                    </div>
-                </SecuritySection>
-
-                {/* ── Audit & Logging ── */}
-                <SecuritySection
-                    id="audit"
-                    badge="Audit & Compliance"
-                    badgeColor="pink-400"
-                    title="Audit & Logging"
-                    subtitle="Every action is recorded. Full traceability for administrators, auditors, and compliance teams."
-                >
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                        {auditFeatures.map((f, i) => (
-                            <FeatureCard key={f.title} icon={f.icon} title={f.title} description={f.description} color={featureColors[i]} />
-                        ))}
-                    </div>
-                </SecuritySection>
-
-                {/* ── Factory Reset & Backup ── */}
-                <SecuritySection
-                    id="factory-reset"
-                    badge="Backup & Recovery"
-                    badgeColor="neon-cyan"
-                    title="Factory Reset & Backup Security"
-                    subtitle="Destructive operations are gated behind multi-step verification and role restrictions."
-                >
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                        {resetFeatures.map((f, i) => (
-                            <FeatureCard key={f.title} icon={f.icon} title={f.title} description={f.description} color={featureColors[i]} />
-                        ))}
-                    </div>
-                </SecuritySection>
-
-                {/* ── Cloud Readiness ── */}
-                <SecuritySection
-                    id="cloud"
-                    badge="Cloud Infrastructure"
-                    badgeColor="neon-purple"
-                    title="Cloud-Ready on GCP"
-                    subtitle="Designed for production-grade cloud deployment on Google Cloud Platform."
-                >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {cloudFeatures.map((f, i) => (
-                            <FeatureCard key={f.title} icon={f.icon} title={f.title} description={f.description} color={featureColors[i]} />
-                        ))}
-                    </div>
-                </SecuritySection>
-
-                {/* ── Compliance ── */}
-                <section className="px-6 lg:px-12 pb-28 max-w-6xl mx-auto w-full">
-                    <div className="glass-card rounded-[2rem] p-10 border-neon-cyan/15 relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 via-transparent to-neon-purple/5 pointer-events-none" />
-                        <div className="text-center mb-10">
-                            <h2 className="text-3xl font-heading font-bold text-white mb-3">Compliance-Ready by Design</h2>
-                            <p className="text-slate-400 max-w-xl mx-auto">Zembaa's architecture is built with data integrity, resilience, and audit-readiness as core principles — not afterthoughts.</p>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {complianceItems.map((item) => {
-                                const Icon = item.icon;
-                                return (
-                                    <div key={item.text} className="flex items-start gap-3 text-slate-300 text-sm">
-                                        <Icon className="w-5 h-5 shrink-0 mt-0.5 text-neon-cyan" />
-                                        {item.text}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
-                </section>
-
-                {/* ── CTA ── */}
-                <section className="px-6 pb-28 flex flex-col items-center text-center max-w-3xl mx-auto w-full">
-                    <div className="glass-card rounded-[2rem] p-12 border-pink-400/20 w-full relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 via-transparent to-neon-cyan/5 pointer-events-none" />
-                        <LuShieldCheck className="w-12 h-12 text-pink-400 mx-auto mb-6" />
-                        <h2 className="text-3xl lg:text-4xl font-heading font-bold text-white mb-4">
-                            Your Data. Fully Protected.
-                        </h2>
-                        <p className="text-slate-400 mb-8 leading-relaxed">
-                            Deploy Zembaa with confidence. Enterprise authentication, isolated data partitions, and full audit logs ensure your institution's data stays safe, always.
+                    <div className="max-w-3xl flex flex-col gap-4">
+                        <h1 className="text-4xl md:text-6xl font-black leading-tight tracking-tight">
+                            Enterprise-Grade <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-blue-400">Security</span>
+                        </h1>
+                        <p className="text-lg md:text-xl text-slate-400 font-normal leading-relaxed">
+                            Your academic data is protected by industry-leading security standards. We employ multiple layers of defense to ensure absolute integrity and confidentiality.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link
-                                href="/login"
-                                className="px-8 py-4 rounded-full bg-gradient-to-r from-pink-500 to-neon-purple text-white text-lg font-bold hover:opacity-90 transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(236,72,153,0.4)] flex items-center justify-center gap-2"
-                            >
-                                Get Started <LuArrowRight className="w-5 h-5" />
-                            </Link>
-                            <Link
-                                href="/solutions"
-                                className="px-8 py-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white text-lg font-semibold transition-all flex items-center justify-center gap-2"
-                            >
-                                View Solutions
-                            </Link>
-                        </div>
                     </div>
+                    <button
+                        onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+                        className="flex mt-4 items-center justify-center rounded-full bg-gradient-to-r from-neon-cyan to-blue-500 text-white px-[36px] py-[14px] text-[16px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(0,245,255,0.5)] transition-all active:scale-95"
+                    >
+                        Learn More
+                    </button>
+                </section>
+
+                {/* Security Features */}
+                <section id="features" className="flex flex-col gap-12">
+                    <div className="flex flex-col gap-4 text-center items-center">
+                        <h2 className="text-3xl md:text-4xl font-bold leading-tight tracking-tight">Comprehensive Protection</h2>
+                        <p className="text-slate-400 text-base max-w-2xl">Zembaa employs multiple layers of security to ensure your data is always safe, from transmission to storage.</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[
+                            { icon: "gpp_good", title: "Secure Authentication", desc: "Multi-factor authentication and Single Sign-On (SSO) integration for secure, verified access." },
+                            { icon: "manage_accounts", title: "Role-Based Access", desc: "Granular control over permissions, ensuring users only access what they need." },
+                            { icon: "enhanced_encryption", title: "Data Encryption", desc: "AES-256 encryption at rest and TLS 1.3 in transit for all sensitive information." },
+                            { icon: "visibility_off", title: "Privacy Protection", desc: "Strict adherence to GDPR, CCPA, and FERPA regulations for academic data privacy." },
+                            { icon: "monitoring", title: "Activity Monitoring", desc: "24/7 continuous monitoring, automated threat detection, and comprehensive logging." },
+                            { icon: "dns", title: "Secure Infrastructure", desc: "Hosted on SOC2 compliant infrastructure with automated disaster recovery protocols." },
+                        ].map((feature, i) => (
+                            <div key={i} className="flex flex-col gap-4 rounded-xl border border-white/10 bg-surface-dark/50 backdrop-blur-sm p-6 hover:border-neon-cyan/50 transition-colors group">
+                                <div className="w-12 h-12 rounded-lg bg-neon-cyan/10 flex items-center justify-center group-hover:bg-neon-cyan/20 transition-colors">
+                                    <span className="material-symbols-outlined text-2xl text-neon-cyan">{feature.icon}</span>
+                                </div>
+                                <div className="flex flex-col gap-2 h-full">
+                                    <h3 className="text-lg font-bold leading-tight mb-2">{feature.title}</h3>
+                                    <p className="text-slate-400 text-sm leading-relaxed mb-4">{feature.desc}</p>
+                                    <div className="mt-auto">
+                                        <button className="flex items-center text-[14px] font-medium text-neon-cyan hover:underline transition-all group-hover:gap-1">
+                                            Read More <span className="material-symbols-outlined text-[16px] ml-1">arrow_right_alt</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Data Protection Flow */}
+                <section className="flex flex-col gap-12 max-w-4xl mx-auto w-full">
+                    <div className="flex flex-col gap-4 text-center items-center">
+                        <h2 className="text-3xl md:text-4xl font-bold leading-tight tracking-tight">Data Protection Flow</h2>
+                        <p className="text-slate-400 text-base max-w-2xl">How we handle your data from entry to secure storage.</p>
+                    </div>
+                    <div className="relative flex flex-col gap-8 py-4">
+                        <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-white/10 -translate-x-1/2" />
+                        <div className="absolute left-8 md:left-1/2 top-0 h-1/2 w-0.5 bg-gradient-to-b from-neon-cyan to-transparent -translate-x-1/2 shadow-[0_0_10px_rgba(0,245,255,0.5)]" />
+
+                        {[
+                            { title: "1. Secure Data Entry", desc: "All data entered is immediately encrypted in the browser using TLS 1.3 before transmission.", active: true },
+                            { title: "2. Encrypted in Transit", desc: "Data passes through strict validation firewalls and malware scanning before reaching our core systems.", active: false },
+                            { title: "3. Stored with Encryption", desc: "Processed schedules are stored using AES-256 encryption in distinct, isolated databases.", active: false },
+                            { title: "4. Access Controlled", desc: "Role-based permissions ensure only authorized users can access specific data sets.", active: false },
+                            { title: "5. Regular Backups", desc: "Automated, encrypted backups are distributed across multiple geographic regions.", active: false },
+                        ].map((step, i) => (
+                            <div key={i} className={`relative flex items-center ${i % 2 === 0 ? 'justify-start md:justify-end md:pr-1/2' : 'justify-start md:justify-start md:pl-1/2'} w-full`}>
+                                <div className={`absolute left-8 md:left-1/2 w-4 h-4 rounded-full -translate-x-1/2 border-4 border-background-dark z-10 ${step.active ? 'bg-neon-cyan shadow-[0_0_10px_rgba(0,245,255,0.8)]' : 'bg-slate-600'
+                                    }`} />
+                                <div className={`${i % 2 === 0 ? 'ml-16 md:ml-0 md:mr-12' : 'ml-16 md:ml-12'} w-full md:w-5/12 bg-surface-dark p-6 rounded-xl border border-white/10`}>
+                                    <h4 className={`text-lg font-bold mb-2 ${step.active ? 'text-neon-cyan' : 'text-slate-200'}`}>{step.title}</h4>
+                                    <p className="text-sm text-slate-400">{step.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* Trust Badges */}
+                <section className="flex flex-col gap-10 py-12 border-y border-white/10">
+                    <div className="text-center">
+                        <h3 className="text-2xl font-bold mb-8">Trusted by Institutions Worldwide</h3>
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-6 md:gap-12">
+                        {[
+                            { icon: "verified_user", label: "SSL Secured" },
+                            { icon: "policy", label: "Privacy Compliant" },
+                            { icon: "fact_check", label: "Annual Audits" },
+                            { icon: "speed", label: "99.9% Uptime" },
+                        ].map((badge, i) => (
+                            <div key={i} className="flex items-center gap-3 bg-surface-dark px-6 py-4 rounded-full border border-white/10 shadow-[0_0_15px_rgba(0,245,255,0.05)] hover:border-neon-cyan/30 transition-colors">
+                                <span className="material-symbols-outlined text-neon-cyan">{badge.icon}</span>
+                                <span className="font-medium text-sm">{badge.label}</span>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* CTA */}
+                <section className="flex flex-col items-center text-center gap-8 py-12 bg-gradient-to-b from-transparent to-neon-cyan/5 rounded-3xl border border-white/10">
+                    <h2 className="text-3xl md:text-5xl font-bold leading-tight">Your Data is Safe With Us</h2>
+                    <p className="text-slate-400 max-w-xl text-lg">Focus on optimizing your academic schedules. We&apos;ll handle the complex security infrastructure.</p>
+                    <button
+                        onClick={() => setShowInquiryModal(true)}
+                        className="mt-4 flex cursor-pointer items-center justify-center rounded-full bg-gradient-to-r from-neon-cyan to-blue-500 text-white px-[36px] py-[14px] text-[16px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(0,245,255,0.5)] transition-all active:scale-95"
+                    >
+                        Get Started Securely
+                    </button>
                 </section>
             </main>
 
             <LandingFooter />
+
+            <GetStartedModal isOpen={showInquiryModal} onClose={() => setShowInquiryModal(false)} />
         </div>
     );
 }

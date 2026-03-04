@@ -27,7 +27,7 @@ export default function TimetablesMenuPage() {
         },
         {
             title: "View time table",
-            description: "View the most recently generated active timetable and workload summary.",
+            description: "View the most recently generated active timetable and schedule details.",
             icon: <LuEye className="w-8 h-8 text-emerald-500" />,
             href: "/department/timetables/view",
             color: "border-emerald-200 bg-emerald-50/30 hover:bg-emerald-50",

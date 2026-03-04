@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Zembaa.AI Security &amp; Compliance Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#25c0f4",
+                        "accent-purple": "#a855f7",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#101e22",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glow-shadow {
+            box-shadow: 0 0 20px rgba(37, 192, 244, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 selection:bg-primary/30">
+<div class="relative min-h-screen flex flex-col overflow-x-hidden">
+<!-- Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 flex justify-center p-4">
+<div class="glass flex items-center justify-between w-full max-w-7xl px-8 py-4 rounded-xl">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<span class="material-symbols-outlined text-3xl">shield_with_heart</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">Zembaa.AI</h2>
+</div>
+<div class="hidden md:flex items-center gap-10">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Platform</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Solutions</a>
+<a class="text-sm font-medium text-primary" href="#">Security</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Pricing</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary hover:bg-primary/90 text-background-dark px-6 py-2 rounded-lg text-sm font-bold transition-all glow-shadow">
+                        Get Started
+                    </button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative pt-44 pb-24 px-6 flex flex-col items-center text-center">
+<div class="absolute inset-0 z-0 overflow-hidden">
+<div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/10 blur-[120px] rounded-full"></div>
+<div class="absolute top-1/3 left-1/3 w-[400px] h-[400px] bg-accent-purple/10 blur-[120px] rounded-full"></div>
+</div>
+<div class="relative z-10 max-w-4xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-widest mb-6">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                    Trusted by Fortune 500
+                </div>
+<h1 class="text-5xl md:text-7xl font-bold leading-tight tracking-tight mb-8">
+                    Enterprise-Grade <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent-purple">Security &amp; Compliance</span>
+</h1>
+<p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                    Your data’s safety is our priority. Zembaa.AI is built on a foundation of rigorous security standards and global compliance frameworks.
+                </p>
+<div class="flex flex-wrap justify-center gap-4">
+<button class="bg-primary text-background-dark h-14 px-8 rounded-xl font-bold text-lg flex items-center gap-2 glow-shadow">
+                        Start Securely
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="glass h-14 px-8 rounded-xl font-bold text-lg hover:bg-white/5 transition-all">
+                        Read Whitepaper
+                    </button>
+</div>
+</div>
+</section>
+<!-- Features Grid -->
+<section class="max-w-7xl mx-auto px-6 py-24 w-full">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- RBAC -->
+<div class="glass p-8 rounded-xl hover:border-primary/40 transition-all group">
+<div class="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">admin_panel_settings</span>
+</div>
+<h3 class="text-xl font-bold mb-4">Role-Based Access Control</h3>
+<p class="text-slate-400 leading-relaxed">
+                        Granular permissions to ensure only authorized personnel access sensitive data. Customize user roles at scale.
+                    </p>
+</div>
+<!-- Encryption -->
+<div class="glass p-8 rounded-xl border-primary/20 bg-primary/5 hover:border-primary/40 transition-all group">
+<div class="w-14 h-14 rounded-lg bg-primary/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">lock</span>
+</div>
+<h3 class="text-xl font-bold mb-4">End-to-End Encryption</h3>
+<p class="text-slate-400 leading-relaxed">
+                        All data is encrypted at rest and in transit using industry-standard AES-256 protocols and TLS 1.3.
+                    </p>
+</div>
+<!-- Audit Trail -->
+<div class="glass p-8 rounded-xl hover:border-primary/40 transition-all group">
+<div class="w-14 h-14 rounded-lg bg-accent-purple/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-accent-purple text-3xl">history_edu</span>
+</div>
+<h3 class="text-xl font-bold mb-4">Real-Time Audit Trail</h3>
+<p class="text-slate-400 leading-relaxed">
+                        Comprehensive logs of every action within the platform for full transparency and forensic accountability.
+                    </p>
+</div>
+</div>
+</section>
+<!-- Certifications -->
+<section class="max-w-7xl mx-auto px-6 py-12 w-full">
+<div class="border-t border-slate-800 pt-16">
+<p class="text-center text-slate-500 font-bold uppercase tracking-widest text-sm mb-12">Certified &amp; Compliant Worldwide</p>
+<div class="flex flex-wrap justify-center gap-12 md:gap-24 opacity-70 grayscale hover:grayscale-0 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-4xl text-white">verified</span>
+<span class="text-xl font-bold">SOC 2 TYPE II</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-4xl text-white">gavel</span>
+<span class="text-xl font-bold">GDPR COMPLIANT</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-4xl text-white">medical_services</span>
+<span class="text-xl font-bold">HIPAA READY</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-4xl text-white">language</span>
+<span class="text-xl font-bold">ISO 27001</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Security Infrastructure Detail -->
+<section class="max-w-7xl mx-auto px-6 py-24 w-full">
+<div class="grid md:grid-cols-2 gap-16 items-center">
+<div>
+<h2 class="text-4xl font-bold mb-6">Built for the most <span class="text-primary">demanding</span> environments</h2>
+<p class="text-slate-400 text-lg mb-8">
+                        Our infrastructure is distributed across multiple isolated availability zones, ensuring 99.99% uptime and zero data loss.
+                    </p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span>Automatic vulnerability scanning &amp; patching</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span>24/7/365 Security Operations Center (SOC)</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">check_circle</span>
+<span>Penetration testing by independent third parties</span>
+</li>
+</ul>
+</div>
+<div class="relative">
+<div class="aspect-square glass rounded-3xl overflow-hidden flex items-center justify-center relative">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent-purple/20"></div>
+<img alt="Cybersecurity hardware" class="w-full h-full object-cover opacity-40 mix-blend-overlay" data-alt="High-tech server room with neon glowing lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUfYcOea1bCJ9KwRVJa0J0elGVd6ORwWf4rGaU-7eezonuekeQxLWUuBWH5K-ZZ2JjNxk493PMXKmcWNVxc1We8wnFK6KsPJ4UYnq_STORJ4r7LbkLa6-bm7i0z3in9zyk1ZUHn5ya0vNAJ6bnUMqjKTxX0xs6LViYl-ZJrzHhoWeWtlKuEo7q025CNjoQ7xN7ngqgAVJtr7H52eZx9jwBTyFpRV0YKiuyXN786BL7umKj83-Njm_7UstEQOsMyXr6JAoZUhoSBGA"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-9xl text-primary opacity-50">data_thresholding</span>
+</div>
+</div>
+<div class="absolute -bottom-6 -right-6 glass p-6 rounded-2xl shadow-2xl">
+<div class="text-3xl font-bold text-primary">0</div>
+<div class="text-xs uppercase font-bold text-slate-500">Critical Breaches to Date</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="px-6 py-24 w-full">
+<div class="max-w-5xl mx-auto glass p-12 md:p-20 rounded-3xl text-center relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[80px]"></div>
+<div class="relative z-10">
+<h2 class="text-3xl md:text-5xl font-bold mb-6">Ready to secure your workspace?</h2>
+<p class="text-slate-400 text-lg mb-10 max-w-xl mx-auto">
+                        Join over 5,000 enterprises who trust Zembaa.AI for their mission-critical operations.
+                    </p>
+<button class="bg-primary text-background-dark h-14 px-10 rounded-xl font-bold text-lg glow-shadow hover:scale-105 transition-transform">
+                        Get Enterprise Access
+                    </button>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="mt-auto border-t border-slate-800 bg-background-dark px-6 py-16">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">shield_with_heart</span>
+<h2 class="text-xl font-bold tracking-tight">Zembaa.AI</h2>
+</div>
+<p class="text-slate-500 text-sm leading-relaxed">
+                        Advancing enterprise intelligence through secure, compliant, and powerful AI infrastructure.
+                    </p>
+</div>
+<div>
+<h4 class="font-bold mb-6">Platform</h4>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Core Engine</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">API Reference</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Integrations</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6">Resources</h4>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Security Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Documentation</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Status Page</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6">Company</h4>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact Support</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Legal &amp; Privacy</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto border-t border-slate-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-slate-500 text-xs">© 2024 Zembaa.AI. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-slate-500 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+<a class="text-slate-500 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
+<a class="text-slate-500 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">hub</span></a>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

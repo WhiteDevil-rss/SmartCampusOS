@@ -81,8 +81,8 @@ NEP-Scheduler follows a **Domain-Driven Design (DDD)** approach with microservic
 | `auth-service` | Node.js + Keycloak | 8001 | Login, JWT issuance, password management, RBAC |
 | `tenant-service` | Node.js | 8002 | University/department provisioning, multi-tenancy |
 | `scheduling-engine` | Python (FastAPI) | 8003 | OR-Tools CP-SAT constraint solving, timetable generation |
-| `ai-ml-service` | Python (FastAPI) | 8004 | ML predictions, workload balancing, fairness scoring |
-| `faculty-service` | Node.js | 8005 | Faculty CRUD, workload tracking, availability |
+| `ai-ml-service` | Python (FastAPI) | 8004 | ML predictions, timetable generation |
+| `faculty-service` | Node.js | 8005 | Faculty CRUD, availability |
 | `course-service` | Node.js | 8006 | Course/subject management, batch assignment |
 | `resource-service` | Node.js | 8007 | Classroom/lab inventory, availability matrix |
 | `notification-service` | Node.js | 8008 | Real-time alerts via WebSocket, email, SMS |

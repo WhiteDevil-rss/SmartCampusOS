@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { LuTriangleAlert, LuUsers, LuUserX, LuLoaderCircle, LuNetwork, LuCalendar, LuMonitor, LuZap, LuSearch, LuCircleX, LuShieldCheck } from 'react-icons/lu';
 import { api } from '@/lib/api';
 import { TimetableGrid } from '@/components/timetable/timetable-grid';
-import { WorkloadSummary } from '@/components/timetable/workload-summary';
 import { TimetableExport } from '@/components/timetable/timetable-export';
 import { DEPT_ADMIN_NAV } from '@/lib/constants/nav-config';
 import { Input } from '@/components/ui/input';
@@ -496,8 +495,6 @@ export default function SpecialTimetablePage() {
                                     baselineSlots={baselineTimetable?.slots}
                                 />
                             </div>
-
-                            <WorkloadSummary slots={specialTimetable.slots} />
                         </div>
                     ) : baselineTimetable ? (
                         <div className="h-full flex flex-col">

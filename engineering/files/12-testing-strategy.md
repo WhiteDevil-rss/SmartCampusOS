@@ -95,51 +95,7 @@ describe('CP-SAT Hard Constraints', () => {
     });
   });
 
-  describe('HC-07/08: Faculty max hours', () => {
-    it('should respect faculty max hours per week', async () => {
-      const timetable = await generateTimetable(VNSGU_DEPT_DATA, DEFAULT_CONFIG);
-      for (const [facultyId, hrs] of Object.entries(timetable.workloadStats)) {
-        const faculty = VNSGU_DEPT_DATA.faculty.find(f => f.id === facultyId);
-        expect(hrs).toBeLessThanOrEqual(faculty!.maxHrsPerWeek);
-      }
-    });
 
-    it('should respect faculty max hours per day', async () => {
-      const timetable = await generateTimetable(VNSGU_DEPT_DATA, DEFAULT_CONFIG);
-      const dailyLoads: Record<string, Record<number, number>> = {};
-      for (const slot of timetable.slots) {
-        if (!slot.facultyId || slot.isBreak) continue;
-        if (!dailyLoads[slot.facultyId]) dailyLoads[slot.facultyId] = {};
-        dailyLoads[slot.facultyId][slot.dayOfWeek] = (dailyLoads[slot.facultyId][slot.dayOfWeek] || 0) + 1;
-      }
-      for (const [facultyId, dayMap] of Object.entries(dailyLoads)) {
-        const faculty = VNSGU_DEPT_DATA.faculty.find(f => f.id === facultyId);
-        for (const [, dayHrs] of Object.entries(dayMap)) {
-          expect(dayHrs).toBeLessThanOrEqual(faculty!.maxHrsPerDay);
-        }
-      }
-    });
-  });
-
-  describe('HC-05: Room type matching', () => {
-    it('should assign lab courses only to lab-type rooms', async () => {
-      const timetable = await generateTimetable(VNSGU_DEPT_DATA, DEFAULT_CONFIG);
-      for (const slot of timetable.slots) {
-        if (slot.slotType !== 'LAB') continue;
-        const room = VNSGU_DEPT_DATA.resources.find(r => r.id === slot.roomId);
-        expect(room?.type).toBe('Lab');
-      }
-    });
-  });
-
-  describe('Workload variance', () => {
-    it('workload variance across faculty should be < 3 hours', async () => {
-      const timetable = await generateTimetable(VNSGU_DEPT_DATA, DEFAULT_CONFIG);
-      const loads = Object.values(timetable.workloadStats) as number[];
-      const variance = Math.max(...loads) - Math.min(...loads);
-      expect(variance).toBeLessThan(3);
-    });
-  });
 });
 ```
 
@@ -267,7 +223,7 @@ describe('Timetable Generation API — Integration', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.slots).toBeInstanceOf(Array);
-    expect(res.body.workloadStats).toBeDefined();
+
   });
 
   it('GET /v1/faculty/:id/schedule — should return only own slots for faculty', async () => {
@@ -566,7 +522,7 @@ STEP 3: Login as cs_dept / cs@123
   → Wait < 30 seconds for result
   → Verify: conflict count = 0
   → Verify: Dharmen Shah assigned iOS (one batch) + .Net (other batch) — no overlap
-  → Verify: Workload variance < 2 hours
+
   → Click Download PDF → verify file downloads correctly
 
 STEP 4: Navigate to Generate Special

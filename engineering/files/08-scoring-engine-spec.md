@@ -10,7 +10,7 @@
 The NEP-Scheduler Scoring Engine is a two-layer system:
 
 1. **OR-Tools CP-SAT Solver** — guarantees hard constraint satisfaction (zero conflicts)
-2. **ML/AI Pipeline** — scores, ranks, and optimizes solutions for soft constraints (workload fairness, slot quality, room utilization)
+2. **ML/AI Pipeline** — scores, ranks, and optimizes solutions for soft constraints (slot quality, room utilization)
 
 The engine is implemented in **Python 3.11 + FastAPI** and exposed as an internal HTTP microservice at port `8003`.
 
@@ -28,8 +28,8 @@ Hard constraints are encoded directly into the CP-SAT model. If any hard constra
 | HC-04 | Subject must be taught by a faculty qualified for that subject | Decision variable only created for `(course, faculty)` pairs in `faculty_subjects` |
 | HC-05 | Lab sessions must use lab-type rooms; theory uses classrooms | Room type check gates variable creation: `if course.type == 'Lab' and room.type != 'Lab': skip` |
 | HC-06 | Room capacity must be ≥ batch strength | Capacity check gates variable creation: `if room.capacity < batch.strength: skip` |
-| HC-07 | Daily faculty hours must not exceed `maxHrsPerDay` | `model.Add(sum(daily_vars) <= faculty.max_hrs_per_day)` |
-| HC-08 | Weekly faculty hours must not exceed `maxHrsPerWeek` | `model.Add(sum(weekly_vars) <= faculty.max_hrs_per_week)` |
+| HC-07 | Daily faculty hours must not exceed max limits (depracated/removed but mentioned if any structure remains, else completely removed) | (Removed) |
+| HC-08 | Weekly faculty hours must not exceed max limits | (Removed) |
 | HC-09 | Each course must be taught exactly `weeklyHrs` times per batch per week | `model.Add(sum(course_vars) == course.weekly_hrs)` |
 
 ---
@@ -43,7 +43,7 @@ Soft constraints are implemented as an objective function minimized by the CP-SA
 | SC-01 | Minimize gaps in faculty daily schedule (back-to-back preference) | High | Penalize non-consecutive slot assignments per faculty per day |
 | SC-02 | Distribute subjects evenly across weekdays | Medium | Penalize >2 sessions of same course on same day |
 | SC-03 | Prefer morning slots for high-cognitive subjects (AI, Mathematics) | Low | Add cost term for assigning high-cognitive courses to afternoon slots |
-| SC-04 | Minimize faculty workload variance (fairness index < 2 hrs/week) | High | `Minimize(max_load - min_load)` across all faculty |
+
 | SC-05 | Lab sessions preferably in 2-hour contiguous blocks | Medium | Reward consecutive slot assignments for Lab-type courses |
 | SC-06 | Senior faculty (HOD) gets preferred timing windows | Low | Reduce cost for HOD assignments in preferred slots |
 
@@ -158,39 +158,17 @@ The ML layer preprocesses data before passing it to OR-Tools, and post-processes
 | ML Module | Algorithm | Purpose |
 |---|---|---|
 | Slot Preference Predictor | Gradient Boosted Trees (XGBoost) | Predict optimal time slots per subject type based on historical schedules |
-| Workload Fairness Scorer | Multi-objective LP Relaxation | Score and balance faculty load equity; computes fairness index |
+
 | Conflict Risk Classifier | Random Forest Classifier | Pre-screen high-risk constraint combinations before running solver |
 | Substitute Recommender | Collaborative Filtering + Cosine Similarity | Suggest substitutes when faculty absent (v2) |
 | Room Utilization Optimizer | Bin Packing Heuristic + RL | Maximize room utilization efficiency |
 | Schedule Quality Ranker | Learning to Rank (LambdaMART) | Rank alternative timetable solutions when solver returns multiple FEASIBLE solutions |
-| Anomaly Detector | Isolation Forest | Detect unusual workload or scheduling patterns |
+| Anomaly Detector | Isolation Forest | Detect unusual scheduling patterns |
 | NEP Compliance Checker | Rule-based + NLP | Validate generated schedule against NEP 2020 hour requirements |
 
 ---
 
-## 8. Workload Fairness Scoring
 
-The fairness objective is encoded in the CP-SAT model:
-
-```python
-# For each faculty, compute total teaching hours (decision variables)
-faculty_loads = []
-for fi in range(len(self.faculty)):
-    load = sum(v for k, v in assignments.items() if k[4] == fi)
-    faculty_loads.append(load)
-
-if len(faculty_loads) >= 2:
-    max_load = model.NewIntVar(0, 30, 'max_load')
-    min_load = model.NewIntVar(0, 30, 'min_load')
-    for load in faculty_loads:
-        model.Add(load <= max_load)
-        model.Add(load >= min_load)
-    variance = model.NewIntVar(0, 30, 'variance')
-    model.Add(variance == max_load - min_load)
-    model.Minimize(variance)
-```
-
-**Target:** Workload variance across all faculty in a department < 2 hours/week.
 
 ---
 
@@ -218,11 +196,7 @@ def _extract_solution(self, solver, assignments, status) -> dict:
                 'slot_type':   'LAB' if self.courses[ci]['type'] == 'Lab' else 'THEORY'
             })
 
-    # Compute workload stats
-    workload = {}
-    for s in timetable_slots:
-        fid = s['faculty_id']
-        workload[fid] = workload.get(fid, 0) + 1
+
 
     # Identify unassignable courses
     unassignable = [
@@ -237,7 +211,7 @@ def _extract_solution(self, solver, assignments, status) -> dict:
         'conflict_count':      0,   # Guaranteed by hard constraints
         'generation_ms':       int(solver.WallTime() * 1000),
         'slots':               timetable_slots,
-        'workload_stats':      workload,
+
         'unassignable_courses': unassignable,
         'time_slots':          self.slots
     }
@@ -296,7 +270,7 @@ class TimetableScheduler:
 ```json
 {
   "department_id": "dept-cs-001",
-  "faculty": [ { "id": "f-rustam", "name": "Rustam Morena", "max_hrs_per_week": 20, ... } ],
+  "faculty": [ { "id": "f-rustam", "name": "Rustam Morena", ... } ],
   "courses": [ { "id": "c-blockchain", "name": "Blockchain", "weekly_hrs": 3, "type": "Theory" } ],
   "batches": [ { "id": "b-mca-a", "name": "MCA Sem 2 Div A", "strength": 30 } ],
   "resources": [ { "id": "r-101", "name": "CS Classroom 101", "type": "Classroom", "capacity": 60 } ],
@@ -315,7 +289,7 @@ class TimetableScheduler:
   "conflict_count": 0,
   "generation_ms": 4250,
   "slots": [ ... ],
-  "workload_stats": { "f-rustam": 3 },
+
   "unassignable_courses": [],
   "time_slots": [ ... ]
 }

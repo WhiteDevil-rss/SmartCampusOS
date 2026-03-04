@@ -28,7 +28,7 @@ This document defines all user stories for NEP-Scheduler across the four user ro
 |---|---|---|
 | US-004 | As a Uni Admin, I want to add departments so that I can structure the university | GIVEN valid dept details WHEN I submit THEN dept appears in list with its own auto-generated login credentials |
 | US-005 | As a Uni Admin, I want to manage classrooms and labs so the timetable can assign rooms correctly | GIVEN I add a room with type=Lab and capacity=30 WHEN timetable is generated THEN lab courses are assigned to this room only if batch strength ≤ 30 |
-| US-012 | As a Uni Admin, I want to see department-wise statistics so I can monitor workload | GIVEN at least one timetable exists WHEN I view dashboard THEN I see faculty count, course count, timetable count per dept |
+| US-012 | As a Uni Admin, I want to see department-wise statistics so I can monitor system usage | GIVEN at least one timetable exists WHEN I view dashboard THEN I see faculty count, course count, timetable count per dept |
 
 ---
 
@@ -80,7 +80,7 @@ This document defines all user stories for NEP-Scheduler across the four user ro
 **And** a conflict-free timetable is returned within 30 seconds  
 **And** the timetable grid is displayed with all days and time slots  
 **And** each cell shows: course name, faculty name, room name  
-**And** the workload summary shows hours per faculty vs. max allowed  
+
 **And** conflict count is guaranteed to be 0
 
 **Edge Cases:**

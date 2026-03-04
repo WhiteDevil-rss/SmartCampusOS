@@ -65,6 +65,12 @@ class TimetableScheduler:
         self.slot_times: Dict[int, Tuple[str, str]] = {}  # slot_number → (start, end)
         self._build_slot_timeline()
 
+        # Normalization (Scaling) is now primarily handled in main.py pre-flight.
+        # We only ensure labDuration is at least 1 if it's a lab course.
+        for c in request.courses:
+            if c.labDuration < 1 and c.type.lower() in ("lab", "practical", "theory+lab"):
+                c.labDuration = 1
+
         # Pre-process elective baskets into virtual batches / courses
         self._elective_virtual_batches: List[Batch] = []
         self._elective_virtual_courses: Dict[str, Course] = {}
@@ -72,6 +78,11 @@ class TimetableScheduler:
         self._option_id_for_batch: Dict[str, str] = {}            # vBatchId → optionId
         self._basket_for_option_batch: Dict[str, str] = {}        # vBatchId → basketId
         self._basket_division_ids: Dict[str, List[str]] = {}      # basketId → [divisionIds]
+        
+        # Basket weeklyHrs already scaled in main.py
+        # for b in request.electiveBaskets:
+        #     b.weeklyHrs = math.ceil(b.weeklyHrs / slot_hrs)
+
         self._process_elective_baskets()
 
         # Effective batches / courses (real + virtual)
@@ -85,7 +96,7 @@ class TimetableScheduler:
 
         # Solver decision variables: (d, p, c_id, f_id, r_id, b_id) → BoolVar
         self.vars: Dict[Tuple, cp_model.IntVar] = {}
-        self._valid_combos: List[Tuple[str, str, str, str]] = []
+        self._valid_combos: List[Tuple[str, str, Optional[str], str, str, int]] = []
 
         self._build_valid_combos()
         self._setup_variables()
@@ -105,52 +116,63 @@ class TimetableScheduler:
 
     def _build_slot_timeline(self):
         cfg = self.request.config
+        if cfg.useCustomBlocks and cfg.timeBlocks:
+            for i, block in enumerate(cfg.timeBlocks):
+                slot_num = i + 1
+                if block.isBreak:
+                    self.break_slots.append(slot_num)
+                else:
+                    self.lecture_slots.append(slot_num)
+                self.slot_times[slot_num] = (block.startTime, block.endTime)
+            return
+
         slot_num = 1
-        current = cfg.startTime
-        end = cfg.endTime
-        break_count = 0
+        from datetime import datetime, timedelta
+        
+        try:
+            curr = datetime.strptime(cfg.startTime, "%H:%M")
+            end_limit = datetime.strptime(cfg.endTime, "%H:%M")
+        except:
+            log.error("Invalid startTime/endTime format. Using 09:00-17:00 default.")
+            curr = datetime.strptime("09:00", "%H:%M")
+            end_limit = datetime.strptime("17:00", "%H:%M")
 
-        total_avail_min = (
-            datetime.strptime(end, "%H:%M") - datetime.strptime(current, "%H:%M")
-        ).total_seconds() / 60
-        # Evenly distribute break(s) across the day
-        break_interval = (
-            (total_avail_min - cfg.numberOfBreaks * cfg.breakDuration) /
-            (cfg.numberOfBreaks + 1)
-        ) if cfg.numberOfBreaks > 0 else total_avail_min
+        lect_dur = cfg.lectureDuration if cfg.lectureDuration > 0 else 60
+        break_dur = cfg.breakDuration if cfg.breakDuration > 0 else 0
+        num_breaks = cfg.numberOfBreaks
+        
+        # Simple heuristic: insert breaks after every few lectures if not specified
+        break_after = 2 if num_breaks > 0 else 999
+        lectures_since_break = 0
+        breaks_done = 0
 
-        elapsed = 0.0
-        next_break_at = break_interval  # minutes until first break
-
-        while True:
-            slot_end = _add_minutes(current, cfg.lectureDuration)
-            if (
-                datetime.strptime(slot_end, "%H:%M") >
-                datetime.strptime(end, "%H:%M")
-            ):
-                break
-
-            # Should we insert a break before this slot?
-            if (
-                cfg.numberOfBreaks > 0
-                and break_count < cfg.numberOfBreaks
-                and elapsed >= next_break_at
-            ):
-                # break slot
-                break_end = _add_minutes(current, cfg.breakDuration)
-                self.break_slots.append(slot_num)
-                slot_num += 1
-                current = break_end
-                elapsed += cfg.breakDuration
-                break_count += 1
-                next_break_at += break_interval
-                continue
-
+        while curr + timedelta(minutes=lect_dur) <= end_limit:
+            # Add lecture slot
+            start_str = curr.strftime("%H:%M")
+            curr += timedelta(minutes=lect_dur)
+            end_str = curr.strftime("%H:%M")
+            
             self.lecture_slots.append(slot_num)
-            self.slot_times[slot_num] = (current, slot_end)
-            elapsed += cfg.lectureDuration
-            current = slot_end
+            self.slot_times[slot_num] = (start_str, end_str)
             slot_num += 1
+            lectures_since_break += 1
+
+            # Check if we should insert a break
+            if breaks_done < num_breaks and lectures_since_break >= break_after:
+                if curr + timedelta(minutes=break_dur) <= end_limit:
+                    b_start = curr.strftime("%H:%M")
+                    curr += timedelta(minutes=break_dur)
+                    b_end = curr.strftime("%H:%M")
+                    
+                    self.break_slots.append(slot_num)
+                    self.slot_times[slot_num] = (b_start, b_end)
+                    slot_num += 1
+                    breaks_done += 1
+                    lectures_since_break = 0
+
+        print(f"[Solver Debug] Generated lecture slots: {self.lecture_slots}")
+        print(f"[Solver Debug] Generated break slots: {self.break_slots}")
+        print(f"[Solver Debug] Slot times: {self.slot_times}")
 
     # ── Elective basket pre-processing ───────────────────────────────────
 
@@ -239,9 +261,14 @@ class TimetableScheduler:
         def _add_combos(courses: List[Course], batches: List[Batch], elective=False):
             for c in courses:
                 req_room_type = c.requiredRoomType
-                if not req_room_type and c.type.lower() in ("lab", "theory+lab"):
+                if not req_room_type and c.type.lower() in ("lab", "theory+lab", "practical"):
                     req_room_type = "Lab"
                 is_theory_only = c.type.lower() == "theory"
+
+                # SKIP: If we are processing regular batches but the course is marked elective,
+                # it should only be handled via virtual elective batches/courses path.
+                if not elective and c.isElective:
+                    continue
 
                 for b in batches:
                     if c.program and b.program and c.program != b.program:
@@ -249,49 +276,42 @@ class TimetableScheduler:
                     if c.semester and b.semester and c.semester != b.semester:
                         continue
 
-                    for f in self.request.faculty:
-                        if f.id in excluded_f:
+                    # For virtual elective courses, only match their intended virtual batch
+                    is_vcourse = c.id.startswith("ELEC_")
+                    is_vbatch = b.id.startswith("ELECTIVE_")
+                    if is_vbatch and is_vcourse:
+                        if not c.id.startswith(f"ELEC_{b.id}_"):
                             continue
-                        # For elective virtual courses, use the real courseId
-                        real_cid = c.id
-                        if c.isElective:
-                            # strip the ELEC_{vbatch_id}_ prefix
-                            # format: ELEC_ELECTIVE_{basketId}_OPT_{optId}_{realCourseId}
-                            parts = c.id.split("_")
-                            real_cid = parts[-1] if len(parts) > 1 else c.id
-                        if real_cid not in faculty_courses.get(f.id, set()):
-                            # Try full course id
-                            if c.id not in faculty_courses.get(f.id, set()):
-                                # Also try: for elective options, allow specific faculty
-                                if not elective:
-                                    continue
-                                # Find the option for this virtual batch
-                                basket_id = self._basket_for_option_batch.get(b.id)
-                                if not basket_id:
-                                    continue
-                                basket = next(
-                                    (bk for bk in self.request.electiveBaskets
-                                     if bk.basketId == basket_id), None
-                                )
-                                if not basket:
-                                    continue
-                                opt_id = self._option_id_for_batch.get(b.id)
-                                opt = next(
-                                    (o for o in basket.options if o.optionId == opt_id), None
-                                )
-                                if not opt or opt.facultyId != f.id:
-                                    continue
 
+                    # Potential Faculty Pairs for this batch/course if elective
+                    potential_pairs: List[Tuple[str, Optional[str], int]] = [] # f1, f2, day (0=any)
+                    if elective:
+                        basket_id = self._basket_for_option_batch.get(b.id)
+                        basket = next((bk for bk in self.request.electiveBaskets if bk.basketId == basket_id), None)
+                        if basket and basket.facultyPairs:
+                            # Use pairs if defined
+                            for fpair in basket.facultyPairs:
+                                potential_pairs.append((fpair.faculty1Id, fpair.faculty2Id, fpair.dayOfWeek))
+                    
+                    if not potential_pairs:
+                        # Fallback to single faculty assignments
+                        for f in self.request.faculty:
+                            if f.id in excluded_f: continue
+                            real_cid = c.id
+                            if c.isElective:
+                                parts = c.id.split("_")
+                                real_cid = parts[-1] if len(parts) > 1 else c.id
+                            if real_cid in faculty_courses.get(f.id, set()) or c.id in faculty_courses.get(f.id, set()):
+                                potential_pairs.append((f.id, None, 0))
+
+                    for (f1_id, f2_id, assigned_day) in potential_pairs:
                         for r in self.request.resources:
-                            if r.id in excluded_r:
-                                continue
-                            if r.capacity < b.strength:
-                                continue
-                            if req_room_type and r.type != req_room_type:
-                                continue
-                            if is_theory_only and r.type.lower() == "lab":
-                                continue
-                            self._valid_combos.append((c.id, f.id, r.id, b.id))
+                            if r.id in excluded_r: continue
+                            if r.capacity < b.strength: continue
+                            if req_room_type and r.type != req_room_type: continue
+                            if is_theory_only and r.type.lower() == "lab": continue
+                            # We'll filter by assigned_day during _setup_variables
+                            self._valid_combos.append((c.id, f1_id, f2_id, r.id, b.id, assigned_day))
 
         # Add regular course/batch combos
         _add_combos(self.request.courses, self.request.batches)
@@ -303,6 +323,16 @@ class TimetableScheduler:
                 elective=True,
             )
 
+        # Diagnostic: Count combos per (course, batch)
+        cb_combo_counts = {}
+        for (cid, f1, f2, rid, bid, day) in self._valid_combos:
+            cb_combo_counts[(cid, bid)] = cb_combo_counts.get((cid, bid), 0) + 1
+        
+        print("--- COMBO PRE-FILTER SUMMARY ---")
+        for (cid, bid), count in cb_combo_counts.items():
+            if count < 5:
+                print(f"[Solver Debug] Suspicously few combos for {cid} in {bid}: {count}")
+
     # ── Variable creation ─────────────────────────────────────────────────
 
     def _setup_variables(self):
@@ -310,34 +340,66 @@ class TimetableScheduler:
             if d in self.request.excludedDayIds:
                 continue
             for p in self.lecture_slots:
-                for (c_id, f_id, r_id, b_id) in self._valid_combos:
-                    key = (d, p, c_id, f_id, r_id, b_id)
+                for (c_id, f1_id, f2_id, r_id, b_id, assigned_day) in self._valid_combos:
+                    if assigned_day != 0 and assigned_day != d:
+                        continue
+                    key = (d, p, c_id, f1_id, f2_id, r_id, b_id)
+                    # Safe ID slicing for variable names
+                    c_short = str(c_id)[-4:] if len(str(c_id)) >= 4 else str(c_id)
+                    f1_short = str(f1_id)[-2:] if len(str(f1_id)) >= 2 else str(f1_id)
+                    f2_short = str(f2_id)[-2:] if f2_id and len(str(f2_id)) >= 2 else ""
+                    r_short = str(r_id)[-2:] if len(str(r_id)) >= 2 else str(r_id)
+                    b_short = str(b_id)[-2:] if len(str(b_id)) >= 2 else str(b_id)
+                    
                     self.vars[key] = self.model.NewBoolVar(
-                        f"d{d}p{p}c{c_id[-6:]}f{f_id[-4:]}r{r_id[-4:]}b{b_id[-4:]}"
+                        f"d{d}p{p}c{c_short}f{f1_short}{f2_short}r{r_short}b{b_short}"
                     )
+        print(f"[Solver Debug] Total decision variables created: {len(self.vars)}")
+        
+        # Optional: Print count per (course, batch)
+        cb_counts = {}
+        for (d, p, c_id, f1_id, f2_id, r_id, b_id) in self.vars:
+            cb_counts[(c_id, b_id)] = cb_counts.get((c_id, b_id), 0) + 1
+        
+        for (c_id, b_id), count in cb_counts.items():
+            if count < 5: # Arbitrary threshold for "suspiciously low"
+                print(f"[Solver Debug] Low variable count: {c_id} for batch {b_id} has only {count} potential slots.")
 
     # ── Hard Constraints ──────────────────────────────────────────────────
 
     def _add_hard_constraints(self):
         days = [d for d in self.days if d not in self.request.excludedDayIds]
         cfg = self.request.config
+        slot_list = sorted(self.lecture_slots)
 
         # Pre-aggregate vars for efficient constraint building
-        cb_vars: Dict[Tuple, List] = {}   # (c_id, b_id) → vars
-        fdp_vars: Dict[Tuple, List] = {}  # (d, p, f_id) → vars
-        bdp_vars: Dict[Tuple, List] = {}  # (d, p, b_id) → vars
-        rdp_vars: Dict[Tuple, List] = {}  # (d, p, r_id) → vars
-        fd_vars: Dict[Tuple, List] = {}   # (d, f_id) → vars
-        cbd_vars: Dict[Tuple, List] = {}  # (c_id, b_id, d) → vars (for day distribution)
-        bd_vars: Dict[Tuple, List] = {}   # (b_id, d) → vars (for gap penalty)
+        cb_vars: Dict[Tuple[str, str], List[cp_model.IntVar]] = {}   # (c_id, b_id) → vars
+        fdp_vars: Dict[Tuple[int, int, str], List[cp_model.IntVar]] = {}  # (d, p, f_id) → vars
+        bdp_vars: Dict[Tuple[int, int, str], List[cp_model.IntVar]] = {}  # (d, p, b_id) → vars
+        rdp_vars: Dict[Tuple[int, int, str], List[cp_model.IntVar]] = {}  # (d, p, r_id) → vars
+        fd_vars: Dict[Tuple[int, str], List[cp_model.IntVar]] = {}   # (d, f_id) → vars
+        cbd_vars: Dict[Tuple[str, str, int], List[cp_model.IntVar]] = {}  # (c_id, b_id, d) → vars
+        bd_vars: Dict[Tuple[str, int], List[cp_model.IntVar]] = {}   # (b_id, d) → vars
+        
+        # New: Specific grouping for Lab pairing (HC9)
+        # (d, c_id, f_id, b_id, p) → var
+        dcfbp_vars: Dict[Tuple[int, str, str, str, int], cp_model.IntVar] = {}
 
         for key, var in self.vars.items():
-            d, p, c_id, f_id, r_id, b_id = key
+            d, p, c_id, f1_id, f2_id, r_id, b_id = key
             cb_vars.setdefault((c_id, b_id), []).append(var)
-            fdp_vars.setdefault((d, p, f_id), []).append(var)
+            
+            fdp_vars.setdefault((d, p, f1_id), []).append(var)
+            fd_vars.setdefault((d, f1_id), []).append(var)
+            dcfbp_vars[(d, c_id, f1_id, b_id, p)] = var
+            
+            if f2_id:
+                fdp_vars.setdefault((d, p, f2_id), []).append(var)
+                fd_vars.setdefault((d, f2_id), []).append(var)
+                dcfbp_vars[(d, c_id, f2_id, b_id, p)] = var
+
             bdp_vars.setdefault((d, p, b_id), []).append(var)
             rdp_vars.setdefault((d, p, r_id), []).append(var)
-            fd_vars.setdefault((d, f_id), []).append(var)
             cbd_vars.setdefault((c_id, b_id, d), []).append(var)
             bd_vars.setdefault((b_id, d), []).append(var)
 
@@ -355,22 +417,27 @@ class TimetableScheduler:
                 if c.isElective and not can_be_taught:
                     can_be_taught = True  # validated by _build_valid_combos
 
+                is_vcourse = c.id.startswith("ELEC_")
+                is_vbatch = b.id.startswith("ELECTIVE_")
+                if is_vbatch and is_vcourse:
+                    if not c.id.startswith(f"ELEC_{b.id}_"):
+                        continue
+
                 if not program_ok or not semester_ok or not can_be_taught or not course_vars:
                     if course_vars:
+                        # Force 0 for incompatible pairs that somehow have vars
                         self.model.Add(sum(course_vars) == 0)
                 else:
+                    print(f"[Solver Debug] Adding requirement: {c.id} for batch {b.id} == {c.weeklyHrs} (Vars: {len(course_vars)})")
                     if len(course_vars) < c.weeklyHrs:
-                        print(f"ERROR: Not enough vars ({len(course_vars)}) for {c.name} which needs {c.weeklyHrs} slots.")
+                        print(f"[Solver Debug] CRITICAL: Not enough vars ({len(course_vars)}) for Course/Batch {c.id}/{b.id}. Needs {c.weeklyHrs} slots.")
                     self.model.Add(sum(course_vars) == c.weeklyHrs)
 
-        print("--- REQUIRED FACULTY WORKLOAD (approx bounds) ---")
-        # Let's see if there is any obvious mathematically impossible assignments
-        
+
         # ── HC2 : Faculty no double-booking ──────────────────────────
         for (d, p, f_id), fvars in fdp_vars.items():
             if len(fvars) > 1:
                 self.model.AddAtMostOne(fvars)
-        return
 
         # ── HC3 : Batch no overlap ────────────────────────────────────
         for (d, p, b_id), bvars in bdp_vars.items():
@@ -394,8 +461,6 @@ class TimetableScheduler:
                     self.model.Add(sum(fvars) == 0)
 
         # ── HC9 : Consecutive slot pairing for Lab courses ────────────
-        slot_list = sorted(self.lecture_slots)
-
         def _break_between(si: int, sj: int) -> bool:
             return any(bi > si and bi < sj for bi in self.break_slots)
 
@@ -423,20 +488,22 @@ class TimetableScheduler:
                             idx_to_p = {
                                 si: slot_list[si]
                                 for si in range(len(slot_list))
-                                if (d, slot_list[si], c.id, f.id, r.id, b.id) in self.vars
+                                if (d, c.id, f.id, b.id, slot_list[si]) in dcfbp_vars
                             }
                             if not idx_to_p:
                                 continue
                             sv_local = {
-                                p: self.vars[(d, p, c.id, f.id, r.id, b.id)]
+                                p: dcfbp_vars[(d, c.id, f.id, b.id, p)]
                                 for p in idx_to_p.values()
                             }
                             start_vars: Dict[int, cp_model.IntVar] = {}
                             for si in valid_starts_idx:
                                 if not all(slot_list[si + k] in sv_local for k in range(lab_dur)):
                                     continue
+                                c_short = c.id[-4:] if len(c.id) >= 4 else c.id
+                                b_short = b.id[-4:] if len(b.id) >= 4 else b.id
                                 sv = self.model.NewBoolVar(
-                                    f"lbst_d{d}i{si}c{c.id[-4:]}b{b.id[-4:]}"
+                                    f"lbst_d{d}i{si}c{c_short}b{b_short}"
                                 )
                                 start_vars[si] = sv
                                 for k in range(lab_dur):
@@ -467,74 +534,40 @@ class TimetableScheduler:
             if key in self.vars:
                 self.model.Add(self.vars[key] == 1)
 
-        # ── HC11 : Elective basket synchronisation ────────────────────
-        # All options in the same basket must be scheduled at the same (day, slot).
-        # We enforce this with a shared set of day/slot BoolVars per basket.
+        # ── HC11, HC14 : Elective Synchronization & Overlap ──
         for basket in self.request.electiveBaskets:
             vbatch_ids = self._basket_option_batch_ids.get(basket.basketId, [])
-            if len(vbatch_ids) < 2:
+            parent_batch_ids = self._basket_division_ids.get(basket.basketId, [])
+            if not vbatch_ids:
                 continue
 
-            # For each (day, slot), collect "any-assignment" BoolVar per option-batch
-            slot_used_per_option: Dict[Tuple[int, int], List[cp_model.IntVar]] = {}
-
-            for b_id in vbatch_ids:
-                # find the virtual course for this option
-                vcourse_id = next(
-                    (cid for cid in self._elective_virtual_courses
-                     if f"_OPT_{self._option_id_for_batch.get(b_id,'')}_" in cid or
-                        cid.endswith(f"_{b_id.split('_OPT_')[1] if '_OPT_' in b_id else ''}_{basket.options[0].courseId if basket.options else ''}")),
-                    None
-                )
-                # simpler: scan all vars for this batch
-                for d in days:
-                    for p in self.lecture_slots:
-                        # does any var exist for this (d,p,*,*,b_id)?
-                        has_var = [
-                            v for (dd, pp, cc, ff, rr, bb), v in self.vars.items()
-                            if dd == d and pp == p and bb == b_id
-                        ]
-                        if has_var:
-                            used = self.model.NewBoolVar(f"bk_used_d{d}p{p}b{b_id[-6:]}")
-                            self.model.Add(sum(has_var) >= 1).OnlyEnforceIf(used)
-                            self.model.Add(sum(has_var) == 0).OnlyEnforceIf(used.Not())
-                            slot_used_per_option.setdefault((d, p), []).append(used)
-
-            # All options must use the SAME set of (d, p) slots
-            # Equivalently: slot (d,p) is used by option A ⟺ used by option B
-            for (d, p), used_list in slot_used_per_option.items():
-                if len(used_list) < 2:
-                    continue
-                for i in range(len(used_list) - 1):
-                    self.model.Add(used_list[i] == used_list[i + 1])
-
-        # ── HC14 : Division Overlap (Elective Baskets vs Parent Divisions) ────────────
-        # For each basket, if any of its virtual batches is scheduled at (d, p),
-        # its parent divisions cannot have ANY class scheduled at (d, p).
-        for basket in self.request.electiveBaskets:
-            vbatch_ids = self._basket_option_batch_ids.get(basket.basketId, [])
-            div_ids = self._basket_division_ids.get(basket.basketId, [])
-            
-            if not vbatch_ids or not div_ids:
-                continue
-                
             for d in days:
                 for p in slot_list:
-                    basket_active_vars = []
+                    # HC11: All groups in a basket must occur at the same time
+                    vbatch_vars = []
                     for vb_id in vbatch_ids:
-                        basket_active_vars.extend(bdp_vars.get((d, p, vb_id), []))
-                        
-                    parent_active_vars = []
-                    for div_id in div_ids:
-                        parent_active_vars.extend(bdp_vars.get((d, p, div_id), []))
-                        
-                    if basket_active_vars and parent_active_vars:
-                        # If basket is active, parent must be 0
-                        is_basket_active = self.model.NewBoolVar(f"bkt_{basket.basketId[-4:]}_act_d{d}p{p}")
-                        self.model.Add(sum(basket_active_vars) >= 1).OnlyEnforceIf(is_basket_active)
-                        self.model.Add(sum(basket_active_vars) == 0).OnlyEnforceIf(is_basket_active.Not())
-                        
-                        self.model.Add(sum(parent_active_vars) == 0).OnlyEnforceIf(is_basket_active)
+                        if (d, p, vb_id) in bdp_vars:
+                            vbatch_vars.append(sum(bdp_vars[(d, p, vb_id)]))
+                        else:
+                            vbatch_vars.append(0)
+
+                    if not vbatch_vars:
+                        continue
+
+                    # Represents true/false if this basket is scheduled at (d,p)
+                    basket_active = self.model.NewBoolVar(f"bask_act_d{d}_p{p}_{basket.basketId[:4]}")
+                    for vb_v in vbatch_vars:
+                        if isinstance(vb_v, int) and vb_v == 0:
+                            self.model.Add(basket_active == 0)
+                        else:
+                            self.model.Add(vb_v == 1).OnlyEnforceIf(basket_active)
+                            self.model.Add(vb_v == 0).OnlyEnforceIf(basket_active.Not())
+
+                    # HC14: Parent batches must not have regular classes at this same time
+                    for pb_id in parent_batch_ids:
+                        if (d, p, pb_id) in bdp_vars:
+                            parent_active = sum(bdp_vars[(d, p, pb_id)])
+                            self.model.Add(parent_active == 0).OnlyEnforceIf(basket_active)
 
     # ── Soft Constraints / Objective ──────────────────────────────────────
 
@@ -547,7 +580,7 @@ class TimetableScheduler:
         objective_terms: List[cp_model.LinearExpr] = []
 
         # SO1 : Room utilisation (prefer tight-capacity rooms)
-        for (d, p, c_id, f_id, r_id, b_id), var in self.vars.items():
+        for (d, p, c_id, f1_id, f2_id, r_id, b_id), var in self.vars.items():
             b = next((x for x in self._all_batches if x.id == b_id), None)
             r = next((x for x in self.request.resources if x.id == r_id), None)
             if b and r and r.capacity > 0:
@@ -555,7 +588,7 @@ class TimetableScheduler:
                 objective_terms.append(var * fit_score)
 
         # SO2 : Prefer earlier slots (morning-dense)
-        for (d, p, c_id, f_id, r_id, b_id), var in self.vars.items():
+        for (d, p, c_id, f1_id, f2_id, r_id, b_id), var in self.vars.items():
             slot_idx = slot_list.index(p) if p in slot_list else 0
             morning_bonus = max(0, n_slots - slot_idx) * 2
             objective_terms.append(var * morning_bonus)
@@ -563,7 +596,7 @@ class TimetableScheduler:
         # SO3 : Even cross-day distribution (reward different days per course-batch)
         # Build cbd_vars (course, batch, day) → list of vars
         cbd_vars: Dict[Tuple, List] = {}
-        for (d, p, c_id, f_id, r_id, b_id), var in self.vars.items():
+        for (d, p, c_id, f1_id, f2_id, r_id, b_id), var in self.vars.items():
             cbd_vars.setdefault((c_id, b_id, d), []).append(var)
 
         for (c_id, b_id, d), cvars in cbd_vars.items():
@@ -572,17 +605,6 @@ class TimetableScheduler:
             self.model.Add(sum(cvars) == 0).OnlyEnforceIf(day_used.Not())
             objective_terms.append(day_used * 50)
 
-        # SO4 : Faculty load balance (penalise overloaded days)
-        fd_vars: Dict[Tuple, List] = {}
-        for (d, p, c_id, f_id, r_id, b_id), var in self.vars.items():
-            fd_vars.setdefault((d, f_id), []).append(var)
-        avg_per_day = max(1, len(slot_list) // 2)
-        for (d, f_id), fvars in fd_vars.items():
-            if len(fvars) <= avg_per_day:
-                continue
-            over = self.model.NewIntVar(0, len(fvars), f"fover_{f_id[-4:]}_{d}")
-            self.model.Add(over == sum(fvars) - avg_per_day)
-            objective_terms.append(over * (-30))
 
         # SO5 : Gap minimization — penalise idle slots within batch's daily window
         # gap_weight: 0 = off, 100 = balanced, 300 = strict
@@ -591,7 +613,7 @@ class TimetableScheduler:
 
         if gap_weight > 0:
             bd_vars: Dict[Tuple, List] = {}
-            for (d, p, c_id, f_id, r_id, b_id), var in self.vars.items():
+            for (d, p, c_id, f1_id, f2_id, r_id, b_id), var in self.vars.items():
                 bd_vars.setdefault((b_id, d), []).append((p, var))
 
             # Add virtual elective batch vars to parent division's bd_vars
@@ -601,7 +623,7 @@ class TimetableScheduler:
                 for d_id in div_ids:
                     for d in days:
                         # Find all variables for any of the vbatch_ids on day d
-                        for (dd, p, c_id, f_id, r_id, b_id), var in self.vars.items():
+                        for (dd, p, c_id, f1_id, f2_id, r_id, b_id), var in self.vars.items():
                             if dd == d and b_id in vbatch_ids:
                                 bd_vars.setdefault((d_id, d), []).append((p, var))
 
@@ -666,21 +688,20 @@ class TimetableScheduler:
         if status in (cp_model.OPTIMAL, cp_model.FEASIBLE):
             slots, metrics = self._extract_solution(solver)
             log.info(
-                "[Solver] Status=%s | Slots=%d | WorkloadVariance=%.3f "
+                "[Solver] Status=%s | Slots=%d "
                 "| UtilizationScore=%.2f%% | GapScore=%.2f",
                 solver.StatusName(status), len(slots),
-                metrics["workloadVariance"], metrics["utilizationScore"],
-                metrics["gapScore"],
+                metrics.get("utilizationScore", 0.0),
+                metrics.get("gapScore", 0.0),
             )
             return GenerateResponse(
                 status=solver.StatusName(status),
                 message="Timetable generated successfully.",
                 slots=slots,
                 solveTimeMs=elapsed_ms,
-                workloadVariance=metrics["workloadVariance"],
-                utilizationScore=metrics["utilizationScore"],
-                gapScore=metrics["gapScore"],
-                electiveGroupCount=metrics["electiveGroupCount"],
+                utilizationScore=metrics.get("utilizationScore", 0.0),
+                gapScore=metrics.get("gapScore", 0.0),
+                electiveGroupCount=metrics.get("electiveGroupCount", 0),
             )
         else:
             log.warning("[Solver] Status=%s — no solution found.", solver.StatusName(status))
@@ -706,25 +727,22 @@ class TimetableScheduler:
         room_map = {r.id: r for r in self.request.resources}
         batch_map = {b.id: b for b in self._all_batches}
 
-        faculty_slots: Dict[str, int] = {}
         room_used: Dict[str, int] = {}
         room_total: Dict[str, int] = {}
         batch_day_slots: Dict[Tuple, List[int]] = {}  # (b_id, d) → [p]
 
         days = [d for d in self.days if d not in self.request.excludedDayIds]
 
-        for (d, p, c_id, f_id, r_id, b_id), var in self.vars.items():
+        for (d, p, c_id, f1_id, f2_id, r_id, b_id), var in self.vars.items():
             if solver.Value(var) != 1:
                 continue
 
             c = course_map.get(c_id)
-            f = faculty_map.get(f_id)
+            f = faculty_map.get(f1_id)
             r = room_map.get(r_id)
             b = batch_map.get(b_id)
             t_start, t_end = self.slot_times.get(p, ("?", "?"))
 
-            # Workload tracking
-            faculty_slots[f_id] = faculty_slots.get(f_id, 0) + 1
             r_cap = r.capacity if r else 1
             room_used[r_id] = room_used.get(r_id, 0) + (b.strength if b else 0)
             room_total[r_id] = room_total.get(r_id, 0) + r_cap
@@ -735,6 +753,12 @@ class TimetableScheduler:
             # Elective metadata
             basket_id = self._basket_for_option_batch.get(b_id)
             opt_id = self._option_id_for_batch.get(b_id)
+            
+            # TimeBlock reference
+            block_id = None
+            if self.request.config.useCustomBlocks:
+                block = self.request.config.timeBlocks[p-1] if 0 <= p-1 < len(self.request.config.timeBlocks) else None
+                if block: block_id = block.id
 
             slots.append(SlotResult(
                 dayOfWeek=d,
@@ -745,8 +769,9 @@ class TimetableScheduler:
                 courseName=c.name if c else None,
                 courseCode=c.code if c else None,
                 slotType=c.type if c else None,
-                facultyId=f_id,
+                facultyId=f1_id,
                 facultyName=f.name if f else None,
+                faculty2Id=f2_id,
                 roomId=r_id,
                 roomName=r.name if r else None,
                 batchId=b_id,
@@ -755,6 +780,8 @@ class TimetableScheduler:
                 basketId=basket_id,
                 isElective=bool(basket_id),
                 optionId=opt_id,
+                blockId=block_id,
+                sessionTypeId=c.sessionTypeId if c else None
             ))
 
         # Add break slots
@@ -771,11 +798,6 @@ class TimetableScheduler:
                 ))
 
         # Compute metrics
-        fac_values = list(faculty_slots.values())
-        wv = 0.0
-        if len(fac_values) >= 2:
-            mean = sum(fac_values) / len(fac_values)
-            wv = round(math.sqrt(sum((x - mean) ** 2 for x in fac_values) / len(fac_values)), 3)
 
         util = 0.0
         total_cap = sum(room_total.values())
@@ -797,7 +819,7 @@ class TimetableScheduler:
             total_idle += idle
             gap_count += 1
 
-        gap_score = round(total_idle / gap_count, 2) if gap_count > 0 else 0.0
+        gap_score = float(round(total_idle / gap_count, 2)) if gap_count > 0 else 0.0
 
         # Elective group count
         elec_groups = len([
@@ -807,7 +829,6 @@ class TimetableScheduler:
         ])
 
         return slots, {
-            "workloadVariance": wv,
             "utilizationScore": util,
             "gapScore": gap_score,
             "electiveGroupCount": elec_groups,

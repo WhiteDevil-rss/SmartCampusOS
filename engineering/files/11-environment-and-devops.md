@@ -442,7 +442,7 @@ pnpm --filter api prisma migrate status
 // Key business metrics emitted by API server
 tt_generation_duration_seconds    // Histogram: timetable generation time
 tt_conflict_count_total           // Counter: constraint violations (target: always 0)
-faculty_workload_variance_hours   // Gauge: workload variance per department
+
 active_panel_sessions             // Gauge: active sessions per panel type
 pdf_export_duration_seconds       // Histogram: PDF generation time
 ```

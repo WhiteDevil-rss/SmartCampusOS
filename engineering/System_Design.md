@@ -132,7 +132,6 @@ Dept Admin          Browser          API Gateway        Scheduling         AI En
     │                  │                  │                  │──SELECT faculty,courses,rooms────────────────────▶│               │               
     │                  │                  │                  │◀─Dept Data────────────────────────────────────────│               │
     │                  │                  │                  │──POST /solve──────▶│                  │               │               │
-    │                  │                  │                  │                  │──ML preprocess    │               │               │
     │                  │                  │                  │                  │──CP-SAT solve     │               │               │
     │                  │                  │                  │◀─solution JSON────│                  │               │               │
     │                  │                  │                  │──INSERT timetable + slots────────────────────────▶│               │
@@ -146,8 +145,7 @@ Dept Admin          Browser          API Gateway        Scheduling         AI En
 - JWT validation: < 50ms
 - Redis lock acquisition: < 10ms
 - PostgreSQL data fetch: < 200ms
-- AI Engine ML preprocessing: < 2,000ms
-- OR-Tools CP-SAT solving: < 30,000ms ← dominates
+- AI Engine solving: < 30,000ms ← dominates
 - PostgreSQL insert: < 300ms
 - Response to browser: < 100ms
 - **Total target: < 35 seconds**
@@ -689,12 +687,6 @@ const timetableConflictCount = new Counter({
   labelNames: ['department_id', 'conflict_type']
 });
 
-const facultyWorkloadVariance = new Gauge({
-  name: 'faculty_workload_variance_hours',
-  help: 'Variance in faculty weekly teaching hours within a department',
-  labelNames: ['department_id']
-});
-
 const activePanelSessions = new Gauge({
   name: 'active_panel_sessions',
   help: 'Active authenticated sessions per panel',
@@ -750,7 +742,6 @@ S3 (PDF/Model) Backups:
 |---|---|---|
 | `timetable.generated` | `{ timetableId, deptId, slots[], generatedAt }` | University ERP auto-imports schedule |
 | `timetable.updated` | `{ timetableId, changedSlots[], reason }` | Sync changes to campus digital display boards |
-| `faculty.workload.exceeded` | `{ facultyId, currentHrs, maxHrs, weekDate }` | HR system alert for regulatory compliance |
 | `class.cancelled` | `{ slotId, course, faculty, room, date }` | Student notification apps (WhatsApp/Email) |
 | `substitute.assigned` | `{ originalFacultyId, substituteFacultyId, slotId }` | HR records management system |
 
@@ -761,7 +752,7 @@ S3 (PDF/Model) Backups:
 | **PDF (A4 Landscape)** | Days × Time Slots grid; faculty and room labels per cell; color-coded by subject type; university branding header | Print, notice boards, accreditation |
 | **JSON REST API** | Nested: `timetable → days → slots` with full metadata including faculty, room, batch details | Third-party apps, student portals, ERP |
 | **iCal (.ics)** | Individual events per lecture with `RRULE:FREQ=WEEKLY` for recurrence | Google Calendar, Outlook, Apple Calendar |
-| **Excel (.xlsx)** | Multiple sheets: one per batch + faculty workload summary sheet | Admin reporting, manual review |
+| **Excel (.xlsx)** | Multiple sheets: one per batch | Admin reporting, manual review |
 | **CSV** | Flat: `day, time, subject, faculty, room, batch, slot_type` columns | Data warehouse import, analytics pipelines |
 
 ### 10.3 PDF Generation Architecture

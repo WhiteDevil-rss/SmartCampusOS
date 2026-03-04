@@ -17,7 +17,7 @@ Indian universities today face critical scheduling challenges:
 
 - **Manual scheduling** takes 2–4 weeks per semester using Excel or paper
 - **Conflicts discovered late** — after printing and distribution, causing cascading changes
-- **Faculty workload imbalance** — no systematic fairness enforcement across faculty
+
 - **No real-time adaptability** — sudden faculty absence or room unavailability causes chaos
 - **NEP 2020 non-compliance** — multidisciplinary and FYUP requirements ignored by legacy tools
 - **Zero transparency** — students and faculty have no digital access to schedules
@@ -27,7 +27,7 @@ Indian universities today face critical scheduling challenges:
 | Stakeholder | Value Delivered |
 |---|---|
 | University Administration | Reduce scheduling time from weeks to minutes; ensure NEP compliance automatically |
-| Department HODs | Perfect workload balance; real-time special scheduling for emergencies |
+| Department HODs | Real-time special scheduling for emergencies |
 | Faculty Members | Fair, predictable schedules; instant access to personal timetable; transparent changes |
 | Students | Digital access to accurate, always-current class schedules |
 | Super Admin / Platform | Centralized multi-university management; global visibility and control |
@@ -42,7 +42,7 @@ Indian universities today face critical scheduling challenges:
 |---|---|---|---|
 | **Superadmin Shreya** | Platform Administrator | Manage all university tenants; monitor system health; control all credentials | No centralized view; manual credential management; no audit trail |
 | **VC Dr. Patel** | University Admin / Vice-Chancellor | Generate university-wide timetables; manage departments; ensure NEP compliance | Manual Excel scheduling takes 2 weeks; conflicts discovered only after printing |
-| **HOD Dr. Shah** | Department Admin / HOD | Schedule MCA timetable; balance faculty load; handle sudden substitutions | Faculty workload imbalance; last-minute changes cause cascading conflicts |
+| **HOD Dr. Shah** | Department Admin / HOD | Schedule MCA timetable; handle sudden substitutions | Last-minute changes cause cascading conflicts |
 | **Prof. Rustam** | Faculty Member | View personal weekly schedule; get notified of changes; update profile | No single source of truth; schedule changes communicated via WhatsApp |
 | **Student Aryan** | MCA Student (Div A) | See class schedule; know room numbers; get notified of cancellations | Outdated printed timetables; no digital access; room confusion |
 
@@ -78,7 +78,7 @@ Indian universities today face critical scheduling challenges:
 | F-014 | PDF export of timetable (download + print) | P0 — Critical | All Admin | ✅ Yes |
 | F-015 | Faculty: Personal timetable view (weekly grid) | P0 — Critical | Faculty | ✅ Yes |
 | F-016 | Faculty: Profile & credential management | P0 — Critical | Faculty | ✅ Yes |
-| F-017 | AI workload balancing across faculty | P1 — High | Auto | ✅ Yes |
+
 | F-018 | Real-time timetable updates via WebSocket | P1 — High | All | ✅ Yes |
 | F-019 | NEP 2020 compliance validation report | P1 — High | Uni Admin | ✅ Yes |
 | F-020 | Configurable time slots (start/end/duration/break) | P0 — Critical | All Admin | ✅ Yes |
@@ -209,7 +209,7 @@ Indian universities today face critical scheduling challenges:
 | FYUP (4-year UG program) | Multi-year program tracking | Program type selector with FYUP; exit point management |
 | Credit-based system | Credit-hour enforcement | Weekly hours derived from credits; soft constraint for credit alignment |
 | Flexible curriculum | Dynamic elective slots | Elective pools in batch configuration; AI assigns based on preference |
-| Faculty workload norms | Max hours per week enforcement | Hard constraint: no faculty exceeds UGC-mandated teaching hours (14–16 hrs/week for PG) |
+
 | Academic calendar alignment | Semester-based scheduling | Start/end dates, working days, holiday exclusion configuration |
 | B.Ed./M.Ed./ITEP support | Program-specific constraints | Configurable constraints per program type |
 | FYUP exit points | Year-wise scheduling support | Separate timetable configurations for Year 1, 2, 3, 4 with shared resource pool |
@@ -238,7 +238,7 @@ Indian universities today face critical scheduling challenges:
 | Timetable Grid | Visual grid: days (columns) × time slots (rows) per batch |
 | Faculty View | Personal weekly schedule per faculty member |
 | Conflict Report | Must show 0 conflicts; if any found, generation fails with detailed report |
-| Workload Summary | Hours assigned per faculty per week vs. max allowed |
+
 | Room Utilization | Percentage utilization per classroom/lab |
 | JSON Export | Machine-readable format for API consumers |
 | PDF Export | Printable A4 Landscape format with university branding |
@@ -277,7 +277,7 @@ Indian universities today face critical scheduling challenges:
 |---|---|---|---|
 | Time to generate timetable | 2–4 weeks | < 2 minutes | < 30 seconds |
 | Scheduling conflicts at launch | 10–30 conflicts typical | 0 conflicts guaranteed | 0 conflicts guaranteed |
-| Faculty workload variance | High (no control) | < 2 hrs/week difference | < 1 hr/week difference |
+
 | Universities onboarded | N/A | 5 universities | 50 universities |
 | Active faculty users | N/A | 200 faculty | 5,000 faculty |
 | Timetables generated/month | N/A | 50 | 2,000 |

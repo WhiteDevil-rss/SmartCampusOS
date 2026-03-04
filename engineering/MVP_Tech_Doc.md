@@ -35,7 +35,7 @@
 | University Admin | Dept CRUD, program management, faculty pool, resources, batches, courses | Multi-university comparison, ERP integration |
 | Department Admin | Dept-scoped management, timetable generation, special timetable, PDF export | AI substitute recommendation, mobile alerts |
 | Faculty Portal | Personal weekly schedule view, profile edit, password change | Leave management, student interaction |
-| Timetable Engine | OR-Tools CP-SAT, hard constraints, soft constraints, workload balancing | RL optimization, predictive scheduling |
+| Timetable Engine | OR-Tools CP-SAT, hard constraints, soft constraints | RL optimization, predictive scheduling |
 | Reports | PDF download, print functionality | Excel export, accreditation reports |
 | Real-time | WebSocket for schedule updates | Push notifications, email/SMS alerts |
 
@@ -174,8 +174,7 @@ nep-scheduler/                          # Root monorepo
 │   │   │   ├── timetable/
 │   │   │   │   ├── TimetableGrid.tsx   # Main grid component
 │   │   │   │   ├── TimetableCell.tsx   # Individual slot cell
-│   │   │   │   ├── TimetableExport.tsx # PDF/Print controls
-│   │   │   │   └── WorkloadBadge.tsx   # Faculty workload indicator
+│   │   │   │   └── TimetableExport.tsx # PDF/Print controls
 │   │   │   ├── forms/
 │   │   │   │   ├── GenerateForm.tsx    # TT generation config form
 │   │   │   │   ├── SpecialTTForm.tsx   # Special TT resource selector
@@ -231,9 +230,6 @@ nep-scheduler/                          # Root monorepo
 │       │   │   ├── cp_sat_solver.py    # OR-Tools implementation
 │       │   │   ├── constraint_model.py # Constraint definitions
 │       │   │   └── solution_extractor.py
-│       │   ├── ml/
-│       │   │   ├── slot_predictor.py   # XGBoost slot preference
-│       │   │   └── workload_scorer.py  # Fairness scoring
 │       │   ├── api/
 │       │   │   ├── solve.py            # POST /solve endpoint
 │       │   │   └── health.py           # GET /health endpoint
@@ -319,8 +315,6 @@ model Faculty {
   email           String          @unique
   phone           String?
   designation     String?
-  maxHrsPerDay    Int             @default(4)
-  maxHrsPerWeek   Int             @default(20)
   userId          String?
   user            User?           @relation(fields: [userId], references: [id])
   createdAt       DateTime        @default(now())
@@ -594,7 +588,7 @@ class TimetableScheduler:
     def solve(self) -> dict:
         """
         Main solving method.
-        Returns solution dict with slots, workload stats, and metadata.
+        Returns solution dict with slots and metadata.
         """
         # ─── Decision Variables ────────────────────────────────────────
         # assign[batch_idx][course_idx][day][slot][faculty_idx][room_idx]
@@ -656,22 +650,6 @@ class TimetableScheduler:
                         if key[0] == bi and key[2] == d and key[3] == si
                     )
 
-        # ─── HARD CONSTRAINT HC-07/08: Faculty max hours ─────────────
-        for fi, faculty in enumerate(self.faculty):
-            # Weekly hours limit
-            weekly_vars = [v for k, v in assignments.items() if k[4] == fi]
-            if weekly_vars:
-                self.model.Add(
-                    sum(weekly_vars) <= faculty['max_hrs_per_week']
-                )
-            # Daily hours limit
-            for d in range(self.days):
-                daily_vars = [v for k, v in assignments.items()
-                              if k[4] == fi and k[2] == d]
-                if daily_vars:
-                    self.model.Add(
-                        sum(daily_vars) <= faculty['max_hrs_per_day']
-                    )
 
         # ─── HARD CONSTRAINT: Weekly frequency per course ─────────────
         for bi, batch in enumerate(self.batches):
@@ -682,22 +660,6 @@ class TimetableScheduler:
                     target_hrs = course.get('weekly_hrs', 3)
                     self.model.Add(sum(course_vars) == target_hrs)
 
-        # ─── SOFT CONSTRAINT: Workload variance minimization ─────────
-        # Minimize the difference between max and min faculty load
-        faculty_loads = []
-        for fi in range(len(self.faculty)):
-            load = sum(v for k, v in assignments.items() if k[4] == fi)
-            faculty_loads.append(load)
-
-        if len(faculty_loads) >= 2:
-            max_load = self.model.NewIntVar(0, 30, 'max_load')
-            min_load = self.model.NewIntVar(0, 30, 'min_load')
-            for load in faculty_loads:
-                self.model.Add(load <= max_load)
-                self.model.Add(load >= min_load)
-            variance = self.model.NewIntVar(0, 30, 'variance')
-            self.model.Add(variance == max_load - min_load)
-            self.model.Minimize(variance)
 
         # ─── SOLVE ────────────────────────────────────────────────────
         solver = cp_model.CpSolver()
@@ -731,12 +693,6 @@ class TimetableScheduler:
                     'slot_type': 'LAB' if self.courses[ci]['type'] == 'Lab' else 'THEORY'
                 })
 
-        # Calculate workload stats
-        workload = {}
-        for s in timetable_slots:
-            fid = s['faculty_id']
-            workload[fid] = workload.get(fid, 0) + 1
-
         # Find unassignable courses (no qualified faculty)
         unassignable = [
             {'course_id': cid, 'reason': 'No available qualified faculty'}
@@ -750,7 +706,6 @@ class TimetableScheduler:
             'conflict_count': 0,  # Guaranteed by hard constraints
             'generation_ms': int(solver.WallTime() * 1000),
             'slots': timetable_slots,
-            'workload_stats': workload,
             'unassignable_courses': unassignable,
             'time_slots': self.slots
         }
@@ -771,7 +726,7 @@ class TimetableScheduler:
 | POST | `/v1/resources` | `{ universityId, name, type, capacity, floor }` | `{ resource }` |
 | POST | `/v1/timetables/generate` | `{ deptId, batchIds, startTime, endTime, lectureDuration, breakDuration, breakAfter, daysPerWeek }` | `{ timetableId, slots[], conflicts: 0, generationTimeMs }` |
 | POST | `/v1/timetables/special` | `{ deptId, unavailableFacultyIds[], unavailableRoomIds[], ...config }` | `{ timetableId, slots[], unassignableCourses[] }` |
-| GET | `/v1/timetables/:id` | — | `{ timetable, slots[], workloadStats }` |
+| GET | `/v1/timetables/:id` | — | `{ timetable, slots[] }` |
 | GET | `/v1/timetables/:id/export/pdf` | — | Binary PDF stream |
 | GET | `/v1/faculty/:id/schedule` | — | `{ faculty, weeklySlots: [{day, time, course, room, batch}] }` |
 | PATCH | `/v1/users/:id/credentials` | `{ currentPass, newUser?, newPass? }` | `{ success: true }` |

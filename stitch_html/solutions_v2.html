@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Zembaa AI Solutions by Role</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#00f2ff",
+                        "accent-purple": "#9D4EDD",
+                        "background-light": "#f5f8f8",
+                        "background-dark": "#030712",
+                        "surface-dark": "#111827",
+                        "surface-darker": "#1f2937",
+                        "border-dark": "#374151"
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .glassmorphism {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(55, 65, 81, 0.5);
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #9D4EDD, #00f2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+            border-color: rgba(0, 242, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex flex-col overflow-x-hidden">
+<!-- Navigation -->
+<header class="sticky top-0 z-50 glassmorphism border-b border-border-dark px-6 lg:px-10 py-4 flex items-center justify-between transition-all duration-300">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<span class="material-symbols-outlined text-3xl">auto_awesome_mosaic</span>
+</div>
+<h2 class="text-2xl font-bold tracking-tight">Zembaa</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors text-primary" href="#">Solutions</a>
+<a class="text-sm font-medium text-slate-300 hover:text-primary transition-colors" href="#">Features</a>
+<a class="text-sm font-medium text-slate-300 hover:text-primary transition-colors" href="#">Pricing</a>
+<a class="text-sm font-medium text-slate-300 hover:text-primary transition-colors" href="#">About Us</a>
+</nav>
+<div class="flex items-center gap-4">
+<a class="hidden sm:block text-sm font-bold text-slate-300 hover:text-white transition-colors" href="#">Log In</a>
+<button class="bg-primary hover:bg-primary/90 text-background-dark text-sm font-bold py-2 px-5 rounded-lg transition-all shadow-[0_0_15px_rgba(0,242,255,0.3)] hover:shadow-[0_0_20px_rgba(0,242,255,0.5)]">
+                Get Started
+            </button>
+</div>
+</header>
+<main class="flex-grow flex flex-col items-center w-full">
+<!-- Hero Section -->
+<section class="w-full max-w-7xl mx-auto px-6 py-20 lg:py-32 flex flex-col items-center text-center relative">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(157,78,221,0.15)_0%,transparent_70%)] pointer-events-none"></div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-8">
+<span class="material-symbols-outlined text-base">school</span>
+<span>Tailored for Academia</span>
+</div>
+<h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 max-w-4xl">
+                Solutions for Every <br class="hidden md:block"/>
+<span class="text-gradient">Academic Role</span>
+</h1>
+<div class="h-1 w-24 bg-gradient-to-r from-accent-purple to-primary rounded-full mb-8"></div>
+<p class="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed">
+                Empowering educational institutions with intelligent, conflict-free academic timetable generation tailored to your specific responsibilities.
+            </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary hover:bg-primary/90 text-background-dark text-base font-bold py-3 px-8 rounded-lg transition-all shadow-[0_0_15px_rgba(0,242,255,0.3)]">
+                    Explore Solutions
+                </button>
+<button class="glassmorphism hover:bg-surface-darker text-white text-base font-medium py-3 px-8 rounded-lg transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">play_circle</span>
+                    Watch Demo
+                </button>
+</div>
+</section>
+<!-- Role-based Solutions Tabs -->
+<section class="w-full max-w-7xl mx-auto px-6 py-16">
+<div class="flex flex-col items-center mb-12">
+<h2 class="text-3xl font-bold mb-4">Empower Your Team</h2>
+<p class="text-slate-400 text-center max-w-2xl">Discover how Zembaa streamlines scheduling tasks across your entire institution, regardless of your position.</p>
+</div>
+<!-- Tabs -->
+<div class="flex overflow-x-auto hide-scrollbar border-b border-border-dark mb-8 justify-start lg:justify-center">
+<button class="flex-shrink-0 px-6 py-4 text-sm font-bold border-b-2 border-primary text-primary transition-colors">
+                    University Administrators
+                </button>
+<button class="flex-shrink-0 px-6 py-4 text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">
+                    Department Heads
+                </button>
+<button class="flex-shrink-0 px-6 py-4 text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">
+                    Academic Coordinators
+                </button>
+<button class="flex-shrink-0 px-6 py-4 text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">
+                    Faculty Members
+                </button>
+</div>
+<!-- Tab Content (Cards) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="glassmorphism rounded-xl p-6 glow-hover transition-all duration-300 flex flex-col h-full">
+<div class="w-12 h-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-2xl">account_balance</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Manage multiple departments</h3>
+<p class="text-slate-400 text-sm leading-relaxed flex-grow">
+                        Oversee and harmonize complex timetables across various disciplines, faculties, and campuses seamlessly from a single dashboard.
+                    </p>
+</div>
+<!-- Card 2 -->
+<div class="glassmorphism rounded-xl p-6 glow-hover transition-all duration-300 flex flex-col h-full">
+<div class="w-12 h-12 rounded-lg bg-accent-purple/10 text-accent-purple flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-2xl">menu_book</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Assign subjects efficiently</h3>
+<p class="text-slate-400 text-sm leading-relaxed flex-grow">
+                        Allocate courses to educators with ease, considering constraints, preferences, and workload limits automatically.
+                    </p>
+</div>
+<!-- Card 3 -->
+<div class="glassmorphism rounded-xl p-6 glow-hover transition-all duration-300 flex flex-col h-full">
+<div class="w-12 h-12 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-2xl">event_available</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Coordinate institutional calendar</h3>
+<p class="text-slate-400 text-sm leading-relaxed flex-grow">
+                        Align academic events, exams, and holidays without conflicts, ensuring smooth operations throughout the academic year.
+                    </p>
+</div>
+<!-- Card 4 -->
+<div class="glassmorphism rounded-xl p-6 glow-hover transition-all duration-300 flex flex-col h-full">
+<div class="w-12 h-12 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-2xl">person_search</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Resource utilization overview</h3>
+<p class="text-slate-400 text-sm leading-relaxed flex-grow">
+                        Gain insights into classroom usage, faculty workloads, and identify areas for optimization to maximize institutional efficiency.
+                    </p>
+</div>
+</div>
+</section>
+<!-- Use Cases Section -->
+<section class="w-full bg-surface-dark/50 py-20 border-y border-border-dark">
+<div class="max-w-7xl mx-auto px-6">
+<div class="flex flex-col items-center mb-16">
+<h2 class="text-3xl font-bold mb-4">Common Use Cases</h2>
+<p class="text-slate-400 text-center max-w-2xl">Tailored solutions for complex academic scheduling challenges.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Case 1 -->
+<div class="glassmorphism rounded-xl p-6 hover:-translate-y-1 transition-transform duration-300 border-l-4 border-l-primary group">
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">location_city</span>
+<h3 class="text-lg font-bold">Multi-campus Scheduling</h3>
+</div>
+<p class="text-sm text-slate-400">Manage travel times and shared resources across different physical locations without generating conflicting schedules for faculty or students.</p>
+</div>
+<!-- Case 2 -->
+<div class="glassmorphism rounded-xl p-6 hover:-translate-y-1 transition-transform duration-300 border-l-4 border-l-accent-purple group">
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-accent-purple group-hover:scale-110 transition-transform">category</span>
+<h3 class="text-lg font-bold">Elective Management</h3>
+</div>
+<p class="text-sm text-slate-400">Handle complex student choices for elective subjects, ensuring prerequisite satisfaction and minimizing clashes for popular course combinations.</p>
+</div>
+<!-- Case 3 -->
+<div class="glassmorphism rounded-xl p-6 hover:-translate-y-1 transition-transform duration-300 border-l-4 border-l-blue-400 group">
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-blue-400 group-hover:scale-110 transition-transform">group_work</span>
+<h3 class="text-lg font-bold">Shared Faculty</h3>
+</div>
+<p class="text-sm text-slate-400">Seamlessly schedule professors who teach across multiple departments or programs, respecting their availability and workload constraints.</p>
+</div>
+<!-- Case 4 -->
+<div class="glassmorphism rounded-xl p-6 hover:-translate-y-1 transition-transform duration-300 border-l-4 border-l-emerald-400 group">
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-emerald-400 group-hover:scale-110 transition-transform">science</span>
+<h3 class="text-lg font-bold">Lab Scheduling</h3>
+</div>
+<p class="text-sm text-slate-400">Allocate specialized rooms and equipment efficiently, grouping lab sessions logically and respecting capacity limitations.</p>
+</div>
+<!-- Case 5 -->
+<div class="glassmorphism rounded-xl p-6 hover:-translate-y-1 transition-transform duration-300 border-l-4 border-l-amber-400 group lg:col-span-2">
+<div class="flex items-center gap-4 mb-4">
+<span class="material-symbols-outlined text-amber-400 group-hover:scale-110 transition-transform">update</span>
+<h3 class="text-lg font-bold">Continuous Timetables</h3>
+</div>
+<p class="text-sm text-slate-400">Adapt to dynamic academic environments where schedules need frequent adjustments due to unforeseen circumstances, maintaining overall stability while accommodating changes.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Before vs After Comparison -->
+<section class="w-full max-w-7xl mx-auto px-6 py-20">
+<div class="flex flex-col items-center mb-16">
+<h2 class="text-3xl font-bold mb-4">The Zembaa Difference</h2>
+<p class="text-slate-400 text-center max-w-2xl">Transform your scheduling process from a nightmare into a strategic advantage.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+<!-- Manual (Before) -->
+<div class="glassmorphism rounded-2xl p-8 border-red-900/30 bg-red-950/10 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-8xl text-red-500">warning</span>
+</div>
+<h3 class="text-xl font-bold text-red-400 mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">cancel</span>
+                        Manual Scheduling
+                    </h3>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-red-500 text-sm mt-1">close</span>
+<span class="text-slate-300">Weeks of tedious manual planning</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-red-500 text-sm mt-1">close</span>
+<span class="text-slate-300">High risk of hidden conflicts and errors</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-red-500 text-sm mt-1">close</span>
+<span class="text-slate-300">Suboptimal use of campus facilities</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-red-500 text-sm mt-1">close</span>
+<span class="text-slate-300">Difficult to accommodate last-minute changes</span>
+</li>
+</ul>
+</div>
+<!-- AI (After) -->
+<div class="glassmorphism rounded-2xl p-8 border-primary/30 relative overflow-hidden shadow-[0_0_30px_rgba(0,242,255,0.1)]">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-8xl text-primary">bolt</span>
+</div>
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent-purple/5 pointer-events-none"></div>
+<h3 class="text-xl font-bold text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">check_circle</span>
+                        Zembaa AI Solution
+                    </h3>
+<ul class="space-y-4">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check</span>
+<span class="text-white font-medium">Instant generation in minutes</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check</span>
+<span class="text-white font-medium">100% guaranteed conflict-free schedules</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check</span>
+<span class="text-white font-medium">Optimized resource and room allocation</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm mt-1">check</span>
+<span class="text-white font-medium">Dynamic adjustments with AI suggestions</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Metrics Section -->
+<section class="w-full bg-gradient-to-b from-transparent to-surface-darker/50 py-20 relative">
+<div class="max-w-7xl mx-auto px-6">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-border-dark">
+<div class="flex flex-col items-center px-4">
+<span class="text-4xl md:text-5xl font-bold text-primary mb-2">90%</span>
+<span class="text-sm text-slate-400 font-medium uppercase tracking-wider">Time Saved</span>
+</div>
+<div class="flex flex-col items-center px-4">
+<span class="text-4xl md:text-5xl font-bold text-accent-purple mb-2">100%</span>
+<span class="text-sm text-slate-400 font-medium uppercase tracking-wider">Conflict-Free</span>
+</div>
+<div class="flex flex-col items-center px-4">
+<span class="text-4xl md:text-5xl font-bold text-blue-400 mb-2">50%</span>
+<span class="text-sm text-slate-400 font-medium uppercase tracking-wider">Better Resource Usage</span>
+</div>
+<div class="flex flex-col items-center px-4">
+<span class="text-4xl md:text-5xl font-bold text-emerald-400 mb-2">80%</span>
+<span class="text-sm text-slate-400 font-medium uppercase tracking-wider">Less Manual Work</span>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="w-full max-w-5xl mx-auto px-6 py-24 text-center relative">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,242,255,0.1)_0%,transparent_60%)] pointer-events-none"></div>
+<h2 class="text-4xl md:text-5xl font-bold mb-6">Find the Right Solution <br class="hidden sm:block"/> for Your Institution</h2>
+<p class="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">Join forward-thinking academic institutions that have already revolutionized their scheduling with Zembaa.</p>
+<button class="bg-primary hover:bg-white text-background-dark text-lg font-bold py-4 px-10 rounded-xl transition-all shadow-[0_0_20px_rgba(0,242,255,0.4)] hover:shadow-[0_0_30px_rgba(0,242,255,0.6)] transform hover:-translate-y-1">
+                Get Started Now
+            </button>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-darker py-12 border-t border-border-dark mt-auto">
+<div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">auto_awesome_mosaic</span>
+<span class="text-xl font-bold">Zembaa</span>
+</div>
+<p class="text-sm text-slate-400 mb-4">AI-powered academic scheduling for modern institutions.</p>
+</div>
+<div>
+<h4 class="font-bold mb-4">Product</h4>
+<ul class="space-y-2 text-sm text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">Features</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Solutions</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Pricing</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4">Company</h4>
+<ul class="space-y-2 text-sm text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-4">Legal</h4>
+<ul class="space-y-2 text-sm text-slate-400">
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-border-dark flex flex-col md:flex-row items-center justify-between text-sm text-slate-500">
+<p>© 2024 Zembaa. All rights reserved.</p>
+</div>
+</footer>
+</body></html>
