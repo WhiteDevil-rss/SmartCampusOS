@@ -7,7 +7,7 @@ import { LuLoader } from 'react-icons/lu';
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
-    allowedRoles: Array<'SUPERADMIN' | 'UNI_ADMIN' | 'DEPT_ADMIN' | 'FACULTY'>;
+    allowedRoles: Array<'SUPERADMIN' | 'UNI_ADMIN' | 'DEPT_ADMIN' | 'FACULTY' | 'STUDENT'>;
 }
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
@@ -25,11 +25,12 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
 
         if (!allowedRoles.includes(user.role)) {
             // Redirect to correct dashboard or fallback
-            switch (user.role) {
+            switch (user.role as string) {
                 case 'SUPERADMIN': router.push('/superadmin'); break;
                 case 'UNI_ADMIN': router.push('/dashboard'); break;
                 case 'DEPT_ADMIN': router.push('/department'); break;
                 case 'FACULTY': router.push('/faculty-panel'); break;
+                case 'STUDENT': router.push('/student'); break;
                 default: router.push('/login');
             }
         }
@@ -41,7 +42,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
             // This will trigger the redirect in useEffect, but let's show a loader for now
             return (
                 <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#0a0a0c]">
-                    <div className="glass-card bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-8 rounded-2xl shadow-xl flex flex-col items-center justify-center gap-4">
+                    <div className="glass-card bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-border-hover p-8 rounded-2xl shadow-xl flex flex-col items-center justify-center gap-4">
                         <LuLoader className="h-10 w-10 text-indigo-600 dark:text-neon-cyan animate-spin" />
                     </div>
                 </div>
@@ -58,7 +59,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
                             </svg>
                         </div>
                         <div className="text-red-600 dark:text-red-400 font-bold text-xl font-display">Access Denied</div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">You don't have permission to access this area.</p>
+                        <p className="text-sm text-slate-600 dark:text-text-muted">You don't have permission to access this area.</p>
                         <button
                             onClick={() => router.push('/login')}
                             className="w-full mt-4 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-bold shadow-lg shadow-red-500/30 transition-all uppercase tracking-wider"
@@ -74,7 +75,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
     if (!hasHydrated || !isAuthReady) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#0a0a0c]">
-                <div className="flex flex-col items-center gap-6 glass-card bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-white/10 p-12 rounded-3xl shadow-2xl relative overflow-hidden">
+                <div className="flex flex-col items-center gap-6 glass-card bg-white/80 dark:bg-white/5 border border-slate-200 dark:border-border-hover p-12 rounded-3xl shadow-2xl relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-pulse" />
                     <LuLoader className="h-12 w-12 text-indigo-600 dark:text-neon-cyan animate-spin" />
                     <p className="text-sm text-slate-600 dark:text-slate-300 animate-pulse font-bold tracking-widest uppercase">Verifying Session...</p>

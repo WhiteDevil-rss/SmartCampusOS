@@ -9,10 +9,10 @@ const LEGEND_ITEMS: SessionColorKey[] = ['theory', 'lab', 'practical', 'project'
 export const TimetableLegend: React.FC<{ className?: string }> = ({ className }) => {
     return (
         <div className={cn(
-            "flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 rounded-xl border bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-white/10 shadow-sm print:shadow-none print:border-slate-300",
+            "flex flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 rounded-xl border bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-slate-200 dark:border-border-hover shadow-sm print:shadow-none print:border-slate-300",
             className
         )}>
-            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mr-1">Legend</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-text-muted dark:text-text-secondary mr-1">Legend</span>
             {LEGEND_ITEMS.map((key) => {
                 const c = SESSION_COLORS[key];
                 return (
@@ -21,7 +21,7 @@ export const TimetableLegend: React.FC<{ className?: string }> = ({ className })
                             "w-3 h-3 rounded border",
                             c.bg, c.border, c.darkBg, c.darkBorder
                         )} />
-                        <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
+                        <span className="text-xs font-medium text-slate-600 dark:text-text-muted">
                             {c.emoji} {c.label}
                         </span>
                     </div>

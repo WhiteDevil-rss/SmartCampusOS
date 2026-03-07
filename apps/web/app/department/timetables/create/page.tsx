@@ -166,10 +166,10 @@ export default function GenerateTimetablePage() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8 print:hidden">
                     {/* ── Left: Config ───────────────────────── */}
                     <div className="lg:col-span-2 space-y-6">
-                        <Card className="glass-card shadow-sm border-slate-200 dark:border-white/10">
+                        <Card className="glass-card shadow-sm border-slate-200 dark:border-border-hover">
                             <CardHeader>
-                                <CardTitle className="text-xl dark:text-white">Generate Timetable</CardTitle>
-                                <CardDescription className="dark:text-slate-400">Configure time parameters and select batches to schedule.</CardDescription>
+                                <CardTitle className="text-xl dark:text-text-primary">Generate Timetable</CardTitle>
+                                <CardDescription className="dark:text-text-muted">Configure time parameters and select batches to schedule.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 {error && <div className="p-3 bg-red-50 text-red-600 rounded text-sm font-medium">{error}</div>}
@@ -184,33 +184,33 @@ export default function GenerateTimetablePage() {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium dark:text-slate-300">Start Time</label>
-                                        <Input type="time" className="dark:bg-[#0a0a0c] dark:border-white/10 dark:text-white" value={config.startTime} onChange={(e) => setConfig({ ...config, startTime: e.target.value })} />
+                                        <label className="text-sm font-medium dark:text-text-muted">Start Time</label>
+                                        <Input type="time" className="dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary" value={config.startTime} onChange={(e) => setConfig({ ...config, startTime: e.target.value })} />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium dark:text-slate-300">End Time</label>
-                                        <Input type="time" className="dark:bg-[#0a0a0c] dark:border-white/10 dark:text-white" value={config.endTime} onChange={(e) => setConfig({ ...config, endTime: e.target.value })} />
+                                        <label className="text-sm font-medium dark:text-text-muted">End Time</label>
+                                        <Input type="time" className="dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary" value={config.endTime} onChange={(e) => setConfig({ ...config, endTime: e.target.value })} />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium dark:text-slate-300">Lecture Duration (mins)</label>
-                                        <Input type="number" className="dark:bg-[#0a0a0c] dark:border-white/10 dark:text-white" min="15" max="180" step="15" value={config.lectureDuration} onChange={(e) => setConfig({ ...config, lectureDuration: parseInt(e.target.value) || 60 })} />
+                                        <label className="text-sm font-medium dark:text-text-muted">Lecture Duration (mins)</label>
+                                        <Input type="number" className="dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary" min="15" max="180" step="15" value={config.lectureDuration} onChange={(e) => setConfig({ ...config, lectureDuration: parseInt(e.target.value) || 60 })} />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium dark:text-slate-300">Break Duration (mins)</label>
-                                        <Input type="number" className="dark:bg-[#0a0a0c] dark:border-white/10 dark:text-white" min="0" max="120" step="5" value={config.breakDuration} onChange={(e) => setConfig({ ...config, breakDuration: parseInt(e.target.value) || 0 })} />
+                                        <label className="text-sm font-medium dark:text-text-muted">Break Duration (mins)</label>
+                                        <Input type="number" className="dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary" min="0" max="120" step="5" value={config.breakDuration} onChange={(e) => setConfig({ ...config, breakDuration: parseInt(e.target.value) || 0 })} />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium dark:text-slate-300">Number of Breaks</label>
-                                        <Input type="number" className="dark:bg-[#0a0a0c] dark:border-white/10 dark:text-white" min="0" max="5" value={config.numberOfBreaks} onChange={(e) => setConfig({ ...config, numberOfBreaks: parseInt(e.target.value) || 0 })} />
+                                        <label className="text-sm font-medium dark:text-text-muted">Number of Breaks</label>
+                                        <Input type="number" className="dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary" min="0" max="5" value={config.numberOfBreaks} onChange={(e) => setConfig({ ...config, numberOfBreaks: parseInt(e.target.value) || 0 })} />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium dark:text-slate-300">Working Days</label>
-                                        <Input type="number" className="dark:bg-[#0a0a0c] dark:border-white/10 dark:text-white" min="1" max="7" value={config.daysPerWeek} onChange={(e) => setConfig({ ...config, daysPerWeek: parseInt(e.target.value) || 5 })} />
+                                        <label className="text-sm font-medium dark:text-text-muted">Working Days</label>
+                                        <Input type="number" className="dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary" min="1" max="7" value={config.daysPerWeek} onChange={(e) => setConfig({ ...config, daysPerWeek: parseInt(e.target.value) || 5 })} />
                                     </div>
                                 </div>
                             </CardContent>
-                            <CardFooter className="bg-slate-50/50 dark:bg-white/5 border-t dark:border-white/10 p-6">
-                                <Button onClick={handleGenerate} disabled={loading || selectedBatchIds.size === 0} className="w-full bg-neon-cyan hover:bg-cyan-600 dark:text-[#0a0a0c] text-white shadow-[0_0_15px_rgba(57,193,239,0.4)] h-12 text-base font-bold transition-all">
+                            <CardFooter className="bg-slate-50/50 dark:bg-surface border-t dark:border-border-hover p-6">
+                                <Button onClick={handleGenerate} disabled={loading || selectedBatchIds.size === 0} className="w-full bg-neon-cyan hover:bg-cyan-600 dark:text-[#0a0a0c] text-text-primary shadow-[0_0_15px_rgba(57,193,239,0.4)] h-12 text-base font-bold transition-all">
                                     {loading ? <LuLoaderCircle className="w-5 h-5 mr-2 animate-spin" /> : <LuPlay className="w-5 h-5 mr-2" />}
                                     {loading ? 'Solving Constraints...' : `Generate for ${selectedBatchIds.size} Batch${selectedBatchIds.size !== 1 ? 'es' : ''}`}
                                 </Button>
@@ -223,7 +223,7 @@ export default function GenerateTimetablePage() {
                                 <CardTitle className="text-lg text-indigo-900 dark:text-indigo-300 flex items-center justify-center sm:justify-start gap-2">
                                     <LuLayers className="w-5 h-5" /> Scheduling Mode
                                 </CardTitle>
-                                <CardDescription className="dark:text-slate-400">Optimize how strictly the AI handles time gaps between classes.</CardDescription>
+                                <CardDescription className="dark:text-text-muted">Optimize how strictly the AI handles time gaps between classes.</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -243,7 +243,7 @@ export default function GenerateTimetablePage() {
                                             )}
                                         >
                                             <span className={cn("text-xs font-bold uppercase tracking-tight", continuousMode === mode.id && (mode.id === 'off' ? 'dark:text-slate-200' : `text-${mode.color}-600 dark:text-${mode.color}-400`))}>{mode.label}</span>
-                                            <span className="text-[10px] text-slate-500 mt-1 leading-tight">{mode.desc}</span>
+                                            <span className="text-[10px] text-text-secondary mt-1 leading-tight">{mode.desc}</span>
                                         </button>
                                     ))}
                                 </div>
@@ -256,7 +256,7 @@ export default function GenerateTimetablePage() {
                                 <CardTitle className="text-lg text-amber-900 dark:text-amber-300 flex items-center gap-2">
                                     <LuLayers className="w-5 h-5" /> Generation Strategy
                                 </CardTitle>
-                                <CardDescription className="dark:text-slate-400">Choose the scope of this generation run.</CardDescription>
+                                <CardDescription className="dark:text-text-muted">Choose the scope of this generation run.</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -276,7 +276,7 @@ export default function GenerateTimetablePage() {
                                             )}
                                         >
                                             <span className={cn("text-xs font-bold uppercase tracking-tight", generationType === type.id && `text-${type.color}-600 dark:text-${type.color}-400`)}>{type.label}</span>
-                                            <span className="text-[10px] text-slate-500 mt-1 leading-tight">{type.desc}</span>
+                                            <span className="text-[10px] text-text-secondary mt-1 leading-tight">{type.desc}</span>
                                         </button>
                                     ))}
                                 </div>
@@ -285,28 +285,28 @@ export default function GenerateTimetablePage() {
 
                         {/* ── Partial Regeneration (Locked Slots) ───── */}
                         {activeTimetable && (
-                            <Card className="glass-card shadow-sm border-slate-200 dark:border-white/10">
-                                <CardHeader className="pb-3 border-b dark:border-white/5">
-                                    <CardTitle className="text-lg dark:text-white flex items-center gap-2">
+                            <Card className="glass-card shadow-sm border-slate-200 dark:border-border-hover">
+                                <CardHeader className="pb-3 border-b dark:border-border">
+                                    <CardTitle className="text-lg dark:text-text-primary flex items-center gap-2">
                                         <LuSquareCheck className="w-5 h-5 text-emerald-500" /> Partial Regeneration
                                     </CardTitle>
-                                    <CardDescription className="dark:text-slate-400">
+                                    <CardDescription className="dark:text-text-muted">
                                         Select slots from the active timetable to <b>LOCK</b>. Locked slots will not be moved.
                                     </CardDescription>
                                 </CardHeader>
-                                <CardContent className="pt-4 overflow-x-auto">
+                                <CardContent className="pt-4 table-container">
                                     <div className="min-w-[500px]">
-                                        <table className="w-full text-xs text-left border-collapse border dark:border-white/10 rounded-lg">
+                                        <table className="w-full text-xs text-left border-collapse border dark:border-border-hover rounded-lg">
                                             <thead>
                                                 <tr className="bg-slate-50 dark:bg-slate-900/50">
-                                                    <th className="p-2 border dark:border-white/10 font-bold dark:text-slate-300">Day</th>
-                                                    {[1, 2, 3, 4, 5, 6, 7, 8].map(s => <th key={s} className="p-2 border dark:border-white/10 text-center font-bold dark:text-slate-300">Slot {s}</th>)}
+                                                    <th className="p-2 border dark:border-border-hover font-bold dark:text-text-muted">Day</th>
+                                                    {[1, 2, 3, 4, 5, 6, 7, 8].map(s => <th key={s} className="p-2 border dark:border-border-hover text-center font-bold dark:text-text-muted">Slot {s}</th>)}
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
                                                     <tr key={day}>
-                                                        <td className="p-2 border dark:border-white/10 font-semibold bg-slate-50/50 dark:bg-slate-900/30 dark:text-slate-400 w-24">{day}</td>
+                                                        <td className="p-2 border dark:border-border-hover font-semibold bg-slate-50/50 dark:bg-slate-900/30 dark:text-text-muted w-24">{day}</td>
                                                         {[1, 2, 3, 4, 5, 6, 7, 8].map(slot => {
                                                             const isLocked = lockedSlots.some(ls => ls.day === day && ls.slot === slot);
                                                             const hasExisting = activeTimetable.entries?.some((e: any) => e.day === day && e.slot === slot);
@@ -322,14 +322,14 @@ export default function GenerateTimetablePage() {
                                                                         }
                                                                     }}
                                                                     className={cn(
-                                                                        "p-2 border dark:border-white/10 text-center cursor-pointer transition-all h-10",
-                                                                        isLocked ? "bg-emerald-100 dark:bg-emerald-500/20" : "hover:bg-slate-50 dark:hover:bg-white/5"
+                                                                        "p-2 border dark:border-border-hover text-center cursor-pointer transition-all h-10",
+                                                                        isLocked ? "bg-emerald-100 dark:bg-emerald-500/20" : "hover:bg-slate-50 dark:hover:bg-surface"
                                                                     )}
                                                                 >
                                                                     {isLocked ? (
                                                                         <span className="text-emerald-600 dark:text-emerald-400 font-bold">LOCKED</span>
                                                                     ) : hasExisting ? (
-                                                                        <span className="text-slate-400 dark:text-slate-600">Active</span>
+                                                                        <span className="text-text-muted dark:text-slate-600">Active</span>
                                                                     ) : (
                                                                         <span className="text-slate-200 dark:text-slate-800">—</span>
                                                                     )}
@@ -341,7 +341,7 @@ export default function GenerateTimetablePage() {
                                             </tbody>
                                         </table>
                                         <div className="mt-3 flex items-center justify-between">
-                                            <p className="text-[10px] text-slate-500 italic">* Only slots with active sessions can be meaningfully locked.</p>
+                                            <p className="text-[10px] text-text-secondary italic">* Only slots with active sessions can be meaningfully locked.</p>
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
@@ -367,28 +367,28 @@ export default function GenerateTimetablePage() {
                             </CardHeader>
                             <CardContent className="space-y-2">
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-slate-600 dark:text-slate-400">Solver</span>
-                                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-white/60 dark:bg-white/10 px-2 rounded text-xs">{aiHealth?.solver || '—'}</span>
+                                    <span className="text-slate-600 dark:text-text-muted">Solver</span>
+                                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-surface-hover dark:bg-surface-hover px-2 rounded text-xs">{aiHealth?.solver || '—'}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-slate-600 dark:text-slate-400">Timeout</span>
-                                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-white/60 dark:bg-white/10 px-2 rounded text-xs">{aiHealth?.solverTimeoutMs ? `${(aiHealth.solverTimeoutMs / 1000).toFixed(0)}s` : '—'}</span>
+                                    <span className="text-slate-600 dark:text-text-muted">Timeout</span>
+                                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-surface-hover dark:bg-surface-hover px-2 rounded text-xs">{aiHealth?.solverTimeoutMs ? `${(aiHealth.solverTimeoutMs / 1000).toFixed(0)}s` : '—'}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-slate-600 dark:text-slate-400">Concurrency Lock</span>
+                                    <span className="text-slate-600 dark:text-text-muted">Concurrency Lock</span>
                                     <span className="font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-2 rounded text-xs">Redis Distributed</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-slate-600 dark:text-slate-400">Hard Constraints</span>
-                                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-white/60 dark:bg-white/10 px-2 rounded text-xs">{aiHealth?.hardConstraints ?? '—'} Active</span>
+                                    <span className="text-slate-600 dark:text-text-muted">Hard Constraints</span>
+                                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-surface-hover dark:bg-surface-hover px-2 rounded text-xs">{aiHealth?.hardConstraints ?? '—'} Active</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-slate-600 dark:text-slate-400">Soft Constraints</span>
-                                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-white/60 dark:bg-white/10 px-2 rounded text-xs">{aiHealth?.softConstraints ?? '—'} Active</span>
+                                    <span className="text-slate-600 dark:text-text-muted">Soft Constraints</span>
+                                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-surface-hover dark:bg-surface-hover px-2 rounded text-xs">{aiHealth?.softConstraints ?? '—'} Active</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-slate-600 dark:text-slate-400">Version</span>
-                                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-white/60 dark:bg-white/10 px-2 rounded text-xs">v{aiHealth?.version || '—'}</span>
+                                    <span className="text-slate-600 dark:text-text-muted">Version</span>
+                                    <span className="font-semibold text-slate-800 dark:text-slate-200 bg-surface-hover dark:bg-surface-hover px-2 rounded text-xs">v{aiHealth?.version || '—'}</span>
                                 </div>
                             </CardContent>
                         </Card>
@@ -396,20 +396,20 @@ export default function GenerateTimetablePage() {
 
                     {/* ── Right: Batch Selection ────────────── */}
                     <div className="lg:col-span-1">
-                        <Card className="glass-card shadow-sm border-slate-200 dark:border-white/10 sticky top-4">
+                        <Card className="glass-card shadow-sm border-slate-200 dark:border-border-hover sticky top-4">
                             <CardHeader className="pb-3">
-                                <CardTitle className="text-lg flex items-center gap-2 dark:text-white">
+                                <CardTitle className="text-lg flex items-center gap-2 dark:text-text-primary">
                                     <LuUsers className="w-5 h-5 text-indigo-500 dark:text-neon-cyan" />
                                     Batch Selection
                                 </CardTitle>
-                                <CardDescription className="dark:text-slate-400">Choose which batches to include in timetable generation.</CardDescription>
+                                <CardDescription className="dark:text-text-muted">Choose which batches to include in timetable generation.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-3">
                                 {/* Semester Filter */}
                                 <div className="space-y-1">
-                                    <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Semester</label>
+                                    <label className="text-xs font-bold text-text-secondary dark:text-text-muted uppercase tracking-wider">Semester</label>
                                     <select
-                                        className="flex h-9 w-full rounded-md border border-input bg-background dark:bg-[#0a0a0c] dark:border-white/10 dark:text-white px-3 py-1 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                                        className="flex h-9 w-full rounded-md border border-input bg-background dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary px-3 py-1 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                                         value={semesterFilter}
                                         onChange={(e) => setSemesterFilter(e.target.value)}
                                     >
@@ -420,11 +420,11 @@ export default function GenerateTimetablePage() {
                                 </div>
 
                                 {/* Search */}
-                                <Input placeholder="Search batches..." value={batchSearch} onChange={(e) => setBatchSearch(e.target.value)} className="h-8 text-sm dark:bg-[#0a0a0c] dark:border-white/10 dark:text-white" />
+                                <Input placeholder="Search batches..." value={batchSearch} onChange={(e) => setBatchSearch(e.target.value)} className="h-8 text-sm dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary" />
 
                                 {/* Select All */}
                                 <div className="flex items-center justify-between px-1">
-                                    <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wide">
+                                    <span className="text-xs font-bold text-text-muted dark:text-text-secondary uppercase tracking-wide">
                                         {selectedBatchIds.size} of {filteredBatches.length} selected
                                     </span>
                                     <button onClick={toggleSelectAll} className="text-xs font-bold text-indigo-600 dark:text-neon-cyan hover:text-indigo-800 dark:hover:text-cyan-400 uppercase tracking-wide transition-colors">
@@ -435,11 +435,11 @@ export default function GenerateTimetablePage() {
                                 {/* Batch List */}
                                 <div className="space-y-1 max-h-[400px] overflow-y-auto pr-1">
                                     {batchesLoading ? (
-                                        <div className="flex items-center justify-center py-8 text-slate-400 dark:text-slate-600">
+                                        <div className="flex items-center justify-center py-8 text-text-muted dark:text-slate-600">
                                             <LuLoaderCircle className="w-5 h-5 animate-spin" />
                                         </div>
                                     ) : filteredBatches.length === 0 ? (
-                                        <p className="text-xs text-slate-400 dark:text-slate-500 text-center py-4">No batches match this filter.</p>
+                                        <p className="text-xs text-text-muted dark:text-text-secondary text-center py-4">No batches match this filter.</p>
                                     ) : (
                                         filteredBatches.map(b => (
                                             <div
@@ -449,17 +449,17 @@ export default function GenerateTimetablePage() {
                                                     "flex items-center gap-3 p-2.5 rounded-lg border cursor-pointer transition-all",
                                                     selectedBatchIds.has(b.id)
                                                         ? "bg-indigo-50/80 border-indigo-200 dark:bg-neon-cyan/20 dark:border-neon-cyan/50 shadow-[0_0_10px_rgba(57,193,239,0.1)]"
-                                                        : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-white/5 dark:border-white/10 dark:hover:border-white/30 dark:hover:bg-white/10"
+                                                        : "bg-surface border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-surface dark:border-border-hover dark:hover:border-primary/30 dark:hover:bg-surface-hover"
                                                 )}
                                             >
                                                 {selectedBatchIds.has(b.id) ? (
                                                     <LuSquareCheck className="w-4 h-4 text-indigo-500 dark:text-neon-cyan flex-shrink-0" />
                                                 ) : (
-                                                    <LuSquare className="w-4 h-4 text-slate-300 dark:text-slate-600 flex-shrink-0" />
+                                                    <LuSquare className="w-4 h-4 text-text-muted dark:text-slate-600 flex-shrink-0" />
                                                 )}
                                                 <div className="flex flex-col min-w-0">
                                                     <span className="text-sm font-semibold truncate dark:text-slate-200">{b.name}</span>
-                                                    <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium uppercase tracking-tight">
+                                                    <span className="text-[10px] text-text-muted dark:text-text-secondary font-medium uppercase tracking-tight">
                                                         Sem {b.semester ?? '—'} • {b.program || 'General'} • {b.strength} students
                                                     </span>
                                                 </div>

@@ -7,21 +7,18 @@ import {
     deleteSubscriber,
     exportSubscribers
 } from '../controllers/subscriber.controller';
-import { authenticate, requireRole } from '../middlewares/auth.middleware';
+import { authenticate, requirePermission } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-// Public endpoint
+// Public endpoint: Newsletter signup
 router.post('/', subscribe);
 
-// Admin-only endpoints
-router.use(authenticate);
-router.use(requireRole(['SUPERADMIN']));
-
-router.get('/export', exportSubscribers);
-router.get('/stats', getSubscribersStats);
-router.get('/', getSubscribers);
-router.patch('/:id/status', updateSubscriberStatus);
-router.delete('/:id', deleteSubscriber);
+// Protected endpoints
+router.get('/', authenticate, requirePermission('SUBSCRIBERS', 'READ'), getSubscribers);
+router.get('/stats', authenticate, requirePermission('SUBSCRIBERS', 'READ'), getSubscribersStats);
+router.patch('/:id/status', authenticate, requirePermission('SUBSCRIBERS', 'UPDATE'), updateSubscriberStatus);
+router.delete('/:id', authenticate, requirePermission('SUBSCRIBERS', 'DELETE'), deleteSubscriber);
+router.get('/export', authenticate, requirePermission('SUBSCRIBERS', 'READ'), exportSubscribers);
 
 export default router;

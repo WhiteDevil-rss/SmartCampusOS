@@ -195,15 +195,15 @@ export const TimetableExport: React.FC<TimetableExportProps> = ({ targetId, file
         <div className="flex flex-wrap items-center gap-2 print:hidden z-10 relative">
             <Button
                 variant="outline"
-                className="bg-white hover:bg-slate-50 border-slate-200 text-slate-700 h-9 font-semibold text-xs transition-colors dark:bg-slate-800 dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-700"
+                className="bg-white hover:bg-slate-50 border-slate-200 text-slate-700 h-9 font-semibold text-xs transition-colors dark:bg-slate-800 dark:border-border-hover dark:text-slate-300 dark:hover:bg-slate-700"
                 onClick={handlePrint}
             >
-                <LuPrinter className="w-4 h-4 mr-2 text-slate-400" />
+                <LuPrinter className="w-4 h-4 mr-2 text-text-muted" />
                 Print
             </Button>
             <Button
                 variant="outline"
-                className="bg-white hover:bg-slate-50 border-slate-200 text-slate-700 h-9 font-semibold text-xs transition-colors dark:bg-slate-800 dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-700"
+                className="bg-white hover:bg-slate-50 border-slate-200 text-slate-700 h-9 font-semibold text-xs transition-colors dark:bg-slate-800 dark:border-border-hover dark:text-slate-300 dark:hover:bg-slate-700"
                 onClick={handleDownloadPdf}
                 disabled={isExportingPdf}
             >

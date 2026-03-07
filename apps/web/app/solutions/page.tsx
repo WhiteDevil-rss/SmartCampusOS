@@ -4,44 +4,36 @@ import React, { useState } from "react";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { GetStartedModal } from "@/components/get-started-modal";
+import { motion, AnimatePresence } from "framer-motion";
 
 const tabs = [
     {
-        label: "University Administrators",
+        label: "University Admins",
         cards: [
-            { icon: "account_balance", title: "Manage multiple departments", desc: "Oversee and harmonize complex timetables across various disciplines, faculties, and campuses seamlessly.", color: "text-neon-cyan", bg: "bg-neon-cyan/10" },
-            { icon: "settings", title: "Configure academic structure", desc: "Set up programs, semesters, divisions, and academic calendar with full flexibility.", color: "text-neon-purple", bg: "bg-neon-purple/10" },
-            { icon: "monitoring", title: "Oversee scheduling across programs", desc: "Bird's-eye view of all schedules with real-time conflict detection and resolution.", color: "text-blue-400", bg: "bg-blue-500/10" },
-            { icon: "insights", title: "Monitor resource utilization", desc: "Gain insights into classroom usage, faculty workloads, and identify areas for optimization.", color: "text-emerald-400", bg: "bg-emerald-500/10" },
+            { icon: "hub", title: "Enterprise Orchestration", desc: "Oversee and harmonize complex academic structures across multi-campus environments with a single pane of glass.", color: "text-primary", bg: "bg-primary/10" },
+            { icon: "security", title: "Policy Enforcement", desc: "Set global institutional rules, program constraints, and academic calendars with cryptographically secure audit trails.", color: "text-secondary", bg: "bg-secondary/10" },
+            { icon: "monitoring", title: "Predictive Analytics", desc: "Deep insights into campus-wide utilization, forecasting resource requirements before conflicts arise.", color: "text-blue-400", bg: "bg-blue-500/10" },
+            { icon: "verified", title: "Certified Accuracy", desc: "Ensure 100% compliance with government and accreditation standards for faculty load and contact hours.", color: "text-emerald-400", bg: "bg-emerald-500/10" },
         ]
     },
     {
         label: "Department Heads",
         cards: [
-            { icon: "menu_book", title: "Assign subjects to faculty", desc: "Allocate courses to educators with ease, considering constraints, preferences, and workload limits.", color: "text-neon-cyan", bg: "bg-neon-cyan/10" },
-            { icon: "tune", title: "Configure department constraints", desc: "Define department-specific scheduling rules, preferred time slots, and room requirements.", color: "text-neon-purple", bg: "bg-neon-purple/10" },
-            { icon: "event_available", title: "Generate department timetables", desc: "One-click timetable generation with AI-powered optimization for your department.", color: "text-blue-400", bg: "bg-blue-500/10" },
-            { icon: "category", title: "Handle elective baskets", desc: "Smart grouping and scheduling of elective subjects with automatic student split handling.", color: "text-emerald-400", bg: "bg-emerald-500/10" },
+            { icon: "auto_fix_high", title: "AI-Powered Allocation", desc: "Instantly assign subjects to faculty based on proficiency, availability, and historical throughput.", color: "text-primary", bg: "bg-primary/10" },
+            { icon: "tune", title: "Constraint Tuning", desc: "Fine-tune department-specific nuances, from specialized lab requirements to cross-disciplinary seminars.", color: "text-secondary", bg: "bg-secondary/10" },
+            { icon: "event_repeat", title: "Iterative Generation", desc: "Generate millions of possible schedule permutations in seconds to find the mathematically perfect fit.", color: "text-blue-400", bg: "bg-blue-500/10" },
+            { icon: "dynamic_feed", title: "Elective Resolution", desc: "Automated handling of complex student elective choices with sub-batching and room-swap logic.", color: "text-emerald-400", bg: "bg-emerald-500/10" },
         ]
     },
     {
-        label: "Academic Coordinators",
+        label: "Faculty & Staff",
         cards: [
-            { icon: "calendar_month", title: "Manage academic calendar", desc: "Align academic events, exams, and holidays without conflicts throughout the year.", color: "text-neon-cyan", bg: "bg-neon-cyan/10" },
-            { icon: "group_work", title: "Coordinate cross-department scheduling", desc: "Handle shared resources, common rooms, and cross-listed courses seamlessly.", color: "text-neon-purple", bg: "bg-neon-purple/10" },
-            { icon: "location_on", title: "Handle room allocations", desc: "Smartly assign venues based on capacity, equipment needs, and proximity.", color: "text-blue-400", bg: "bg-blue-500/10" },
-            { icon: "share", title: "Export and share timetables", desc: "Export schedules in multiple formats and share with stakeholders instantly.", color: "text-emerald-400", bg: "bg-emerald-500/10" },
+            { icon: "person_search", title: "Personnel Optimization", desc: "Respecting faculty preferences and research blocks while maintaining teaching excellence.", color: "text-primary", bg: "bg-primary/10" },
+            { icon: "dashboard_customize", title: "Personal Command Center", desc: "Every educator receives a personalized, dynamic schedule synced across all their digital devices.", color: "text-secondary", bg: "bg-secondary/10" },
+            { icon: "emergency", title: "Swap & Backup Logic", desc: "Instant readjustment for unforeseen leaves with automated substitute suggestions and notifications.", color: "text-blue-400", bg: "bg-blue-500/10" },
+            { icon: "forum", title: "Integrated Feedback", desc: "Direct channel for schedule-related requests and feedback with administrative transparency.", color: "text-emerald-400", bg: "bg-emerald-500/10" },
         ]
-    },
-    {
-        label: "Faculty Members",
-        cards: [
-            { icon: "schedule", title: "View personal schedules", desc: "Access your teaching schedule anytime, anywhere with a clean, personal dashboard.", color: "text-neon-cyan", bg: "bg-neon-cyan/10" },
-            { icon: "edit_calendar", title: "Update availability", desc: "Set your preferred teaching hours and unavailable time slots with ease.", color: "text-neon-purple", bg: "bg-neon-purple/10" },
-            { icon: "sync", title: "Access real-time changes", desc: "Stay updated with instant notifications when schedules are modified.", color: "text-blue-400", bg: "bg-blue-500/10" },
-            { icon: "notifications_active", title: "Receive notifications", desc: "Get alerts for schedule changes, room updates, and important announcements.", color: "text-emerald-400", bg: "bg-emerald-500/10" },
-        ]
-    },
+    }
 ];
 
 export default function SolutionsPage() {
@@ -49,172 +41,111 @@ export default function SolutionsPage() {
     const [showInquiryModal, setShowInquiryModal] = useState(false);
 
     return (
-        <div className="dark min-h-screen bg-background-dark text-slate-100 relative overflow-x-hidden flex flex-col font-heading selection:bg-neon-cyan/30 antialiased">
+        <div className="min-h-screen bg-background text-text-primary font-sans antialiased mesh-gradient flex flex-col selection:bg-primary/30">
             <LandingNav />
 
-            <main className="flex-grow flex flex-col items-center w-full">
-                {/* Hero */}
-                <section className="w-full max-w-7xl mx-auto px-6 py-20 lg:py-32 flex flex-col items-center text-center relative">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(157,78,221,0.15)_0%,transparent_70%)] pointer-events-none" />
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neon-cyan/30 bg-neon-cyan/10 text-neon-cyan text-sm font-medium mb-8">
-                        <span className="material-symbols-outlined text-base">school</span>
-                        <span>Tailored for Academia</span>
+            <main className="flex-grow pt-32 pb-24 px-6 relative z-10">
+                <div className="max-w-7xl mx-auto">
+                    {/* Hero Section */}
+                    <div className="text-center mb-24">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-morphism border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-[0.2em] mb-8"
+                        >
+                            <span className="material-symbols-outlined text-sm">settings_suggest</span>
+                            Engineered for Scale
+                        </motion.div>
+                        <h1 className="text-5xl md:text-7xl font-bold font-space-grotesk leading-tight tracking-tight mb-8">
+                            Unifying the <span className="gradient-text">Academic Universe</span>
+                        </h1>
+                        <p className="text-text-muted text-xl leading-relaxed max-w-2xl mx-auto">
+                            SmartCampus OS delivers domain-specific solutions that scale from individual departments to global education networks.
+                        </p>
                     </div>
-                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 max-w-4xl">
-                        Solutions for Every <br className="hidden md:block" />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-purple to-neon-cyan">Academic Role</span>
-                    </h1>
-                    <div className="h-1 w-24 bg-gradient-to-r from-neon-purple to-neon-cyan rounded-full mb-8" />
-                    <p className="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed">
-                        Empowering educational institutions with intelligent, conflict-free academic timetable generation tailored to your specific responsibilities.
-                    </p>
-                    <button
-                        onClick={() => document.getElementById('roles')?.scrollIntoView({ behavior: 'smooth' })}
-                        className="flex items-center justify-center rounded-full bg-gradient-to-r from-neon-cyan to-blue-500 text-white px-[36px] py-[14px] text-[16px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(0,245,255,0.5)] transition-all active:scale-95"
-                    >
-                        Find Your Solution
-                    </button>
-                </section>
 
-                {/* Role-based Tabs */}
-                <section id="roles" className="w-full max-w-7xl mx-auto px-6 py-16">
-                    <div className="flex flex-col items-center mb-12">
-                        <h2 className="text-3xl font-bold mb-4">Empower Your Team</h2>
-                        <p className="text-slate-400 text-center max-w-2xl">Discover how Zembaa streamlines scheduling tasks across your entire institution.</p>
-                    </div>
-                    <div className="flex overflow-x-auto border-b border-white/10 mb-8 justify-start lg:justify-center">
-                        {tabs.map((tab, i) => (
-                            <button
-                                key={i}
-                                onClick={() => setActiveTab(i)}
-                                className={`flex-shrink-0 px-6 py-4 text-sm font-bold border-b-2 transition-colors ${activeTab === i ? 'border-neon-cyan text-neon-cyan' : 'border-transparent text-slate-400 hover:text-slate-200'
-                                    }`}
+                    {/* Role Tabs Section */}
+                    <div className="mb-24">
+                        <div className="flex justify-center mb-12 border-b border-border gap-8 overflow-x-auto pb-4 no-scrollbar">
+                            {tabs.map((tab, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setActiveTab(i)}
+                                    className={`relative px-4 py-2 text-sm font-bold uppercase tracking-widest transition-all ${activeTab === i ? 'text-white' : 'text-text-secondary hover:text-slate-300'
+                                        }`}
+                                >
+                                    {tab.label}
+                                    {activeTab === i && (
+                                        <motion.div
+                                            layoutId="activeTabUnderline"
+                                            className="absolute bottom-0 left-0 w-full h-0.5 bg-primary shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]"
+                                        />
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={activeTab}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.3 }}
+                                className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
                             >
-                                {tab.label}
-                            </button>
-                        ))}
+                                {tabs[activeTab].cards.map((card, i) => (
+                                    <div key={i} className="glass-morphism rounded-[32px] p-8 border border-border hover:border-primary/20 group transition-all h-full flex flex-col">
+                                        <div className={`w-14 h-14 rounded-2xl ${card.bg} ${card.color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
+                                            <span className="material-symbols-outlined text-2xl">{card.icon}</span>
+                                        </div>
+                                        <h3 className="text-xl font-bold font-space-grotesk mb-4">{card.title}</h3>
+                                        <p className="text-text-secondary text-sm leading-relaxed flex-grow">{card.desc}</p>
+                                    </div>
+                                ))}
+                            </motion.div>
+                        </AnimatePresence>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {tabs[activeTab].cards.map((card, i) => (
-                            <div key={i} className="bg-surface-dark/70 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-neon-cyan/50 hover:shadow-[0_0_15px_rgba(0,245,255,0.1)] transition-all duration-300 flex flex-col h-full">
-                                <div className={`w-12 h-12 rounded-lg ${card.bg} ${card.color} flex items-center justify-center mb-6`}>
-                                    <span className="material-symbols-outlined text-2xl">{card.icon}</span>
-                                </div>
-                                <h3 className="text-xl font-bold mb-3">{card.title}</h3>
-                                <p className="text-slate-400 text-sm leading-relaxed flex-grow">{card.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
 
-                {/* Use Cases */}
-                <section className="w-full bg-surface-dark/50 py-20 border-y border-white/10">
-                    <div className="max-w-7xl mx-auto px-6">
-                        <div className="flex flex-col items-center mb-16">
-                            <h2 className="text-3xl font-bold mb-4">Common Use Cases</h2>
-                            <p className="text-slate-400 text-center max-w-2xl">Tailored solutions for complex academic scheduling challenges.</p>
+                    {/* Use Cases Grid */}
+                    <div className="mb-24">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl font-bold font-space-grotesk mb-4">Enterprise Use Cases</h2>
+                            <p className="text-text-secondary uppercase text-[10px] font-bold tracking-[0.3em]">Solving the complex patterns of higher education</p>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="grid md:grid-cols-3 gap-8">
                             {[
-                                { icon: "location_city", title: "Multi-campus Scheduling", desc: "Manage travel times and shared resources across different physical locations.", color: "border-l-neon-cyan", iconColor: "text-neon-cyan" },
-                                { icon: "category", title: "Elective Management", desc: "Handle complex student choices for elective subjects with automatic conflict resolution.", color: "border-l-neon-purple", iconColor: "text-neon-purple" },
-                                { icon: "group_work", title: "Shared Faculty", desc: "Seamlessly schedule professors who teach across multiple departments or programs.", color: "border-l-blue-400", iconColor: "text-blue-400" },
-                                { icon: "science", title: "Lab Scheduling", desc: "Allocate specialized rooms and equipment efficiently, grouping lab sessions logically.", color: "border-l-emerald-400", iconColor: "text-emerald-400" },
-                                { icon: "update", title: "Continuous Timetables", desc: "Adapt to dynamic academic environments where schedules need frequent adjustments.", color: "border-l-amber-400", iconColor: "text-amber-400", wide: true },
-                            ].map((c, i) => (
-                                <div key={i} className={`bg-surface-dark/70 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:-translate-y-1 transition-transform duration-300 border-l-4 ${c.color} group flex flex-col ${c.wide ? 'lg:col-span-2' : ''}`}>
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <span className={`material-symbols-outlined ${c.iconColor} group-hover:scale-110 transition-transform`}>{c.icon}</span>
-                                        <h3 className="text-lg font-bold">{c.title}</h3>
-                                    </div>
-                                    <p className="text-sm text-slate-400 mb-4">{c.desc}</p>
-                                    <div className="mt-auto">
-                                        <button className="flex items-center text-[14px] font-medium text-neon-cyan hover:underline transition-all group-hover:gap-1">
-                                            View Details <span className="material-symbols-outlined text-[16px] ml-1">arrow_right_alt</span>
-                                        </button>
-                                    </div>
+                                { title: "Multi-modal Scheduling", desc: "Coordinating hybrid models combining on-campus labs with virtual theoretical sessions.", icon: "layers" },
+                                { title: "Resource Conflict Resolution", desc: "Automated real-time re-allocation when high-value labs or auditoriums become unavailable.", icon: "balance" },
+                                { title: "Cross-University Credit", desc: "Facilitating students taking courses across different institutions within a single federation.", icon: "account_tree" }
+                            ].map((uc, i) => (
+                                <div key={i} className="bg-white/5 rounded-3xl p-8 border border-border-hover hover:bg-white/[0.07] transition-colors">
+                                    <span className="material-symbols-outlined text-primary mb-4">{uc.icon}</span>
+                                    <h4 className="text-white font-bold mb-3">{uc.title}</h4>
+                                    <p className="text-text-secondary text-sm leading-relaxed">{uc.desc}</p>
                                 </div>
                             ))}
                         </div>
                     </div>
-                </section>
 
-                {/* Before vs After */}
-                <section className="w-full max-w-7xl mx-auto px-6 py-20">
-                    <div className="flex flex-col items-center mb-16">
-                        <h2 className="text-3xl font-bold mb-4">The Zembaa Difference</h2>
-                        <p className="text-slate-400 text-center max-w-2xl">Transform your scheduling process from a nightmare into a strategic advantage.</p>
+                    {/* Final CTA */}
+                    <div className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-[48px] p-12 md:p-20 border border-primary/20 text-center relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full -mr-64 -mt-64" />
+                        <h2 className="text-4xl md:text-5xl font-bold font-space-grotesk mb-6 relative z-10 max-w-2xl mx-auto">
+                            Ready to upgrade to an <span className="text-primary italic">Operating System?</span>
+                        </h2>
+                        <p className="text-text-muted text-lg mb-12 relative z-10 max-w-xl mx-auto leading-relaxed">
+                            Stop managing tools. Start managing results with SmartCampus OS. Join 50+ tier-1 institutions scaling with ease.
+                        </p>
+                        <button
+                            onClick={() => setShowInquiryModal(true)}
+                            className="glow-button relative z-10 inline-flex items-center gap-3 bg-primary text-white px-10 py-5 rounded-2xl font-bold text-lg hover:scale-105 transition-all"
+                        >
+                            Request Architecture Review
+                            <span className="material-symbols-outlined text-[20px]">arrow_forward</span>
+                        </button>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                        {/* Before */}
-                        <div className="bg-surface-dark/70 backdrop-blur-sm rounded-2xl p-8 border border-red-900/30 bg-red-950/10 relative overflow-hidden">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <span className="material-symbols-outlined text-8xl text-red-500">warning</span>
-                            </div>
-                            <h3 className="text-xl font-bold text-red-400 mb-6 flex items-center gap-2">
-                                <span className="material-symbols-outlined">cancel</span> Manual Scheduling
-                            </h3>
-                            <ul className="space-y-4">
-                                {["Weeks of tedious manual planning", "High risk of hidden conflicts", "Suboptimal use of campus facilities", "Difficult to accommodate changes"].map((item, i) => (
-                                    <li key={i} className="flex items-start gap-3">
-                                        <span className="material-symbols-outlined text-red-500 text-sm mt-1">close</span>
-                                        <span className="text-slate-300">{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        {/* After */}
-                        <div className="bg-surface-dark/70 backdrop-blur-sm rounded-2xl p-8 border border-neon-cyan/30 relative overflow-hidden shadow-[0_0_30px_rgba(0,245,255,0.1)]">
-                            <div className="absolute top-0 right-0 p-4 opacity-10">
-                                <span className="material-symbols-outlined text-8xl text-neon-cyan">bolt</span>
-                            </div>
-                            <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 to-neon-purple/5 pointer-events-none" />
-                            <h3 className="text-xl font-bold text-neon-cyan mb-6 flex items-center gap-2">
-                                <span className="material-symbols-outlined">check_circle</span> Zembaa AI Solution
-                            </h3>
-                            <ul className="space-y-4">
-                                {["Instant generation in minutes", "100% guaranteed conflict-free", "Optimized resource allocation", "Dynamic adjustments with AI"].map((item, i) => (
-                                    <li key={i} className="flex items-start gap-3">
-                                        <span className="material-symbols-outlined text-neon-cyan text-sm mt-1">check</span>
-                                        <span className="text-white font-medium">{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                {/* Metrics */}
-                <section className="w-full py-20 relative">
-                    <div className="max-w-7xl mx-auto px-6">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/10">
-                            {[
-                                { value: "90%", label: "Time Saved", color: "text-neon-cyan" },
-                                { value: "100%", label: "Conflict-Free", color: "text-neon-purple" },
-                                { value: "50%", label: "Better Resource Usage", color: "text-blue-400" },
-                                { value: "80%", label: "Less Manual Work", color: "text-emerald-400" },
-                            ].map((m, i) => (
-                                <div key={i} className="flex flex-col items-center px-4">
-                                    <span className={`text-4xl md:text-5xl font-bold ${m.color} mb-2`}>{m.value}</span>
-                                    <span className="text-sm text-slate-400 font-medium uppercase tracking-wider">{m.label}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
-                {/* CTA */}
-                <section className="w-full max-w-5xl mx-auto px-6 py-24 text-center relative">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,245,255,0.1)_0%,transparent_60%)] pointer-events-none" />
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6">Find the Right Solution <br className="hidden sm:block" /> for Your Institution</h2>
-                    <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">Join forward-thinking academic institutions that have already revolutionized their scheduling with Zembaa.</p>
-                    <button
-                        onClick={() => setShowInquiryModal(true)}
-                        className="flex mx-auto items-center justify-center rounded-full bg-gradient-to-r from-neon-cyan to-blue-500 text-white px-[36px] py-[14px] text-[16px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(0,245,255,0.5)] transition-all active:scale-95"
-                    >
-                        Get Started
-                    </button>
-                </section>
+                </div>
             </main>
 
             <LandingFooter />

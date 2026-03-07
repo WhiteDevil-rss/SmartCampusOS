@@ -7,21 +7,20 @@ import {
     deleteInquiry,
     exportInquiriesExcel,
 } from '../controllers/inquiry.controller';
-import { authenticate, requireRole } from '../middlewares/auth.middleware';
+import { authenticate, requireRole, requirePermission } from '../middlewares/auth.middleware';
 
 const router = Router();
 
 // ── Public route (no auth required) ─────────────────────────────────────────
 router.post('/', createInquiry);
 
-// ── Super Admin only routes ──────────────────────────────────────────────────
+// ── Super Admin & Authorized Admin routes ────────────────────────────────────
 router.use(authenticate);
-router.use(requireRole(['SUPERADMIN']));
 
-router.get('/export', exportInquiriesExcel);
-router.get('/', getAllInquiries);
-router.get('/:id', getInquiryById);
-router.patch('/:id/status', updateInquiryStatus);
-router.delete('/:id', deleteInquiry);
+router.get('/export', requirePermission('INQUIRIES', 'READ'), exportInquiriesExcel);
+router.get('/', requirePermission('INQUIRIES', 'READ'), getAllInquiries);
+router.get('/:id', requirePermission('INQUIRIES', 'READ'), getInquiryById);
+router.patch('/:id/status', requirePermission('INQUIRIES', 'WRITE'), updateInquiryStatus);
+router.delete('/:id', requirePermission('INQUIRIES', 'DELETE'), deleteInquiry);
 
 export default router;

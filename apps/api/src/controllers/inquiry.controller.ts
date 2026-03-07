@@ -89,8 +89,8 @@ export const createInquiry = async (req: Request, res: Response) => {
         const { name, email, contactNumber, organization, message } = req.body;
 
         // --- Validation ---
-        if (!name || !email || !contactNumber) {
-            return res.status(400).json({ error: 'Name, email, and contact number are required.' });
+        if (!email) {
+            return res.status(400).json({ error: 'Email is required.' });
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -98,18 +98,21 @@ export const createInquiry = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Invalid email format.' });
         }
 
-        const phoneRegex = /^[\d\s\+\-\(\)]{7,20}$/;
-        if (!phoneRegex.test(contactNumber)) {
-            return res.status(400).json({ error: 'Invalid contact number.' });
+        if (contactNumber) {
+            const phoneRegex = /^[\d\s\+\-\(\)]{7,20}$/;
+            if (!phoneRegex.test(contactNumber)) {
+                return res.status(400).json({ error: 'Invalid contact number.' });
+            }
         }
 
         // --- Sanitize ---
         const sanitized = {
-            name: String(name).trim().substring(0, 200),
+            name: name ? String(name).trim().substring(0, 200) : undefined,
             email: String(email).trim().toLowerCase().substring(0, 254),
-            contactNumber: String(contactNumber).trim().substring(0, 30),
+            contactNumber: contactNumber ? String(contactNumber).trim().substring(0, 30) : undefined,
             organization: organization ? String(organization).trim().substring(0, 300) : undefined,
             message: message ? String(message).trim().substring(0, 2000) : undefined,
+            source: req.body.source || 'get_started_popup',
             ipAddress: (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()
                 || req.socket?.remoteAddress
                 || undefined,

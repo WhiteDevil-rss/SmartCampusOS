@@ -120,7 +120,7 @@ export default function DepartmentsDashboard() {
                 <div className="flex justify-between items-center mb-6 relative z-20">
                     <div>
                         <h2 className="text-3xl font-heading font-extrabold tracking-tight text-slate-900 dark:text-white glow-cyan">Departments Directory</h2>
-                        <p className="text-slate-600 dark:text-slate-400 font-light mt-1">Manage all registered departments, faculties, and core configurations.</p>
+                        <p className="text-slate-600 dark:text-text-muted font-light mt-1">Manage all registered departments, faculties, and core configurations.</p>
                     </div>
                     <Button onClick={() => setIsAddOpen(true)} className="bg-neon-cyan text-white dark:text-slate-900 shadow-md dark:shadow-[0_0_15px_rgba(57,193,239,0.4)] hover:shadow-lg hover:bg-cyan-600 dark:hover:bg-white font-bold transition-all px-6">
                         <LuPlus className="w-5 h-5 mr-2" /> Add Department
@@ -135,42 +135,42 @@ export default function DepartmentsDashboard() {
                             <div key={dept.id} className="glass-card rounded-[1.5rem] overflow-hidden group hover:border-cyan-500/30 dark:hover:border-neon-cyan/40 transition-all duration-500 hover:shadow-lg dark:hover:shadow-[0_0_30px_rgba(57,193,239,0.15)] relative">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/10 blur-[40px] rounded-full group-hover:bg-neon-cyan/25 dark:bg-neon-cyan/5 dark:group-hover:bg-neon-cyan/15 transition-colors duration-500" />
 
-                                <div className="p-6 border-b border-slate-200 dark:border-white/5 relative z-10 bg-slate-50/50 dark:bg-transparent">
+                                <div className="p-6 border-b border-slate-200 dark:border-border relative z-10 bg-slate-50/50 dark:bg-transparent">
                                     <div className="flex items-start justify-between">
                                         <div className="flex flex-col">
                                             <span className="font-heading font-extrabold text-xl text-slate-900 dark:text-white tracking-tight">{dept.shortName}</span>
-                                            <span className="line-clamp-1 mt-1 text-slate-600 dark:text-slate-400 font-medium text-sm">{dept.name}</span>
+                                            <span className="line-clamp-1 mt-1 text-slate-600 dark:text-text-muted font-medium text-sm">{dept.name}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="p-6 pt-4 relative z-10">
                                     <div className="flex justify-between items-center text-sm mb-2 group/stat">
-                                        <span className="text-slate-500 dark:text-slate-500 text-xs font-semibold uppercase tracking-wider group-hover/stat:text-cyan-600 dark:group-hover/stat:text-neon-cyan transition-colors">HOD</span>
+                                        <span className="text-text-secondary dark:text-text-secondary text-xs font-semibold uppercase tracking-wider group-hover/stat:text-cyan-600 dark:group-hover/stat:text-neon-cyan transition-colors">HOD</span>
                                         <span className="font-medium text-slate-700 dark:text-slate-300">{dept.hod || 'Unassigned'}</span>
                                     </div>
                                     <div className="flex justify-between text-sm mb-4 group/stat items-center">
-                                        <span className="text-slate-500 dark:text-slate-500 text-xs font-semibold uppercase tracking-wider group-hover/stat:text-cyan-600 dark:group-hover/stat:text-neon-cyan transition-colors">Contact</span>
+                                        <span className="text-text-secondary dark:text-text-secondary text-xs font-semibold uppercase tracking-wider group-hover/stat:text-cyan-600 dark:group-hover/stat:text-neon-cyan transition-colors">Contact</span>
                                         <span className="font-medium text-slate-700 dark:text-slate-300 line-clamp-1">{dept.email}</span>
                                     </div>
-                                    <div className="grid grid-cols-3 gap-2 border-t border-slate-200 dark:border-white/10 pt-4">
+                                    <div className="grid grid-cols-3 gap-2 border-t border-slate-200 dark:border-border-hover pt-4">
                                         <div className="text-center">
-                                            <div className="text-xl font-bold text-slate-900 dark:text-white px-2 py-1 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg">{dept._count?.faculty || 0}</div>
-                                            <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1 uppercase tracking-widest">Faculty</div>
+                                            <div className="text-xl font-bold text-slate-900 dark:text-white px-2 py-1 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-border-hover rounded-lg">{dept._count?.faculty || 0}</div>
+                                            <div className="text-xs text-text-secondary dark:text-text-muted font-medium mt-1 uppercase tracking-widest">Faculty</div>
                                         </div>
                                         <div className="text-center">
-                                            <div className="text-xl font-bold text-slate-900 dark:text-white px-2 py-1 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg">{dept._count?.courses || 0}</div>
-                                            <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1 uppercase tracking-widest">Subjects</div>
+                                            <div className="text-xl font-bold text-slate-900 dark:text-white px-2 py-1 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-border-hover rounded-lg">{dept._count?.courses || 0}</div>
+                                            <div className="text-xs text-text-secondary dark:text-text-muted font-medium mt-1 uppercase tracking-widest">Subjects</div>
                                         </div>
                                         <div className="text-center">
-                                            <div className="text-xl font-bold text-slate-900 dark:text-white px-2 py-1 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg">{dept._count?.batches || 0}</div>
-                                            <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-1 uppercase tracking-widest">Batches</div>
+                                            <div className="text-xl font-bold text-slate-900 dark:text-white px-2 py-1 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-border-hover rounded-lg">{dept._count?.batches || 0}</div>
+                                            <div className="text-xs text-text-secondary dark:text-text-muted font-medium mt-1 uppercase tracking-widest">Batches</div>
                                         </div>
                                     </div>
 
                                     <div className="flex gap-2 mt-5">
                                         <Button
                                             variant="ghost"
-                                            className="w-1/2 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10 hover:text-cyan-700 dark:hover:text-neon-cyan hover:bg-cyan-50 dark:hover:bg-neon-cyan/10"
+                                            className="w-1/2 text-slate-600 dark:text-text-muted border border-slate-200 dark:border-border-hover hover:text-cyan-700 dark:hover:text-neon-cyan hover:bg-cyan-50 dark:hover:bg-neon-cyan/10"
                                             size="sm"
                                             onClick={() => {
                                                 setSelectedDeptId(dept.id);
@@ -184,7 +184,7 @@ export default function DepartmentsDashboard() {
                                         </Button>
                                         <Button
                                             variant="ghost"
-                                            className="w-1/2 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10"
+                                            className="w-1/2 text-slate-600 dark:text-text-muted border border-slate-200 dark:border-border-hover hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10"
                                             size="sm"
                                             onClick={() => handleDeleteDepartment(dept.id)}
                                         >
@@ -196,7 +196,7 @@ export default function DepartmentsDashboard() {
                         ))}
 
                         {departments.length === 0 && (
-                            <div className="col-span-full py-16 text-center text-slate-600 dark:text-slate-400 glass-card rounded-[2rem] border-dashed border-slate-300 dark:border-white/20">
+                            <div className="col-span-full py-16 text-center text-slate-600 dark:text-text-muted glass-card rounded-[2rem] border-dashed border-slate-300 dark:border-white/20">
                                 No departments initialized. Provision a department to construct schedules.
                             </div>
                         )}
@@ -246,7 +246,7 @@ export default function DepartmentsDashboard() {
 
                             <hr className="my-4" />
                             <h4 className="text-sm font-semibold text-slate-800">Department Admin Account</h4>
-                            <p className="text-xs text-slate-500 mb-2">This account orchestrates schedules localized to this department entirely.</p>
+                            <p className="text-xs text-text-secondary mb-2">This account orchestrates schedules localized to this department entirely.</p>
 
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Admin Username</label>

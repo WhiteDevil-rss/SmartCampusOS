@@ -1,0 +1,129 @@
+
+> smartcampus-os@1.0.0 build /Users/shivam/Downloads/VNSGU/Code
+> turbo run build "--filter" "@smartcampus-os/web"
+
+• turbo 2.8.11
+• Packages in scope: @smartcampus-os/web
+• Running build in 1 packages
+• Remote caching disabled
+@smartcampus-os/validation:build: cache hit, replaying logs 87fb10d1bde3b490
+@smartcampus-os/types:build: cache hit, replaying logs 8ef60afb3190c4ed
+@smartcampus-os/types:build: 
+@smartcampus-os/validation:build: 
+@smartcampus-os/validation:build: > @smartcampus-os/validation@1.0.0 build /Users/shivam/Downloads/VNSGU/Code/packages/validation
+@smartcampus-os/validation:build: > tsc
+@smartcampus-os/validation:build: 
+@smartcampus-os/types:build: > @smartcampus-os/types@1.0.0 build /Users/shivam/Downloads/VNSGU/Code/packages/types
+@smartcampus-os/types:build: > tsc
+@smartcampus-os/types:build: 
+@smartcampus-os/web:build: cache miss, executing ed58f02b0ea55804
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build: > @smartcampus-os/web@0.1.0 build /Users/shivam/Downloads/VNSGU/Code/apps/web
+@smartcampus-os/web:build: > next build
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build: ⚠ `eslint` configuration in next.config.mjs is no longer supported. See more info here: https://nextjs.org/docs/app/api-reference/cli/next#next-lint-options
+@smartcampus-os/web:build: ⚠ Invalid next.config.mjs options detected: 
+@smartcampus-os/web:build: ⚠     Unrecognized key(s) in object: 'swcMinify', 'eslint'
+@smartcampus-os/web:build: ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+@smartcampus-os/web:build: ▲ Next.js 16.1.6 (Turbopack)
+@smartcampus-os/web:build: - Environments: .env.local
+@smartcampus-os/web:build: - Experiments (use with caution):
+@smartcampus-os/web:build:   · optimizePackageImports
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build:   Creating an optimized production build ...
+@smartcampus-os/web:build: ✓ Compiled successfully in 13.1s
+@smartcampus-os/web:build:   Skipping validation of types
+@smartcampus-os/web:build:   Collecting page data using 7 workers ...
+@smartcampus-os/web:build:   Generating static pages using 7 workers (0/75) ...
+@smartcampus-os/web:build:   Generating static pages using 7 workers (18/75) 
+@smartcampus-os/web:build:   Generating static pages using 7 workers (37/75) 
+@smartcampus-os/web:build:   Generating static pages using 7 workers (56/75) 
+@smartcampus-os/web:build: ✓ Generating static pages using 7 workers (75/75) in 1433.8ms
+@smartcampus-os/web:build:   Finalizing page optimization ...
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build: Route (app)
+@smartcampus-os/web:build: ┌ ○ /
+@smartcampus-os/web:build: ├ ○ /_not-found
+@smartcampus-os/web:build: ├ ○ /about-us
+@smartcampus-os/web:build: ├ ○ /admissions
+@smartcampus-os/web:build: ├ ○ /careers
+@smartcampus-os/web:build: ├ ○ /contact
+@smartcampus-os/web:build: ├ ○ /dashboard
+@smartcampus-os/web:build: ├ ○ /dashboard/admissions
+@smartcampus-os/web:build: ├ ○ /dashboard/departments
+@smartcampus-os/web:build: ├ ○ /dashboard/faculty
+@smartcampus-os/web:build: ├ ○ /dashboard/library
+@smartcampus-os/web:build: ├ ○ /dashboard/naac
+@smartcampus-os/web:build: ├ ○ /dashboard/placements
+@smartcampus-os/web:build: ├ ○ /dashboard/resources
+@smartcampus-os/web:build: ├ ○ /department
+@smartcampus-os/web:build: ├ ○ /department/analytics
+@smartcampus-os/web:build: ├ ○ /department/batches
+@smartcampus-os/web:build: ├ ○ /department/courses
+@smartcampus-os/web:build: ├ ○ /department/electives
+@smartcampus-os/web:build: ├ ○ /department/faculty
+@smartcampus-os/web:build: ├ ○ /department/faculty/performance
+@smartcampus-os/web:build: ├ ○ /department/finance
+@smartcampus-os/web:build: ├ ○ /department/helpdesk
+@smartcampus-os/web:build: ├ ○ /department/iot
+@smartcampus-os/web:build: ├ ○ /department/leave
+@smartcampus-os/web:build: ├ ○ /department/resources
+@smartcampus-os/web:build: ├ ○ /department/results
+@smartcampus-os/web:build: ├ ○ /department/results/trends
+@smartcampus-os/web:build: ├ ○ /department/special
+@smartcampus-os/web:build: ├ ○ /department/students
+@smartcampus-os/web:build: ├ ○ /department/students/risk
+@smartcampus-os/web:build: ├ ○ /department/subjects
+@smartcampus-os/web:build: ├ ○ /department/timetables
+@smartcampus-os/web:build: ├ ○ /department/timetables/create
+@smartcampus-os/web:build: ├ ○ /department/timetables/view
+@smartcampus-os/web:build: ├ ƒ /department/timetables/view/[id]
+@smartcampus-os/web:build: ├ ○ /faculty
+@smartcampus-os/web:build: ├ ○ /faculty-panel
+@smartcampus-os/web:build: ├ ○ /faculty-panel/schedule
+@smartcampus-os/web:build: ├ ○ /faculty/academics
+@smartcampus-os/web:build: ├ ○ /faculty/assignments
+@smartcampus-os/web:build: ├ ○ /faculty/attendance
+@smartcampus-os/web:build: ├ ○ /faculty/messages
+@smartcampus-os/web:build: ├ ○ /faculty/profile
+@smartcampus-os/web:build: ├ ○ /faculty/schedule
+@smartcampus-os/web:build: ├ ○ /faculty/support
+@smartcampus-os/web:build: ├ ○ /legal
+@smartcampus-os/web:build: ├ ○ /login
+@smartcampus-os/web:build: ├ ○ /platform
+@smartcampus-os/web:build: ├ ○ /privacy-policy
+@smartcampus-os/web:build: ├ ○ /profile
+@smartcampus-os/web:build: ├ ƒ /public/[slug]
+@smartcampus-os/web:build: ├ ○ /security
+@smartcampus-os/web:build: ├ ○ /solutions
+@smartcampus-os/web:build: ├ ○ /student
+@smartcampus-os/web:build: ├ ○ /student/academics
+@smartcampus-os/web:build: ├ ○ /student/assistant
+@smartcampus-os/web:build: ├ ○ /student/attendance
+@smartcampus-os/web:build: ├ ○ /student/career
+@smartcampus-os/web:build: ├ ○ /student/fees
+@smartcampus-os/web:build: ├ ○ /student/library
+@smartcampus-os/web:build: ├ ○ /student/messages
+@smartcampus-os/web:build: ├ ○ /student/placement
+@smartcampus-os/web:build: ├ ○ /student/profile
+@smartcampus-os/web:build: ├ ○ /student/requests
+@smartcampus-os/web:build: ├ ○ /student/timetable
+@smartcampus-os/web:build: ├ ○ /superadmin
+@smartcampus-os/web:build: ├ ○ /superadmin/inquiries
+@smartcampus-os/web:build: ├ ○ /superadmin/logs
+@smartcampus-os/web:build: ├ ○ /superadmin/settings
+@smartcampus-os/web:build: ├ ○ /superadmin/subscribers
+@smartcampus-os/web:build: ├ ○ /superadmin/universities
+@smartcampus-os/web:build: ├ ○ /superadmin/users
+@smartcampus-os/web:build: ├ ○ /terms-of-service
+@smartcampus-os/web:build: └ ○ /verify
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build: ○  (Static)   prerendered as static content
+@smartcampus-os/web:build: ƒ  (Dynamic)  server-rendered on demand
+@smartcampus-os/web:build: 
+
+ Tasks:    3 successful, 3 total
+Cached:    2 cached, 3 total
+  Time:    20.564s 
+

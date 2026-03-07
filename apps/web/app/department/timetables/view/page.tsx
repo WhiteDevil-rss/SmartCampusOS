@@ -66,17 +66,17 @@ export default function TimetableListPage() {
         <ProtectedRoute allowedRoles={['DEPT_ADMIN']}>
             <DashboardLayout navItems={navItems} title="Generated Timetables History">
                 <div className="max-w-7xl mx-auto space-y-6">
-                    <div className="glass-card shadow-sm border-slate-200 dark:border-white/5 rounded-[2rem] overflow-hidden relative">
+                    <div className="glass-card shadow-sm border-slate-200 dark:border-border rounded-[2rem] overflow-hidden relative">
                         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-neon-cyan/15 dark:bg-neon-cyan/5 blur-[100px] rounded-full pointer-events-none" />
 
-                        <div className="bg-slate-50/50 dark:bg-white/5 border-b border-slate-200 dark:border-white/10 p-6 relative z-10">
+                        <div className="bg-slate-50/50 dark:bg-surface border-b border-slate-200 dark:border-border-hover p-6 relative z-10">
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <h2 className="text-2xl font-heading font-extrabold text-slate-900 dark:text-white tracking-tight glow-cyan">Timetable Archive</h2>
-                                    <p className="text-slate-600 dark:text-slate-400 font-light mt-1">View and access all previously generated timetables.</p>
+                                    <h2 className="text-2xl font-heading font-extrabold text-slate-900 dark:text-text-primary tracking-tight glow-cyan">Timetable Archive</h2>
+                                    <p className="text-slate-600 dark:text-text-muted font-light mt-1">View and access all previously generated timetables.</p>
                                 </div>
                                 <Link href="/department/timetables/create">
-                                    <Button className="bg-neon-cyan text-white dark:text-[#0a0a0c] font-bold hover:bg-cyan-600 dark:hover:bg-white transition-all shadow-[0_0_15px_rgba(57,193,239,0.4)] hover:shadow-[0_0_25px_rgba(57,193,239,0.6)]">
+                                    <Button className="bg-neon-cyan text-text-primary dark:text-[#0a0a0c] font-bold hover:bg-cyan-600 dark:hover:bg-white transition-all shadow-[0_0_15px_rgba(57,193,239,0.4)] hover:shadow-[0_0_25px_rgba(57,193,239,0.6)]">
                                         <LuCalendar className="w-5 h-5 mr-2" /> Generate New
                                     </Button>
                                 </Link>
@@ -88,28 +88,28 @@ export default function TimetableListPage() {
                                     <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
                                 </div>
                             ) : timetables.length === 0 ? (
-                                <div className="text-center p-12 text-slate-500">
-                                    <LuFileText className="w-12 h-12 mx-auto text-slate-300 mb-3" />
+                                <div className="text-center p-12 text-text-secondary">
+                                    <LuFileText className="w-12 h-12 mx-auto text-text-muted mb-3" />
                                     <p>No timetables have been generated yet.</p>
                                 </div>
                             ) : (
                                 <Table>
                                     <TableHeader>
-                                        <TableRow className="bg-slate-50 dark:bg-white/5 hover:bg-slate-50 dark:hover:bg-white/5 border-b border-slate-200 dark:border-white/10">
-                                            <TableHead className="w-[300px] text-slate-600 dark:text-slate-400 font-medium">File Name (Time)</TableHead>
-                                            <TableHead className="text-slate-600 dark:text-slate-400 font-medium">Type</TableHead>
-                                            <TableHead className="text-slate-600 dark:text-slate-400 font-medium">Status</TableHead>
-                                            <TableHead className="text-slate-600 dark:text-slate-400 font-medium">Generation Time</TableHead>
-                                            <TableHead className="text-slate-600 dark:text-slate-400 font-medium">Slots Filled</TableHead>
-                                            <TableHead className="text-right text-slate-600 dark:text-slate-400 font-medium">Actions</TableHead>
+                                        <TableRow className="bg-slate-50 dark:bg-surface hover:bg-slate-50 dark:hover:bg-surface border-b border-slate-200 dark:border-border-hover">
+                                            <TableHead className="w-[300px] text-slate-600 dark:text-text-muted font-medium">File Name (Time)</TableHead>
+                                            <TableHead className="text-slate-600 dark:text-text-muted font-medium">Type</TableHead>
+                                            <TableHead className="text-slate-600 dark:text-text-muted font-medium">Status</TableHead>
+                                            <TableHead className="text-slate-600 dark:text-text-muted font-medium">Generation Time</TableHead>
+                                            <TableHead className="text-slate-600 dark:text-text-muted font-medium">Slots Filled</TableHead>
+                                            <TableHead className="text-right text-slate-600 dark:text-text-muted font-medium">Actions</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {timetables.map((tt) => (
-                                            <TableRow key={tt.id} className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors border-b border-slate-200 dark:border-white/5 group">
-                                                <TableCell className="font-medium text-slate-900 dark:text-white">
+                                            <TableRow key={tt.id} className="hover:bg-slate-50 dark:hover:bg-surface transition-colors border-b border-slate-200 dark:border-border group">
+                                                <TableCell className="font-medium text-slate-900 dark:text-text-primary">
                                                     <div className="flex items-center gap-2">
-                                                        <LuFileText className="w-4 h-4 text-slate-400 dark:text-slate-500 group-hover:text-neon-cyan transition-colors" />
+                                                        <LuFileText className="w-4 h-4 text-text-muted dark:text-text-secondary group-hover:text-neon-cyan transition-colors" />
                                                         {getFileName(tt)}
                                                     </div>
                                                 </TableCell>
@@ -126,23 +126,23 @@ export default function TimetableListPage() {
                                                 </TableCell>
                                                 <TableCell>
                                                     {tt.status === 'ACTIVE' ? (
-                                                        <Badge className="bg-neon-cyan text-white dark:text-[#0a0a0c] font-bold shadow-[0_0_10px_rgba(57,193,239,0.4)] hover:bg-cyan-600 dark:hover:bg-white">Active</Badge>
+                                                        <Badge className="bg-neon-cyan text-text-primary dark:text-[#0a0a0c] font-bold shadow-[0_0_10px_rgba(57,193,239,0.4)] hover:bg-cyan-600 dark:hover:bg-white">Active</Badge>
                                                     ) : (
-                                                        <Badge variant="secondary" className="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700">Archived</Badge>
+                                                        <Badge variant="secondary" className="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-text-muted hover:bg-slate-300 dark:hover:bg-slate-700">Archived</Badge>
                                                     )}
                                                 </TableCell>
-                                                <TableCell className="text-slate-600 dark:text-slate-400 text-sm font-light">
+                                                <TableCell className="text-slate-600 dark:text-text-muted text-sm font-light">
                                                     <div className="flex items-center gap-1.5">
                                                         <LuClock className="w-3.5 h-3.5" />
                                                         {formatDate(tt.createdAt)}
                                                     </div>
                                                 </TableCell>
-                                                <TableCell className="text-slate-900 dark:text-white font-medium">
+                                                <TableCell className="text-slate-900 dark:text-text-primary font-medium">
                                                     {tt._count?.slots || 0} slots
                                                 </TableCell>
                                                 <TableCell className="text-right">
                                                     <Link href={`/department/timetables/view/${tt.id}`}>
-                                                        <Button size="sm" variant="ghost" className="text-cyan-600 dark:text-neon-cyan hover:text-slate-900 dark:hover:text-white hover:bg-cyan-50 dark:hover:bg-white/10 rounded-lg group/btn shadow-[0_0_15px_rgba(57,193,239,0)] hover:shadow-[0_0_15px_rgba(57,193,239,0.3)] transition-all border border-transparent dark:hover:border-neon-cyan/30">
+                                                        <Button size="sm" variant="ghost" className="text-cyan-600 dark:text-neon-cyan hover:text-slate-900 dark:hover:text-text-primary hover:bg-cyan-50 dark:hover:bg-surface-hover rounded-lg group/btn shadow-[0_0_15px_rgba(57,193,239,0)] hover:shadow-[0_0_15px_rgba(57,193,239,0.3)] transition-all border border-transparent dark:hover:border-neon-cyan/30">
                                                             <LuEye className="w-4 h-4 mr-2" /> View Report
                                                         </Button>
                                                     </Link>

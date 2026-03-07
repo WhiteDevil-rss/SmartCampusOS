@@ -55,7 +55,7 @@ export default function TimetableDetailView({ params }: { params: Promise<{ id: 
                 <div className="max-w-7xl mx-auto">
                     <div className="mb-4">
                         <Link href="/department/timetables/view">
-                            <Button variant="ghost" className="text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5">
+                            <Button variant="ghost" className="text-text-secondary dark:text-text-muted hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-surface">
                                 <LuArrowLeft className="w-4 h-4 mr-2" /> Back to Timetables List
                             </Button>
                         </Link>
@@ -67,7 +67,7 @@ export default function TimetableDetailView({ params }: { params: Promise<{ id: 
                         </div>
                     ) : timetable ? (
                         <div className="space-y-6">
-                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-xl shadow-sm border-slate-200 dark:border-white/10 print:hidden gap-4 relative overflow-hidden">
+                            <div className="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-xl shadow-sm border-slate-200 dark:border-border-hover print:hidden gap-4 relative overflow-hidden">
                                 <div className="absolute top-0 right-[-10%] w-[40%] h-[120%] bg-neon-cyan/5 dark:bg-neon-cyan/5 blur-[50px] rounded-full pointer-events-none" />
                                 <div className="relative z-10">
                                     <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 tracking-tight">
@@ -79,14 +79,14 @@ export default function TimetableDetailView({ params }: { params: Promise<{ id: 
                                             "Department Master Schedule"
                                         )}
                                     </h3>
-                                    <div className="text-slate-500 dark:text-slate-400 mt-1.5 flex flex-wrap items-center gap-2">
-                                        <Badge variant="outline" className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-widest ${timetable.status === 'ACTIVE' ? 'bg-neon-cyan/10 text-neon-cyan border-neon-cyan/30 shadow-[0_0_10px_rgba(57,193,239,0.2)]' : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 border-slate-200 dark:border-white/10'}`}>
+                                    <div className="text-text-secondary dark:text-text-muted mt-1.5 flex flex-wrap items-center gap-2">
+                                        <Badge variant="outline" className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-widest ${timetable.status === 'ACTIVE' ? 'bg-neon-cyan/10 text-neon-cyan border-neon-cyan/30 shadow-[0_0_10px_rgba(57,193,239,0.2)]' : 'bg-slate-50 dark:bg-slate-800 text-text-secondary dark:text-text-muted border-slate-200 dark:border-border-hover'}`}>
                                             {timetable.status}
                                         </Badge>
-                                        <div className="h-4 w-[1px] bg-slate-200 dark:bg-white/10 mx-1" />
-                                        <span className="text-xs font-medium bg-slate-50 dark:bg-slate-900/50 px-2 py-0.5 rounded border border-slate-100 dark:border-white/5">Generated in {timetable.generationMs}ms</span>
-                                        <div className="h-4 w-[1px] bg-slate-200 dark:bg-white/10 mx-1" />
-                                        <span className="text-xs text-slate-400 font-medium">{timetable.slots.length} assignments tracked.</span>
+                                        <div className="h-4 w-[1px] bg-slate-200 dark:bg-surface-hover mx-1" />
+                                        <span className="text-xs font-medium bg-slate-50 dark:bg-slate-900/50 px-2 py-0.5 rounded border border-slate-100 dark:border-border">Generated in {timetable.generationMs}ms</span>
+                                        <div className="h-4 w-[1px] bg-slate-200 dark:bg-surface-hover mx-1" />
+                                        <span className="text-xs text-text-muted font-medium">{timetable.slots.length} assignments tracked.</span>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2 relative z-10">
@@ -114,10 +114,10 @@ export default function TimetableDetailView({ params }: { params: Promise<{ id: 
                             </Card>
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center p-12 glass-card border-2 border-dashed border-slate-200 dark:border-white/10 rounded-xl text-center">
-                            <LuCalendar className="w-16 h-16 text-slate-300 dark:text-slate-600 mb-4" />
-                            <h3 className="text-xl font-bold text-slate-700 dark:text-slate-300 mb-2">Timetable Not Found</h3>
-                            <p className="text-slate-500 dark:text-slate-400 max-w-md">
+                        <div className="flex flex-col items-center justify-center p-12 glass-card border-2 border-dashed border-slate-200 dark:border-border-hover rounded-xl text-center">
+                            <LuCalendar className="w-16 h-16 text-text-muted dark:text-slate-600 mb-4" />
+                            <h3 className="text-xl font-bold text-slate-700 dark:text-text-muted mb-2">Timetable Not Found</h3>
+                            <p className="text-text-secondary dark:text-text-muted max-w-md">
                                 The timetable parameter could not be retrieved or it does not exist.
                             </p>
                         </div>

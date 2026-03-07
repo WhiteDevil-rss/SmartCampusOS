@@ -69,3 +69,4 @@ run-ai-evals.sh
 progress.txt
 gcp_deployment_guide.md.resolved
 apps/api/inquiries.xlsx
+.stitch_html/

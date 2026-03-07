@@ -118,7 +118,7 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
         <div className="flex flex-col space-y-4">
             {/* ── Batch Tabs ──────────────────────────────────────────────── */}
             {viewMode === 'admin' && uniqueBatches.length > 0 && (
-                <div className="flex items-center gap-1 p-1.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl shadow-sm overflow-x-auto print:hidden">
+                <div className="flex items-center gap-1 p-1.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-border-hover rounded-xl shadow-sm overflow-x-auto print:hidden">
                     <TabButton
                         active={selectedBatch === 'ALL'}
                         onClick={() => setSelectedBatch('ALL')}
@@ -141,7 +141,7 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
                                 "flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all",
                                 showFilters
                                     ? "bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300"
-                                    : "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5"
+                                    : "text-text-secondary dark:text-text-muted hover:bg-slate-100 dark:hover:bg-white/5"
                             )}
                         >
                             <LuFilter className="w-3.5 h-3.5" />
@@ -183,23 +183,23 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
             )}
 
             {/* ── Desktop Grid ────────────────────────────────────────────── */}
-            <Card className="overflow-hidden border-slate-200 dark:border-white/10 shadow-xl rounded-xl hidden md:block">
+            <Card className="overflow-hidden border-slate-200 dark:border-border-hover shadow-xl rounded-xl hidden md:block">
                 <div className="overflow-auto max-h-[78vh] custom-scrollbar">
                     <div className="min-w-[900px]">
                         {/* Day Headers */}
                         <div
-                            className="grid sticky top-0 z-20 font-bold bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-white/10 shadow-sm"
+                            className="grid sticky top-0 z-20 font-bold bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-border-hover shadow-sm"
                             style={{ gridTemplateColumns: `100px repeat(${days}, minmax(0, 1fr))` }}
                         >
-                            <div className="p-3 border-r border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-slate-800/50 flex items-center justify-center">
-                                <span className="text-[9px] uppercase tracking-[0.15em] font-black text-slate-400 dark:text-slate-500">Time</span>
+                            <div className="p-3 border-r border-slate-200 dark:border-border-hover bg-slate-50/80 dark:bg-slate-800/50 flex items-center justify-center">
+                                <span className="text-[9px] uppercase tracking-[0.15em] font-black text-text-muted dark:text-text-secondary">Time</span>
                             </div>
                             {dayLabels.map((day, i) => (
                                 <div
                                     key={day}
                                     className={cn(
                                         "p-3 text-center text-sm text-slate-600 dark:text-slate-300",
-                                        i < days - 1 && "border-r border-slate-100 dark:border-white/5"
+                                        i < days - 1 && "border-r border-slate-100 dark:border-border"
                                     )}
                                 >
                                     <span className="hidden lg:inline">{day}</span>
@@ -231,10 +231,10 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
                                         style={{ gridTemplateColumns: `100px repeat(${days}, minmax(0, 1fr))` }}
                                     >
                                         {/* Time Column */}
-                                        <div className="p-2 border-r border-slate-200 dark:border-white/10 sticky left-0 z-10 flex flex-col items-center justify-center bg-white dark:bg-slate-900 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] group-hover:bg-slate-50 dark:group-hover:bg-slate-800/50 transition-colors">
+                                        <div className="p-2 border-r border-slate-200 dark:border-border-hover sticky left-0 z-10 flex flex-col items-center justify-center bg-white dark:bg-slate-900 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] group-hover:bg-slate-50 dark:group-hover:bg-slate-800/50 transition-colors">
                                             <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300 tracking-tight">{block.startTime}</span>
                                             <div className="h-2.5 w-[1px] bg-slate-200 dark:bg-slate-700 my-0.5" />
-                                            <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 tracking-tight">{block.endTime}</span>
+                                            <span className="text-[11px] font-bold text-text-muted dark:text-text-secondary tracking-tight">{block.endTime}</span>
                                             {block.name && <span className="text-[7px] uppercase font-black text-slate-300 dark:text-slate-600 mt-0.5">{block.name}</span>}
                                         </div>
 
@@ -248,7 +248,7 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
                                                     key={d}
                                                     className={cn(
                                                         "p-1.5 min-h-[100px]",
-                                                        dIdx < days - 1 && "border-r border-slate-100 dark:border-white/5",
+                                                        dIdx < days - 1 && "border-r border-slate-100 dark:border-border",
                                                         "group-hover:bg-indigo-50/10 dark:group-hover:bg-indigo-950/10 transition-colors"
                                                     )}
                                                 >
@@ -302,13 +302,13 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
                     }).filter(Boolean);
 
                     return (
-                        <Card key={d} className="border-slate-200 dark:border-white/10 overflow-hidden">
-                            <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-white/10">
+                        <Card key={d} className="border-slate-200 dark:border-border-hover overflow-hidden">
+                            <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-border-hover">
                                 <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider">{day}</h3>
                             </div>
                             <div className="p-3 space-y-2">
                                 {daySlots.length === 0 ? (
-                                    <div className="text-center py-6 text-sm text-slate-400 dark:text-slate-600">No classes scheduled</div>
+                                    <div className="text-center py-6 text-sm text-text-muted dark:text-slate-600">No classes scheduled</div>
                                 ) : (
                                     daySlots.map((slot: any, idx: number) => {
                                         if (slot.isBreak) {
@@ -322,9 +322,9 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
                                         return (
                                             <div key={idx} className="flex gap-3 items-start">
                                                 <div className="flex flex-col items-center pt-1 w-12 flex-shrink-0">
-                                                    <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">{slot.blockStartTime || slot.startTime}</span>
+                                                    <span className="text-[10px] font-bold text-slate-600 dark:text-text-muted">{slot.blockStartTime || slot.startTime}</span>
                                                     <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-700" />
-                                                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-600">{slot.blockEndTime || slot.endTime}</span>
+                                                    <span className="text-[10px] font-bold text-text-muted dark:text-slate-600">{slot.blockEndTime || slot.endTime}</span>
                                                 </div>
                                                 <div className="flex-1">
                                                     <TimetableCell slot={slot} viewMode={viewMode} onCellClick={handleCellClick} />
@@ -360,7 +360,7 @@ function TabButton({ active, onClick, label }: { active: boolean; onClick: () =>
                 "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap",
                 active
                     ? "bg-indigo-600 dark:bg-indigo-500 text-white shadow-md shadow-indigo-200 dark:shadow-indigo-900/50"
-                    : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-800 dark:hover:text-slate-200"
+                    : "text-slate-600 dark:text-text-muted hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-800 dark:hover:text-slate-200"
             )}
         >
             {label}

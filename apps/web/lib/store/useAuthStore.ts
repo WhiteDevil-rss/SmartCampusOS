@@ -5,7 +5,7 @@ export interface User {
     id: string;
     username: string;
     email: string;
-    role: 'SUPERADMIN' | 'UNI_ADMIN' | 'DEPT_ADMIN' | 'FACULTY';
+    role: 'SUPERADMIN' | 'UNI_ADMIN' | 'DEPT_ADMIN' | 'FACULTY' | 'STUDENT';
     entityId: string | null;
     universityId: string | null;
 }

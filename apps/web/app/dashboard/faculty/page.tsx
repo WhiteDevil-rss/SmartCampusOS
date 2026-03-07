@@ -140,7 +140,7 @@ export default function FacultyDashboard() {
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 relative z-20">
                     <div>
                         <h2 className="text-3xl font-heading font-extrabold tracking-tight text-slate-900 dark:text-white glow-cyan">Faculty Directory</h2>
-                        <p className="text-slate-600 dark:text-slate-400 font-light mt-1">Manage all registered teaching bodies and their scheduling constraints.</p>
+                        <p className="text-slate-600 dark:text-text-muted font-light mt-1">Manage all registered teaching bodies and their scheduling constraints.</p>
                     </div>
                     <Button onClick={() => setIsAddOpen(true)} className="bg-neon-cyan text-white dark:text-slate-900 shadow-md dark:shadow-[0_0_15px_rgba(57,193,239,0.4)] hover:shadow-lg hover:bg-cyan-600 dark:hover:bg-white font-bold transition-all px-6 shrink-0">
                         <LuPlus className="w-5 h-5 mr-2" /> Register Faculty
@@ -155,7 +155,7 @@ export default function FacultyDashboard() {
                             <div key={fac.id} className="glass-card rounded-[1.5rem] overflow-hidden group hover:border-cyan-500/30 dark:hover:border-neon-cyan/40 transition-all duration-500 hover:shadow-lg dark:hover:shadow-[0_0_30px_rgba(57,193,239,0.15)] relative">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/10 blur-[40px] rounded-full group-hover:bg-neon-cyan/25 dark:bg-neon-cyan/5 dark:group-hover:bg-neon-cyan/15 transition-colors duration-500" />
 
-                                <div className="p-6 border-b border-slate-200 dark:border-white/5 relative z-10 bg-slate-50/50 dark:bg-transparent">
+                                <div className="p-6 border-b border-slate-200 dark:border-border relative z-10 bg-slate-50/50 dark:bg-transparent">
                                     <div className="flex items-start justify-between">
                                         <div className="flex flex-col">
                                             <span className="font-heading font-extrabold text-xl text-slate-900 dark:text-white tracking-tight">{fac.name}</span>
@@ -164,7 +164,7 @@ export default function FacultyDashboard() {
                                     </div>
                                     <div className="flex flex-wrap gap-1 mt-3">
                                         {fac.departments?.map((fd) => (
-                                            <span key={fd.departmentId} className="px-2 py-0.5 bg-slate-200 dark:bg-white/10 text-slate-700 dark:text-slate-300 text-[10px] font-bold rounded-full flex items-center uppercase tracking-tight border border-slate-300 dark:border-white/10">
+                                            <span key={fd.departmentId} className="px-2 py-0.5 bg-slate-200 dark:bg-surface-hover text-slate-700 dark:text-slate-300 text-[10px] font-bold rounded-full flex items-center uppercase tracking-tight border border-slate-300 dark:border-border-hover">
                                                 <LuBuilding2 className="w-2.5 h-2.5 mr-1" />
                                                 {departments.find(d => d.id === fd.departmentId)?.shortName || '???'}
                                             </span>
@@ -173,7 +173,7 @@ export default function FacultyDashboard() {
                                 </div>
                                 <div className="p-6 pt-4 relative z-10">
                                     <div className="flex justify-between items-center text-sm mb-4 group/stat">
-                                        <span className="text-slate-500 dark:text-slate-500 text-xs font-semibold uppercase tracking-wider group-hover/stat:text-cyan-600 dark:group-hover/stat:text-neon-cyan transition-colors">Contact</span>
+                                        <span className="text-text-secondary dark:text-text-secondary text-xs font-semibold uppercase tracking-wider group-hover/stat:text-cyan-600 dark:group-hover/stat:text-neon-cyan transition-colors">Contact</span>
                                         <span className="font-medium text-slate-700 dark:text-slate-300 line-clamp-1">{fac.email}</span>
                                     </div>
 
@@ -181,7 +181,7 @@ export default function FacultyDashboard() {
                                     <div className="flex gap-2 mt-5">
                                         <Button
                                             variant="ghost"
-                                            className="w-1/2 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10 hover:text-cyan-700 dark:hover:text-neon-cyan hover:bg-cyan-50 dark:hover:bg-neon-cyan/10"
+                                            className="w-1/2 text-slate-600 dark:text-text-muted border border-slate-200 dark:border-border-hover hover:text-cyan-700 dark:hover:text-neon-cyan hover:bg-cyan-50 dark:hover:bg-neon-cyan/10"
                                             size="sm"
                                             onClick={() => {
                                                 setSelectedFacId(fac.id);
@@ -197,7 +197,7 @@ export default function FacultyDashboard() {
                                         </Button>
                                         <Button
                                             variant="ghost"
-                                            className="w-1/2 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10"
+                                            className="w-1/2 text-slate-600 dark:text-text-muted border border-slate-200 dark:border-border-hover hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10"
                                             size="sm"
                                             onClick={() => handleDeleteFaculty(fac.id)}
                                         >
@@ -209,7 +209,7 @@ export default function FacultyDashboard() {
                         ))}
 
                         {faculties.length === 0 && (
-                            <div className="col-span-full py-16 text-center text-slate-600 dark:text-slate-400 glass-card rounded-[2rem] border-dashed border-slate-300 dark:border-white/20">
+                            <div className="col-span-full py-16 text-center text-slate-600 dark:text-text-muted glass-card rounded-[2rem] border-dashed border-slate-300 dark:border-white/20">
                                 No faculty members found. Provision teaching personnel to construct schedules.
                             </div>
                         )}

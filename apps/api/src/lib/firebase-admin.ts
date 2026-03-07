@@ -9,6 +9,7 @@ if (serviceAccountPath) {
             const certData = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
             admin.initializeApp({
                 credential: admin.credential.cert(certData),
+                storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
             });
             console.log(`Firebase Admin: Initialized for project: ${certData.project_id}`);
         } catch (error: any) {
@@ -19,6 +20,7 @@ if (serviceAccountPath) {
     if (!admin.apps.length) {
         admin.initializeApp({
             credential: admin.credential.applicationDefault(),
+            storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
         });
     }
 }

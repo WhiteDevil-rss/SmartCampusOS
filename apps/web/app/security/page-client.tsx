@@ -55,8 +55,8 @@ export default function SecurityClient() {
                         { title: "Access Control", icon: "manage_accounts", desc: "Granular role-based permissions and multi-factor authentication for all users." },
                         { title: "Audit Logging", icon: "visibility", desc: "Comprehensive logging of all system activities for full transparency and accountability." }
                     ].map((s, i) => (
-                        <div key={i} className="glass-card p-10 rounded-3xl border-white/5 group hover:border-primary/30 transition-all">
-                            <div className="w-16 h-16 rounded-2xl bg-surface border border-white/5 flex items-center justify-center mb-8 shadow-2xl group-hover:bg-primary group-hover:text-white transition-all">
+                        <div key={i} className="glass-card p-10 rounded-3xl border-border group hover:border-primary/30 transition-all">
+                            <div className="w-16 h-16 rounded-2xl bg-surface border border-border flex items-center justify-center mb-8 shadow-2xl group-hover:bg-primary group-hover:text-white transition-all">
                                 <span className="material-symbols-outlined text-3xl font-bold">{s.icon}</span>
                             </div>
                             <h3 className="text-2xl font-bold mb-4">{s.title}</h3>
@@ -107,7 +107,7 @@ export default function SecurityClient() {
                 </section>
 
                 {/* Final Statement */}
-                <section className="text-center bg-surface/30 p-20 rounded-[3rem] border border-white/5 shadow-2xl relative overflow-hidden">
+                <section className="text-center bg-surface/30 p-20 rounded-[3rem] border border-border shadow-2xl relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 to-transparent"></div>
                     <h2 className="text-4xl font-bold font-heading mb-6 relative z-10">Your Data is Safe With Us</h2>
                     <p className="text-xl text-text-secondary mb-10 relative z-10 max-w-2xl mx-auto">We are committed to maintaining the highest levels of security and privacy for our global institutional partners.</p>
@@ -117,7 +117,7 @@ export default function SecurityClient() {
                 </section>
             </main>
 
-            <footer className="border-t border-white/5 py-12 px-6 text-center text-xs text-text-muted uppercase tracking-widest">
+            <footer className="border-t border-border py-12 px-6 text-center text-xs text-text-muted uppercase tracking-widest">
                 <p>© 2024 Zembaa AI Technologies. All Rights Reserved.</p>
             </footer>
         </div>

@@ -56,7 +56,7 @@ export function ConfirmDialog({
                     </DialogTitle>
                 </DialogHeader>
 
-                <p className="text-sm text-slate-600 dark:text-slate-400 py-2 leading-relaxed">{state.message}</p>
+                <p className="text-sm text-slate-600 dark:text-text-muted py-2 leading-relaxed">{state.message}</p>
 
                 {state.requireTypedConfirm && (
                     <div className="space-y-3 mt-1">
@@ -69,14 +69,14 @@ export function ConfirmDialog({
                             </p>
                         </div>
                         <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-slate-600 dark:text-slate-400">
+                            <label className="text-xs font-medium text-slate-600 dark:text-text-muted">
                                 Type <span className="font-bold text-red-600 dark:text-red-400 font-mono">&quot;delete&quot;</span> to confirm:
                             </label>
                             <Input
                                 placeholder="delete"
                                 value={typedValue}
                                 onChange={(e) => setTypedValue(e.target.value)}
-                                className="font-mono text-sm border-slate-300 dark:border-white/10 dark:bg-slate-900/50 dark:text-white caret-slate-900 dark:caret-white"
+                                className="font-mono text-sm border-slate-300 dark:border-border-hover dark:bg-slate-900/50 dark:text-white caret-slate-900 dark:caret-white"
                                 autoComplete="off"
                                 autoFocus
                             />
@@ -85,7 +85,7 @@ export function ConfirmDialog({
                 )}
 
                 <DialogFooter className="mt-2">
-                    <Button variant="outline" onClick={handleClose} className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800">Cancel</Button>
+                    <Button variant="outline" onClick={handleClose} className="dark:border-border-hover dark:text-slate-300 dark:hover:bg-slate-800">Cancel</Button>
                     <Button
                         className={state.danger !== false ? 'bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white disabled:opacity-40' : ''}
                         disabled={!isTypedConfirmValid}

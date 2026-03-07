@@ -6,57 +6,93 @@ import { motion } from 'framer-motion';
 
 export default function PrivacyPolicyPage() {
     return (
-        <div className="min-h-screen bg-background text-text-primary font-sans relative">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-
-            <nav className="sticky top-0 z-50 px-4 py-3 glass-morphism border-b border-white/5">
+        <div className="min-h-screen bg-background text-text-primary font-sans antialiased mesh-gradient selection:bg-primary/30">
+            {/* Nav Header */}
+            <nav className="fixed top-0 left-0 w-full z-50 px-6 py-4 glass-morphism border-b border-border">
                 <div className="max-w-7xl mx-auto flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                            <span className="material-symbols-outlined text-white">auto_awesome</span>
+                    <Link href="/" className="flex items-center gap-3 group">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:scale-110 transition-transform">
+                            <span className="material-symbols-outlined text-primary text-2xl">hub</span>
                         </div>
-                        <span className="font-heading font-bold text-lg">Zembaa AI</span>
+                        <span className="text-white text-xl font-bold font-space-grotesk tracking-tight">SmartCampus OS</span>
                     </Link>
-                    <Link href="/">
-                        <button className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1">
-                            <span className="material-symbols-outlined text-sm">arrow_back</span> Back to Home
-                        </button>
+                    <Link href="/" className="text-sm font-bold uppercase tracking-widest text-text-muted hover:text-white transition-colors flex items-center gap-2 group">
+                        <span className="material-symbols-outlined text-lg transition-transform group-hover:-translate-x-1">arrow_back</span>
+                        Back Home
                     </Link>
                 </div>
             </nav>
 
-            <main className="max-w-4xl mx-auto px-6 py-20 relative z-10">
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12">
-                    <h1 className="text-5xl font-heading font-bold mb-6">Privacy <span className="text-primary">Policy</span></h1>
-                    <p className="text-slate-400">Last Updated: March 2026</p>
-                </motion.div>
+            <main className="pt-32 pb-24 px-6 relative z-10">
+                <div className="max-w-4xl mx-auto">
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-16">
+                        <h2 className="text-primary font-bold uppercase tracking-[0.3em] text-xs mb-4">Governance & Trust</h2>
+                        <h1 className="text-5xl font-bold font-space-grotesk leading-tight tracking-tight mb-6">
+                            Privacy <span className="gradient-text">Protocol</span>
+                        </h1>
+                        <p className="text-text-secondary font-medium">Revision 2.0.4 — Effective March 2026</p>
+                    </motion.div>
 
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="prose prose-invert prose-lg max-w-none text-slate-300">
-                    <p>At Zembaa AI, protecting your privacy and safeguarding your academic data is our highest priority. This Privacy Policy outlines how we collect, use, and store information through our timetable generation platform.</p>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="prose prose-invert prose-slate max-w-none space-y-12"
+                    >
+                        <section className="bg-white/5 rounded-3xl p-8 border border-border">
+                            <h2 className="text-white text-2xl font-bold font-space-grotesk mb-4 flex items-center gap-3">
+                                <span className="material-symbols-outlined text-primary">data_usage</span>
+                                1. Data Collection Architecture
+                            </h2>
+                            <p className="text-text-muted leading-relaxed mb-4">
+                                SmartCampus OS processes institutional data with clinical precision. We collect:
+                            </p>
+                            <ul className="grid md:grid-cols-2 gap-4 list-none p-0 tracking-tight">
+                                {[
+                                    { title: 'Identity Layer', desc: 'Secure UID, email, and biometric markers for login.' },
+                                    { title: 'Academic Assets', desc: 'Room capacities, faculty load, and course structures.' },
+                                    { title: 'Telemetry', desc: 'Infrastructure performance and security audit trails.' },
+                                    { title: 'Audit Logs', desc: 'Detailed tracking of administrative overrides.' }
+                                ].map((item, i) => (
+                                    <li key={i} className="bg-[#0f172a] p-4 rounded-xl border border-border">
+                                        <strong className="text-slate-200 block mb-1">{item.title}</strong>
+                                        <span className="text-xs text-text-secondary">{item.desc}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
 
-                    <h2 className="text-white text-2xl font-bold mt-10 mb-4">1. Information We Collect</h2>
-                    <p>We only collect data strictly necessary to provide and improve our services:</p>
-                    <ul className="list-disc pl-6 space-y-2 mb-6">
-                        <li><strong>Account Data:</strong> Names, emails, and phone numbers for university administrators and staff using our portal.</li>
-                        <li><strong>Institutional Data:</strong> Non-personal academic constraints, faculty names, course loads, and room capacities uploaded to correctly map your schedules.</li>
-                        <li><strong>Usage Logs:</strong> System logs tracking IP addresses and browser configurations for security and audit trailing purposes.</li>
-                    </ul>
+                        <section>
+                            <h2 className="text-white text-2xl font-bold font-space-grotesk mb-4">2. Processing Logic</h2>
+                            <p className="text-text-muted leading-relaxed">
+                                Data is processed exclusively for the purpose of institutional optimization. Our AI engines use academic metadata to resolve scheduling conflicts, monitor campus resources, and provide predictive analytics for administrative decision-making. We never sell or monetize institutional intelligence to third-party entities.
+                            </p>
+                        </section>
 
-                    <h2 className="text-white text-2xl font-bold mt-10 mb-4">2. Data Usage</h2>
-                    <p>We process your data exclusively to:</p>
-                    <ul className="list-disc pl-6 space-y-2 mb-6">
-                        <li>Compute and resolve timetable generation algorithms via our AI engine.</li>
-                        <li>Maintain role-based access controls and secure endpoints for administrators.</li>
-                        <li>Send automated notifications regarding service status or completed generation cycles.</li>
-                    </ul>
+                        <section className="border-l-2 border-primary/20 pl-8">
+                            <h2 className="text-white text-2xl font-bold font-space-grotesk mb-4">3. Sovereign Encryption</h2>
+                            <p className="text-text-muted leading-relaxed">
+                                All data in transit is protected by TLS 1.3 protocol. At-rest data is encrypted using AES-256 standard within decentralized cloud infrastructure conforming to SOC2 and ISO27001 certifications.
+                            </p>
+                        </section>
 
-                    <h2 className="text-white text-2xl font-bold mt-10 mb-4">3. Data Storage & Security</h2>
-                    <p>Zembaa AI employs bank-grade security protocols. All data transmits via SSL/TLS encryption. Data is redundantly stored within sovereign data centers conforming to ISO27001 standards. We do not sell, rent, or trade institutional data to any third party entities.</p>
-
-                    <h2 className="text-white text-2xl font-bold mt-10 mb-4">4. User Rights</h2>
-                    <p>Under GDPR, CCPA, and associated privacy architectures, users retain full rights to request exports of their data, request structural deletions, or appeal algorithmic processing. Please channel legal compliance inquiries to <strong>legal@zembaa.ai</strong>.</p>
-                </motion.div>
+                        <section className="bg-primary/5 rounded-3xl p-8 border border-primary/10">
+                            <h2 className="text-white text-2xl font-bold font-space-grotesk mb-4">4. Legal Contact</h2>
+                            <p className="text-text-muted leading-relaxed mb-6">
+                                For inquiries regarding data sovereignty, GDPR/CCPA compliance, or structural deletion requests, please contact our Data Protection Officer.
+                            </p>
+                            <div className="flex items-center gap-3 text-white font-bold font-space-grotesk underline">
+                                <span className="material-symbols-outlined">gavel</span>
+                                legal@smartcampus.ac.in
+                            </div>
+                        </section>
+                    </motion.div>
+                </div>
             </main>
+
+            <footer className="py-12 border-t border-border text-center">
+                <p className="text-slate-600 text-[10px] font-bold uppercase tracking-[0.3em]">SmartCampus Enterprise Hub</p>
+            </footer>
         </div>
     );
 }

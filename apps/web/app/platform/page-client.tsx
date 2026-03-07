@@ -83,7 +83,7 @@ export default function PlatformClient() {
                             ))}
                         </div>
                     </div>
-                    <div className="relative glass-morphism rounded-[3rem] p-12 overflow-hidden min-h-[400px] flex items-center justify-center border-white/5 animate-fade-in">
+                    <div className="relative glass-morphism rounded-[3rem] p-12 overflow-hidden min-h-[400px] flex items-center justify-center border-border animate-fade-in">
                         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary via-transparent to-transparent"></div>
                         <div className="relative z-10 w-full max-w-sm">
                             <div className="w-full h-1 bg-white/5 rounded-full mb-12 overflow-hidden">
@@ -91,7 +91,7 @@ export default function PlatformClient() {
                             </div>
                             <div className="grid grid-cols-4 gap-4">
                                 {[...Array(12)].map((_, i) => (
-                                    <div key={i} className={`h-16 rounded-xl border border-white/5 bg-white/5 flex items-center justify-center animate-pulse`} style={{ animationDelay: `${i * 0.1}s` }}>
+                                    <div key={i} className={`h-16 rounded-xl border border-border bg-white/5 flex items-center justify-center animate-pulse`} style={{ animationDelay: `${i * 0.1}s` }}>
                                         <div className={`w-2 h-2 rounded-full ${i % 3 === 0 ? 'bg-primary' : 'bg-secondary'}`}></div>
                                     </div>
                                 ))}
@@ -101,7 +101,7 @@ export default function PlatformClient() {
                 </section>
 
                 {/* Integrations */}
-                <section className="glass-morphism rounded-[3rem] p-16 text-center border-white/5 mb-32">
+                <section className="glass-morphism rounded-[3rem] p-16 text-center border-border mb-32">
                     <h2 className="text-3xl font-bold font-heading mb-12">Seamless Ecosystem Integration</h2>
                     <div className="flex flex-wrap justify-center items-center gap-12 mb-12">
                         {[
@@ -112,7 +112,7 @@ export default function PlatformClient() {
                             { name: "Sakai", icon: "account_balance" }
                         ].map((int, i) => (
                             <div key={i} className="flex flex-col items-center gap-4 group">
-                                <div className="size-20 rounded-3xl bg-surface border border-white/5 flex items-center justify-center group-hover:border-primary/50 transition-colors shadow-2xl">
+                                <div className="size-20 rounded-3xl bg-surface border border-border flex items-center justify-center group-hover:border-primary/50 transition-colors shadow-2xl">
                                     <span className="material-symbols-outlined text-4xl text-text-muted group-hover:text-primary transition-colors">{int.icon}</span>
                                 </div>
                                 <span className="text-xs font-bold uppercase tracking-widest text-text-muted">{int.name}</span>
@@ -123,21 +123,21 @@ export default function PlatformClient() {
                 </section>
 
                 {/* CTA */}
-                <section className="text-center bg-gradient-to-br from-[#1A1A3E] to-background p-16 rounded-[4rem] border border-white/5 shadow-3xl">
+                <section className="text-center bg-gradient-to-br from-[#1A1A3E] to-background p-16 rounded-[4rem] border border-border shadow-3xl">
                     <h2 className="text-4xl md:text-6xl font-bold font-heading mb-8">Ready to Optimize?</h2>
                     <p className="text-xl text-text-secondary mb-12 max-w-2xl mx-auto">Join the institutions leading the way in academic innovation with Zembaa AI.</p>
                     <div className="flex flex-col sm:flex-row justify-center gap-6">
                         <button className="px-12 py-5 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-xl shadow-2xl glow-shadow-primary hover:scale-105 transition-transform">
                             Start Free Trial
                         </button>
-                        <button className="px-12 py-5 rounded-full border border-border bg-white/5 font-semibold text-xl hover:bg-white/10 transition-colors">
+                        <button className="px-12 py-5 rounded-full border border-border bg-white/5 font-semibold text-xl hover:bg-surface-hover transition-colors">
                             Read Docs
                         </button>
                     </div>
                 </section>
             </main>
 
-            <footer className="border-t border-white/5 py-12 px-6 text-center text-xs text-text-muted uppercase tracking-widest">
+            <footer className="border-t border-border py-12 px-6 text-center text-xs text-text-muted uppercase tracking-widest">
                 <p>© 2024 Zembaa AI Technologies. All Rights Reserved.</p>
             </footer>
         </div>

@@ -42,7 +42,7 @@ export const TimetableTooltip: React.FC<TimetableTooltipProps> = ({ slot, onClos
                         onClick={onClose}
                         className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white/60 dark:bg-slate-800/60 flex items-center justify-center hover:bg-white dark:hover:bg-slate-700 transition-colors"
                     >
-                        <LuX className="w-4 h-4 text-slate-500 dark:text-slate-400" />
+                        <LuX className="w-4 h-4 text-text-secondary dark:text-text-muted" />
                     </button>
                     <div className="flex items-center gap-2 mb-1">
                         <div className={cn("px-2 py-0.5 rounded-md border text-[10px] font-bold uppercase tracking-tight", c.badge, c.darkBadge)}>
@@ -79,11 +79,11 @@ export const TimetableTooltip: React.FC<TimetableTooltipProps> = ({ slot, onClos
 function DetailRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
     return (
         <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-slate-500 flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-text-muted dark:text-text-secondary flex-shrink-0">
                 {icon}
             </div>
             <div className="min-w-0">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">{label}</div>
+                <div className="text-[10px] font-bold uppercase tracking-wider text-text-muted dark:text-text-secondary">{label}</div>
                 <div className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">{value}</div>
             </div>
         </div>

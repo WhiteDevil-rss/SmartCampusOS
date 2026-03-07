@@ -112,7 +112,7 @@ export default function ProfilePage() {
 
                 <div className="max-w-4xl mx-auto space-y-8 pb-12">
                     {/* Header Section */}
-                    <div className="flex flex-col md:flex-row items-center gap-6 p-8 rounded-3xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-white/10 shadow-sm relative overflow-hidden backdrop-blur-md">
+                    <div className="flex flex-col md:flex-row items-center gap-6 p-8 rounded-3xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-border-hover shadow-sm relative overflow-hidden backdrop-blur-md">
                         <div className="absolute top-0 right-0 p-4 opacity-5 dark:opacity-10">
                             <LuBadgeCheck className="w-32 h-32 text-primary" />
                         </div>
@@ -124,7 +124,7 @@ export default function ProfilePage() {
                             <p className="text-primary font-semibold uppercase tracking-wider text-sm mt-1 flex items-center justify-center md:justify-start">
                                 <LuShield className="w-4 h-4 mr-2" /> {profile?.role?.replace('_', ' ')}
                             </p>
-                            <div className="mt-2 flex flex-wrap justify-center md:justify-start gap-4 text-sm text-slate-500 dark:text-slate-400">
+                            <div className="mt-2 flex flex-wrap justify-center md:justify-start gap-4 text-sm text-text-secondary dark:text-text-muted">
                                 <span className="flex items-center"><LuMail className="w-4 h-4 mr-1.5" /> {profile?.email}</span>
                                 {profile?.phoneNumber && <span className="flex items-center"><LuPhone className="w-4 h-4 mr-1.5" /> {profile?.phoneNumber}</span>}
                             </div>
@@ -134,12 +134,12 @@ export default function ProfilePage() {
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                         {/* Left Column: Personal info */}
                         <div className="md:col-span-12 space-y-8">
-                            <Card className="glass-card border-slate-200 dark:border-white/10 overflow-hidden shadow-sm">
-                                <CardHeader className="bg-slate-50/50 dark:bg-white/5 border-b dark:border-white/10 px-8 py-6">
+                            <Card className="glass-card border-slate-200 dark:border-border-hover overflow-hidden shadow-sm">
+                                <CardHeader className="bg-slate-50/50 dark:bg-white/5 border-b dark:border-border-hover px-8 py-6">
                                     <div className="flex items-center justify-between">
                                         <div>
                                             <CardTitle className="text-xl text-slate-900 dark:text-white">Personal Details</CardTitle>
-                                            <CardDescription className="text-slate-500 dark:text-slate-400">Update your contact and identification information</CardDescription>
+                                            <CardDescription className="text-text-secondary dark:text-text-muted">Update your contact and identification information</CardDescription>
                                         </div>
                                         <LuUser className="w-6 h-6 text-primary/40" />
                                     </div>
@@ -154,7 +154,7 @@ export default function ProfilePage() {
                                                 value={formData.username}
                                                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                                                 placeholder="johndoe"
-                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-border-hover focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -165,7 +165,7 @@ export default function ProfilePage() {
                                                 value={formData.email}
                                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                                 placeholder="john@vnsgu.ac.in"
-                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-border-hover focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -176,7 +176,7 @@ export default function ProfilePage() {
                                                 value={formData.phoneNumber}
                                                 onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
                                                 placeholder="+91 9876543210"
-                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-border-hover focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -187,7 +187,7 @@ export default function ProfilePage() {
                                                 value={formData.address}
                                                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                                                 placeholder="City, State, Country"
-                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-border-hover focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium"
                                             />
                                         </div>
                                     </div>
@@ -196,8 +196,8 @@ export default function ProfilePage() {
 
                             {/* Faculty Specific Fields */}
                             {(profile?.role === 'FACULTY' || profile?.role === 'DEPT_ADMIN') && (
-                                <Card className="glass-card border-slate-200 dark:border-white/10 overflow-hidden shadow-sm">
-                                    <CardHeader className="bg-slate-50/50 dark:bg-white/5 border-b dark:border-white/10 px-8 py-6">
+                                <Card className="glass-card border-slate-200 dark:border-border-hover overflow-hidden shadow-sm">
+                                    <CardHeader className="bg-slate-50/50 dark:bg-white/5 border-b dark:border-border-hover px-8 py-6">
                                         <div className="flex items-center justify-between">
                                             <div>
                                                 <CardTitle className="text-xl">Professional Background</CardTitle>
@@ -216,7 +216,7 @@ export default function ProfilePage() {
                                                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, qualifications: e.target.value })}
                                                 placeholder="e.g. Ph.D. in Computer Science, M.Tech, etc."
                                                 rows={3}
-                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium resize-none shadow-inner"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-border-hover focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium resize-none shadow-inner"
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -228,39 +228,41 @@ export default function ProfilePage() {
                                                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, experience: e.target.value })}
                                                 placeholder="Describe your previous academic and industrial experience..."
                                                 rows={4}
-                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-white/10 focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium resize-none shadow-inner"
+                                                className="bg-slate-100 dark:bg-white/5 border-slate-200 dark:border-border-hover focus:ring-primary/20 transition-all text-slate-900 dark:text-white font-medium resize-none shadow-inner"
                                             />
                                         </div>
                                     </CardContent>
                                 </Card>
                             )}
 
-                            {/* Institutional Context (Read-only) */}
-                            <Card className="glass-card border-slate-200 dark:border-white/10 overflow-hidden shadow-sm opacity-80 shadow-inner bg-slate-50/30 dark:bg-transparent">
-                                <CardHeader className="px-8 py-4 border-b dark:border-white/5">
-                                    <CardTitle className="text-sm uppercase tracking-widest text-slate-500 font-bold flex items-center">
-                                        <LuBuilding className="w-4 h-4 mr-2" /> Institutional Context
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div>
-                                        <p className="text-xs font-bold text-slate-500 uppercase">University</p>
-                                        <p className="font-semibold text-slate-800 dark:text-slate-200 mt-1">{profile?.university?.name || 'VNSGU'}</p>
-                                    </div>
-                                    {profile?.facultyDetails?.departments && (
-                                        <div className="md:col-span-2">
-                                            <p className="text-xs font-bold text-slate-500 uppercase">Affiliated Department(s)</p>
-                                            <div className="flex flex-wrap gap-2 mt-1">
-                                                {profile.facultyDetails.departments.map((d: any) => (
-                                                    <span key={d.departmentId} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold ring-1 ring-primary/20">
-                                                        {d.department?.name}
-                                                    </span>
-                                                ))}
-                                            </div>
+                            {/* Institutional Context (Read-only) — Hidden for SUPERADMINs */}
+                            {profile?.role !== 'SUPERADMIN' && (
+                                <Card className="glass-card border-slate-200 dark:border-border-hover overflow-hidden shadow-sm opacity-80 shadow-inner bg-slate-50/30 dark:bg-transparent">
+                                    <CardHeader className="px-8 py-4 border-b dark:border-border">
+                                        <CardTitle className="text-sm uppercase tracking-widest text-text-secondary font-bold flex items-center">
+                                            <LuBuilding className="w-4 h-4 mr-2" /> Institutional Context
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="p-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div>
+                                            <p className="text-xs font-bold text-text-secondary uppercase">University</p>
+                                            <p className="font-semibold text-slate-800 dark:text-slate-200 mt-1">{profile?.university?.name || 'VNSGU'}</p>
                                         </div>
-                                    )}
-                                </CardContent>
-                            </Card>
+                                        {profile?.facultyDetails?.departments && (
+                                            <div className="md:col-span-2">
+                                                <p className="text-xs font-bold text-text-secondary uppercase">Affiliated Department(s)</p>
+                                                <div className="flex flex-wrap gap-2 mt-1">
+                                                    {profile.facultyDetails.departments.map((d: any) => (
+                                                        <span key={d.departmentId} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold ring-1 ring-primary/20">
+                                                            {d.department?.name}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            )}
 
                             <div className="flex justify-end pt-4">
                                 <Button

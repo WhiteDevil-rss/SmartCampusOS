@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { GenerateRequest } from '@nep-scheduler/types';
 
 const AI_ENGINE_URL = process.env.AI_ENGINE_URL || 'http://localhost:5001';
 

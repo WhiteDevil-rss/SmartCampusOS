@@ -1,22 +1,29 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/lib/store/useAuthStore";
-import { GetStartedButton } from "@/components/get-started-button";
+import { ThemeToggle } from "./theme-toggle";
 
 const navLinks = [
-    { label: "Home", href: "/" },
-    { label: "Platform", href: "/platform" },
+    { label: "Ecosystem", href: "#ecosystem" },
     { label: "Solutions", href: "/solutions" },
     { label: "Security", href: "/security" },
+    { label: "Admissions", href: "/admissions" },
 ];
 
 export function LandingNav() {
     const { user, isAuthenticated } = useAuthStore();
     const pathname = usePathname();
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => setScrolled(window.scrollY > 20);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const getDashboardPath = () => {
         if (!user) return "/dashboard";
@@ -29,108 +36,94 @@ export function LandingNav() {
     };
 
     return (
-        <header className="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-white/10 bg-background-dark/80 backdrop-blur-md px-6 lg:px-10 py-4">
+        <header
+            className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between transition-all duration-300 px-6 lg:px-12 py-4 ${scrolled ? "bg-background/80 backdrop-blur-xl border-b border-border py-3" : "bg-transparent py-6"
+                }`}
+        >
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 text-slate-100">
-                <div className="w-6 h-6 text-neon-cyan flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[28px]">schedule</span>
+            <Link href="/" className="flex items-center gap-2.5 group">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:border-primary/40 transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.1)]">
+                    <span className="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform">hub</span>
                 </div>
-                <h2 className="text-slate-100 text-xl font-bold leading-tight tracking-[-0.015em] font-heading">Zembaa</h2>
+                <div className="flex flex-col">
+                    <span className="text-text-primary text-lg font-bold font-space-grotesk tracking-tight leading-none">SmartCampus</span>
+                    <span className="text-secondary text-[10px] font-bold tracking-[0.2em] uppercase leading-none mt-1">Operating System</span>
+                </div>
             </Link>
 
             {/* Center Nav */}
-            <div className="hidden md:flex flex-1 justify-center items-center gap-8">
+            <nav className="hidden md:flex items-center gap-10">
                 {navLinks.map((link) => (
                     <Link
                         key={link.href}
                         href={link.href}
-                        className={`text-[14px] font-medium transition-colors ${pathname === link.href
-                            ? "text-neon-cyan"
-                            : "text-slate-300 hover:text-neon-cyan"
+                        className={`text-sm font-medium transition-all hover:text-text-primary ${pathname === link.href ? "text-text-primary" : "text-text-muted"
                             }`}
                     >
                         {link.label}
                     </Link>
                 ))}
-            </div>
+            </nav>
 
-            {/* Right Desktop Actions */}
-            <div className="hidden md:flex flex-1 justify-end items-center gap-3">
+            {/* Right Actions */}
+            <div className="flex items-center gap-4">
                 {isAuthenticated ? (
                     <Link
                         href={getDashboardPath()}
-                        className="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-gradient-to-r from-neon-cyan to-blue-500 text-background-dark text-sm font-bold shadow-[0_0_15px_rgba(0,245,255,0.3)] hover:shadow-[0_0_25px_rgba(0,245,255,0.5)] transition-all"
+                        className="glow-button hidden sm:flex items-center justify-center rounded-full bg-primary text-white px-8 py-2.5 text-sm font-bold transition-all hover:scale-105 active:scale-95"
                     >
-                        Dashboard
+                        Platform
                     </Link>
                 ) : (
-                    <div className="flex items-center gap-3">
+                    <>
                         <Link
                             href="/login"
-                            className="hidden sm:flex items-center justify-center rounded-full border border-neon-cyan text-neon-cyan px-6 py-2 text-[14px] font-medium hover:bg-neon-cyan hover:text-white transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-neon-cyan/50"
+                            className="hidden sm:inline-flex text-sm font-bold text-text-muted hover:text-text-primary transition-colors mr-2 focus:outline-none"
                         >
-                            Login
+                            Sign In
                         </Link>
-                        <GetStartedButton
-                            className="flex items-center justify-center rounded-full bg-gradient-to-r from-neon-cyan to-blue-500 text-white px-6 py-[10px] text-[14px] font-semibold shadow-[0_0_15px_rgba(0,245,255,0.3)] hover:scale-105 hover:shadow-[0_0_25px_rgba(0,245,255,0.5)] transition-all active:scale-95 animate-pulse hover:animate-none"
+                        <Link
+                            href="/login?tab=register"
+                            className="glow-button hidden sm:flex items-center justify-center rounded-full bg-foreground text-background px-8 py-2.5 text-sm font-bold transition-all hover:scale-105 active:scale-95"
                         >
                             Get Started
-                        </GetStartedButton>
-                    </div>
+                        </Link>
+                    </>
                 )}
-            </div>
 
-            {/* Mobile Menu Button */}
-            <button
-                className="md:hidden p-2 rounded-lg border border-white/10 text-slate-300 hover:text-white transition-colors ml-3"
-                onClick={() => setMobileOpen((v) => !v)}
-                aria-label="Toggle navigation menu"
-            >
-                <span className="material-symbols-outlined text-xl">{mobileOpen ? 'close' : 'menu'}</span>
-            </button>
+                <ThemeToggle />
+
+                {/* Mobile Menu Button */}
+                <button
+                    className="md:hidden w-10 h-10 flex items-center justify-center rounded-xl border border-border text-text-muted hover:text-text-primary transition-colors"
+                    onClick={() => setMobileOpen(!mobileOpen)}
+                    aria-label="Toggle menu"
+                >
+                    <span className="material-symbols-outlined">{mobileOpen ? 'close' : 'menu'}</span>
+                </button>
+            </div>
 
             {/* Mobile Dropdown */}
             {mobileOpen && (
-                <div className="absolute top-full left-0 right-0 mt-0 bg-background-dark/95 backdrop-blur-xl border-b border-white/10 p-4 flex flex-col gap-3 md:hidden shadow-[0_8px_40px_rgba(0,0,0,0.6)]">
+                <div className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-2xl border-b border-border p-6 flex flex-col gap-4 md:hidden animate-in slide-in-from-top-4 duration-300">
                     {navLinks.map((link) => (
                         <Link
                             key={link.href}
                             href={link.href}
                             onClick={() => setMobileOpen(false)}
-                            className={`text-sm font-medium py-2 px-3 rounded-lg transition-colors ${pathname === link.href
-                                ? "text-neon-cyan bg-neon-cyan/10"
-                                : "text-slate-300 hover:text-white hover:bg-white/5"
-                                }`}
+                            className="text-lg font-medium text-text-muted hover:text-text-primary py-2"
                         >
                             {link.label}
                         </Link>
                     ))}
-                    <div className="border-t border-white/10 pt-3 mt-1 flex flex-col gap-2">
-                        {isAuthenticated ? (
-                            <Link
-                                href={getDashboardPath()}
-                                onClick={() => setMobileOpen(false)}
-                                className="w-full text-center px-6 py-2.5 rounded-lg bg-gradient-to-r from-neon-cyan to-blue-500 text-background-dark text-sm font-bold transition-all"
-                            >
-                                Dashboard
-                            </Link>
-                        ) : (
-                            <>
-                                <Link
-                                    href="/login"
-                                    onClick={() => setMobileOpen(false)}
-                                    className="w-full text-center text-sm font-medium text-slate-300 hover:text-white transition-colors py-2"
-                                >
-                                    Sign In
-                                </Link>
-                                <GetStartedButton
-                                    onClick={() => setMobileOpen(false)}
-                                    className="w-full text-center px-6 py-2.5 rounded-lg bg-gradient-to-r from-neon-cyan to-blue-500 text-background-dark text-sm font-bold transition-all"
-                                >
-                                    Get Started
-                                </GetStartedButton>
-                            </>
-                        )}
+                    <div className="border-t border-border pt-6 mt-2 flex flex-col gap-4">
+                        <Link
+                            href="/login"
+                            onClick={() => setMobileOpen(false)}
+                            className="w-full text-center py-4 rounded-2xl bg-foreground text-background font-bold"
+                        >
+                            Initialize System
+                        </Link>
                     </div>
                 </div>
             )}

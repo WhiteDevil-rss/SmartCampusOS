@@ -3,9 +3,9 @@
     {
       "id": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Veer Narmad South Gujarat University",
-      "shortName": "vnsgu",
+      "shortName": "VNSGU",
       "location": "Surat, Gujarat",
-      "email": "vc@vnsgu.ac.in",
+      "email": "admin@vnsgu.ac.in",
       "estYear": 1965,
       "website": "vnsgu.ac.in",
       "adminUserId": "0c2a2e5a-cb7a-46a3-bc1c-54879f7d54b3",
@@ -32,7 +32,7 @@
     {
       "id": "9be572c4-1fc9-48c3-9b30-631316853799",
       "username": "superadmin",
-      "email": "admin@zembaa.com",
+      "email": "admin@smartcampus.os",
       "passwordHash": "$2b$12$2Jrt90jspTyJe2xLJvCddOr/qYc2BHvoAeLVAZOGTqmjUfRtbFY0q",
       "firebaseUid": "53Wc97Zg31gcX9Il9ODs7pkfEVt2",
       "role": "SUPERADMIN",
@@ -193,6 +193,116 @@
       "isActive": true,
       "createdAt": "2026-03-04T16:08:24.539Z",
       "lastLogin": "2026-03-04T17:14:59.439Z"
+    },
+    {
+      "id": "a583022b-f3c8-4026-88e4-382571c7b76f",
+      "username": "aaravpatel85",
+      "email": "aarav.patel@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "93846fa8-101e-415b-a9df-c19e7fb644b2",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "f7a189a5-dd96-4a4f-a5be-88b3c09ee514",
+      "username": "diyasharma5",
+      "email": "diya.sharma@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "fd3916af-d640-416d-a207-d3eb42ee077c",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "9a9a5fa7-175f-4d5e-a9d7-c5d31e1cda94",
+      "username": "rahulverma5",
+      "email": "rahul.verma@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "fe7c3c97-f817-49c7-a6cb-89c0ab19eb94",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "df143c38-4477-4f10-aa86-914963869aa3",
+      "username": "snehaiyer54",
+      "email": "sneha.iyer@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "63dcdf68-54b3-4af5-a4ea-9a7d6207340b",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "0c254b69-6b76-4566-9c9a-9ca8b4465c56",
+      "username": "rohanmehta84",
+      "email": "rohan.mehta@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "ff143b27-6c1e-4513-b1aa-dcdc7f0b46be",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "d7d990f2-e3ec-4f83-82d9-59fb23bd82dc",
+      "username": "priyadesai9",
+      "email": "priya.desai@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "16069d45-d9f3-4274-bdad-aac317b7dedc",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "1e406c60-3352-428b-b505-ae33bd597e1b",
+      "username": "amitsingh11",
+      "email": "amit.singh@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "27fb2d33-7d69-4227-82a0-3607d3abd9c7",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "0c829fed-1325-434d-8538-3dff13850a0c",
+      "username": "nehagupta21",
+      "email": "neha.gupta@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "b92a23d4-819d-48f4-9eb6-22b287e27a77",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "4874a5a8-5d63-425c-a064-4b217ca84a33",
+      "username": "vikramrathore93",
+      "email": "vikram.rathore@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "16891ece-1ed9-4746-bb00-86a2dd2b9ff3",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "debcc0bb-2c7a-44b1-b003-8225e9711e77",
+      "username": "poojareddy29",
+      "email": "pooja.reddy@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "6290429f-4822-4cdb-9b1f-2bf49faf4f8b",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
     }
   ],
   "departments": [
@@ -351,7 +461,8 @@
       "year": "2025-26",
       "strength": 60,
       "totalStudents": 120,
-      "createdAt": "2026-03-04T16:08:24.571Z"
+      "createdAt": "2026-03-04T16:08:24.571Z",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4"
     },
     {
       "id": "a290f72f-40f6-4659-8542-ab97fb9a0611",
@@ -364,7 +475,8 @@
       "year": "2025-26",
       "strength": 60,
       "totalStudents": 120,
-      "createdAt": "2026-03-04T17:15:30.904Z"
+      "createdAt": "2026-03-04T17:15:30.904Z",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4"
     }
   ],
   "courses": [
@@ -561,7 +673,7 @@
       "id": "f2ebbdd8-9ec3-4562-8df7-ca3526975fb6",
       "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Dharmen Shah",
-      "email": "dharmen@vnsgu.ac.in",
+      "email": "dharmen@smartcampus.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
@@ -574,7 +686,7 @@
       "id": "0a838706-7f61-4024-9d20-6b1e55000899",
       "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Jayshree Patel",
-      "email": "jayshree@vnsgu.ac.in",
+      "email": "jayshree@smartcampus.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
@@ -587,7 +699,7 @@
       "id": "013beb75-af32-40f2-922a-60d64787317a",
       "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Prakash Rana",
-      "email": "prakash@vnsgu.ac.in",
+      "email": "prakash@smartcampus.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
@@ -600,7 +712,7 @@
       "id": "dd1baa3b-082f-4dab-8da4-6162a106854c",
       "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Mayur Gohil",
-      "email": "mayur@vnsgu.ac.in",
+      "email": "mayur@smartcampus.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
@@ -613,7 +725,7 @@
       "id": "28daefbf-62ac-4489-aa41-3815a80298cb",
       "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Nimisha Modi",
-      "email": "nimisha@vnsgu.ac.in",
+      "email": "nimisha@smartcampus.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
@@ -626,7 +738,7 @@
       "id": "506de1b6-5553-405b-bcd1-ce843badb848",
       "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Rustam Morena",
-      "email": "rustam@vnsgu.ac.in",
+      "email": "rustam@smartcampus.ac.in",
       "phone": null,
       "designation": "Professor",
       "qualifications": null,
@@ -639,7 +751,7 @@
       "id": "4fbd0c14-dcb0-4324-b791-9433a45abbdc",
       "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Ravi Gulati",
-      "email": "ravi@vnsgu.ac.in",
+      "email": "ravi@smartcampus.ac.in",
       "phone": null,
       "designation": "Professor",
       "qualifications": null,
@@ -652,7 +764,7 @@
       "id": "f06a1425-82ae-4bbf-9b5b-f20db72bc283",
       "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Vimal Chaoudhary",
-      "email": "vimal@vnsgu.ac.in",
+      "email": "vimal@smartcampus.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
@@ -665,7 +777,7 @@
       "id": "8693f0e8-2bc9-4d94-a340-12929a32d514",
       "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "name": "Rinku Patel",
-      "email": "rinku@vnsgu.ac.in",
+      "email": "rinku@smartcampus.ac.in",
       "phone": null,
       "designation": "Assistant Professor",
       "qualifications": null,
@@ -849,5 +961,276 @@
     }
   ],
   "timetables": [],
-  "exportedAt": "2026-03-04T17:20:07.259Z"
+  "exportedAt": "2026-03-04T17:20:07.259Z",
+  "programs": [
+    {
+      "id": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "name": "Master of Computer Applications",
+      "shortName": "MCA",
+      "type": "PG",
+      "duration": 2,
+      "totalSems": 4
+    },
+    {
+      "id": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "name": "Bachelor of Computer Applications",
+      "shortName": "BCA",
+      "type": "UG",
+      "duration": 3,
+      "totalSems": 6
+    }
+  ],
+  "sessionTypes": [
+    {
+      "id": "5e4d3e61-1d27-485e-acee-f73ca9c35cc4",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "name": "Theory",
+      "durationRule": 60,
+      "roomTypeRequired": "Classroom"
+    },
+    {
+      "id": "fd0f8d5f-ef0a-4b8b-8457-7ca099f1cef6",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "name": "Lab",
+      "durationRule": 120,
+      "roomTypeRequired": "Lab"
+    }
+  ],
+  "timeBlocks": [
+    {
+      "id": "b517d903-6daf-4e39-be25-db88da1a3be7",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "name": "Block 1",
+      "startTime": "09:00",
+      "endTime": "10:00",
+      "duration": 60,
+      "isBreak": false,
+      "slotNumber": 1
+    },
+    {
+      "id": "3db59910-0ec3-426a-9271-11f07ab1f502",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "name": "Block 2",
+      "startTime": "10:00",
+      "endTime": "11:00",
+      "duration": 60,
+      "isBreak": false,
+      "slotNumber": 2
+    },
+    {
+      "id": "fb140f09-0bf0-41c8-b2f2-d4a24fa19e64",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "name": "Short Break",
+      "startTime": "11:00",
+      "endTime": "11:15",
+      "duration": 15,
+      "isBreak": true,
+      "slotNumber": 3
+    },
+    {
+      "id": "f57b7347-5cb3-4a63-8819-c6780fdb6e4a",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "name": "Block 3",
+      "startTime": "11:15",
+      "endTime": "12:15",
+      "duration": 60,
+      "isBreak": false,
+      "slotNumber": 4
+    },
+    {
+      "id": "e786d49f-f216-4b53-9d2f-5025eb8c3251",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "name": "Lunch Break",
+      "startTime": "12:15",
+      "endTime": "13:00",
+      "duration": 45,
+      "isBreak": true,
+      "slotNumber": 5
+    },
+    {
+      "id": "2295aff5-381d-44e1-a6a8-fd0757483b57",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "name": "Block 4",
+      "startTime": "13:00",
+      "endTime": "15:00",
+      "duration": 120,
+      "isBreak": false,
+      "slotNumber": 6
+    }
+  ],
+  "students": [
+    {
+      "id": "93846fa8-101e-415b-a9df-c19e7fb644b2",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250000",
+      "name": "Aarav Patel",
+      "email": "aarav.patel@student.vnsgu.ac.in",
+      "phone": "9876510000",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "fd3916af-d640-416d-a207-d3eb42ee077c",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250001",
+      "name": "Diya Sharma",
+      "email": "diya.sharma@student.vnsgu.ac.in",
+      "phone": "9876510001",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "fe7c3c97-f817-49c7-a6cb-89c0ab19eb94",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250002",
+      "name": "Rahul Verma",
+      "email": "rahul.verma@student.vnsgu.ac.in",
+      "phone": "9876510002",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "63dcdf68-54b3-4af5-a4ea-9a7d6207340b",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250003",
+      "name": "Sneha Iyer",
+      "email": "sneha.iyer@student.vnsgu.ac.in",
+      "phone": "9876510003",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "ff143b27-6c1e-4513-b1aa-dcdc7f0b46be",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250004",
+      "name": "Rohan Mehta",
+      "email": "rohan.mehta@student.vnsgu.ac.in",
+      "phone": "9876510004",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "16069d45-d9f3-4274-bdad-aac317b7dedc",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250005",
+      "name": "Priya Desai",
+      "email": "priya.desai@student.vnsgu.ac.in",
+      "phone": "9876510005",
+      "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "27fb2d33-7d69-4227-82a0-3607d3abd9c7",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250006",
+      "name": "Amit Singh",
+      "email": "amit.singh@student.vnsgu.ac.in",
+      "phone": "9876510006",
+      "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "b92a23d4-819d-48f4-9eb6-22b287e27a77",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250007",
+      "name": "Neha Gupta",
+      "email": "neha.gupta@student.vnsgu.ac.in",
+      "phone": "9876510007",
+      "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "16891ece-1ed9-4746-bb00-86a2dd2b9ff3",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250008",
+      "name": "Vikram Rathore",
+      "email": "vikram.rathore@student.vnsgu.ac.in",
+      "phone": "9876510008",
+      "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "6290429f-4822-4cdb-9b1f-2bf49faf4f8b",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250009",
+      "name": "Pooja Reddy",
+      "email": "pooja.reddy@student.vnsgu.ac.in",
+      "phone": "9876510009",
+      "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    }
+  ],
+  "assignments": [
+    {
+      "id": "817995ae-e05c-47c3-bc8c-6ac7e4171618",
+      "title": "AI Mid-Term Project",
+      "description": "Implement A* search algorithm for pathfinding.",
+      "dueDate": "2026-03-14T19:03:03.278Z",
+      "maxMarks": 100,
+      "facultyId": "f2ebbdd8-9ec3-4562-8df7-ca3526975fb6",
+      "courseId": "cf7699ac-7616-45fa-9d78-0e292e63ff11",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221"
+    },
+    {
+      "id": "89ae4d38-63ec-4ad3-a626-61ec98066f2a",
+      "title": "Linear Regression Analysis",
+      "description": "Perform linear regression on the provided dataset.",
+      "dueDate": "2026-03-21T19:03:03.284Z",
+      "maxMarks": 50,
+      "facultyId": "f2ebbdd8-9ec3-4562-8df7-ca3526975fb6",
+      "courseId": "cf7699ac-7616-45fa-9d78-0e292e63ff11",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221"
+    }
+  ],
+  "feeStructures": [
+    {
+      "id": "f262c342-b40f-4921-8765-70de06e5baaf",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "semester": 2,
+      "academicYear": "2025-2026",
+      "components": [
+        {
+          "name": "Tuition Fee",
+          "amount": 45000,
+          "optional": false
+        },
+        {
+          "name": "Library Fee",
+          "amount": 2000,
+          "optional": false
+        },
+        {
+          "name": "Sports Fee",
+          "amount": 1500,
+          "optional": false
+        }
+      ],
+      "totalAmount": 48500
+    }
+  ]
 }

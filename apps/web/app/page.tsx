@@ -6,7 +6,7 @@ import { useAuthStore } from "@/lib/store/useAuthStore";
 import { GetStartedModal } from "@/components/get-started-modal";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
-import { GetStartedButton } from "@/components/get-started-button";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const { user, isAuthenticated } = useAuthStore();
@@ -29,277 +29,227 @@ export default function Home() {
 
   const dashboardPath = getDashboardPath();
 
+  const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6 }
+  };
+
   return (
-    <div className="dark min-h-screen bg-background-dark text-slate-100 relative overflow-x-hidden flex flex-col font-heading selection:bg-neon-cyan/30 antialiased">
+    <div className="min-h-screen bg-background text-text-primary relative overflow-x-hidden flex flex-col font-sans selection:bg-primary/30 antialiased mesh-gradient">
       <LandingNav />
 
       <main className="flex-1">
-        {/* Section B: Hero */}
-        <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 px-6 md:px-12 max-w-7xl mx-auto overflow-hidden">
-          {/* Decorative background */}
-          <div className="absolute top-1/4 -left-64 w-96 h-96 bg-neon-cyan/20 rounded-full mix-blend-screen filter blur-[128px]" />
-          <div className="absolute bottom-1/4 -right-64 w-96 h-96 bg-neon-purple/20 rounded-full mix-blend-screen filter blur-[128px]" />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center relative z-10">
-            <div className="flex flex-col gap-8 max-w-2xl">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-neon-cyan/30 bg-neon-cyan/10 w-fit">
-                <span className="material-symbols-outlined text-neon-cyan text-sm">auto_awesome</span>
-                <span className="text-neon-cyan text-xs font-semibold tracking-wide uppercase">AI-Powered Scheduling</span>
+        {/* Hero Section */}
+        <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 md:px-12 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial="initial"
+              animate="animate"
+              variants={fadeIn}
+              className="flex flex-col gap-8"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/10 w-fit backdrop-blur-md">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                </span>
+                <span className="text-primary text-xs font-bold tracking-wider uppercase">V1.0 Now Live</span>
               </div>
 
-              {/* Heading */}
-              <div className="flex flex-col gap-4">
-                <h1 className="text-slate-100 text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight">
-                  The Future of Academic <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan to-neon-purple">Timetable Generation</span>
-                </h1>
-                <p className="text-slate-400 text-lg md:text-xl font-normal leading-relaxed max-w-xl">
-                  Create conflict-free, optimized timetables in seconds with our intelligent AI scheduling engine.
-                </p>
-              </div>
+              <h1 className="text-5xl md:text-7xl font-bold font-space-grotesk leading-[1.05] tracking-tight">
+                The AI-Powered <br />
+                <span className="gradient-text">University OS</span>
+              </h1>
 
-              {/* CTA Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
+              <p className="text-text-muted text-lg md:text-xl font-normal leading-relaxed max-w-xl">
+                Experience the next generation of academic management. A unified platform integrating AI, Blockchain, and IoT for the modern campus.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-6 pt-4">
                 {mounted && isAuthenticated ? (
                   <Link
                     href={dashboardPath}
-                    className="flex items-center justify-center rounded-full bg-gradient-to-r from-neon-cyan to-blue-500 text-white px-[36px] py-[14px] text-[16px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(0,245,255,0.5)] transition-all active:scale-95"
+                    className="glow-button flex items-center justify-center rounded-full bg-primary text-white px-10 py-4 text-base font-bold transition-all hover:scale-105 active:scale-95"
                   >
-                    Access Dashboard
+                    Launch Platform
                   </Link>
                 ) : (
                   <>
                     <button
                       onClick={() => setShowInquiryModal(true)}
-                      className="flex items-center justify-center rounded-full bg-gradient-to-r from-neon-cyan to-blue-500 text-white px-[36px] py-[14px] text-[16px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(0,245,255,0.5)] transition-all active:scale-95"
+                      className="glow-button flex items-center justify-center rounded-full bg-primary text-white px-10 py-4 text-base font-bold transition-all hover:scale-105 active:scale-95"
                     >
-                      Get Started Free
+                      Initialize System
                     </button>
                     <button
-                      onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-                      className="flex items-center justify-center gap-2 rounded-full border border-neon-cyan text-neon-cyan bg-transparent px-[36px] py-[14px] text-[16px] font-medium hover:bg-neon-cyan hover:text-white transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-neon-cyan/50"
+                      onClick={() => document.getElementById('ecosystem')?.scrollIntoView({ behavior: 'smooth' })}
+                      className="flex items-center justify-center gap-2 rounded-full border border-border-hover bg-white/5 backdrop-blur-md text-white px-10 py-4 text-base font-medium hover:bg-surface-hover transition-all transition-all"
                     >
-                      <span className="material-symbols-outlined text-[20px]">play_circle</span>
-                      Watch Demo
+                      Explore Ecosystem
                     </button>
                   </>
                 )}
               </div>
 
-              {/* Trust bar */}
-              <div className="pt-8 border-t border-white/10 flex flex-col gap-3 mt-2">
-                <div className="flex flex-wrap gap-6 text-slate-400 text-sm">
-                  <span className="flex items-center gap-1.5"><span className="text-neon-cyan">✓</span> 50+ Universities</span>
-                  <span className="flex items-center gap-1.5"><span className="text-neon-cyan">✓</span> 500+ Timetables</span>
-                  <span className="flex items-center gap-1.5"><span className="text-neon-cyan">✓</span> 99.9% Conflict-Free</span>
+              <div className="pt-10 flex items-center gap-8 border-t border-border mt-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-2xl font-bold font-space-grotesk">50+</span>
+                  <span className="text-xxs uppercase tracking-widest text-text-secondary font-bold">Institutions</span>
+                </div>
+                <div className="w-px h-10 bg-white/5" />
+                <div className="flex flex-col gap-1">
+                  <span className="text-2xl font-bold font-space-grotesk">10k+</span>
+                  <span className="text-xxs uppercase tracking-widest text-text-secondary font-bold">Users</span>
+                </div>
+                <div className="w-px h-10 bg-white/5" />
+                <div className="flex flex-col gap-1">
+                  <span className="text-2xl font-bold font-space-grotesk">99.9%</span>
+                  <span className="text-xxs uppercase tracking-widest text-text-secondary font-bold">Uptime</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {/* Dashboard Preview */}
-            <div className="relative w-full aspect-[4/3] rounded-2xl bg-white/[0.03] border border-white/10 shadow-2xl p-2 md:p-4 overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/5 to-neon-purple/5 z-0" />
-              <div className="relative z-10 w-full h-full bg-background-dark rounded-xl border border-white/10 shadow-inner flex flex-col overflow-hidden">
-                {/* Dashboard Header */}
-                <div className="h-12 border-b border-white/10 flex items-center px-4 justify-between bg-white/[0.03]">
-                  <div className="flex gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                  </div>
-                  <div className="h-4 w-32 bg-white/10 rounded-full" />
-                </div>
-                {/* Dashboard Content */}
-                <div className="flex-1 p-4 flex gap-4">
-                  <div className="w-48 border-r border-white/10 pr-4 hidden sm:flex flex-col gap-3">
-                    <div className="h-6 w-full bg-white/10 rounded" />
-                    <div className="h-6 w-3/4 bg-white/10 rounded" />
-                    <div className="h-6 w-5/6 bg-white/10 rounded" />
-                    <div className="mt-auto h-8 w-full bg-neon-cyan/20 rounded" />
-                  </div>
-                  <div className="flex-1 flex flex-col gap-4">
-                    <div className="flex gap-4">
-                      <div className="h-24 flex-1 bg-white/[0.03] rounded-lg border border-white/10 flex items-center justify-center">
-                        <div className="h-8 w-8 rounded-full bg-neon-cyan/50" />
-                      </div>
-                      <div className="h-24 flex-1 bg-white/[0.03] rounded-lg border border-white/10 flex items-center justify-center">
-                        <div className="h-8 w-8 rounded-full bg-neon-purple/50" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="relative hidden lg:block"
+            >
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 blur-3xl opacity-30 animate-pulse" />
+              <div className="relative glass-morphism rounded-3xl p-4 md:p-8 aspect-video overflow-hidden border border-border-hover">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
+                {/* Dashboard Mockup Representation */}
+                <div className="flex flex-col h-full gap-4">
+                  <div className="h-4 w-32 bg-surface-hover rounded-full mb-4" />
+                  <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="h-24 glass-effect rounded-2xl flex items-center justify-center">
+                      <div className="h-10 w-10 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-primary">analytics</span>
                       </div>
                     </div>
-                    {/* Timetable Grid Mockup */}
-                    <div className="flex-1 bg-white/[0.03] rounded-lg border border-white/10 p-2 grid grid-cols-5 gap-2">
-                      <div className="bg-neon-cyan/20 rounded col-span-2 row-span-2" />
-                      <div className="bg-blue-500/20 rounded col-span-1 row-span-1" />
-                      <div className="bg-neon-purple/20 rounded col-span-2 row-span-1" />
-                      <div className="bg-emerald-500/20 rounded col-span-1 row-span-3" />
-                      <div className="bg-amber-500/20 rounded col-span-2 row-span-2" />
+                    <div className="h-24 glass-effect rounded-2xl flex items-center justify-center">
+                      <div className="h-10 w-10 rounded-full bg-secondary/20 border border-secondary/30 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-secondary">verified</span>
+                      </div>
+                    </div>
+                    <div className="h-24 glass-effect rounded-2xl flex items-center justify-center">
+                      <div className="h-10 w-10 rounded-full bg-accent-green/20 border border-accent-green/30 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-accent-green">sensors</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-1 glass-effect rounded-2xl p-6 relative overflow-hidden">
+                    <div className="flex flex-col gap-4">
+                      <div className="h-4 w-1/2 bg-surface-hover rounded-full" />
+                      <div className="h-2 w-full bg-white/5 rounded-full" />
+                      <div className="h-2 w-5/6 bg-white/5 rounded-full" />
+                      <div className="h-32 mt-4 glass-morphism rounded-xl border border-border" />
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="absolute inset-0 border-2 border-neon-cyan/0 group-hover:border-neon-cyan/30 rounded-2xl transition-all duration-500 z-20 pointer-events-none" />
-            </div>
+            </motion.div>
           </div>
         </section>
 
-        {/* Section C: Features Grid */}
-        <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative">
-          <div className="flex flex-col gap-4 text-center mb-16 items-center">
-            <h2 className="text-slate-100 text-3xl md:text-4xl font-bold leading-tight">Powerful Features</h2>
-            <p className="text-slate-400 text-base md:text-lg max-w-2xl">
-              Everything you need for intelligent scheduling
+        {/* Ecosystem Section */}
+        <section id="ecosystem" className="py-24 px-6 md:px-12 max-w-7xl mx-auto relative overflow-hidden">
+          <div className="flex flex-col gap-4 text-center mb-20 items-center">
+            <h2 className="text-4xl md:text-5xl font-bold font-space-grotesk tracking-tight">The 7-Module Ecosystem</h2>
+            <p className="text-text-muted text-lg max-w-2xl">
+              A comprehensive suite of interconnected modules designed to automate and enhance every aspect of university life.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: "auto_awesome", title: "AI Timetable Generation", desc: "Advanced AI generates optimized schedules automatically" },
-              { icon: "verified_user", title: "Zero Conflicts", desc: "Guaranteed conflict-free scheduling for all resources" },
-              { icon: "tune", title: "Smart Constraints", desc: "Intelligent handling of complex academic requirements" },
-              { icon: "account_tree", title: "Multi-Program Support", desc: "Handle multiple programs, divisions, and semesters" },
-              { icon: "menu_book", title: "Elective Management", desc: "Smart basket-based elective scheduling with student splits" },
-              { icon: "bolt", title: "Resource Optimization", desc: "Maximum utilization of rooms, labs, and time slots" },
-              { icon: "calendar_month", title: "Continuous Scheduling", desc: "Gap-free timetables for better student experience" },
-              { icon: "sync", title: "Easy Updates", desc: "Flexible partial regeneration without full rebuild" },
-            ].map((feature, i) => (
-              <div key={i} className="group flex flex-col gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-6 hover:bg-white/[0.06] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(0,245,255,0.1)] relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-cyan to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-12 h-12 rounded-lg bg-neon-cyan/10 flex items-center justify-center text-neon-cyan mb-2">
-                  <span className="material-symbols-outlined text-[28px]">{feature.icon}</span>
-                </div>
-                <div>
-                  <h3 className="text-slate-100 text-lg font-bold mb-2">{feature.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-4">{feature.desc}</p>
-                  <button
-                    onClick={() => { }}
-                    className="flex items-center text-[14px] font-medium text-neon-cyan hover:underline transition-all group/btn"
-                  >
-                    Learn More
-                    <span className="material-symbols-outlined text-[16px] ml-1 transition-transform group-hover/btn:translate-x-1">arrow_right_alt</span>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Section D: How It Works */}
-        <section className="py-24 px-6 md:px-12 max-w-4xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-slate-100 text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
-            <p className="text-slate-400 text-lg">A simple process to generate your academic timetable.</p>
-          </div>
-          <div className="relative flex flex-col gap-0 pl-6 md:pl-0">
-            <div className="absolute left-[38px] md:left-1/2 md:-ml-px top-4 bottom-4 w-0.5 bg-white/10" />
-
-            {[
-              { icon: "settings", title: "Setup Your Institution", desc: "Configure your university, departments, and programs", active: true },
-              { icon: "database", title: "Add Academic Data", desc: "Input subjects, faculty, rooms, and time slots", active: false },
-              { icon: "tune", title: "Set Preferences", desc: "Define constraints, electives, and scheduling rules", active: false },
-              { icon: "smart_toy", title: "Generate Timetable", desc: "AI creates optimized conflict-free schedule instantly", active: false },
-              { icon: "check_circle", title: "Review & Export", desc: "Review, make adjustments, and export your timetable", active: false },
-            ].map((step, i) => (
-              <div key={i} className="relative flex flex-col md:flex-row items-start md:items-center justify-between mb-12 md:mb-16 group">
-                <div className={`md:w-[45%] mb-4 md:mb-0 ${i % 2 === 0 ? 'text-left md:text-right' : 'text-left md:text-left md:order-last'} pl-12 md:pl-0`}>
-                  <h3 className="text-xl font-bold text-slate-100 mb-2">{step.title}</h3>
-                  <p className="text-slate-400 text-sm">{step.desc}</p>
-                </div>
-                <div className={`absolute left-0 md:left-1/2 md:-translate-x-1/2 flex items-center justify-center w-10 h-10 rounded-full border-4 border-background-dark z-10 ${step.active
-                  ? 'bg-neon-cyan text-background-dark shadow-[0_0_15px_rgba(0,245,255,0.5)]'
-                  : 'bg-white/[0.03] border-white/10 text-slate-300 group-hover:border-neon-cyan/50 group-hover:text-neon-cyan transition-colors'
-                  }`}>
-                  <span className="material-symbols-outlined text-[20px]">{step.icon}</span>
-                </div>
-                <div className="md:w-[45%]" />
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Section E: Statistics */}
-        <section className="py-24 border-y border-white/5 relative w-full">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
-              {[
-                { value: "500+", label: "Timetables Generated", color: "text-white" },
-                { value: "50+", label: "Universities Trust Us", color: "text-neon-cyan" },
-                { value: "1000+", label: "Faculty Managed", color: "text-white" },
-                { value: "99.9%", label: "Conflict-Free Rate", color: "text-neon-purple" },
-              ].map((stat, i) => (
-                <div key={i} className="text-center md:text-left">
-                  <div className={`text-4xl font-extrabold ${stat.color} mb-2 tracking-tight`}>{stat.value}</div>
-                  <div className="text-xs font-bold text-slate-500 uppercase tracking-widest">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Section F: Testimonials */}
-        <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-slate-100 text-3xl md:text-4xl font-bold mb-4">What Our Users Say</h2>
-            <p className="text-slate-400 text-lg">Trusted by academic institutions worldwide</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { quote: "This platform completely transformed how we create timetables. What used to take weeks now takes minutes.", name: "Dr. Sarah Johnson", role: "Dean of Academics" },
-              { quote: "The AI scheduling is incredibly smart. Zero conflicts and optimal resource usage every single time.", name: "Prof. Michael Chen", role: "Department Head" },
-              { quote: "Managing electives across multiple batches was a nightmare. Now it's completely automated and accurate.", name: "Dr. Emily Roberts", role: "Academic Coordinator" },
-            ].map((testimonial, i) => (
-              <div key={i} className="bg-white/[0.03] backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-neon-cyan/30 transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,245,255,0.05)]">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, j) => (
-                    <span key={j} className="material-symbols-outlined text-neon-cyan text-lg fill-1">star</span>
-                  ))}
-                </div>
-                <p className="text-slate-300 text-base leading-relaxed mb-6 italic">&ldquo;{testimonial.quote}&rdquo;</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-neon-cyan/30 to-neon-purple/30 flex items-center justify-center text-white font-bold text-sm">
-                    {testimonial.name.split(' ').map(n => n[0]).join('')}
+              {
+                icon: "psychology",
+                title: "AI Doubts Assistant",
+                desc: "Real-time AI support for students to resolve academic queries instantly.",
+                color: "from-indigo-500/20 to-violet-500/20",
+                accent: "indigo"
+              },
+              {
+                icon: "verified",
+                title: "Blockchain Vault",
+                desc: "Immutable academic results and certificate verification system.",
+                color: "from-blue-500/20 to-cyan-500/20",
+                accent: "blue"
+              },
+              {
+                icon: "sensors",
+                title: "IoT Campus Presence",
+                desc: "Automated attendance tracking via Bluetooth and IoT proximity sensors.",
+                color: "from-emerald-500/20 to-teal-500/20",
+                accent: "emerald"
+              },
+              {
+                icon: "trending_up",
+                title: "Predictive Analytics",
+                desc: "AI engines that forecast student performance and attrition risks.",
+                color: "from-orange-500/20 to-rose-500/20",
+                accent: "orange"
+              },
+              {
+                icon: "auto_awesome",
+                title: "Smart Scheduler",
+                desc: "Conflict-free, intelligent timetable generation for entire departments.",
+                color: "from-fuchsia-500/20 to-pink-500/20",
+                accent: "fuchsia"
+              },
+              {
+                icon: "account_balance_wallet",
+                title: "Financial Engine",
+                desc: "Unified fee management, scholarships, and digital payment tracking.",
+                color: "from-amber-500/20 to-yellow-500/20",
+                accent: "amber"
+              }
+            ].map((module, i) => (
+              <motion.div
+                key={i}
+                whileHover={{ y: -5 }}
+                className={`group relative glass-morphism p-8 rounded-3xl overflow-hidden border border-border hover:border-white/20 transition-all duration-500`}
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${module.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                <div className="relative z-10">
+                  <div className={`w-14 h-14 rounded-2xl glass-effect flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform duration-500`}>
+                    <span className="material-symbols-outlined text-3xl">{module.icon}</span>
                   </div>
-                  <div>
-                    <p className="text-slate-100 font-bold text-sm">{testimonial.name}</p>
-                    <p className="text-slate-500 text-xs">{testimonial.role}</p>
-                  </div>
+                  <h3 className="text-xl font-bold mb-3 font-space-grotesk">{module.title}</h3>
+                  <p className="text-text-muted text-sm leading-relaxed">{module.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
 
-        {/* Section G: CTA */}
-        <section className="py-24 px-6 md:px-12">
-          <div className="max-w-5xl mx-auto rounded-3xl bg-gradient-to-br from-neon-cyan/20 via-background-dark to-neon-purple/20 border border-white/10 p-12 md:p-20 text-center relative overflow-hidden">
-            <div className="relative z-10 flex flex-col items-center gap-8">
-              <h2 className="text-slate-100 text-4xl md:text-5xl font-bold leading-tight max-w-2xl">
-                Ready to Transform Your Academic Scheduling?
+        {/* Final CTA */}
+        <section className="py-32 px-6">
+          <div className="max-w-5xl mx-auto rounded-[48px] glass-morphism p-12 md:p-24 text-center relative overflow-hidden border border-border-hover group">
+            <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-[100px] group-hover:bg-primary/20 transition-colors duration-700" />
+            <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] group-hover:bg-secondary/20 transition-colors duration-700" />
+
+            <div className="relative z-10 flex flex-col items-center gap-10">
+              <h2 className="text-4xl md:text-6xl font-bold font-space-grotesk tracking-tighter leading-tight">
+                Step into the Future <br /> of <span className="gradient-text">Academic Management</span>
               </h2>
-              <p className="text-slate-300 text-lg max-w-xl">
-                Join over 50+ universities that have eliminated scheduling conflicts and saved countless administrative hours.
+              <p className="text-slate-300 text-lg md:text-xl max-w-2xl leading-relaxed">
+                Join the elite circle of institutions leveraging SmartCampus OS to drive academic excellence and administrative efficiency.
               </p>
-              <div className="flex justify-center gap-[16px] flex-wrap mt-4 w-full">
-                <button
-                  onClick={() => setShowInquiryModal(true)}
-                  className="flex items-center justify-center rounded-full bg-gradient-to-r from-neon-cyan to-blue-500 text-white px-[36px] py-[14px] text-[16px] font-semibold shadow-[0_0_20px_rgba(0,245,255,0.3)] hover:scale-105 hover:shadow-[0_0_30px_rgba(0,245,255,0.5)] transition-all active:scale-95"
-                >
-                  Get Started Free
-                </button>
-                <Link
-                  href="/contact"
-                  className="flex items-center justify-center rounded-full border border-neon-cyan text-neon-cyan bg-transparent px-[36px] py-[14px] text-[16px] font-medium hover:bg-neon-cyan hover:text-white transition-all active:scale-95 focus:outline-none focus:ring-2 focus:ring-neon-cyan/50"
-                >
-                  Schedule Demo
-                </Link>
-              </div>
+              <button
+                onClick={() => setShowInquiryModal(true)}
+                className="glow-button flex items-center justify-center rounded-full bg-white text-background px-12 py-5 text-lg font-bold transition-all hover:scale-105 active:scale-95"
+              >
+                Deploy SmartCampus OS
+              </button>
             </div>
           </div>
         </section>
       </main>
 
       <LandingFooter />
-
-      {/* Get Started Inquiry Modal */}
       <GetStartedModal isOpen={showInquiryModal} onClose={() => setShowInquiryModal(false)} />
     </div>
   );

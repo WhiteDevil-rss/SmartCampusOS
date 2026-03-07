@@ -153,8 +153,8 @@ export default function SuperAdminUsers() {
 
                 <div className="flex justify-between items-center mb-10">
                     <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white glow-sm">Users Directory</h2>
-                        <p className="text-slate-600 dark:text-slate-400 mt-1">Manage platform access, roles, and reset credentials securely.</p>
+                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-text-primary glow-sm">Users Directory</h2>
+                        <p className="text-slate-600 dark:text-text-muted mt-1">Manage platform access, roles, and reset credentials securely.</p>
                     </div>
                     <Button onClick={() => setIsAddUserOpen(true)} className="bg-neon-cyan text-slate-900 font-bold shadow-[0_0_15px_rgba(57,193,239,0.4)] hover:shadow-[0_0_25px_rgba(57,193,239,0.6)] transition-all">
                         <LuUserPlus className="w-4 h-4 mr-2" /> Add User
@@ -164,15 +164,15 @@ export default function SuperAdminUsers() {
                 {loading ? (
                     <div className="flex justify-center p-12"><div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin" /></div>
                 ) : (
-                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-white/5 backdrop-blur-md shadow-xl dark:shadow-2xl overflow-hidden rounded-2xl">
-                        <CardHeader className="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/5 pb-6">
-                            <CardTitle className="text-xl text-slate-900 dark:text-white">Registered Accounts</CardTitle>
-                            <CardDescription className="text-slate-600 dark:text-slate-400">A complete list of users registered across the multi-tenant architecture.</CardDescription>
+                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-xl dark:shadow-2xl overflow-hidden rounded-2xl">
+                        <CardHeader className="bg-slate-50 dark:bg-surface border-b border-slate-200 dark:border-border pb-6">
+                            <CardTitle className="text-xl text-slate-900 dark:text-text-primary">Registered Accounts</CardTitle>
+                            <CardDescription className="text-slate-600 dark:text-text-muted">A complete list of users registered across the multi-tenant architecture.</CardDescription>
                         </CardHeader>
                         <CardContent className="p-0">
-                            <div className="overflow-x-auto">
+                            <div className="table-container">
                                 <table className="w-full text-sm text-left">
-                                    <thead className="text-xs text-slate-500 dark:text-slate-400 uppercase bg-slate-50 dark:bg-white/5">
+                                    <thead className="text-xs text-text-secondary dark:text-text-muted uppercase bg-slate-50 dark:bg-surface">
                                         <tr>
                                             <th className="px-6 py-5 font-bold tracking-wider">User</th>
                                             <th className="px-6 py-5 font-bold tracking-wider">Role</th>
@@ -183,17 +183,17 @@ export default function SuperAdminUsers() {
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                                         {usersList.map((user) => (
-                                            <tr key={user.id} className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group">
+                                            <tr key={user.id} className="hover:bg-slate-50 dark:hover:bg-surface transition-colors group">
                                                 <td className="px-6 py-5">
                                                     <div className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-neon-cyan transition-colors">{user.username}</div>
-                                                    <div className="text-slate-500 dark:text-slate-500 text-xs mt-0.5">{user.email || 'No email provided'}</div>
+                                                    <div className="text-text-secondary dark:text-text-secondary text-xs mt-0.5">{user.email || 'No email provided'}</div>
                                                 </td>
                                                 <td className="px-6 py-5">
                                                     <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 uppercase tracking-wider">
                                                         {user.role}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-5 text-slate-700 dark:text-slate-300 font-medium">
+                                                <td className="px-6 py-5 text-slate-700 dark:text-text-muted font-medium">
                                                     {user.university ? user.university.shortName : 'System Wide'}
                                                 </td>
                                                 <td className="px-6 py-5">
@@ -211,7 +211,7 @@ export default function SuperAdminUsers() {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        className="text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 border border-slate-200 dark:border-white/5 rounded-xl font-bold"
+                                                        className="text-slate-900 dark:text-text-primary hover:bg-slate-100 dark:hover:bg-surface-hover border border-slate-200 dark:border-border rounded-xl font-bold"
                                                         onClick={() => {
                                                             setSelectedUserId(user.id);
                                                             setEditUserForm({
@@ -254,8 +254,8 @@ export default function SuperAdminUsers() {
                                         ))}
                                         {usersList.length === 0 && (
                                             <tr>
-                                                <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
-                                                    <LuShieldAlert className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+                                                <td colSpan={5} className="px-6 py-12 text-center text-text-secondary">
+                                                    <LuShieldAlert className="w-8 h-8 mx-auto text-text-muted mb-2" />
                                                     No users found in the system.
                                                 </td>
                                             </tr>
@@ -269,26 +269,26 @@ export default function SuperAdminUsers() {
 
                 {/* Add User Modal */}
                 <Dialog open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>
-                    <DialogContent className="sm:max-w-xl bg-white dark:bg-[#0a0a0c] border border-slate-200 dark:border-white/5 shadow-2xl dark:shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-[2rem] p-0 overflow-hidden">
+                    <DialogContent className="sm:max-w-xl bg-white dark:bg-[#0a0a0c] border border-slate-200 dark:border-border shadow-2xl dark:shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-[2rem] p-0 overflow-hidden">
                         <DialogHeader className="p-8 pb-0">
-                            <DialogTitle className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Provision Identity</DialogTitle>
-                            <p className="text-slate-600 dark:text-slate-400 font-medium">Create a new secure access point for the matrix.</p>
+                            <DialogTitle className="text-3xl font-black text-slate-900 dark:text-text-primary tracking-tight">Provision Identity</DialogTitle>
+                            <p className="text-slate-600 dark:text-text-muted font-medium">Create a new secure access point for the matrix.</p>
                         </DialogHeader>
                         <div className="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Username</label>
+                                    <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">Username</label>
                                     <Input
-                                        className="bg-white/5 border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-white font-medium"
+                                        className="bg-surface border-border focus:border-neon-cyan/50 h-12 rounded-xl text-text-primary font-medium"
                                         placeholder="Identity Identifier"
                                         value={newUserForm.username}
                                         onChange={(e) => setNewUserForm({ ...newUserForm, username: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Email Address</label>
+                                    <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">Email Address</label>
                                     <Input
-                                        className="bg-white/5 border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-white font-medium"
+                                        className="bg-surface border-border focus:border-neon-cyan/50 h-12 rounded-xl text-text-primary font-medium"
                                         type="email"
                                         placeholder="admin@example.com"
                                         value={newUserForm.email}
@@ -299,18 +299,18 @@ export default function SuperAdminUsers() {
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Contact Number</label>
+                                    <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">Contact Number</label>
                                     <Input
-                                        className="bg-white/5 border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-white font-medium"
+                                        className="bg-surface border-border focus:border-neon-cyan/50 h-12 rounded-xl text-text-primary font-medium"
                                         placeholder="+91 9876543210"
                                         value={newUserForm.phoneNumber}
                                         onChange={(e) => setNewUserForm({ ...newUserForm, phoneNumber: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Access Key</label>
+                                    <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">Access Key</label>
                                     <Input
-                                        className="bg-white/5 border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-white font-medium"
+                                        className="bg-surface border-border focus:border-neon-cyan/50 h-12 rounded-xl text-text-primary font-medium"
                                         type="password"
                                         placeholder="••••••••"
                                         value={newUserForm.password}
@@ -321,9 +321,9 @@ export default function SuperAdminUsers() {
 
                             <div className="grid grid-cols-2 gap-6 pt-2">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">System Role</label>
+                                    <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">System Role</label>
                                     <select
-                                        className="w-full h-12 rounded-xl bg-white/5 border border-white/5 text-white text-sm font-bold px-4 focus:border-neon-cyan/50 outline-none transition-all cursor-pointer appearance-none"
+                                        className="w-full h-12 rounded-xl bg-surface border border-border text-text-primary text-sm font-bold px-4 focus:border-neon-cyan/50 outline-none transition-all cursor-pointer appearance-none"
                                         value={newUserForm.role}
                                         onChange={(e) => setNewUserForm({ ...newUserForm, role: e.target.value })}
                                     >
@@ -335,9 +335,9 @@ export default function SuperAdminUsers() {
                                 </div>
                                 {newUserForm.role !== 'SUPERADMIN' && (
                                     <div className="space-y-2">
-                                        <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Partition Assignment</label>
+                                        <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">Partition Assignment</label>
                                         <select
-                                            className="w-full h-12 rounded-xl bg-white/5 border border-white/5 text-white text-sm font-bold px-4 focus:border-neon-cyan/50 outline-none transition-all cursor-pointer appearance-none"
+                                            className="w-full h-12 rounded-xl bg-surface border border-border text-text-primary text-sm font-bold px-4 focus:border-neon-cyan/50 outline-none transition-all cursor-pointer appearance-none"
                                             value={newUserForm.universityId}
                                             onChange={(e) => setNewUserForm({ ...newUserForm, universityId: e.target.value })}
                                         >
@@ -350,8 +350,8 @@ export default function SuperAdminUsers() {
                                 )}
                             </div>
                         </div>
-                        <DialogFooter className="p-8 bg-white/[0.02] border-t border-white/5">
-                            <Button variant="ghost" onClick={() => setIsAddUserOpen(false)} className="text-slate-400 hover:text-white hover:bg-white/5 rounded-xl px-6 h-12 font-bold">Discard</Button>
+                        <DialogFooter className="p-8 bg-surface border-t border-border">
+                            <Button variant="ghost" onClick={() => setIsAddUserOpen(false)} className="text-text-muted hover:text-text-primary hover:bg-surface rounded-xl px-6 h-12 font-bold">Discard</Button>
                             <Button
                                 onClick={handleCreateUser}
                                 disabled={!newUserForm.username || !newUserForm.password || !newUserForm.phoneNumber}
@@ -365,26 +365,26 @@ export default function SuperAdminUsers() {
 
                 {/* Edit User Modal */}
                 <Dialog open={isEditUserOpen} onOpenChange={setIsEditUserOpen}>
-                    <DialogContent className="sm:max-w-xl bg-[#0a0a0c] border border-white/5 shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-[2rem] p-0 overflow-hidden">
+                    <DialogContent className="sm:max-w-xl bg-[#0a0a0c] border border-border shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-[2rem] p-0 overflow-hidden">
                         <DialogHeader className="p-8 pb-0">
-                            <DialogTitle className="text-3xl font-black text-white tracking-tight">Modify Identity</DialogTitle>
-                            <p className="text-slate-400 font-medium">Update secure parameters for the user account.</p>
+                            <DialogTitle className="text-3xl font-black text-text-primary tracking-tight">Modify Identity</DialogTitle>
+                            <p className="text-text-muted font-medium">Update secure parameters for the user account.</p>
                         </DialogHeader>
                         <div className="p-8 space-y-6">
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Username</label>
+                                    <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">Username</label>
                                     <Input
-                                        className="bg-white/5 border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-white font-medium"
+                                        className="bg-surface border-border focus:border-neon-cyan/50 h-12 rounded-xl text-text-primary font-medium"
                                         placeholder="Username"
                                         value={editUserForm.username}
                                         onChange={(e) => setEditUserForm({ ...editUserForm, username: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Email <span className="text-rose-500 font-normal ml-1 tracking-normal">(Locked)</span></label>
+                                    <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">Email <span className="text-rose-500 font-normal ml-1 tracking-normal">(Locked)</span></label>
                                     <Input
-                                        className="bg-white/5 border-white/5 h-12 rounded-xl text-slate-500 font-medium cursor-not-allowed opacity-50"
+                                        className="bg-surface border-border h-12 rounded-xl text-text-secondary font-medium cursor-not-allowed opacity-50"
                                         type="email"
                                         disabled
                                         value={editUserForm.email}
@@ -394,18 +394,18 @@ export default function SuperAdminUsers() {
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Contact Number</label>
+                                    <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">Contact Number</label>
                                     <Input
-                                        className="bg-white/5 border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-white font-medium"
+                                        className="bg-surface border-border focus:border-neon-cyan/50 h-12 rounded-xl text-text-primary font-medium"
                                         placeholder="Phone Number"
                                         value={editUserForm.phoneNumber}
                                         onChange={(e) => setEditUserForm({ ...editUserForm, phoneNumber: e.target.value })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">System Role</label>
+                                    <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">System Role</label>
                                     <select
-                                        className="w-full h-12 rounded-xl bg-white/5 border border-white/5 text-white text-sm font-bold px-4 outline-none transition-all cursor-pointer appearance-none"
+                                        className="w-full h-12 rounded-xl bg-surface border border-border text-text-primary text-sm font-bold px-4 outline-none transition-all cursor-pointer appearance-none"
                                         value={editUserForm.role}
                                         onChange={(e) => setEditUserForm({ ...editUserForm, role: e.target.value })}
                                     >
@@ -418,9 +418,9 @@ export default function SuperAdminUsers() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Physical Address</label>
+                                <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">Physical Address</label>
                                 <Input
-                                    className="bg-white/5 border-white/5 focus:border-neon-cyan/50 h-12 rounded-xl text-white font-medium"
+                                    className="bg-surface border-border focus:border-neon-cyan/50 h-12 rounded-xl text-text-primary font-medium"
                                     placeholder="Address"
                                     value={editUserForm.address}
                                     onChange={(e) => setEditUserForm({ ...editUserForm, address: e.target.value })}
@@ -429,9 +429,9 @@ export default function SuperAdminUsers() {
 
                             {editUserForm.role !== 'SUPERADMIN' && (
                                 <div className="space-y-2">
-                                    <label className="text-[10px] uppercase font-black text-slate-500 tracking-widest ml-1">Partition Assignment</label>
+                                    <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">Partition Assignment</label>
                                     <select
-                                        className="w-full h-12 rounded-xl bg-white/5 border border-white/5 text-white text-sm font-bold px-4 outline-none transition-all cursor-pointer appearance-none"
+                                        className="w-full h-12 rounded-xl bg-surface border border-border text-text-primary text-sm font-bold px-4 outline-none transition-all cursor-pointer appearance-none"
                                         value={editUserForm.universityId}
                                         onChange={(e) => setEditUserForm({ ...editUserForm, universityId: e.target.value })}
                                     >
@@ -443,8 +443,8 @@ export default function SuperAdminUsers() {
                                 </div>
                             )}
                         </div>
-                        <DialogFooter className="p-8 bg-white/[0.02] border-t border-white/5">
-                            <Button variant="ghost" onClick={() => setIsEditUserOpen(false)} className="text-slate-400 hover:text-white hover:bg-white/5 rounded-xl px-6 h-12 font-bold">Cancel</Button>
+                        <DialogFooter className="p-8 bg-surface border-t border-border">
+                            <Button variant="ghost" onClick={() => setIsEditUserOpen(false)} className="text-text-muted hover:text-text-primary hover:bg-surface rounded-xl px-6 h-12 font-bold">Cancel</Button>
                             <Button
                                 onClick={handleEditUser}
                                 disabled={!editUserForm.username}
@@ -471,12 +471,12 @@ export default function SuperAdminUsers() {
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                 />
-                                <p className="text-xs text-slate-500">This action cannot be undone. The user will be required to use this new credential to authenticate.</p>
+                                <p className="text-xs text-text-secondary">This action cannot be undone. The user will be required to use this new credential to authenticate.</p>
                             </div>
                         </div>
                         <DialogFooter>
                             <Button variant="outline" onClick={() => setIsResetPasswordOpen(false)}>Cancel</Button>
-                            <Button variant="outline" className="bg-red-600 text-white hover:bg-red-700 hover:text-white" onClick={handleResetPassword} disabled={newPassword.length < 6}>Reset Credentials</Button>
+                            <Button variant="outline" className="bg-red-600 text-text-primary hover:bg-red-700 hover:text-text-primary" onClick={handleResetPassword} disabled={newPassword.length < 6}>Reset Credentials</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

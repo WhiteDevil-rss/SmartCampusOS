@@ -1,0 +1,141 @@
+import { Response, Request } from 'express';
+import prisma from '../lib/prisma';
+import { AuthRequest } from '../middlewares/auth.middleware';
+
+export const submitApplication = async (req: Request, res: Response) => {
+    try {
+        const {
+            universityId, departmentId, programId,
+            applicantName, email, phone, documents
+        } = req.body;
+
+        const application = await prisma.admissionApplication.create({
+            data: {
+                universityId,
+                departmentId,
+                programId,
+                applicantName,
+                email,
+                phone,
+                documents: documents || {},
+                status: 'SUBMITTED'
+            }
+        });
+
+        res.status(201).json(application);
+    } catch (error: any) {
+        console.error('Submit Application Error:', error);
+        res.status(500).json({ error: 'Failed to submit admission application' });
+    }
+};
+
+export const getApplications = async (req: AuthRequest, res: Response) => {
+    try {
+        const { universityId, departmentId, status, programId } = req.query;
+        const where: any = {};
+
+        if (universityId) where.universityId = universityId as string;
+        if (departmentId) where.departmentId = departmentId as string;
+        if (status) where.status = status as string;
+        if (programId) where.programId = programId as string;
+
+        const applications = await prisma.admissionApplication.findMany({
+            where,
+            include: {
+                program: true,
+                university: true
+            },
+            orderBy: { appliedAt: 'desc' }
+        });
+
+        res.json(applications);
+    } catch (error: any) {
+        console.error('Get Applications Error:', error);
+        res.status(500).json({ error: 'Failed to fetch applications' });
+    }
+};
+
+export const updateApplicationStatus = async (req: AuthRequest, res: Response) => {
+    try {
+        const id = req.params.id as string;
+        const { status, remarks } = req.body;
+
+        const application = await prisma.admissionApplication.update({
+            where: { id },
+            data: {
+                status,
+                remarks,
+                updatedAt: new Date()
+            }
+        });
+
+        res.json(application);
+    } catch (error: any) {
+        console.error('Update Application Status Error:', error);
+        res.status(500).json({ error: 'Failed to update application status' });
+    }
+};
+
+export const onboardStudent = async (req: AuthRequest, res: Response) => {
+    try {
+        const id = req.params.id as string;
+        const { batchId } = req.body;
+
+        const application = await prisma.admissionApplication.findUnique({
+            where: { id },
+            include: { program: true }
+        });
+
+        if (!application || application.status !== 'SELECTED') {
+            return res.status(400).json({ error: 'Application must be SELECTED before onboarding' });
+        }
+
+        if (!batchId) {
+            return res.status(400).json({ error: 'Batch ID is required for onboarding' });
+        }
+
+        // 1. Create User
+        const username = application.applicantName.toLowerCase().replace(/\s+/g, '_') + '_' + Math.floor(Math.random() * 1000);
+        const user = await prisma.user.create({
+            data: {
+                username,
+                email: application.email,
+                role: 'STUDENT',
+                universityId: application.universityId,
+                isActive: true
+            }
+        });
+
+        // 2. Create Student
+        const enrollmentNo = `STUDENT_${new Date().getFullYear()}_${Math.floor(Math.random() * 10000)}`;
+
+        const student = await prisma.student.create({
+            data: {
+                universityId: application.universityId,
+                departmentId: application.departmentId || '',
+                enrollmentNo,
+                batchId,
+                programId: application.programId,
+                name: application.applicantName,
+                email: application.email,
+                phone: application.phone,
+                admissionYear: new Date().getFullYear()
+            }
+        });
+
+        // 3. Update Application Status
+        const updatedApplication = await prisma.admissionApplication.update({
+            where: { id },
+            data: { status: 'ONBOARDED' }
+        });
+
+        res.json({
+            message: 'Student onboarded successfully',
+            student,
+            user: { id: user.id, username: user.username }
+        });
+    } catch (error: any) {
+        console.error('Onboard Student Error:', error);
+        res.status(500).json({ error: 'Failed to onboard student' });
+    }
+};

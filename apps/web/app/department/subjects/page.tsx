@@ -37,7 +37,7 @@ interface Subject {
 function ProgramSelect({ value, onChange, programs }: { value: string; onChange: (v: string) => void; programs: Program[] }) {
     return (
         <select
-            className="w-full h-10 rounded-md border border-input bg-background dark:bg-slate-900/50 dark:border-white/10 dark:text-white px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
+            className="w-full h-10 rounded-md border border-input bg-background dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
             value={value}
             onChange={(e) => onChange(e.target.value)}
         >
@@ -56,7 +56,7 @@ function SubjectFormFields({
         <div className="space-y-4 py-4">
             {error && <div className="p-3 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/30 rounded-lg text-sm">{error}</div>}
             <div className="space-y-2">
-                <label className="text-sm font-medium dark:text-slate-300">Subject Name</label>
+                <label className="text-sm font-medium dark:text-text-muted">Subject Name</label>
                 <Input
                     placeholder="e.g. Data Structures and Algorithms"
                     value={form.name}
@@ -70,23 +70,23 @@ function SubjectFormFields({
                             program: shouldSync ? newName : form.program
                         });
                     }}
-                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white"
+                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
                 />
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium dark:text-slate-300">Subject Code</label>
+                    <label className="text-sm font-medium dark:text-text-muted">Subject Code</label>
                     <Input
                         placeholder="e.g. MCA-201"
                         value={form.code}
                         onChange={(e) => setForm({ ...form, code: e.target.value })}
-                        className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white"
+                        className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-medium dark:text-slate-300">Subject Type</label>
+                    <label className="text-sm font-medium dark:text-text-muted">Subject Type</label>
                     <select
-                        className="w-full h-10 rounded-md border border-input bg-background dark:bg-slate-900/50 dark:border-white/10 dark:text-white px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
+                        className="w-full h-10 rounded-md border border-input bg-background dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                         value={form.type}
                         onChange={(e) => setForm({ ...form, type: e.target.value })}
                     >
@@ -98,13 +98,13 @@ function SubjectFormFields({
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium dark:text-slate-300">Program</label>
+                    <label className="text-sm font-medium dark:text-text-muted">Program</label>
                     <ProgramSelect value={form.program} onChange={(v) => setForm({ ...form, program: v })} programs={programs} />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-medium dark:text-slate-300">Semester</label>
+                    <label className="text-sm font-medium dark:text-text-muted">Semester</label>
                     <select
-                        className="w-full h-10 rounded-md border border-input bg-background dark:bg-slate-900/50 dark:border-white/10 dark:text-white px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
+                        className="w-full h-10 rounded-md border border-input bg-background dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                         value={form.semester}
                         onChange={(e) => setForm({ ...form, semester: parseInt(e.target.value) })}
                     >
@@ -116,7 +116,7 @@ function SubjectFormFields({
                 </div>
             </div>
             <div className="space-y-2">
-                <label className="text-sm font-medium dark:text-slate-300">Credits <span className="text-slate-400 dark:text-slate-500 font-normal">(1 Credit = 1 Hour/Week)</span></label>
+                <label className="text-sm font-medium dark:text-text-muted">Credits <span className="text-text-muted dark:text-text-secondary font-normal">(1 Credit = 1 Hour/Week)</span></label>
                 <Input
                     type="number" min="1" max="10"
                     value={form.credits}
@@ -124,21 +124,21 @@ function SubjectFormFields({
                         const c = parseInt(e.target.value) || 1;
                         setForm({ ...form, credits: c, weeklyHrs: c });
                     }}
-                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white"
+                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
                 />
-                <p className="text-xs text-slate-500 dark:text-slate-400">Weekly teaching hours are automatically set equal to credits.</p>
+                <p className="text-xs text-text-secondary dark:text-text-muted">Weekly teaching hours are automatically set equal to credits.</p>
             </div>
-            <div className="flex items-center gap-3 p-3 border dark:border-white/10 rounded-lg bg-slate-50/50 dark:bg-slate-900/30">
+            <div className="flex items-center gap-3 p-3 border dark:border-border-hover rounded-lg bg-slate-50/50 dark:bg-slate-900/30">
                 <input
                     type="checkbox"
                     id="isElective"
-                    className="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-primary focus:ring-primary dark:bg-slate-800"
+                    className="w-4 h-4 rounded border-slate-300 dark:border-border-hover text-primary focus:ring-primary dark:bg-slate-800"
                     checked={form.isElective}
                     onChange={(e) => setForm({ ...form, isElective: e.target.checked })}
                 />
-                <label htmlFor="isElective" className="text-sm font-medium dark:text-slate-300 cursor-pointer flex flex-col">
+                <label htmlFor="isElective" className="text-sm font-medium dark:text-text-muted cursor-pointer flex flex-col">
                     <span>Is Elective Subject?</span>
-                    <span className="text-[10px] text-slate-500 font-normal">Mark this if the subject belongs to a parallel elective track.</span>
+                    <span className="text-[10px] text-text-secondary font-normal">Mark this if the subject belongs to a parallel elective track.</span>
                 </label>
             </div>
         </div>
@@ -249,19 +249,19 @@ export default function DeptSubjectsDashboard() {
                 <Toast toast={toast} onClose={hideToast} />
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
-                        <h2 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-white">Subjects Catalog</h2>
-                        <p className="text-slate-500 dark:text-slate-400">Manage all subjects offered across programs in your department.</p>
+                        <h2 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-text-primary">Subjects Catalog</h2>
+                        <p className="text-text-secondary dark:text-text-muted">Manage all subjects offered across programs in your department.</p>
                     </div>
-                    <Button onClick={() => { setError(''); setAddForm({ ...emptyForm }); setIsAddOpen(true); }} className="bg-primary shadow-md hover:bg-primary/90 shrink-0 text-white">
+                    <Button onClick={() => { setError(''); setAddForm({ ...emptyForm }); setIsAddOpen(true); }} className="bg-primary shadow-md hover:bg-primary/90 shrink-0 text-text-primary">
                         <LuPlus className="w-4 h-4 mr-2" /> Add Subject
                     </Button>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4 mb-6">
                     <div className="flex items-center gap-2 glass border rounded-lg px-3 py-2 shadow-sm w-full max-w-sm">
-                        <LuFilter className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
+                        <LuFilter className="w-4 h-4 text-text-muted dark:text-text-secondary shrink-0" />
                         <select
-                            className="flex-1 text-sm bg-transparent outline-none dark:text-white"
+                            className="flex-1 text-sm bg-transparent outline-none dark:text-text-primary"
                             value={filterProgram}
                             onChange={(e) => setFilterProgram(e.target.value)}
                         >
@@ -271,10 +271,10 @@ export default function DeptSubjectsDashboard() {
                     </div>
 
                     <div className="flex items-center gap-2 glass border rounded-lg px-3 py-2 shadow-sm w-full max-w-sm">
-                        <LuSearch className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
+                        <LuSearch className="w-4 h-4 text-text-muted dark:text-text-secondary shrink-0" />
                         <Input
                             placeholder="Search by name or code..."
-                            className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:text-white"
+                            className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm placeholder:text-text-muted dark:placeholder:text-text-secondary dark:text-text-primary"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -286,14 +286,14 @@ export default function DeptSubjectsDashboard() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filtered.map(course => (
-                            <Card key={course.id} className="glass-card shadow-sm border-slate-200 dark:border-white/10 hover:shadow-md transition-shadow overflow-hidden group">
-                                <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 dark:from-indigo-500/10 to-indigo-50/30 dark:to-transparent border-slate-100 dark:border-white/5">
+                            <Card key={course.id} className="glass-card shadow-sm border-slate-200 dark:border-border-hover hover:shadow-md transition-shadow overflow-hidden group">
+                                <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 dark:from-indigo-500/10 to-indigo-50/30 dark:to-transparent border-slate-100 dark:border-border">
                                     <div className="flex justify-between items-start gap-2">
                                         <div className="min-w-0 pr-2">
                                             <CardTitle className="text-base font-bold text-slate-800 dark:text-slate-200 line-clamp-2 leading-tight">{course.name}</CardTitle>
-                                            <CardDescription className="font-mono font-bold text-sm mt-1 text-slate-500 dark:text-indigo-400">{course.code}</CardDescription>
+                                            <CardDescription className="font-mono font-bold text-sm mt-1 text-text-secondary dark:text-indigo-400">{course.code}</CardDescription>
                                         </div>
-                                        <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded-md border shrink-0 ${typeColor[course.type] || 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'}`}>
+                                        <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded-md border shrink-0 ${typeColor[course.type] || 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-text-muted border-slate-200 dark:border-slate-700'}`}>
                                             {course.type}
                                         </span>
                                         {course.isElective && (
@@ -305,21 +305,21 @@ export default function DeptSubjectsDashboard() {
                                 </CardHeader>
                                 <CardContent className="pt-4 pb-4">
                                     <div className="grid grid-cols-3 gap-2 mb-4 text-center">
-                                        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 border dark:border-white/5">
-                                            <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase">Program</div>
+                                        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 border dark:border-border">
+                                            <div className="text-[10px] text-text-muted dark:text-text-secondary font-bold uppercase">Program</div>
                                             <div className="text-sm font-bold text-indigo-600 dark:text-indigo-400">{course.program || '—'}</div>
                                         </div>
-                                        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 border dark:border-white/5">
-                                            <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase">Credits</div>
+                                        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 border dark:border-border">
+                                            <div className="text-[10px] text-text-muted dark:text-text-secondary font-bold uppercase">Credits</div>
                                             <div className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{course.credits}</div>
                                         </div>
-                                        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 border dark:border-white/5">
-                                            <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase">Semester</div>
+                                        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 border dark:border-border">
+                                            <div className="text-[10px] text-text-muted dark:text-text-secondary font-bold uppercase">Semester</div>
                                             <div className="text-sm font-bold text-amber-600 dark:text-amber-400">{course.semester ? `Sem ${course.semester}` : '—'}</div>
                                         </div>
                                     </div>
                                     <div className="flex gap-2">
-                                        <Button variant="outline" size="sm" className="w-1/2 text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border-slate-200 dark:border-white/10 dark:bg-transparent"
+                                        <Button variant="outline" size="sm" className="w-1/2 text-slate-600 dark:text-text-muted hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border-slate-200 dark:border-border-hover dark:bg-transparent"
                                             onClick={() => {
                                                 setSelectedId(course.id);
                                                 setEditForm({
@@ -346,9 +346,9 @@ export default function DeptSubjectsDashboard() {
                             </Card>
                         ))}
                         {filtered.length === 0 && (
-                            <div className="col-span-full py-16 text-center text-slate-500 dark:text-slate-400 glass-card rounded-xl border-dashed border-2 border-slate-200 dark:border-white/10">
-                                <LuBookOpen className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-                                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300">{filterProgram ? `No subjects for ${filterProgram}` : 'No subjects added yet'}</h3>
+                            <div className="col-span-full py-16 text-center text-text-secondary dark:text-text-muted glass-card rounded-xl border-dashed border-2 border-slate-200 dark:border-border-hover">
+                                <LuBookOpen className="w-12 h-12 text-text-muted dark:text-slate-600 mx-auto mb-3" />
+                                <h3 className="text-lg font-semibold text-slate-700 dark:text-text-muted">{filterProgram ? `No subjects for ${filterProgram}` : 'No subjects added yet'}</h3>
                                 <p className="text-sm mt-1">Add subjects and link them to programs to enable timetable generation.</p>
                             </div>
                         )}
@@ -356,23 +356,23 @@ export default function DeptSubjectsDashboard() {
                 )}
 
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto glass-card dark:border-white/10">
-                        <DialogHeader><DialogTitle className="dark:text-white">Add New Subject</DialogTitle></DialogHeader>
+                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto glass-card dark:border-border-hover">
+                        <DialogHeader><DialogTitle className="dark:text-text-primary">Add New Subject</DialogTitle></DialogHeader>
                         <SubjectFormFields form={addForm} setForm={setAddForm} error={error} programs={programs} />
-                        <DialogFooter className="border-t dark:border-white/5 pt-4">
-                            <Button variant="outline" className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setIsAddOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleCreate} disabled={!addForm.name || !addForm.code}>Add Subject</Button>
+                        <DialogFooter className="border-t dark:border-border pt-4">
+                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsAddOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleCreate} disabled={!addForm.name || !addForm.code}>Add Subject</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
 
                 <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto glass-card dark:border-white/10">
-                        <DialogHeader><DialogTitle className="dark:text-white">Edit Subject</DialogTitle></DialogHeader>
+                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto glass-card dark:border-border-hover">
+                        <DialogHeader><DialogTitle className="dark:text-text-primary">Edit Subject</DialogTitle></DialogHeader>
                         <SubjectFormFields form={editForm} setForm={setEditForm} error={error} programs={programs} />
-                        <DialogFooter className="border-t dark:border-white/5 pt-4">
-                            <Button variant="outline" className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setIsEditOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleEdit} disabled={!editForm.name || !editForm.code}>Save Changes</Button>
+                        <DialogFooter className="border-t dark:border-border pt-4">
+                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsEditOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleEdit} disabled={!editForm.name || !editForm.code}>Save Changes</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

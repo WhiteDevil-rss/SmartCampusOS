@@ -41,7 +41,7 @@ export default function TimetablesMenuPage() {
                 <div className="max-w-5xl mx-auto space-y-6">
                     <div>
                         <h2 className="text-2xl font-bold tracking-tight text-slate-800">Manage Timetables</h2>
-                        <p className="text-slate-500">Select an action to generate, supervise, or view schedules.</p>
+                        <p className="text-text-secondary">Select an action to generate, supervise, or view schedules.</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -60,7 +60,7 @@ export default function TimetablesMenuPage() {
                                         </CardDescription>
                                     </CardHeader>
                                     <CardContent>
-                                        <div className="flex items-center text-sm font-bold text-slate-500 group-hover:text-indigo-600">
+                                        <div className="flex items-center text-sm font-bold text-text-secondary group-hover:text-indigo-600">
                                             Go to action <LuArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                                         </div>
                                     </CardContent>

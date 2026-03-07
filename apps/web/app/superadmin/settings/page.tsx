@@ -237,13 +237,13 @@ export default function GlobalSettingsPage() {
 
                 <div className="flex justify-between items-center mb-10">
                     <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white glow-sm">System Configuration</h2>
-                        <p className="text-slate-600 dark:text-slate-400 mt-1">Manage global parameters, security policies, and platform-wide defaults.</p>
+                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-text-primary glow-sm">System Configuration</h2>
+                        <p className="text-slate-600 dark:text-text-muted mt-1">Manage global parameters, security policies, and platform-wide defaults.</p>
                     </div>
                     <Button
                         onClick={handleSave}
                         disabled={loading}
-                        className="bg-neon-cyan text-slate-900 font-black shadow-[0_0_20px_rgba(57,193,239,0.4)] hover:shadow-[0_0_35px_rgba(57,193,239,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 h-11 px-6 rounded-xl border border-transparent hover:border-white/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 disabled:shadow-none"
+                        className="bg-neon-cyan text-slate-900 font-black shadow-[0_0_20px_rgba(57,193,239,0.4)] hover:shadow-[0_0_35px_rgba(57,193,239,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 h-11 px-6 rounded-xl border border-transparent hover:border-border-hover disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 disabled:shadow-none"
                     >
                         {loading ? (
                             <div className="flex items-center">
@@ -261,39 +261,39 @@ export default function GlobalSettingsPage() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* General Platform Settings */}
-                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-white/5 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden">
-                        <CardHeader className="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/5 p-6">
+                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden">
+                        <CardHeader className="bg-slate-50 dark:bg-surface border-b border-slate-200 dark:border-border p-6">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 rounded-lg bg-neon-cyan/10 border border-neon-cyan/20">
                                     <LuGlobe className="w-5 h-5 text-neon-cyan" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-lg text-slate-900 dark:text-white">Platform Defaults</CardTitle>
-                                    <CardDescription className="text-slate-600 dark:text-slate-400">Basic system-wide branding and region settings.</CardDescription>
+                                    <CardTitle className="text-lg text-slate-900 dark:text-text-primary">Platform Defaults</CardTitle>
+                                    <CardDescription className="text-slate-600 dark:text-text-muted">Basic system-wide branding and region settings.</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
                         <CardContent className="p-6 space-y-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Platform Name</label>
+                                <label className="text-sm font-bold text-slate-700 dark:text-text-muted uppercase tracking-wider">Platform Name</label>
                                 <Input
-                                    className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white rounded-xl h-11"
+                                    className="bg-slate-50 dark:bg-surface border-slate-200 dark:border-border-hover text-slate-900 dark:text-text-primary rounded-xl h-11"
                                     value={settings.platformName}
                                     onChange={(e) => handleChange('platformName', e.target.value)}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">System Support Email</label>
+                                <label className="text-sm font-bold text-slate-700 dark:text-text-muted uppercase tracking-wider">System Support Email</label>
                                 <Input
-                                    className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white rounded-xl h-11"
+                                    className="bg-slate-50 dark:bg-surface border-slate-200 dark:border-border-hover text-slate-900 dark:text-text-primary rounded-xl h-11"
                                     value={settings.supportEmail}
                                     onChange={(e) => handleChange('supportEmail', e.target.value)}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Maintenance Mode</label>
-                                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                                    <span className="text-sm text-slate-600 dark:text-slate-300">Disable platform access for all users except Super Admins</span>
+                                <label className="text-sm font-bold text-slate-700 dark:text-text-muted uppercase tracking-wider">Maintenance Mode</label>
+                                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-surface border border-slate-200 dark:border-border-hover">
+                                    <span className="text-sm text-slate-600 dark:text-text-muted">Disable platform access for all users except Super Admins</span>
                                     <div
                                         onClick={() => handleChange('maintenanceMode', !settings.maintenanceMode)}
                                         className={`w-12 h-6 ${settings.maintenanceMode ? 'bg-neon-cyan/20' : 'bg-slate-200 dark:bg-slate-800'} rounded-full relative cursor-pointer group transition-colors`}
@@ -306,33 +306,33 @@ export default function GlobalSettingsPage() {
                     </Card>
 
                     {/* Security & Access */}
-                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-white/5 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden">
-                        <CardHeader className="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/5 p-6">
+                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden">
+                        <CardHeader className="bg-slate-50 dark:bg-surface border-b border-slate-200 dark:border-border p-6">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/20">
                                     <LuLock className="w-5 h-5 text-rose-500 dark:text-rose-400" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-lg text-slate-900 dark:text-white">Security & Auth</CardTitle>
-                                    <CardDescription className="text-slate-600 dark:text-slate-400">Manage session, password, and access control policies.</CardDescription>
+                                    <CardTitle className="text-lg text-slate-900 dark:text-text-primary">Security & Auth</CardTitle>
+                                    <CardDescription className="text-slate-600 dark:text-text-muted">Manage session, password, and access control policies.</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
                         <CardContent className="p-6 space-y-6">
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Session Timeout (Seconds)</label>
+                                <label className="text-sm font-bold text-slate-700 dark:text-text-muted uppercase tracking-wider">Session Timeout (Seconds)</label>
                                 <Input
-                                    className="bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white rounded-xl h-11"
+                                    className="bg-slate-50 dark:bg-surface border-slate-200 dark:border-border-hover text-slate-900 dark:text-text-primary rounded-xl h-11"
                                     value={settings.sessionTimeout}
                                     type="number"
                                     onChange={(e) => handleChange('sessionTimeout', e.target.value)}
                                 />
-                                <p className="text-[10px] text-slate-500">Platform-wide strict session duration before auto-logout.</p>
+                                <p className="text-[10px] text-text-secondary">Platform-wide strict session duration before auto-logout.</p>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Multi-Factor Authentication (MFA)</label>
-                                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
-                                    <span className={`text-sm ${settings.mfaEnabled ? 'text-amber-500 font-bold' : 'text-slate-700 dark:text-slate-300'}`}>
+                                <label className="text-sm font-bold text-slate-700 dark:text-text-muted uppercase tracking-wider">Multi-Factor Authentication (MFA)</label>
+                                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-surface border border-slate-200 dark:border-border-hover">
+                                    <span className={`text-sm ${settings.mfaEnabled ? 'text-amber-500 font-bold' : 'text-slate-700 dark:text-text-muted'}`}>
                                         {settings.mfaEnabled ? 'Enforce MFA for all Super Admins' : 'MFA is currently optional'}
                                     </span>
                                     <div
@@ -347,26 +347,26 @@ export default function GlobalSettingsPage() {
                     </Card>
 
                     {/* Database & Logs */}
-                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-white/5 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden lg:col-span-2">
-                        <CardHeader className="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/5 p-6">
+                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden lg:col-span-2">
+                        <CardHeader className="bg-slate-50 dark:bg-surface border-b border-slate-200 dark:border-border p-6">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20">
                                     <LuDatabase className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-lg text-slate-900 dark:text-white">Audit & Persistence</CardTitle>
-                                    <CardDescription className="text-slate-600 dark:text-slate-400">Settings for log retention and automated data backups.</CardDescription>
+                                    <CardTitle className="text-lg text-slate-900 dark:text-text-primary">Audit & Persistence</CardTitle>
+                                    <CardDescription className="text-slate-600 dark:text-text-muted">Settings for log retention and automated data backups.</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
                         <CardContent className="p-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Log Retention Period (Days)</label>
+                                    <label className="text-sm font-bold text-slate-700 dark:text-text-muted uppercase tracking-wider">Log Retention Period (Days)</label>
                                     <select
                                         value={settings.logRetention}
                                         onChange={(e) => handleChange('logRetention', e.target.value)}
-                                        className="w-full flex h-11 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-3 py-2 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-neon-cyan/30"
+                                        className="w-full flex h-11 rounded-xl border border-slate-200 dark:border-border-hover bg-slate-50 dark:bg-surface px-3 py-2 text-sm text-slate-900 dark:text-text-primary focus:ring-2 focus:ring-neon-cyan/30"
                                     >
                                         <option value="30">30 Days</option>
                                         <option value="90">90 Days</option>
@@ -375,10 +375,10 @@ export default function GlobalSettingsPage() {
                                     </select>
                                 </div>
                                 <div className="space-y-4">
-                                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-surface border border-slate-200 dark:border-border-hover">
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-bold text-slate-900 dark:text-white">Daily Automated Backups</span>
-                                            <span className="text-[10px] text-slate-500">Run database snapshots every 24 hours at 00:00 UTC</span>
+                                            <span className="text-sm font-bold text-slate-900 dark:text-text-primary">Daily Automated Backups</span>
+                                            <span className="text-[10px] text-text-secondary">Run database snapshots every 24 hours at 00:00 UTC</span>
                                         </div>
                                         <div
                                             onClick={() => handleChange('autoBackups', !settings.autoBackups)}
@@ -393,15 +393,15 @@ export default function GlobalSettingsPage() {
                     </Card>
 
                     {/* ── Firebase Auth Sync ───────────────────────────────────────────────────── */}
-                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-white/5 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden lg:col-span-2">
-                        <CardHeader className="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/5 p-6">
+                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden lg:col-span-2">
+                        <CardHeader className="bg-slate-50 dark:bg-surface border-b border-slate-200 dark:border-border p-6">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 rounded-lg bg-orange-500/10 border border-orange-500/20">
                                     <SiFirebase className="w-5 h-5 text-orange-500" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-lg text-slate-900 dark:text-white">Firebase Auth Sync</CardTitle>
-                                    <CardDescription className="text-slate-600 dark:text-slate-400">Manually reconcile the application database with Firebase Authentication to repair missing or mismatched user accounts.</CardDescription>
+                                    <CardTitle className="text-lg text-slate-900 dark:text-text-primary">Firebase Auth Sync</CardTitle>
+                                    <CardDescription className="text-slate-600 dark:text-text-muted">Manually reconcile the application database with Firebase Authentication to repair missing or mismatched user accounts.</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
@@ -410,11 +410,11 @@ export default function GlobalSettingsPage() {
                                 {/* Controls */}
                                 <div className="space-y-5">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Sync Scope</label>
+                                        <label className="text-sm font-bold text-slate-700 dark:text-text-muted uppercase tracking-wider">Sync Scope</label>
                                         <select
                                             value={syncScope}
                                             onChange={(e) => setSyncScope(e.target.value)}
-                                            className="w-full flex h-11 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-3 py-2 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-orange-500/30 outline-none"
+                                            className="w-full flex h-11 rounded-xl border border-slate-200 dark:border-border-hover bg-slate-50 dark:bg-surface px-3 py-2 text-sm text-slate-900 dark:text-text-primary focus:ring-2 focus:ring-orange-500/30 outline-none"
                                         >
                                             <option value="all">All Users</option>
                                             <option value="by_role:UNI_ADMIN">University Admins only</option>
@@ -423,10 +423,10 @@ export default function GlobalSettingsPage() {
                                         </select>
                                     </div>
 
-                                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+                                    <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-surface border border-slate-200 dark:border-border-hover">
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-bold text-slate-900 dark:text-white">Dry-Run Mode</span>
-                                            <span className="text-[10px] text-slate-500 mt-0.5">Preview changes without writing to Firebase</span>
+                                            <span className="text-sm font-bold text-slate-900 dark:text-text-primary">Dry-Run Mode</span>
+                                            <span className="text-[10px] text-text-secondary mt-0.5">Preview changes without writing to Firebase</span>
                                         </div>
                                         <div
                                             onClick={() => setSyncDryRun(v => !v)}
@@ -446,7 +446,7 @@ export default function GlobalSettingsPage() {
                                                 placeholder="sync"
                                                 value={syncConfirmText}
                                                 onChange={(e) => setSyncConfirmText(e.target.value)}
-                                                className="font-mono text-sm bg-white dark:bg-slate-900 border-red-200 dark:border-red-800/50 dark:text-white h-10"
+                                                className="font-mono text-sm bg-white dark:bg-slate-900 border-red-200 dark:border-red-800/50 dark:text-text-primary h-10"
                                                 autoComplete="off"
                                             />
                                         </div>
@@ -457,7 +457,7 @@ export default function GlobalSettingsPage() {
                                         disabled={syncRunning || (!syncDryRun && syncConfirmText.toLowerCase() !== 'sync')}
                                         className={`w-full h-11 font-bold transition-all rounded-xl ${syncDryRun
                                             ? 'bg-orange-100 dark:bg-orange-500/10 text-orange-700 dark:text-orange-400 border border-orange-200 dark:border-orange-500/30 hover:bg-orange-200 dark:hover:bg-orange-500/20'
-                                            : 'bg-red-600 hover:bg-red-700 text-white disabled:opacity-40'
+                                            : 'bg-red-600 hover:bg-red-700 text-text-primary disabled:opacity-40'
                                             }`}
                                     >
                                         {syncRunning ? (
@@ -482,26 +482,26 @@ export default function GlobalSettingsPage() {
                                                 {syncReport.dryRun
                                                     ? <LuTriangleAlert className="w-4 h-4 text-orange-500" />
                                                     : <LuCircleCheck className="w-4 h-4 text-emerald-500" />}
-                                                <h4 className="text-sm font-bold text-slate-800 dark:text-white">
+                                                <h4 className="text-sm font-bold text-slate-800 dark:text-text-primary">
                                                     {syncReport.dryRun ? 'Dry-Run Preview' : 'Sync Complete'} — {syncReport.durationMs}ms
                                                 </h4>
                                             </div>
                                             <div className="grid grid-cols-2 gap-3">
-                                                {[['Scanned', syncReport.scanned, 'text-slate-600 dark:text-slate-400'],
+                                                {[['Scanned', syncReport.scanned, 'text-slate-600 dark:text-text-muted'],
                                                 ['Created', syncReport.created, 'text-emerald-600 dark:text-emerald-400'],
                                                 ['Updated', syncReport.updated, 'text-blue-600 dark:text-blue-400'],
-                                                ['Skipped', syncReport.skipped, 'text-slate-500'],
+                                                ['Skipped', syncReport.skipped, 'text-text-secondary'],
                                                 ['Failed', syncReport.failed, 'text-red-600 dark:text-red-400'],
                                                 ['Orphans', syncReport.orphansFound, 'text-amber-600 dark:text-amber-400'],
                                                 ].map(([label, val, color]) => (
-                                                    <div key={label as string} className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-center">
-                                                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{label}</div>
+                                                    <div key={label as string} className="bg-slate-50 dark:bg-surface border border-slate-200 dark:border-border-hover rounded-xl p-3 text-center">
+                                                        <div className="text-[10px] text-text-muted font-bold uppercase tracking-widest">{label}</div>
                                                         <div className={`text-2xl font-black mt-0.5 ${color}`}>{val}</div>
                                                     </div>
                                                 ))}
                                             </div>
                                             {syncReport.errors?.length > 0 && (
-                                                <div className="mt-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/40 rounded-xl p-3 max-h-40 overflow-y-auto">
+                                                <div className="mt-3 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800/40 rounded-xl p-3 max-h-40 overflow-y-auto custom-scrollbar">
                                                     <p className="text-xs font-bold text-red-700 dark:text-red-400 mb-2 uppercase">Failed Operations</p>
                                                     {syncReport.errors.map((e: any, i: number) => (
                                                         <div key={i} className="text-xs text-red-600 dark:text-red-400 font-mono truncate">
@@ -512,7 +512,7 @@ export default function GlobalSettingsPage() {
                                             )}
                                         </>
                                     ) : (
-                                        <div className="flex flex-col items-center justify-center h-full min-h-[180px] text-center text-slate-400 dark:text-slate-600 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-xl">
+                                        <div className="flex flex-col items-center justify-center h-full min-h-[180px] text-center text-text-muted dark:text-slate-600 border-2 border-dashed border-slate-200 dark:border-border-hover rounded-xl">
                                             <SiFirebase className="w-10 h-10 mb-3 opacity-30" />
                                             <p className="text-sm font-medium">No sync results yet</p>
                                             <p className="text-xs mt-1">Run a dry-run to preview changes</p>
@@ -524,17 +524,17 @@ export default function GlobalSettingsPage() {
                     </Card>
 
                     {/* ── Card 1: Create Seed Backup ─────────────────────────────────────── */}
-                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-white/5 backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden lg:col-span-2">
+                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-2xl rounded-2xl overflow-hidden lg:col-span-2">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500 opacity-80"></div>
-                        <CardHeader className="bg-slate-50 dark:bg-white/5 border-b border-slate-200 dark:border-white/5 p-6">
+                        <CardHeader className="bg-slate-50 dark:bg-surface border-b border-slate-200 dark:border-border p-6">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                                         <LuArchive className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                                     </div>
                                     <div>
-                                        <CardTitle className="text-lg text-slate-900 dark:text-white">Seed Data Management</CardTitle>
-                                        <CardDescription className="text-slate-500 dark:text-slate-400">Backup the current system state as a seed file that can be restored later via Factory Reset.</CardDescription>
+                                        <CardTitle className="text-lg text-slate-900 dark:text-text-primary">Seed Data Management</CardTitle>
+                                        <CardDescription className="text-text-secondary dark:text-text-muted">Backup the current system state as a seed file that can be restored later via Factory Reset.</CardDescription>
                                     </div>
                                 </div>
                                 <Button
@@ -551,9 +551,9 @@ export default function GlobalSettingsPage() {
                         </CardHeader>
                         <CardContent className="p-6 space-y-5">
                             {/* Backup list */}
-                            <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+                            <div className="space-y-2 max-h-52 overflow-y-auto pr-1 custom-scrollbar">
                                 {backups.length === 0 ? (
-                                    <div className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-slate-200 dark:border-white/10 rounded-xl text-slate-400">
+                                    <div className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-slate-200 dark:border-border-hover rounded-xl text-text-muted">
                                         <LuArchive className="w-8 h-8 mb-2 opacity-30" />
                                         <p className="text-sm font-medium">No seed backups yet</p>
                                         <p className="text-xs mt-0.5">Click &quot;Create Seed Backup&quot; to save the current state</p>
@@ -563,19 +563,19 @@ export default function GlobalSettingsPage() {
                                         <div key={b.filename} onClick={() => !resetRunning && setSelectedBackup(b.filename)}
                                             className={`flex items-center justify-between px-4 py-3 rounded-xl border cursor-pointer transition-all ${selectedBackup === b.filename
                                                 ? 'border-emerald-400 bg-emerald-50 dark:bg-emerald-950/30'
-                                                : 'border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20'
+                                                : 'border-slate-200 dark:border-border-hover hover:border-slate-300 dark:hover:border-border-hover'
                                                 }`}>
                                             <div className="flex items-center gap-3 min-w-0">
                                                 <div className={`w-2 h-2 rounded-full flex-shrink-0 ${selectedBackup === b.filename ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`} />
                                                 <div className="min-w-0">
-                                                    <p className="text-sm font-medium text-slate-800 dark:text-white truncate">{b.displayName}</p>
-                                                    <p className="text-xs text-slate-500">{b.totalRecords} records &bull; {b.sizeDisplay} &bull; by {b.createdByName}</p>
+                                                    <p className="text-sm font-medium text-slate-800 dark:text-text-primary truncate">{b.displayName}</p>
+                                                    <p className="text-xs text-text-secondary">{b.totalRecords} records &bull; {b.sizeDisplay} &bull; by {b.createdByName}</p>
                                                 </div>
                                             </div>
                                             <a href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/v1/seed/backups/${b.filename}/download`}
                                                 target="_blank" rel="noreferrer"
                                                 onClick={e => e.stopPropagation()}
-                                                className="flex-shrink-0 ml-3 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors">
+                                                className="flex-shrink-0 ml-3 p-1.5 rounded-lg text-text-muted hover:text-slate-700 dark:hover:text-text-primary hover:bg-slate-100 dark:hover:bg-surface-hover transition-colors">
                                                 <LuDownload className="w-4 h-4" />
                                             </a>
                                         </div>
@@ -587,7 +587,7 @@ export default function GlobalSettingsPage() {
                             <Button
                                 onClick={handleCreateBackup}
                                 disabled={creatingBackup || resetRunning}
-                                className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all"
+                                className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-text-primary font-bold rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all"
                             >
                                 {creatingBackup ? (
                                     <span className="flex items-center gap-2">
@@ -625,23 +625,23 @@ export default function GlobalSettingsPage() {
                             <div>
                                 <label className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-widest mb-2 block">Select Backup to Restore</label>
                                 {backups.length === 0 ? (
-                                    <div className="flex items-center gap-2 text-sm text-slate-400 border border-dashed border-slate-200 dark:border-white/10 rounded-xl px-4 py-3">
+                                    <div className="flex items-center gap-2 text-sm text-text-muted border border-dashed border-slate-200 dark:border-border-hover rounded-xl px-4 py-3">
                                         <LuArchive className="w-4 h-4" /> No backups available — create one first.
                                     </div>
                                 ) : (
-                                    <div className="space-y-2 max-h-44 overflow-y-auto pr-1">
+                                    <div className="space-y-2 max-h-44 overflow-y-auto pr-1 custom-scrollbar">
                                         {backups.map(b => (
                                             <div key={b.filename}
                                                 onClick={() => !restoreRunning && setRestoreBackup(b.filename)}
                                                 className={`flex items-center gap-3 px-4 py-3 rounded-xl border cursor-pointer transition-all ${restoreBackup === b.filename
                                                     ? 'border-amber-400 bg-amber-50 dark:bg-amber-950/30'
-                                                    : 'border-slate-200 dark:border-white/10 hover:border-amber-300 dark:hover:border-amber-800/50'
+                                                    : 'border-slate-200 dark:border-border-hover hover:border-amber-300 dark:hover:border-amber-800/50'
                                                     }`}
                                             >
                                                 <div className={`w-2 h-2 rounded-full flex-shrink-0 ${restoreBackup === b.filename ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-600'}`} />
                                                 <div className="min-w-0">
-                                                    <p className="text-sm font-medium text-slate-800 dark:text-white truncate">{b.displayName}</p>
-                                                    <p className="text-xs text-slate-500">{b.totalRecords} records &bull; {b.sizeDisplay} &bull; by {b.createdByName}</p>
+                                                    <p className="text-sm font-medium text-slate-800 dark:text-text-primary truncate">{b.displayName}</p>
+                                                    <p className="text-xs text-text-secondary">{b.totalRecords} records &bull; {b.sizeDisplay} &bull; by {b.createdByName}</p>
                                                 </div>
                                             </div>
                                         ))}
@@ -673,7 +673,7 @@ export default function GlobalSettingsPage() {
                                     <Button
                                         onClick={handleRestoreAndSync}
                                         disabled={restoreConfirmText !== 'RESTORE' || restoreRunning || !restoreBackup}
-                                        className="w-full h-11 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl disabled:opacity-40 transition-all"
+                                        className="w-full h-11 bg-amber-600 hover:bg-amber-700 text-text-primary font-bold rounded-xl disabled:opacity-40 transition-all"
                                     >
                                         {restoreRunning ? (
                                             <span className="flex items-center gap-2">
@@ -693,12 +693,12 @@ export default function GlobalSettingsPage() {
                             {/* Progress steps */}
                             {restoreSteps.length > 0 && (
                                 <div className="space-y-2 mt-2">
-                                    <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">Progress</p>
+                                    <p className="text-xs font-bold text-text-secondary uppercase tracking-widest">Progress</p>
                                     {restoreSteps.map((step, i) => (
                                         <div key={i} className={`flex items-start gap-3 px-4 py-3 rounded-xl border text-sm ${step.status === 'done' ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/40' :
                                             step.status === 'failed' ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800/40' :
                                                 step.status === 'running' ? 'bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800/40 animate-pulse' :
-                                                    'bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/5 opacity-50'
+                                                    'bg-slate-50 dark:bg-surface border-slate-200 dark:border-border opacity-50'
                                             }`}>
                                             <span className="mt-0.5 flex-shrink-0">
                                                 {step.status === 'done' && <LuCircleCheck className="w-4 h-4 text-emerald-500" />}
@@ -707,8 +707,8 @@ export default function GlobalSettingsPage() {
                                                 {step.status === 'pending' && <div className="w-4 h-4 rounded-full border-2 border-slate-300 dark:border-slate-600" />}
                                             </span>
                                             <div>
-                                                <p className="font-semibold text-slate-800 dark:text-white">{step.label}</p>
-                                                {step.detail && <p className="text-xs text-slate-500 mt-0.5">{step.detail}</p>}
+                                                <p className="font-semibold text-slate-800 dark:text-text-primary">{step.label}</p>
+                                                {step.detail && <p className="text-xs text-text-secondary mt-0.5">{step.detail}</p>}
                                             </div>
                                         </div>
                                     ))}
@@ -720,7 +720,7 @@ export default function GlobalSettingsPage() {
                     {/* ── Card 2: Factory Reset ─────────────────────────────────────────── */}
                     <Card className="bg-red-50/50 dark:bg-red-950/20 border-red-200 dark:border-red-900/40 shadow-2xl rounded-2xl overflow-hidden lg:col-span-2 relative">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-500 via-rose-500 to-red-500"></div>
-                        <CardHeader className="bg-white/50 dark:bg-black/20 border-b border-red-200 dark:border-red-900/40 p-6">
+                        <CardHeader className="bg-surface0 dark:bg-black/20 border-b border-red-200 dark:border-red-900/40 p-6">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 rounded-lg bg-red-500/10 border border-red-500/20">
                                     <LuFlame className="w-5 h-5 text-red-600 dark:text-red-500" />
@@ -756,8 +756,8 @@ export default function GlobalSettingsPage() {
 
                             {/* Progress tracker */}
                             {resetSteps.length > 0 && (
-                                <div className="space-y-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl p-4">
-                                    <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Reset Progress</p>
+                                <div className="space-y-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-border-hover rounded-xl p-4">
+                                    <p className="text-xs font-bold uppercase tracking-widest text-text-secondary mb-3">Reset Progress</p>
                                     {resetSteps.map((step, i) => (
                                         <div key={i} className="flex items-start gap-3">
                                             <div className="w-5 h-5 flex-shrink-0 mt-0.5">
@@ -770,9 +770,9 @@ export default function GlobalSettingsPage() {
                                                 <p className={`text-sm font-semibold ${step.status === 'done' ? 'text-emerald-700 dark:text-emerald-400' :
                                                     step.status === 'failed' ? 'text-red-700 dark:text-red-400' :
                                                         step.status === 'running' ? 'text-blue-700 dark:text-blue-400' :
-                                                            'text-slate-400'
+                                                            'text-text-muted'
                                                     }`}>{step.label}</p>
-                                                {step.detail && <p className="text-xs text-slate-500 mt-0.5">{step.detail}</p>}
+                                                {step.detail && <p className="text-xs text-text-secondary mt-0.5">{step.detail}</p>}
                                             </div>
                                         </div>
                                     ))}
@@ -781,7 +781,7 @@ export default function GlobalSettingsPage() {
 
                             {/* Confirmation */}
                             <div className="bg-white dark:bg-slate-900 rounded-xl p-4 border border-red-200 dark:border-red-900/50">
-                                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest mb-2 block">
+                                <label className="text-xs font-bold text-slate-700 dark:text-text-muted uppercase tracking-widest mb-2 block">
                                     Type <span className="font-mono bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded">RESET</span> to confirm
                                 </label>
                                 <Input

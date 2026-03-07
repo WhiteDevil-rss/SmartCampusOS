@@ -15,8 +15,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Zembaa Solution",
-  description: "Zembaa Solution - Intelligent TimeTable Generator",
+  title: "SmartCampus OS",
+  description: "AI-Powered University Operating System - Advanced Management for Modern Education",
 };
 
 export default function RootLayout({

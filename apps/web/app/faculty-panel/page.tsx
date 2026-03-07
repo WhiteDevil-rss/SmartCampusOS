@@ -45,7 +45,7 @@ export default function FacultyDashboard() {
                 ) : facultyData ? (
                     <div className="space-y-8 animate-in fade-in duration-500">
                         {/* Header Profile Section */}
-                        <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-[#0a0a12] border border-slate-200 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-none">
+                        <div className="relative overflow-hidden rounded-3xl bg-white dark:bg-[#0a0a12] border border-slate-200 dark:border-border-hover shadow-xl shadow-slate-200/50 dark:shadow-none">
                             <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 opacity-90" />
                             <div className="relative px-8 pb-8 pt-16 flex flex-col md:flex-row items-end gap-6">
                                 <div className="w-32 h-32 rounded-3xl bg-white dark:bg-[#121220] p-1.5 shadow-2xl relative z-10 -mt-16 border-4 border-white dark:border-[#0a0a12]">
@@ -60,7 +60,7 @@ export default function FacultyDashboard() {
                                             {facultyData.designation || 'Faculty'}
                                         </span>
                                     </div>
-                                    <div className="flex flex-wrap gap-4 text-sm font-medium text-slate-500 dark:text-slate-400">
+                                    <div className="flex flex-wrap gap-4 text-sm font-medium text-text-secondary dark:text-text-muted">
                                         <span className="flex items-center gap-1.5 bg-slate-100 dark:bg-white/5 px-2.5 py-1 rounded-lg">
                                             <LuUser className="w-4 h-4 text-indigo-500" /> ID: {facultyData.id.slice(0, 8).toUpperCase()}
                                         </span>
@@ -84,29 +84,29 @@ export default function FacultyDashboard() {
                             <div className="lg:col-span-2 space-y-8">
                                 {/* Academic & Professional section */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <Card className="rounded-3xl border-slate-200/60 dark:border-white/10 dark:bg-[#0a0a0c] shadow-lg shadow-slate-100/50 dark:shadow-none transition-all hover:border-indigo-500/30">
-                                        <CardHeader className="pb-3 border-b dark:border-white/5 mb-4">
+                                    <Card className="rounded-3xl border-slate-200/60 dark:border-border-hover dark:bg-[#0a0a0c] shadow-lg shadow-slate-100/50 dark:shadow-none transition-all hover:border-indigo-500/30">
+                                        <CardHeader className="pb-3 border-b dark:border-border mb-4">
                                             <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center mb-2">
                                                 <LuGraduationCap className="w-5 h-5 text-orange-500" />
                                             </div>
                                             <CardTitle className="text-lg font-bold">Qualifications</CardTitle>
                                         </CardHeader>
                                         <CardContent>
-                                            <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed min-h-[60px]">
+                                            <p className="text-slate-600 dark:text-text-muted text-sm leading-relaxed min-h-[60px]">
                                                 {facultyData.qualifications || 'Information not provided yet.'}
                                             </p>
                                         </CardContent>
                                     </Card>
 
-                                    <Card className="rounded-3xl border-slate-200/60 dark:border-white/10 dark:bg-[#0a0a0c] shadow-lg shadow-slate-100/50 dark:shadow-none transition-all hover:border-purple-500/30">
-                                        <CardHeader className="pb-3 border-b dark:border-white/5 mb-4">
+                                    <Card className="rounded-3xl border-slate-200/60 dark:border-border-hover dark:bg-[#0a0a0c] shadow-lg shadow-slate-100/50 dark:shadow-none transition-all hover:border-purple-500/30">
+                                        <CardHeader className="pb-3 border-b dark:border-border mb-4">
                                             <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center mb-2">
                                                 <LuClock className="w-5 h-5 text-purple-500" />
                                             </div>
                                             <CardTitle className="text-lg font-bold">Experience</CardTitle>
                                         </CardHeader>
                                         <CardContent>
-                                            <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed min-h-[60px]">
+                                            <p className="text-slate-600 dark:text-text-muted text-sm leading-relaxed min-h-[60px]">
                                                 {facultyData.experience || 'Professional history not updated.'}
                                             </p>
                                         </CardContent>
@@ -114,8 +114,8 @@ export default function FacultyDashboard() {
                                 </div>
 
                                 {/* Subjects and Schedule Overview */}
-                                <Card className="rounded-3xl border-slate-200/60 dark:border-white/10 dark:bg-[#0a0a0c] shadow-lg shadow-slate-100/50 dark:shadow-none overflow-hidden">
-                                    <CardHeader className="bg-slate-50/50 dark:bg-white/5 border-b dark:border-white/10 px-8 py-5">
+                                <Card className="rounded-3xl border-slate-200/60 dark:border-border-hover dark:bg-[#0a0a0c] shadow-lg shadow-slate-100/50 dark:shadow-none overflow-hidden">
+                                    <CardHeader className="bg-slate-50/50 dark:bg-white/5 border-b dark:border-border-hover px-8 py-5">
                                         <div className="flex items-center justify-between">
                                             <CardTitle className="text-xl font-bold flex items-center gap-2">
                                                 <LuBookOpen className="w-6 h-6 text-indigo-500" />
@@ -130,9 +130,9 @@ export default function FacultyDashboard() {
                                         {facultyData.subjects && facultyData.subjects.length > 0 ? (
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 {facultyData.subjects.map((sub: any) => (
-                                                    <div key={sub.id} className="group relative p-5 rounded-2xl border border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.02] hover:bg-white dark:hover:bg-white/[0.05] transition-all hover:shadow-md hover:border-indigo-100 dark:hover:border-indigo-900/30">
+                                                    <div key={sub.id} className="group relative p-5 rounded-2xl border border-slate-100 dark:border-border bg-slate-50/50 dark:bg-white/[0.02] hover:bg-white dark:hover:bg-white/[0.05] transition-all hover:shadow-md hover:border-indigo-100 dark:hover:border-indigo-900/30">
                                                         <div className="flex items-start justify-between mb-3">
-                                                            <div className="p-2.5 rounded-xl bg-white dark:bg-white/5 shadow-sm border border-slate-100 dark:border-white/10">
+                                                            <div className="p-2.5 rounded-xl bg-white dark:bg-white/5 shadow-sm border border-slate-100 dark:border-border-hover">
                                                                 <LuCalendar className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                                                             </div>
                                                             <span className={cn(
@@ -143,14 +143,14 @@ export default function FacultyDashboard() {
                                                             </span>
                                                         </div>
                                                         <h4 className="font-bold text-slate-900 dark:text-white mb-1">{sub.course?.name}</h4>
-                                                        <p className="text-xs font-semibold text-slate-500 dark:text-slate-500">Course Code: {sub.course?.code}</p>
+                                                        <p className="text-xs font-semibold text-text-secondary dark:text-text-secondary">Course Code: {sub.course?.code}</p>
                                                     </div>
                                                 ))}
                                             </div>
                                         ) : (
-                                            <div className="text-center py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-100 dark:border-white/10 rounded-2xl bg-slate-50/30 dark:bg-white/[0.01]">
+                                            <div className="text-center py-12 flex flex-col items-center justify-center border-2 border-dashed border-slate-100 dark:border-border-hover rounded-2xl bg-slate-50/30 dark:bg-white/[0.01]">
                                                 <LuBookOpen className="w-10 h-10 text-slate-300 dark:text-slate-700 mb-3" />
-                                                <p className="text-slate-500 font-medium">No subjects assigned for this semester.</p>
+                                                <p className="text-text-secondary font-medium">No subjects assigned for this semester.</p>
                                             </div>
                                         )}
                                     </CardContent>
@@ -159,28 +159,28 @@ export default function FacultyDashboard() {
 
                             {/* Contact Sidebar */}
                             <div className="space-y-8">
-                                <Card className="rounded-3xl border-slate-200/60 dark:border-white/10 dark:bg-[#0a0a0c] shadow-lg shadow-slate-100/50 dark:shadow-none overflow-hidden">
+                                <Card className="rounded-3xl border-slate-200/60 dark:border-border-hover dark:bg-[#0a0a0c] shadow-lg shadow-slate-100/50 dark:shadow-none overflow-hidden">
                                     <div className="h-2 bg-indigo-600" />
                                     <CardHeader className="px-6 pt-6 pb-2">
                                         <CardTitle className="text-lg font-bold">Contact Details</CardTitle>
                                     </CardHeader>
                                     <CardContent className="px-6 pb-8 space-y-6">
                                         <div className="space-y-1">
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Email Address</span>
+                                            <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Email Address</span>
                                             <p className="text-sm font-semibold text-slate-900 dark:text-white break-all">{facultyData.email || '—'}</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact Number</span>
+                                            <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Contact Number</span>
                                             <p className="text-sm font-semibold text-slate-900 dark:text-white">{facultyData.user?.phoneNumber || facultyData.phone || '—'}</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Office Address</span>
+                                            <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Office Address</span>
                                             <p className="text-sm font-semibold text-slate-900 dark:text-white leading-relaxed">{facultyData.user?.address || 'Department Office'}</p>
                                         </div>
 
-                                        <div className="pt-4 border-t dark:border-white/5">
+                                        <div className="pt-4 border-t dark:border-border">
                                             <Link href="/profile">
-                                                <Button variant="outline" className="w-full rounded-xl border-slate-200 dark:border-white/10 font-bold hover:bg-slate-50 dark:hover:bg-white/5">Update Info</Button>
+                                                <Button variant="outline" className="w-full rounded-xl border-slate-200 dark:border-border-hover font-bold hover:bg-slate-50 dark:hover:bg-white/5">Update Info</Button>
                                             </Link>
                                         </div>
                                     </CardContent>

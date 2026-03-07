@@ -149,7 +149,7 @@ export default function LoginClient() {
                         <h2 className="font-heading text-3xl font-bold">Zembaa AI</h2>
                     </div>
 
-                    <div className="glass-card p-8 lg:p-10 rounded-3xl w-full border-white/5 shadow-2xl">
+                    <div className="glass-card p-8 lg:p-10 rounded-3xl w-full border-border shadow-2xl">
                         <div className="mb-8">
                             <h2 className="font-heading text-3xl font-bold text-white mb-2">Sign In</h2>
                             <p className="text-text-muted text-sm font-medium">Please enter your credentials to access the platform.</p>
@@ -235,7 +235,7 @@ export default function LoginClient() {
                             <span className="relative bg-surface px-4 text-xs font-bold text-text-muted uppercase tracking-widest">OR</span>
                         </div>
 
-                        <button className="w-full bg-white/5 border border-border text-white font-bold py-4 rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-3 active:scale-[0.98]">
+                        <button className="w-full bg-white/5 border border-border text-white font-bold py-4 rounded-xl hover:bg-surface-hover transition-all flex items-center justify-center gap-3 active:scale-[0.98]">
                             <svg className="w-5 h-5" viewBox="0 0 24 24">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />

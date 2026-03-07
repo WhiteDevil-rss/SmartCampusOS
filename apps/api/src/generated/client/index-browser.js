@@ -161,6 +161,18 @@ exports.Prisma.FacultyScalarFieldEnum = {
   experience: 'experience',
   userId: 'userId',
   availability: 'availability',
+  createdAt: 'createdAt',
+  payrollConfigId: 'payrollConfigId'
+};
+
+exports.Prisma.FacultyFeedbackScalarFieldEnum = {
+  id: 'id',
+  facultyId: 'facultyId',
+  studentId: 'studentId',
+  rating: 'rating',
+  comment: 'comment',
+  semester: 'semester',
+  academicYear: 'academicYear',
   createdAt: 'createdAt'
 };
 
@@ -334,7 +346,8 @@ exports.Prisma.UserScalarFieldEnum = {
   address: 'address',
   isActive: 'isActive',
   createdAt: 'createdAt',
-  lastLogin: 'lastLogin'
+  lastLogin: 'lastLogin',
+  fcmToken: 'fcmToken'
 };
 
 exports.Prisma.AuditLogScalarFieldEnum = {
@@ -372,6 +385,7 @@ exports.Prisma.InquiryScalarFieldEnum = {
   contactNumber: 'contactNumber',
   organization: 'organization',
   message: 'message',
+  source: 'source',
   status: 'status',
   ipAddress: 'ipAddress',
   createdAt: 'createdAt',
@@ -382,8 +396,423 @@ exports.Prisma.SubscriberScalarFieldEnum = {
   id: 'id',
   email: 'email',
   status: 'status',
+  creatorId: 'creatorId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PermissionScalarFieldEnum = {
+  id: 'id',
+  roleId: 'roleId',
+  userId: 'userId',
+  module: 'module',
+  action: 'action',
+  allowed: 'allowed',
+  restrictions: 'restrictions',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SubscriptionControlScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  canSubscribe: 'canSubscribe',
+  subscriptionLimit: 'subscriptionLimit',
+  subscriptionExpiry: 'subscriptionExpiry',
+  autoRenew: 'autoRenew',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PublicPortalConfigScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  slug: 'slug',
+  customDomain: 'customDomain',
+  branding: 'branding',
+  features: 'features',
+  rateLimits: 'rateLimits',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  departmentId: 'departmentId',
+  enrollmentNo: 'enrollmentNo',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  batchId: 'batchId',
+  programId: 'programId',
+  admissionYear: 'admissionYear',
+  photoUrl: 'photoUrl'
+};
+
+exports.Prisma.AttendanceSessionScalarFieldEnum = {
+  id: 'id',
+  timetableSlotId: 'timetableSlotId',
+  date: 'date',
+  method: 'method',
+  qrToken: 'qrToken',
+  openedAt: 'openedAt',
+  closedAt: 'closedAt'
+};
+
+exports.Prisma.AttendanceRecordScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  studentId: 'studentId',
+  status: 'status',
+  method: 'method',
+  markedAt: 'markedAt',
+  flagId: 'flagId'
+};
+
+exports.Prisma.AttendanceFlagScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  flagType: 'flagType',
+  reason: 'reason',
+  documentUrl: 'documentUrl',
+  status: 'status',
+  appliedAt: 'appliedAt',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt'
+};
+
+exports.Prisma.ResultScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  programId: 'programId',
+  semester: 'semester',
+  academicYear: 'academicYear',
+  sgpa: 'sgpa',
+  cgpa: 'cgpa',
+  status: 'status',
+  resultHash: 'resultHash',
+  publishedAt: 'publishedAt',
+  blockchainTxHash: 'blockchainTxHash',
+  blockchainConfirmedAt: 'blockchainConfirmedAt'
+};
+
+exports.Prisma.SubjectResultScalarFieldEnum = {
+  id: 'id',
+  resultId: 'resultId',
+  courseId: 'courseId',
+  internalMarks: 'internalMarks',
+  midTermMarks: 'midTermMarks',
+  externalMarks: 'externalMarks',
+  totalMarks: 'totalMarks',
+  grade: 'grade',
+  creditsEarned: 'creditsEarned'
+};
+
+exports.Prisma.VerificationRequestScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  enrollmentNo: 'enrollmentNo',
+  requesterIp: 'requesterIp',
+  requestType: 'requestType',
+  verifiedAt: 'verifiedAt',
+  blockchainMatch: 'blockchainMatch',
+  resultSnapshot: 'resultSnapshot'
+};
+
+exports.Prisma.FeeStructureScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  programId: 'programId',
+  semester: 'semester',
+  academicYear: 'academicYear',
+  components: 'components',
+  totalAmount: 'totalAmount'
+};
+
+exports.Prisma.FeePaymentScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  feeStructureId: 'feeStructureId',
+  amount: 'amount',
+  paymentDate: 'paymentDate',
+  method: 'method',
+  transactionId: 'transactionId',
+  status: 'status',
+  gateway: 'gateway'
+};
+
+exports.Prisma.BookScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  isbn: 'isbn',
+  title: 'title',
+  author: 'author',
+  departmentId: 'departmentId',
+  category: 'category',
+  totalCopies: 'totalCopies',
+  availableCopies: 'availableCopies'
+};
+
+exports.Prisma.BookLoanScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  bookId: 'bookId',
+  issuedAt: 'issuedAt',
+  dueDate: 'dueDate',
+  returnedAt: 'returnedAt',
+  fineAmount: 'fineAmount'
+};
+
+exports.Prisma.BookReservationScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  bookId: 'bookId',
+  reservedAt: 'reservedAt',
+  expiresAt: 'expiresAt'
+};
+
+exports.Prisma.CompanyScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  name: 'name',
+  type: 'type',
+  hrContact: 'hrContact',
+  website: 'website'
+};
+
+exports.Prisma.PlacementRecordScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  companyId: 'companyId',
+  placedAt: 'placedAt',
+  ctc: 'ctc',
+  role: 'role'
+};
+
+exports.Prisma.AdmissionApplicationScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  departmentId: 'departmentId',
+  programId: 'programId',
+  applicantName: 'applicantName',
+  email: 'email',
+  phone: 'phone',
+  documents: 'documents',
+  status: 'status',
+  remarks: 'remarks',
+  appliedAt: 'appliedAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AssignmentScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  attachments: 'attachments',
+  dueDate: 'dueDate',
+  maxMarks: 'maxMarks',
+  facultyId: 'facultyId',
+  courseId: 'courseId',
+  batchId: 'batchId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AssignmentSubmissionScalarFieldEnum = {
+  id: 'id',
+  assignmentId: 'assignmentId',
+  studentId: 'studentId',
+  fileUrl: 'fileUrl',
+  submittedAt: 'submittedAt',
+  grade: 'grade',
+  feedback: 'feedback',
+  plagiarismScore: 'plagiarismScore',
+  status: 'status'
+};
+
+exports.Prisma.StudyMaterialScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  fileUrl: 'fileUrl',
+  fileType: 'fileType',
+  facultyId: 'facultyId',
+  courseId: 'courseId',
+  batchId: 'batchId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.QuizScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  timeLimit: 'timeLimit',
+  facultyId: 'facultyId',
+  courseId: 'courseId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.QuestionScalarFieldEnum = {
+  id: 'id',
+  quizId: 'quizId',
+  type: 'type',
+  text: 'text',
+  options: 'options',
+  correctAnswer: 'correctAnswer',
+  marks: 'marks'
+};
+
+exports.Prisma.QuizAttemptScalarFieldEnum = {
+  id: 'id',
+  quizId: 'quizId',
+  studentId: 'studentId',
+  score: 'score',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.ServiceRequestScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  type: 'type',
+  status: 'status',
+  description: 'description',
+  attachments: 'attachments',
+  approvedBy: 'approvedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ComplaintScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  studentId: 'studentId',
+  category: 'category',
+  subject: 'subject',
+  description: 'description',
+  status: 'status',
+  isAnonymous: 'isAnonymous',
+  resolution: 'resolution',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ChatThreadScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  threadId: 'threadId',
+  senderId: 'senderId',
+  content: 'content',
+  type: 'type',
+  fileUrl: 'fileUrl',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  message: 'message',
+  category: 'category',
+  isRead: 'isRead',
+  link: 'link',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MessageHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  type: 'type',
+  title: 'title',
+  content: 'content',
+  link: 'link',
+  source: 'source',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MessageSyncLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  lastSyncAt: 'lastSyncAt',
+  syncStatus: 'syncStatus',
+  offlineCount: 'offlineCount',
+  deviceInfo: 'deviceInfo'
+};
+
+exports.Prisma.EventScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  location: 'location',
+  budget: 'budget',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PayrollConfigScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  facultyId: 'facultyId',
+  baseSalary: 'baseSalary',
+  allowances: 'allowances',
+  deductions: 'deductions',
+  bankAccount: 'bankAccount',
+  ifscCode: 'ifscCode',
+  taxId: 'taxId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SalarySlipScalarFieldEnum = {
+  id: 'id',
+  facultyId: 'facultyId',
+  month: 'month',
+  year: 'year',
+  baseSalary: 'baseSalary',
+  allowances: 'allowances',
+  deductions: 'deductions',
+  grossAmount: 'grossAmount',
+  netAmount: 'netAmount',
+  paymentDate: 'paymentDate',
+  status: 'status',
+  transactionId: 'transactionId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.StudentElectiveMappingScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  basketId: 'basketId',
+  optionId: 'optionId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.TimetableChangeScalarFieldEnum = {
+  id: 'id',
+  originalSlotId: 'originalSlotId',
+  substituteFacultyId: 'substituteFacultyId',
+  newRoomId: 'newRoomId',
+  date: 'date',
+  reason: 'reason',
+  approvedBy: 'approvedBy',
+  notificationSent: 'notificationSent',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -393,6 +822,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -418,6 +851,7 @@ exports.Prisma.ModelName = {
   Department: 'Department',
   FacultyDepartment: 'FacultyDepartment',
   Faculty: 'Faculty',
+  FacultyFeedback: 'FacultyFeedback',
   FacultySubject: 'FacultySubject',
   Course: 'Course',
   Batch: 'Batch',
@@ -435,7 +869,43 @@ exports.Prisma.ModelName = {
   AuditLog: 'AuditLog',
   GlobalSettings: 'GlobalSettings',
   Inquiry: 'Inquiry',
-  Subscriber: 'Subscriber'
+  Subscriber: 'Subscriber',
+  Permission: 'Permission',
+  SubscriptionControl: 'SubscriptionControl',
+  PublicPortalConfig: 'PublicPortalConfig',
+  Student: 'Student',
+  AttendanceSession: 'AttendanceSession',
+  AttendanceRecord: 'AttendanceRecord',
+  AttendanceFlag: 'AttendanceFlag',
+  Result: 'Result',
+  SubjectResult: 'SubjectResult',
+  VerificationRequest: 'VerificationRequest',
+  FeeStructure: 'FeeStructure',
+  FeePayment: 'FeePayment',
+  Book: 'Book',
+  BookLoan: 'BookLoan',
+  BookReservation: 'BookReservation',
+  Company: 'Company',
+  PlacementRecord: 'PlacementRecord',
+  AdmissionApplication: 'AdmissionApplication',
+  Assignment: 'Assignment',
+  AssignmentSubmission: 'AssignmentSubmission',
+  StudyMaterial: 'StudyMaterial',
+  Quiz: 'Quiz',
+  Question: 'Question',
+  QuizAttempt: 'QuizAttempt',
+  ServiceRequest: 'ServiceRequest',
+  Complaint: 'Complaint',
+  ChatThread: 'ChatThread',
+  Message: 'Message',
+  Notification: 'Notification',
+  MessageHistory: 'MessageHistory',
+  MessageSyncLog: 'MessageSyncLog',
+  Event: 'Event',
+  PayrollConfig: 'PayrollConfig',
+  SalarySlip: 'SalarySlip',
+  StudentElectiveMapping: 'StudentElectiveMapping',
+  TimetableChange: 'TimetableChange'
 };
 
 /**

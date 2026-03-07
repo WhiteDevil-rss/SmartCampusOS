@@ -63,7 +63,10 @@ export const subscribe = async (req: Request, res: Response) => {
         }
 
         const newSubscriber = await prisma.subscriber.create({
-            data: { email }
+            data: {
+                email,
+                creatorId: (req as any).user?.id || null
+            }
         });
 
         // Async update to Excel so it doesn't block the response (or await it for safety)

@@ -242,7 +242,7 @@ export default function RootLandingClient() {
                                         <motion.div
                                             key={i}
                                             whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
-                                            className={`rounded-lg border border-white/5 p-2 ${i % 7 === 0 ? 'bg-primary/20 border-primary/30' : i % 11 === 0 ? 'bg-secondary/20 border-secondary/30' : 'bg-white/5'}`}
+                                            className={`rounded-lg border border-border p-2 ${i % 7 === 0 ? 'bg-primary/20 border-primary/30' : i % 11 === 0 ? 'bg-secondary/20 border-secondary/30' : 'bg-white/5'}`}
                                         >
                                             {i % 7 === 0 && <div className="h-full w-full opacity-50 animate-pulse"></div>}
                                         </motion.div>
@@ -275,19 +275,19 @@ export default function RootLandingClient() {
             {/*  Stats Section  */}
             <section className="px-6 py-20 bg-surface/30">
                 <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div className="glass-morphism p-8 rounded-2xl text-center border-white/5 hover:border-primary/20 transition-colors">
+                    <div className="glass-morphism p-8 rounded-2xl text-center border-border hover:border-primary/20 transition-colors">
                         <p className="gradient-text text-5xl font-heading font-bold mb-2">150+</p>
                         <p className="text-sm text-text-muted font-bold uppercase tracking-widest">Universities</p>
                     </div>
-                    <div className="glass-morphism p-8 rounded-2xl text-center border-white/5 hover:border-secondary/20 transition-colors">
+                    <div className="glass-morphism p-8 rounded-2xl text-center border-border hover:border-secondary/20 transition-colors">
                         <p className="gradient-text text-5xl font-heading font-bold mb-2">500+</p>
                         <p className="text-sm text-text-muted font-bold uppercase tracking-widest">Timetables</p>
                     </div>
-                    <div className="glass-morphism p-8 rounded-2xl text-center border-white/5 hover:border-accent-red/20 transition-colors">
+                    <div className="glass-morphism p-8 rounded-2xl text-center border-border hover:border-accent-red/20 transition-colors">
                         <p className="gradient-text text-5xl font-heading font-bold mb-2">1000+</p>
                         <p className="text-sm text-text-muted font-bold uppercase tracking-widest">Faculty Members</p>
                     </div>
-                    <div className="glass-morphism p-8 rounded-2xl text-center border-white/5 hover:border-accent-green/20 transition-colors">
+                    <div className="glass-morphism p-8 rounded-2xl text-center border-border hover:border-accent-green/20 transition-colors">
                         <p className="gradient-text text-5xl font-heading font-bold mb-2">99.9%</p>
                         <p className="text-sm text-text-muted font-bold uppercase tracking-widest">Conflict-Free</p>
                     </div>
@@ -369,7 +369,7 @@ export default function RootLandingClient() {
 
             {/*  CTA Section  */}
             <section className="px-6 py-32">
-                <div className="max-w-6xl mx-auto rounded-[3rem] p-12 md:p-24 text-center relative overflow-hidden bg-gradient-to-br from-[#1A1A3E] to-[#0A0A1A] border border-white/5 shadow-2xl">
+                <div className="max-w-6xl mx-auto rounded-[3rem] p-12 md:p-24 text-center relative overflow-hidden bg-gradient-to-br from-[#1A1A3E] to-[#0A0A1A] border border-border shadow-2xl">
                     <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary/10 blur-[120px] rounded-full"></div>
                     <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-secondary/10 blur-[120px] rounded-full"></div>
                     <div className="relative z-10 max-w-3xl mx-auto">
@@ -407,7 +407,7 @@ export default function RootLandingClient() {
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.5 }}
                         viewport={{ once: true }}
-                        className="glass-morphism rounded-3xl p-10 md:p-14 border border-white/10 shadow-2xl relative overflow-hidden"
+                        className="glass-morphism rounded-3xl p-10 md:p-14 border border-border-hover shadow-2xl relative overflow-hidden"
                     >
                         {/* Decorative glow */}
                         <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/30 blur-3xl rounded-full"></div>
@@ -424,7 +424,7 @@ export default function RootLandingClient() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Enter your email address"
                                 disabled={subscribeStatus === 'loading'}
-                                className="flex-1 bg-white/5 border border-white/10 rounded-full px-6 py-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                                className="flex-1 bg-white/5 border border-border-hover rounded-full px-6 py-4 text-white placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                                 required
                             />
                             <motion.button
@@ -455,7 +455,7 @@ export default function RootLandingClient() {
             </section>
 
             {/*  Footer  */}
-            <footer className="border-t border-white/5 pt-24 pb-12 px-6">
+            <footer className="border-t border-border pt-24 pb-12 px-6">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-20">
                         <div className="col-span-2 lg:col-span-2">
@@ -509,7 +509,7 @@ export default function RootLandingClient() {
                         </div>
                     </div>
 
-                    <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-text-muted font-medium uppercase tracking-widest">
+                    <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-text-muted font-medium uppercase tracking-widest">
                         <p>© 2026 Zembaa AI Technologies. All Rights Reserved.</p>
                         <div className="flex gap-8">
                             <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy</Link>
@@ -535,18 +535,18 @@ export default function RootLandingClient() {
                             animate={{ scale: 1, y: 0 }}
                             exit={{ scale: 0.9, y: 20 }}
                             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                            className="bg-[#0A0A1A] border border-white/10 rounded-2xl overflow-hidden w-full max-w-5xl shadow-2xl relative"
+                            className="bg-[#0A0A1A] border border-border-hover rounded-2xl overflow-hidden w-full max-w-5xl shadow-2xl relative"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Header */}
-                            <div className="flex justify-between items-center p-4 border-b border-white/10 bg-white/5">
+                            <div className="flex justify-between items-center p-4 border-b border-border-hover bg-white/5">
                                 <h3 className="text-white font-bold text-lg font-heading flex items-center gap-2">
                                     <span className="material-symbols-outlined text-primary">play_circle</span>
                                     Zembaa AI Demo
                                 </h3>
                                 <button
                                     onClick={() => setShowDemo(false)}
-                                    className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors text-white"
+                                    className="w-8 h-8 rounded-full bg-surface-hover flex items-center justify-center hover:bg-white/20 transition-colors text-white"
                                 >
                                     <span className="material-symbols-outlined text-sm">close</span>
                                 </button>

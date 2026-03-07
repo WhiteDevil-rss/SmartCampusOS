@@ -1,142 +1,130 @@
-# Zembaa.AI Scheduler (Timetable Management Platform)
+# 🎓 SmartCampus OS
+### The Intelligent Operating System for Modern Institutions
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Stack: Monorepo](https://img.shields.io/badge/Structure-PNPM--Monorepo-blue)](https://pnpm.io/)
-[![Engine: Google OR-Tools](https://img.shields.io/badge/Engine-Google_OR--Tools-brightgreen)](https://developers.google.com/optimization)
+[![Version](https://img.shields.io/badge/Version-v2.0.0--Premium-indigo)](https://github.com/WhiteDevil-rss/SmartCampusOS)
+[![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](https://opensource.org/licenses/MIT)
+[![Stack: Turbo Monorepo](https://img.shields.io/badge/Architecture-Turbo--Monorepo-slate)](https://turbo.build/)
+[![Engine: Google OR-Tools](https://img.shields.io/badge/AI--Engine-Google_OR--Tools-blue)](https://developers.google.com/optimization)
 
-**Zembaa.AI Scheduler** is a high-performance, AI-driven academic scheduling platform designed for large-scale universities. It automates the complex task of generating conflict-free, workload-balanced timetables while adhering to **NEP 2020** mandates.
-
----
-
-## Key Enterprise Features
-
-- **Robust Firebase Auth Synchronization**: Fully automated, two-way sync between PostgreSQL and Firebase Authentication for all CRUD user operations (Super Admins, University Admins, Department Admins, and Faculty). Ensures no orphaned users and tight login integrity.
-- **Enterprise Activity Logging**: Dual-storage (Database + Filesystem) asynchronous activity monitoring. Critical mutations automatically track execution timestamps, explicit changes, IP Addresses, and Device Headers using extreme high-throughput pipelines. 
-- **Graceful Deletion Safeguards**: Highly descriptive, user-friendly dependency trapping blocks the deletion of core entities (like Departments or Universities) if they harbor orphaned records like active courses, batches, timetables, or faculty.
-- **High-Performance Architecture**: Next.js App Router wrapped in Turbopack for ultra-fast compilation, Brotli-compressed Express.js REST APIs caching heavy responses through an integrated Redis Layer.
+**SmartCampus OS** is a high-performance, AI-driven academic orchestration platform designed to transform traditional campus management into a seamless digital ecosystem. It leverages cutting-edge constraint-solving algorithms and a premium glassmorphic UI to provide an unparalleled experience for administrators, faculty, and students.
 
 ---
 
-## System Architecture
+## 🚀 Vision & Purpose
+In the era of **NEP 2020**, educational institutions face unprecedented complexity in resource allocation. SmartCampus OS eliminates the manual friction of scheduling, resource management, and departmental coordination through:
+- **Autonomous Scheduling**: Resolving billions of constraints in seconds.
+- **Institutional Integrity**: Real-time synchronization across departments.
+- **Predictive Analytics**: Forecasting resource needs and optimizing occupancy.
 
-The project is structured as a **Polyglot Monorepo**, isolating concerns while maintaining strong type safety across the stack.
+---
+
+## 🏗️ System Architecture
+The platform is built on a **Polyglot Monorepo** architecture, optimized for speed, scalability, and type safety.
 
 ```mermaid
 graph TD
-    User((User)) --> Web[Next.js Frontend]
-    Web --> API[Node.js / Express API]
-    API --> DB[(PostgreSQL)]
-    API --> Redis[(Redis Cache)]
-    API --> AI[Python AI Engine]
-    AI --> Solver[Google OR-Tools]
+    User((Institutional User)) --> Web[Next.js 14 Premium UI]
+    Web --> API[Turbo Express.js API]
+    API --> DB[(PostgreSQL + Prisma)]
+    API --> Auth[Firebase Identity]
+    API --> Cache[(Redis Intelligence)]
+    API --> AI[FastAPI Solver Engine]
+    AI --> Solver[Google OR-Tools CP-SAT]
     
-    subgraph "Real-Time Updates"
-    API <--> Socket[Socket.io]
+    subgraph "Real-Time Operations"
+    API <--> Socket[Socket.io Gateway]
     Socket <--> Web
     end
 ```
 
-### Microservices Breakdown
-| Service | Tech Stack | Responsibility |
+### Infrastructure Breakdown
+| Component | Technology | Role |
 | :--- | :--- | :--- |
-| **`apps/web`** | Next.js 14, Tailwind, Shadcn | Multi-role responsive dashboard (4 Panels). |
-| **`apps/api`** | Node.js, TypeScript, Prisma | Business logic, RBAC, Firebase integrations and AI orchestration. |
-| **`apps/ai-engine`**| Python 3.10, FastAPI | Constraint solving and optimization logic using OR-Tools. |
-| **`packages/types`** | TypeScript | Shared Zod schemas and TypeScript interfaces. |
+| **Edge Web** | Next.js 14, Framer Motion, Tailwind | High-fidelity, role-based dashboards with glassmorphic aesthetics. |
+| **Core API** | Node.js, TypeScript, Prisma | Orchestration layer, RBAC, and Firebase Auth synchronization. |
+| **AI Engine** | Python 3.10, FastAPI | Constraint programming and combinatorial optimization. |
+| **Persistence** | PostgreSQL, Redis | Relational data integrity and high-speed caching. |
 
 ---
 
-## The AI Scheduling Engine
+## 💎 Core Features
 
-The "brain" of the platform uses **Google OR-Tools CP-SAT Solver** to resolve billions of possible scheduling combinations in seconds.
+### 1. The SolvEngine™ (AI Scheduler)
+Powered by **Google OR-Tools**, our scheduling engine handles:
+- **Hard Constraints**: Ensuring zero faculty collisions, room conflicts, or batch overlaps.
+- **Soft Constraints**: Balancing faculty workload, minimizing "dead hours", and optimizing preferred time slots.
+- **Real-time Regeneration**: Instantly adapt schedules for faculty leave or resource outages.
 
-### Constraints & Optimizations
-- **Hard Constraints**: Faculty separation (no clones), un-overlappable room assignments, batch integrity, and strict capacity checks. 
-- **Soft Constraints**: Heavy workload balancing, minimized slot gaps, preferred daily slot prioritization.
+### 2. Institutional Gateway
+- **Unified Identity**: Seamless Firebase integration with automated PostgreSQL synchronization.
+- **Audit Trails**: Enterprise-grade activity logging with device fingerprinting and IP tracking.
+- **RBAC Matrix**: Deep control for Superadmins, University Admins, and Department Heads.
 
----
-
-## Feature Matrix
-
-The platform is divided into 4 specialised panels to handle the university hierarchy:
-
-### 1. Global Superadmin
-- Managing multiple university tenants and configuring platform-wide settings.
-- Security oversight natively backed by Enterprise Audit Logging.
-
-### 2. University Admin
-- Full infrastructure management (Classrooms, Labs, Departments).
-- Faculty pool coordination and primary/secondary workload assignment.
-
-### 3. Department Admin
-- Granular control over department-specific courses and batches.
-- **Standard Generation**: AI-triggered master schedules.
-- **Special Contingency**: Regenerate schedules on-the-fly when faculty are absent.
-
-### 4. Faculty Portal
-- Personalised weekly schedule view.
-- Real-time updates on room changes or substitutions.
+### 3. Smart Resource Management
+- **Occupancy Intelligence**: Track classroom and lab utilization across the campus.
+- **Conflict Safeguards**: Intelligent trapping system prevents accidental deletion of active dependencies.
 
 ---
 
-## Step-by-Step Project Start
+## 🛠️ Setup & Installation
 
-Follow these exact steps to launch the entire ecosystem in under 2 minutes:
+Follow these steps to deploy the SmartCampus OS ecosystem locally:
 
-### 1. External Infrastructure (Docker)
-Ensure Docker is running, then spin up the database, cache, and solvers:
+### Prerequisites
+- **Node.js**: v18+ (pnpm recommended)
+- **Python**: v3.10+
+- **Docker**: For database and cache orchestration
+
+### 1. Launch Infrastructure
+Spin up the core services using Docker:
 ```bash
 docker-compose up -d
 ```
 
-### 2. Backend & Database Sync
-Initialise the database schema and seed the environment with VNSGU demo data:
+### 2. Configure Backend
+Initialize the database and sync the environment:
 ```bash
 cd apps/api
 pnpm install
 npx prisma db push
-npx prisma db seed # This creates demo accounts!
-# Start the API
+npx prisma db seed # Initializes the 'SmartCampus OS' environment
 pnpm run dev
 ```
 
-### 3. Solvers & Health Check
-The AI engine and Redis start automatically with Docker. You can check the solver health at `http://localhost:5000/health`.
-
-### 4. Frontend Launch
-In a new terminal:
+### 3. Launch Frontend
+Deploy the premium interface:
 ```bash
 cd apps/web
 pnpm install
 pnpm run dev
 ```
-Open `http://localhost:3000` and log in.
+
+Visit `http://localhost:3000` to access the OS.
 
 ---
 
-## Demo Credentials
+## 🔑 Default Access Credentials
 
-| Role | Email | Password |
+| Identity Role | Authorized Identifier | Access Key |
 | :--- | :--- | :--- |
-| **Superadmin** | `superadmin` | `password123` |
-| **Uni Admin** | `admin_vnsgu` | `password123` |
-| **Dept Admin** | `admin_dcs_vnsgu` | `password123` |
-| **Faculty (Ravi)** | `ravi` | `password123` |
+| **Superadmin** | `admin@smartcampus.ac.in` | `password123` |
+| **University Admin** | `vc@smartcampus.ac.in` | `password123` |
+| **Department Admin** | `admin_dcs@smartcampus.ac.in` | `password123` |
+| **Faculty Core** | `dharmen@smartcampus.ac.in` | `password123` |
 
 ---
 
-## Deployment
+## ☁️ Deployment Strategy
+Optimized for **Google Cloud Platform (GCP)**:
+- **Cloud Run**: Global scaling for microservices.
+- **Cloud SQL**: Managed PostgreSQL high availability.
+- **Cloud Tasks**: Managed queue for heavy AI solve operations.
 
-This project is optimised for **Google Cloud Platform (GCP)** using:
-- **Cloud Run** for horizontal scaling of microservices.
-- **Cloud SQL** for managed PostgreSQL.
-- **Memorystore** for managed Redis.
-
-See the [In-depth GCP Deployment Guide](./gcp_deployment_guide.md) for step-by-step instructions.
+Check the [Infrastructure Guide](./gcp_deployment_guide.md) for enterprise deployment.
 
 ---
 
-## License
-Distributed under the MIT License. See `LICENSE` for more information.
+## 📝 License
+Distributed under the MIT License. Developed and maintained with ❤️ by [WhiteDevil-rss](https://github.com/WhiteDevil-rss).
 
-*Built By [Rajput Shivam Singh](https://github.com/WhiteDevil-rss)*
+*SmartCampus OS - The Future of Institutional Intelligence.*

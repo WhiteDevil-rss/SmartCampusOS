@@ -43,7 +43,7 @@ export const SESSION_COLORS: Record<SessionColorKey, {
         emoji: '☕', label: 'Break',
     },
     free: {
-        bg: 'bg-slate-50/50', border: 'border-slate-100', text: 'text-slate-400', subtext: 'text-slate-300', badge: '', icon: 'text-slate-200',
+        bg: 'bg-slate-50/50', border: 'border-slate-100', text: 'text-text-muted', subtext: 'text-slate-300', badge: '', icon: 'text-slate-200',
         darkBg: 'dark:bg-slate-900/30', darkBorder: 'dark:border-slate-800', darkText: 'dark:text-slate-600', darkSubtext: 'dark:text-slate-700', darkBadge: '', darkIcon: 'dark:text-slate-700',
         emoji: '⬜', label: 'Free',
     },

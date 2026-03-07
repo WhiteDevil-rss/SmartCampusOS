@@ -9,6 +9,19 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use(async (config) => {
+    // Dynamically adjust baseURL if the route expects v2
+    if (config.url && config.url.startsWith('/v2/')) {
+        let base = config.baseURL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/v1');
+
+        // Remove trailing slash if present
+        if (base.endsWith('/')) base = base.slice(0, -1);
+
+        if (base.endsWith('/v1')) {
+            config.baseURL = base.replace('/v1', '');
+            console.log(`[API Debug] Routing to V2: ${config.baseURL}${config.url}`);
+        }
+    }
+
     // Wait for Firebase to initialize before checking currentUser
     await auth.authStateReady();
     const user = auth.currentUser;

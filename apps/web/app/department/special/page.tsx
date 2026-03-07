@@ -166,7 +166,7 @@ export default function SpecialTimetablePage() {
 
     if (loading) return (
         <DashboardLayout navItems={DEPT_ADMIN_NAV} title="Special Schedule">
-            <div className="flex flex-col items-center justify-center h-[60vh] text-slate-400 dark:text-slate-500">
+            <div className="flex flex-col items-center justify-center h-[60vh] text-text-muted dark:text-text-secondary">
                 <LuLoaderCircle className="w-10 h-10 animate-spin mb-4 text-neon-cyan" />
                 <p className="animate-pulse">Loading university configuration...</p>
             </div>
@@ -187,64 +187,64 @@ export default function SpecialTimetablePage() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {/* Exclusions Sidebar */}
                 <div className="lg:col-span-1 space-y-6">
-                    <Card className="border-slate-200 shadow-sm overflow-hidden flex flex-col h-[calc(100vh-12rem)] glass-card dark:border-white/10">
-                        <CardHeader className="bg-slate-50/50 dark:bg-white/5 border-b dark:border-white/10 pb-4 px-4 pt-4">
-                            <CardTitle className="flex items-center gap-2 text-slate-800 dark:text-white text-lg">
+                    <Card className="border-slate-200 shadow-sm overflow-hidden flex flex-col h-[calc(100vh-12rem)] glass-card dark:border-border-hover">
+                        <CardHeader className="bg-slate-50/50 dark:bg-surface border-b dark:border-border-hover pb-4 px-4 pt-4">
+                            <CardTitle className="flex items-center gap-2 text-slate-800 dark:text-text-primary text-lg">
                                 <LuTriangleAlert className="w-5 h-5 text-amber-500 dark:text-amber-400" />
                                 Exclusions
                             </CardTitle>
-                            <CardDescription className="text-xs leading-relaxed dark:text-slate-400">
+                            <CardDescription className="text-xs leading-relaxed dark:text-text-muted">
                                 Select staff or rooms unavailable for the contingency matrix.
                             </CardDescription>
                         </CardHeader>
 
                         {/* Custom Tabs */}
-                        <div className="flex border-b dark:border-white/10 overflow-x-auto scrollbar-none bg-slate-50/50 dark:bg-[#0a0a0c]">
+                        <div className="flex border-b dark:border-border-hover overflow-x-auto scrollbar-none bg-slate-50/50 dark:bg-[#0a0a0c]">
                             <button
                                 onClick={() => setActiveTab('faculty')}
                                 className={cn(
                                     "flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 px-2 whitespace-nowrap",
-                                    activeTab === 'faculty' ? "border-indigo-500 text-indigo-600 bg-white dark:bg-[#1a1a1f] dark:border-neon-cyan dark:text-neon-cyan" : "border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                                    activeTab === 'faculty' ? "border-indigo-500 text-indigo-600 bg-white dark:bg-[#1a1a1f] dark:border-neon-cyan dark:text-neon-cyan" : "border-transparent text-text-muted hover:text-slate-600 dark:hover:text-text-muted"
                                 )}
                             >
-                                Faculty <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80 dark:bg-white/10 dark:text-white">{excludedIds.size}</Badge>
+                                Faculty <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80 dark:bg-surface-hover dark:text-text-primary">{excludedIds.size}</Badge>
                             </button>
                             <button
                                 onClick={() => setActiveTab('resources')}
                                 className={cn(
                                     "flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 px-2 whitespace-nowrap",
-                                    activeTab === 'resources' ? "border-indigo-500 text-indigo-600 bg-white dark:bg-[#1a1a1f] dark:border-neon-cyan dark:text-neon-cyan" : "border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                                    activeTab === 'resources' ? "border-indigo-500 text-indigo-600 bg-white dark:bg-[#1a1a1f] dark:border-neon-cyan dark:text-neon-cyan" : "border-transparent text-text-muted hover:text-slate-600 dark:hover:text-text-muted"
                                 )}
                             >
-                                Rooms <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80 dark:bg-white/10 dark:text-white">{excludedRoomIds.size}</Badge>
+                                Rooms <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80 dark:bg-surface-hover dark:text-text-primary">{excludedRoomIds.size}</Badge>
                             </button>
                             <button
                                 onClick={() => setActiveTab('batches')}
                                 className={cn(
                                     "flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 px-2 whitespace-nowrap",
-                                    activeTab === 'batches' ? "border-indigo-500 text-indigo-600 bg-white dark:bg-[#1a1a1f] dark:border-neon-cyan dark:text-neon-cyan" : "border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                                    activeTab === 'batches' ? "border-indigo-500 text-indigo-600 bg-white dark:bg-[#1a1a1f] dark:border-neon-cyan dark:text-neon-cyan" : "border-transparent text-text-muted hover:text-slate-600 dark:hover:text-text-muted"
                                 )}
                             >
-                                Batches <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80 dark:bg-white/10 dark:text-white">{selectedBatchIds.size}</Badge>
+                                Batches <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80 dark:bg-surface-hover dark:text-text-primary">{selectedBatchIds.size}</Badge>
                             </button>
                             <button
                                 onClick={() => setActiveTab('days')}
                                 className={cn(
                                     "flex-1 py-2.5 text-[10px] font-black uppercase tracking-widest transition-all border-b-2 px-2 whitespace-nowrap",
-                                    activeTab === 'days' ? "border-indigo-500 text-indigo-600 bg-white dark:bg-[#1a1a1f] dark:border-neon-cyan dark:text-neon-cyan" : "border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                                    activeTab === 'days' ? "border-indigo-500 text-indigo-600 bg-white dark:bg-[#1a1a1f] dark:border-neon-cyan dark:text-neon-cyan" : "border-transparent text-text-muted hover:text-slate-600 dark:hover:text-text-muted"
                                 )}
                             >
-                                Days <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80 dark:bg-white/10 dark:text-white">{excludedDayIds.size}</Badge>
+                                Days <Badge variant="secondary" className="ml-0.5 px-1 py-0 min-w-[1rem] h-3.5 bg-slate-100/80 dark:bg-surface-hover dark:text-text-primary">{excludedDayIds.size}</Badge>
                             </button>
                         </div>
 
                         {activeTab !== 'days' && (
-                            <div className="p-3 border-b dark:border-white/10 bg-white dark:bg-white/5">
+                            <div className="p-3 border-b dark:border-border-hover bg-white dark:bg-surface">
                                 <div className="relative">
-                                    <LuSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                                    <LuSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-text-muted" />
                                     <Input
                                         placeholder={activeTab === 'faculty' ? "Filter faculty..." : activeTab === 'resources' ? "Filter rooms..." : "Filter batches..."}
-                                        className="pl-9 h-9 text-xs dark:bg-[#0a0a0c] dark:border-white/10 dark:text-white"
+                                        className="pl-9 h-9 text-xs dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary"
                                         value={activeTab === 'faculty' ? facultySearch : activeTab === 'resources' ? resourceSearch : batchSearch}
                                         onChange={(e) => {
                                             if (activeTab === 'faculty') setFacultySearch(e.target.value);
@@ -267,25 +267,25 @@ export default function SpecialTimetablePage() {
                                                 "group flex items-center justify-between p-2 rounded border cursor-pointer transition-all",
                                                 excludedIds.has(f.id)
                                                     ? "bg-red-50/80 border-red-200 text-red-900 shadow-sm dark:bg-red-900/20 dark:border-red-500/30 dark:text-red-300"
-                                                    : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10 dark:text-slate-200"
+                                                    : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-surface dark:border-border-hover dark:hover:bg-surface-hover dark:text-slate-200"
                                             )}
                                         >
                                             <div className="flex items-center gap-2">
                                                 <div className={cn(
                                                     "w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black uppercase",
-                                                    excludedIds.has(f.id) ? "bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400" : "bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-300"
+                                                    excludedIds.has(f.id) ? "bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400" : "bg-slate-100 text-text-secondary dark:bg-surface-hover dark:text-text-muted"
                                                 )}>
                                                     {f.name.charAt(0)}
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-[12px] font-bold leading-tight">{f.name}</span>
-                                                    <span className="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">{f.designation || 'Staff'}</span>
+                                                    <span className="text-[9px] text-text-muted font-medium uppercase tracking-tighter">{f.designation || 'Staff'}</span>
                                                 </div>
                                             </div>
                                             {excludedIds.has(f.id) && <LuCircleX className="w-3.5 h-3.5 text-red-400" />}
                                         </div>
                                     ))}
-                                    {filteredFaculty.length === 0 && <div className="p-8 text-center text-slate-400 text-[10px] italic font-medium uppercase tracking-widest">No matching faculty.</div>}
+                                    {filteredFaculty.length === 0 && <div className="p-8 text-center text-text-muted text-[10px] italic font-medium uppercase tracking-widest">No matching faculty.</div>}
                                 </div>
                             ) : activeTab === 'resources' ? (
                                 <div className="space-y-1">
@@ -297,30 +297,30 @@ export default function SpecialTimetablePage() {
                                                 "group flex items-center justify-between p-2 rounded border cursor-pointer transition-all",
                                                 excludedRoomIds.has(r.id)
                                                     ? "bg-red-50/80 border-red-200 text-red-900 shadow-sm dark:bg-red-900/20 dark:border-red-500/30 dark:text-red-300"
-                                                    : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10 dark:text-slate-200"
+                                                    : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-surface dark:border-border-hover dark:hover:bg-surface-hover dark:text-slate-200"
                                             )}
                                         >
                                             <div className="flex items-center gap-2">
                                                 <div className={cn(
                                                     "w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black uppercase",
-                                                    excludedRoomIds.has(r.id) ? "bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400" : "bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-300"
+                                                    excludedRoomIds.has(r.id) ? "bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400" : "bg-slate-100 text-text-secondary dark:bg-surface-hover dark:text-text-muted"
                                                 )}>
                                                     <LuMonitor className="w-3.5 h-3.5" />
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-[12px] font-bold leading-tight">{r.name}</span>
-                                                    <span className="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">{r.type} • {r.building || 'Main'}</span>
+                                                    <span className="text-[9px] text-text-muted font-medium uppercase tracking-tighter">{r.type} • {r.building || 'Main'}</span>
                                                 </div>
                                             </div>
                                             {excludedRoomIds.has(r.id) && <LuCircleX className="w-3.5 h-3.5 text-red-400" />}
                                         </div>
                                     ))}
-                                    {filteredResources.length === 0 && <div className="p-8 text-center text-slate-400 text-[10px] italic font-medium uppercase tracking-widest">No matching rooms.</div>}
+                                    {filteredResources.length === 0 && <div className="p-8 text-center text-text-muted text-[10px] italic font-medium uppercase tracking-widest">No matching rooms.</div>}
                                 </div>
                             ) : activeTab === 'batches' ? (
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between px-1 mb-2">
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Filter: {semesterFilter} semesters</span>
+                                        <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">Filter: {semesterFilter} semesters</span>
                                         <button
                                             onClick={() => {
                                                 const currentMatching = batches.filter(b =>
@@ -364,19 +364,19 @@ export default function SpecialTimetablePage() {
                                                         "group flex items-center justify-between p-2 rounded border cursor-pointer transition-all",
                                                         selectedBatchIds.has(b.id)
                                                             ? "bg-indigo-50/80 border-indigo-200 text-indigo-900 shadow-sm dark:bg-neon-cyan/20 dark:border-neon-cyan/50 dark:text-cyan-100"
-                                                            : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10 dark:text-slate-200"
+                                                            : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-surface dark:border-border-hover dark:hover:bg-surface-hover dark:text-slate-200"
                                                     )}
                                                 >
                                                     <div className="flex items-center gap-2">
                                                         <div className={cn(
                                                             "w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-black uppercase",
-                                                            selectedBatchIds.has(b.id) ? "bg-indigo-100 text-indigo-600 dark:bg-neon-cyan/30 dark:text-neon-cyan" : "bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-300"
+                                                            selectedBatchIds.has(b.id) ? "bg-indigo-100 text-indigo-600 dark:bg-neon-cyan/30 dark:text-neon-cyan" : "bg-slate-100 text-text-secondary dark:bg-surface-hover dark:text-text-muted"
                                                         )}>
                                                             <LuUsers className="w-3.5 h-3.5" />
                                                         </div>
                                                         <div className="flex flex-col">
                                                             <span className="text-[12px] font-bold leading-tight">{b.name}</span>
-                                                            <span className="text-[9px] text-slate-400 font-medium uppercase tracking-tighter">Sem {b.semester} • {b.program || 'Gen'}</span>
+                                                            <span className="text-[9px] text-text-muted font-medium uppercase tracking-tighter">Sem {b.semester} • {b.program || 'Gen'}</span>
                                                         </div>
                                                     </div>
                                                     {selectedBatchIds.has(b.id) && <LuShieldCheck className="w-3.5 h-3.5 text-indigo-400 dark:text-neon-cyan" />}
@@ -394,19 +394,19 @@ export default function SpecialTimetablePage() {
                                                 "group flex items-center justify-between p-2.5 rounded-lg border cursor-pointer transition-all",
                                                 excludedDayIds.has(idx + 1)
                                                     ? "bg-red-50/80 border-red-200 text-red-900 shadow-sm dark:bg-red-900/20 dark:border-red-500/30 dark:text-red-300"
-                                                    : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10 dark:text-slate-200"
+                                                    : "bg-white border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-surface dark:border-border-hover dark:hover:bg-surface-hover dark:text-slate-200"
                                             )}
                                         >
                                             <div className="flex items-center gap-3">
                                                 <div className={cn(
                                                     "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold",
-                                                    excludedDayIds.has(idx + 1) ? "bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400" : "bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-300"
+                                                    excludedDayIds.has(idx + 1) ? "bg-red-100 text-red-600 dark:bg-red-500/20 dark:text-red-400" : "bg-slate-100 text-text-secondary dark:bg-surface-hover dark:text-text-muted"
                                                 )}>
                                                     <LuCalendar className="w-4 h-4" />
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-[13px] font-semibold">{day}</span>
-                                                    <span className="text-[10px] text-slate-400 uppercase tracking-tighter">Full Day Block</span>
+                                                    <span className="text-[10px] text-text-muted uppercase tracking-tighter">Full Day Block</span>
                                                 </div>
                                             </div>
                                             {excludedDayIds.has(idx + 1) && <LuCircleX className="w-4 h-4 text-red-400 mt-1" />}
@@ -416,11 +416,11 @@ export default function SpecialTimetablePage() {
                             )}
                         </CardContent>
 
-                        <div className="p-4 bg-slate-50 border-t space-y-3 dark:bg-white/5 dark:border-white/10">
+                        <div className="p-4 bg-slate-50 border-t space-y-3 dark:bg-surface dark:border-border-hover">
                             <div className="space-y-1.5">
-                                <label className="text-[10px] font-black uppercase text-slate-500 dark:text-slate-400 tracking-widest pl-1">Semester Logic</label>
+                                <label className="text-[10px] font-black uppercase text-text-secondary dark:text-text-muted tracking-widest pl-1">Semester Logic</label>
                                 <select
-                                    className="flex h-9 w-full rounded-lg border border-slate-200 bg-white dark:bg-[#0a0a0c] dark:border-white/10 dark:text-white px-3 py-1 text-xs font-semibold focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
+                                    className="flex h-9 w-full rounded-lg border border-slate-200 bg-white dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary px-3 py-1 text-xs font-semibold focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
                                     value={semesterFilter}
                                     onChange={(e) => setSemesterFilter(e.target.value)}
                                 >
@@ -433,7 +433,7 @@ export default function SpecialTimetablePage() {
                             {error && <div className="text-[11px] font-medium text-red-600 bg-red-50 dark:bg-red-900/20 dark:border-red-500/30 p-2 rounded border border-red-100 mb-2">{error}</div>}
 
                             <Button
-                                className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-neon-cyan dark:hover:bg-cyan-600 dark:text-[#0a0a0c] text-white h-10 shadow-[0_0_15px_rgba(57,193,239,0.4)] transition-all font-bold text-xs uppercase tracking-wider"
+                                className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-neon-cyan dark:hover:bg-cyan-600 dark:text-[#0a0a0c] text-text-primary h-10 shadow-[0_0_15px_rgba(57,193,239,0.4)] transition-all font-bold text-xs uppercase tracking-wider"
                                 onClick={handleGenerateSpecial}
                                 disabled={generating || (excludedIds.size === 0 && excludedRoomIds.size === 0)}
                             >
@@ -447,10 +447,10 @@ export default function SpecialTimetablePage() {
                 <div className="lg:col-span-3 min-h-[calc(100vh-12rem)]">
                     {specialTimetable ? (
                         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                            <div className="bg-white dark:bg-[#0a0a0c] p-6 rounded-2xl shadow-xl border border-indigo-100 dark:border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden">
+                            <div className="bg-white dark:bg-[#0a0a0c] p-6 rounded-2xl shadow-xl border border-indigo-100 dark:border-border-hover flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative overflow-hidden">
                                 <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500 dark:bg-neon-cyan" />
                                 <div className="space-y-1">
-                                    <h3 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
+                                    <h3 className="text-xl font-black text-slate-900 dark:text-text-primary flex items-center gap-2">
                                         <div className="p-1.5 bg-indigo-50 dark:bg-neon-cyan/20 rounded-lg text-indigo-600 dark:text-neon-cyan">
                                             <LuCalendar className="w-5 h-5" />
                                         </div>
@@ -469,7 +469,7 @@ export default function SpecialTimetablePage() {
                                             <LuCalendar className="w-3 h-3 mr-1" />
                                             {excludedDayIds.size} Blocked Days
                                         </Badge>
-                                        <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest hidden sm:inline">
+                                        <span className="text-[11px] font-bold text-text-muted dark:text-text-secondary uppercase tracking-widest hidden sm:inline">
                                             Engine Latency: {specialTimetable.generationMs}ms
                                         </span>
                                     </div>
@@ -479,7 +479,7 @@ export default function SpecialTimetablePage() {
                                         variant="outline"
                                         size="sm"
                                         onClick={() => setSpecialTimetable(null)}
-                                        className="text-xs font-bold dark:border-white/10 dark:text-slate-300 dark:hover:bg-white/10"
+                                        className="text-xs font-bold dark:border-border-hover dark:text-text-muted dark:hover:bg-surface-hover"
                                     >
                                         Clear Plan
                                     </Button>
@@ -487,7 +487,7 @@ export default function SpecialTimetablePage() {
                                 </div>
                             </div>
 
-                            <div id="special-timetable-grid" className="bg-slate-100/50 dark:bg-white/5 p-1.5 rounded-2xl border border-slate-200 dark:border-white/10 shadow-inner overflow-x-auto">
+                            <div id="special-timetable-grid" className="bg-slate-100/50 dark:bg-surface p-1.5 rounded-2xl border border-slate-200 dark:border-border-hover shadow-inner table-container">
                                 <TimetableGrid
                                     slots={specialTimetable.slots}
                                     config={specialTimetable.configJson}
@@ -498,30 +498,30 @@ export default function SpecialTimetablePage() {
                         </div>
                     ) : baselineTimetable ? (
                         <div className="h-full flex flex-col">
-                            <Card className="flex-1 flex flex-col items-center justify-center p-12 border-dashed border-2 bg-slate-50/50 dark:bg-white/5 dark:border-white/10">
-                                <div className="w-24 h-24 bg-white dark:bg-[#0a0a0c] rounded-3xl shadow-sm flex items-center justify-center mb-6 border border-slate-100 dark:border-white/10 group hover:scale-110 transition-transform duration-500">
+                            <Card className="flex-1 flex flex-col items-center justify-center p-12 border-dashed border-2 bg-slate-50/50 dark:bg-surface dark:border-border-hover">
+                                <div className="w-24 h-24 bg-white dark:bg-[#0a0a0c] rounded-3xl shadow-sm flex items-center justify-center mb-6 border border-slate-100 dark:border-border-hover group hover:scale-110 transition-transform duration-500">
                                     <LuZap className="w-10 h-10 text-indigo-200 dark:text-neon-cyan/40 group-hover:text-indigo-500 dark:group-hover:text-neon-cyan transition-colors" />
                                 </div>
-                                <h3 className="text-xl font-black text-slate-800 dark:text-white mb-2">Matrix Ready for Generation</h3>
-                                <p className="text-slate-500 dark:text-slate-400 text-sm max-w-sm text-center mb-8">
+                                <h3 className="text-xl font-black text-slate-800 dark:text-text-primary mb-2">Matrix Ready for Generation</h3>
+                                <p className="text-text-secondary dark:text-text-muted text-sm max-w-sm text-center mb-8">
                                     A baseline timetable exists. Select exclusions on the left and trigger the AI engine to generate a conflict-free contingency plan.
                                 </p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-lg">
-                                    <div className="bg-white dark:bg-[#0a0a0c] p-4 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-4 hover:border-slate-300 dark:hover:border-neon-cyan/50 transition-colors">
+                                    <div className="bg-white dark:bg-[#0a0a0c] p-4 rounded-xl border border-slate-200 dark:border-border-hover shadow-sm flex items-center gap-4 hover:border-slate-300 dark:hover:border-neon-cyan/50 transition-colors">
                                         <div className="p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg text-indigo-600 dark:text-indigo-400">
                                             <LuUsers className="w-5 h-5" />
                                         </div>
                                         <div>
-                                            <div className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-wider">Baseline Staff</div>
+                                            <div className="text-[10px] uppercase font-black text-text-muted dark:text-text-secondary tracking-wider">Baseline Staff</div>
                                             <div className="text-lg font-black text-slate-800 dark:text-slate-200">{faculty.length} Assigned</div>
                                         </div>
                                     </div>
-                                    <div className="bg-white dark:bg-[#0a0a0c] p-4 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm flex items-center gap-4 hover:border-slate-300 dark:hover:border-neon-purple/50 transition-colors">
+                                    <div className="bg-white dark:bg-[#0a0a0c] p-4 rounded-xl border border-slate-200 dark:border-border-hover shadow-sm flex items-center gap-4 hover:border-slate-300 dark:hover:border-neon-purple/50 transition-colors">
                                         <div className="p-3 bg-amber-50 dark:bg-amber-900/20 rounded-lg text-amber-600 dark:text-amber-400">
                                             <LuNetwork className="w-5 h-5" />
                                         </div>
                                         <div>
-                                            <div className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-wider">Active Slots</div>
+                                            <div className="text-[10px] uppercase font-black text-text-muted dark:text-text-secondary tracking-wider">Active Slots</div>
                                             <div className="text-lg font-black text-slate-800 dark:text-slate-200">{baselineTimetable.slots.length} Matrix Blocks</div>
                                         </div>
                                     </div>
@@ -530,13 +530,13 @@ export default function SpecialTimetablePage() {
                         </div>
                     ) : (
                         <div className="h-full flex flex-col">
-                            <Card className="flex-1 flex flex-col items-center justify-center p-12 border-dashed border-2 bg-slate-50/50 dark:bg-white/5 dark:border-white/10">
+                            <Card className="flex-1 flex flex-col items-center justify-center p-12 border-dashed border-2 bg-slate-50/50 dark:bg-surface dark:border-border-hover">
                                 <div className="w-20 h-20 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mb-6">
                                     <LuTriangleAlert className="w-10 h-10 text-red-300 dark:text-red-400" />
                                 </div>
-                                <h3 className="text-xl font-black text-slate-800 dark:text-white mb-2 font-display">No Baseline Matrix Found</h3>
-                                <p className="text-slate-500 dark:text-slate-400 text-sm max-w-md text-center">
-                                    The Special Timetable generator requires an existing active timetable to calculate differences and maintain continuity. Please generate a <span className="font-bold text-slate-800 dark:text-white">Regular Timetable</span> first.
+                                <h3 className="text-xl font-black text-slate-800 dark:text-text-primary mb-2 font-display">No Baseline Matrix Found</h3>
+                                <p className="text-text-secondary dark:text-text-muted text-sm max-w-md text-center">
+                                    The Special Timetable generator requires an existing active timetable to calculate differences and maintain continuity. Please generate a <span className="font-bold text-slate-800 dark:text-text-primary">Regular Timetable</span> first.
                                 </p>
                             </Card>
                         </div>

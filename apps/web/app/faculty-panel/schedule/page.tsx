@@ -51,11 +51,11 @@ export default function FacultySchedulePage() {
                     <div className="flex justify-center p-12"><div className="w-8 h-8 rounded-full border-4 border-indigo-600 dark:border-neon-cyan border-t-transparent animate-spin" /></div>
                 ) : latestTimetable ? (
                     <div className="space-y-4">
-                        <div className="flex justify-between items-center bg-slate-900/40 border border-white/5 backdrop-blur-md p-8 rounded-[1.5rem] shadow-2xl relative overflow-hidden group">
+                        <div className="flex justify-between items-center bg-slate-900/40 border border-border backdrop-blur-md p-8 rounded-[1.5rem] shadow-2xl relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-neon-cyan/5 blur-[40px] rounded-full group-hover:bg-neon-cyan/15 transition-all duration-500" />
                             <div className="relative z-10">
                                 <h3 className="text-2xl font-black text-white glow-sm tracking-tight">Active Schedule Matrix</h3>
-                                <p className="text-sm text-slate-400 font-medium mt-1">
+                                <p className="text-sm text-text-muted font-medium mt-1">
                                     Generated Dynamic Matrix: {new Date(latestTimetable.createdAt).toLocaleDateString()}
                                 </p>
                             </div>
@@ -69,12 +69,12 @@ export default function FacultySchedulePage() {
                         />
                     </div>
                 ) : (
-                    <div className="text-center p-20 border border-dashed rounded-[2rem] bg-slate-900/20 border-white/10 backdrop-blur-sm">
+                    <div className="text-center p-20 border border-dashed rounded-[2rem] bg-slate-900/20 border-border-hover backdrop-blur-sm">
                         <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6">
                             <LuCalendar className="w-8 h-8 text-slate-600" />
                         </div>
                         <h3 className="text-xl font-black text-white mb-2 tracking-tight">Vortex Sync Pending</h3>
-                        <p className="text-slate-500 font-medium max-w-sm mx-auto">Your specific department has not generated or published an active timetable matrix yet. Please stand by for synchronization.</p>
+                        <p className="text-text-secondary font-medium max-w-sm mx-auto">Your specific department has not generated or published an active timetable matrix yet. Please stand by for synchronization.</p>
                     </div>
                 )}
             </DashboardLayout>

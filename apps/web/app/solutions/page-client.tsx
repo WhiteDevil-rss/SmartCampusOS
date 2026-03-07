@@ -81,7 +81,7 @@ export default function SolutionsClient() {
                             <h3 className="text-3xl font-bold mb-4">{s.title}</h3>
                             <p className="text-text-secondary text-lg mb-8 leading-relaxed max-w-md">{s.desc}</p>
 
-                            <div className="bg-white/5 border border-white/5 rounded-2xl p-6 mb-8">
+                            <div className="bg-white/5 border border-border rounded-2xl p-6 mb-8">
                                 <p className="text-secondary font-bold text-2xl mb-1">{s.stats}</p>
                                 <p className="text-text-muted text-xs uppercase tracking-widest font-bold">Key Performance Indicator</p>
                             </div>
@@ -111,7 +111,7 @@ export default function SolutionsClient() {
                             { title: "Empowerment", desc: "Free your academic coordinators from mundane tasks to focus on student success.", icon: "rocket_launch" }
                         ].map((b, i) => (
                             <div key={i} className="text-center group">
-                                <div className="w-20 h-20 rounded-full bg-surface border border-white/5 flex items-center justify-center mx-auto mb-8 shadow-2xl group-hover:border-primary/50 transition-colors">
+                                <div className="w-20 h-20 rounded-full bg-surface border border-border flex items-center justify-center mx-auto mb-8 shadow-2xl group-hover:border-primary/50 transition-colors">
                                     <span className="material-symbols-outlined text-4xl text-text-muted group-hover:text-primary transition-colors">{b.icon}</span>
                                 </div>
                                 <h4 className="text-xl font-bold mb-4">{b.title}</h4>
@@ -122,7 +122,7 @@ export default function SolutionsClient() {
                 </section>
 
                 {/* Final CTA */}
-                <section className="text-center py-20 bg-surface/30 rounded-[3rem] border border-white/5 shadow-2xl">
+                <section className="text-center py-20 bg-surface/30 rounded-[3rem] border border-border shadow-2xl">
                     <h2 className="text-4xl font-bold font-heading mb-6">Need a custom solution?</h2>
                     <p className="text-xl text-text-secondary mb-10">Our consultants are ready to help you build the perfect platform for your needs.</p>
                     <button className="px-12 py-5 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-xl shadow-2xl glow-shadow-primary hover:scale-105 transition-transform">
@@ -131,7 +131,7 @@ export default function SolutionsClient() {
                 </section>
             </main>
 
-            <footer className="border-t border-white/5 py-12 px-6 text-center text-xs text-text-muted uppercase tracking-widest">
+            <footer className="border-t border-border py-12 px-6 text-center text-xs text-text-muted uppercase tracking-widest">
                 <p>© 2024 Zembaa AI Technologies. All Rights Reserved.</p>
             </footer>
         </div>

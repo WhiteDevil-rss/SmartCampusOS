@@ -1,128 +1,147 @@
 "use client";
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import { LandingNav } from "@/components/landing-nav";
+import { LandingFooter } from "@/components/landing-footer";
 
 const jobs = [
-    { title: "Senior AI Engineer", department: "Engineering", location: "Remote", type: "Full-Time" },
-    { title: "Product Designer", department: "Design", location: "New York, NY", type: "Full-Time" },
-    { title: "Customer Success Manager", department: "Operations", location: "Remote", type: "Full-Time" }
+    { title: "Core Systems Architect", department: "Platform Engineering", location: "Global / Remote", type: "Full-Time" },
+    { title: "AI Protocol Researcher", department: "Intelligence Lab", location: "Singapore / Hybrid", type: "Full-Time" },
+    { title: "Interface Systems Designer", department: "Experience Design", location: "London / Hybrid", type: "Full-Time" },
+    { title: "Institutional Growth Lead", department: "Global Operations", location: "Remote", type: "Full-Time" }
 ];
 
 export default function CareersPage() {
     const [selectedJob, setSelectedJob] = useState<string | null>(null);
 
     return (
-        <div className="min-h-screen bg-background text-text-primary font-sans relative">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <div className="min-h-screen bg-background text-text-primary font-sans antialiased mesh-gradient flex flex-col selection:bg-primary/30">
+            <LandingNav />
 
-            <nav className="sticky top-0 z-50 px-4 py-3 glass-morphism border-b border-white/5">
-                <div className="max-w-7xl mx-auto flex items-center justify-between">
-                    <Link href="/" className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center">
-                            <span className="material-symbols-outlined text-white">auto_awesome</span>
-                        </div>
-                        <span className="font-heading font-bold text-lg">Zembaa AI</span>
-                    </Link>
-                    <Link href="/">
-                        <button className="text-sm font-medium hover:text-primary transition-colors flex items-center gap-1">
-                            <span className="material-symbols-outlined text-sm">arrow_back</span> Back to Home
-                        </button>
-                    </Link>
-                </div>
-            </nav>
-
-            <main className="max-w-5xl mx-auto px-6 py-20 relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-16"
-                >
-                    <h1 className="text-5xl font-heading font-bold mb-4">Join Our <span className="gradient-text">Team</span></h1>
-                    <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-                        We're always looking for passionate people to help us revolutionize academic scheduling. Work from anywhere, impact everywhere.
-                    </p>
-                </motion.div>
-
-                <div className="space-y-6 mb-20">
-                    {jobs.map((job, idx) => (
+            <main className="flex-grow pt-32 pb-24 px-6 relative z-10">
+                <div className="max-w-5xl mx-auto">
+                    {/* Header Section */}
+                    <div className="text-center mb-24">
                         <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                            whileHover={{ scale: 1.01 }}
-                            className="glass-morphism rounded-2xl p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between border border-white/10 hover:border-primary/50 transition-colors cursor-pointer"
-                            onClick={() => setSelectedJob(job.title)}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-morphism border border-border text-primary text-[10px] font-bold uppercase tracking-[0.2em] mb-8"
                         >
-                            <div>
-                                <h3 className="text-2xl font-bold mb-2 text-white">{job.title}</h3>
-                                <div className="flex flex-wrap gap-4 text-sm text-slate-400">
-                                    <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">work</span> {job.department}</span>
-                                    <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">location_on</span> {job.location}</span>
-                                    <span className="flex items-center gap-1"><span className="material-symbols-outlined text-sm">schedule</span> {job.type}</span>
-                                </div>
-                            </div>
-                            <div className="mt-4 md:mt-0">
-                                <button className="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-xl font-medium transition-colors text-white">
-                                    Apply Now
-                                </button>
-                            </div>
+                            <span className="material-symbols-outlined text-sm">rocket_launch</span>
+                            Build the Infrastructure of Knowledge
                         </motion.div>
-                    ))}
+                        <h1 className="text-5xl md:text-7xl font-bold font-space-grotesk tracking-tight mb-8">
+                            Join the <span className="gradient-text">OS Mission</span>
+                        </h1>
+                        <p className="text-text-muted text-xl leading-relaxed max-w-2xl mx-auto">
+                            We are building the sovereign operating system for higher education. We're looking for architects, designers, and thinkers to help us scale institutional intelligence.
+                        </p>
+                    </div>
+
+                    {/* Job Listings */}
+                    <div className="space-y-4 mb-24">
+                        <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-text-secondary mb-8 border-b border-border pb-4">
+                            Open Protocol Positions
+                        </div>
+                        {jobs.map((job, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                                onClick={() => setSelectedJob(job.title)}
+                                className="glass-morphism rounded-[24px] p-8 flex flex-col md:flex-row md:items-center justify-between border border-border hover:border-primary/20 transition-all cursor-pointer group"
+                            >
+                                <div>
+                                    <h3 className="text-2xl font-bold font-space-grotesk mb-3 text-text-primary transition-colors group-hover:text-primary">{job.title}</h3>
+                                    <div className="flex flex-wrap gap-6 text-[10px] font-bold uppercase tracking-widest text-text-secondary">
+                                        <span className="flex items-center gap-2"><span className="material-symbols-outlined text-[14px]">layers</span> {job.department}</span>
+                                        <span className="flex items-center gap-2"><span className="material-symbols-outlined text-[14px]">public</span> {job.location}</span>
+                                        <span className="flex items-center gap-2"><span className="material-symbols-outlined text-[14px]">bolt</span> {job.type}</span>
+                                    </div>
+                                </div>
+                                <div className="mt-6 md:mt-0 flex items-center gap-4">
+                                    <span className="text-[10px] font-bold uppercase tracking-widest text-primary opacity-0 group-hover:opacity-100 transition-opacity">Initialize Application</span>
+                                    <div className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover:bg-primary group-hover:border-primary transition-all">
+                                        <span className="material-symbols-outlined text-text-primary transition-transform group-hover:translate-x-1">arrow_forward</span>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Culture Section */}
+                    <div className="grid md:grid-cols-2 gap-12 mb-24">
+                        <div className="glass-morphism rounded-[40px] p-12 border border-border">
+                            <h3 className="text-2xl font-bold font-space-grotesk mb-6">Autonomous <span className="text-primary italic">Execution</span></h3>
+                            <p className="text-text-muted leading-relaxed">We value ownership over management. Every node in our team is empowered to make high-impact decisions and execute on institutional-scale problems.</p>
+                        </div>
+                        <div className="glass-morphism rounded-[40px] p-12 border border-border">
+                            <h3 className="text-2xl font-bold font-space-grotesk mb-6">Global <span className="text-primary italic">Residency</span></h3>
+                            <p className="text-text-muted leading-relaxed">Our infrastructure is global, and so is our team. We operate across time zones to ensure the SmartCampus OS protocol never stops evolving.</p>
+                        </div>
+                    </div>
                 </div>
 
+                {/* Application Modal */}
                 <AnimatePresence>
                     {selectedJob && (
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md"
                             onClick={() => setSelectedJob(null)}
                         >
                             <motion.div
-                                initial={{ scale: 0.9, y: 20 }}
-                                animate={{ scale: 1, y: 0 }}
-                                exit={{ scale: 0.9, y: 20 }}
-                                className="bg-[#0A0A1A] border border-white/10 rounded-2xl p-8 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+                                initial={{ scale: 0.95, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.95, opacity: 0 }}
+                                className="bg-background border border-border rounded-[32px] p-10 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative card-glow"
                                 onClick={e => e.stopPropagation()}
                             >
-                                <div className="flex justify-between items-start mb-6">
-                                    <h2 className="text-3xl font-bold text-white">Apply for {selectedJob}</h2>
-                                    <button onClick={() => setSelectedJob(null)} className="text-slate-400 hover:text-white">
+                                <div className="flex justify-between items-start mb-10">
+                                    <div>
+                                        <div className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary mb-2">Initialize Application</div>
+                                        <h2 className="text-3xl font-bold font-space-grotesk text-text-primary">{selectedJob}</h2>
+                                    </div>
+                                    <button onClick={() => setSelectedJob(null)} className="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-text-muted hover:text-text-primary transition-colors">
                                         <span className="material-symbols-outlined">close</span>
                                     </button>
                                 </div>
 
-                                <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert('Application Submitted Placeholder'); setSelectedJob(null); }}>
-                                    <div>
-                                        <label className="block text-sm font-medium text-slate-300 mb-1">Full Name</label>
-                                        <input type="text" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary" />
+                                <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); setSelectedJob(null); }}>
+                                    <div className="grid md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-text-secondary mb-2">Legal Identity</label>
+                                            <input type="text" placeholder="Full Name" required className="w-full bg-surface border border-border rounded-2xl px-5 py-4 text-text-primary focus:outline-none focus:border-primary/50 transition-colors" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-bold uppercase tracking-widest text-text-secondary mb-2">Communication Link</label>
+                                            <input type="email" placeholder="Email Address" required className="w-full bg-surface border border-border rounded-2xl px-5 py-4 text-text-primary focus:outline-none focus:border-primary/50 transition-colors" />
+                                        </div>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-300 mb-1">Email</label>
-                                        <input type="email" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary" />
+                                        <label className="block text-[10px] font-bold uppercase tracking-widest text-text-secondary mb-2">Professional Artifacts (URLs)</label>
+                                        <input type="url" placeholder="GitHub, LinkedIn, or Portfolio" className="w-full bg-surface border border-border rounded-2xl px-5 py-4 text-text-primary focus:outline-none focus:border-primary/50 transition-colors" />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-300 mb-1">LinkedIn Profile / Portfolio</label>
-                                        <input type="url" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary" />
+                                        <label className="block text-[10px] font-bold uppercase tracking-widest text-text-secondary mb-2">Why SmartCampus OS?</label>
+                                        <textarea rows={4} placeholder="Brief reasoning for joining the mission..." className="w-full bg-surface border border-border rounded-2xl px-5 py-4 text-text-primary focus:outline-none focus:border-primary/50 transition-colors resize-none"></textarea>
                                     </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-slate-300 mb-1">Cover Letter (Optional)</label>
-                                        <textarea rows={4} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary"></textarea>
-                                    </div>
-                                    <button type="submit" className="w-full bg-gradient-to-r from-primary to-secondary text-white font-bold py-4 rounded-xl mt-4">
-                                        Submit Application
+                                    <button type="submit" className="w-full glow-button bg-primary text-white font-bold py-5 rounded-2xl mt-4">
+                                        Submit Protocol Application
                                     </button>
                                 </form>
                             </motion.div>
                         </motion.div>
                     )}
                 </AnimatePresence>
-
             </main>
+
+            <LandingFooter />
         </div>
     );
 }

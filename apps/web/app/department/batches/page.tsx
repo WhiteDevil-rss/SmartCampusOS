@@ -60,11 +60,11 @@ function DivisionFill({ used, total }: { used: number; total: number }) {
     return (
         <div className="mt-3">
             <div className="flex justify-between text-xs mb-1">
-                <span className={over ? 'text-red-600 font-bold' : 'text-slate-500'}>
+                <span className={over ? 'text-red-600 font-bold' : 'text-text-secondary'}>
                     {over && <LuTriangleAlert className="w-3 h-3 inline mr-1" />}
                     {used} / {total} students assigned
                 </span>
-                <span className={over ? 'text-red-600 font-bold' : 'text-slate-400'}>{pct}%</span>
+                <span className={over ? 'text-red-600 font-bold' : 'text-text-muted'}>{pct}%</span>
             </div>
             <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                 <div
@@ -93,7 +93,7 @@ function ConfirmDialog({ state, onClose }: { state: ConfirmState; onClose: () =>
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>Cancel</Button>
                     <Button
-                        className="bg-red-600 hover:bg-red-700 text-white"
+                        className="bg-red-600 hover:bg-red-700 text-text-primary"
                         onClick={() => { state.onConfirm(); onClose(); }}
                     >
                         Delete
@@ -338,15 +338,15 @@ export default function DeptBatchesDashboard() {
             <DashboardLayout navItems={DEPT_ADMIN_NAV} title="Student Batches">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
-                        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Batch Management</h2>
-                        <p className="text-slate-500 dark:text-slate-400">Manage batches like &quot;MCA 25-27&quot; with divisions (A, B, C) and student counts.</p>
+                        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-text-primary">Batch Management</h2>
+                        <p className="text-text-secondary dark:text-text-muted">Manage batches like &quot;MCA 25-27&quot; with divisions (A, B, C) and student counts.</p>
                     </div>
                     <div className="flex gap-2 w-full sm:w-auto">
                         <div className="flex items-center gap-2 glass border rounded-lg px-3 py-2 shadow-sm w-full sm:w-64">
-                            <LuSearch className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
+                            <LuSearch className="w-4 h-4 text-text-muted dark:text-text-secondary shrink-0" />
                             <Input
                                 placeholder="Search batches..."
-                                className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 dark:text-white"
+                                className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm placeholder:text-text-muted dark:placeholder:text-text-secondary dark:text-text-primary"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -368,8 +368,8 @@ export default function DeptBatchesDashboard() {
                             const totalCap = first.totalStudents || 0;
 
                             return (
-                                <Card key={groupKey} className="glass-card shadow-sm border-slate-200 dark:border-white/10 overflow-hidden">
-                                    <CardHeader className="pb-0 bg-gradient-to-r from-slate-50 dark:from-indigo-500/10 to-indigo-50/30 dark:to-transparent border-b border-slate-100 dark:border-white/5">
+                                <Card key={groupKey} className="glass-card shadow-sm border-slate-200 dark:border-border-hover overflow-hidden">
+                                    <CardHeader className="pb-0 bg-gradient-to-r from-slate-50 dark:from-indigo-500/10 to-indigo-50/30 dark:to-transparent border-b border-slate-100 dark:border-border">
                                         <div className="pb-4">
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center gap-3">
@@ -380,8 +380,8 @@ export default function DeptBatchesDashboard() {
                                                         <CardTitle className="text-lg font-bold text-slate-800 dark:text-slate-200">{first.name}</CardTitle>
                                                         <CardDescription className="text-sm">
                                                             <span className="font-semibold text-indigo-600 dark:text-indigo-400">{first.program || 'General'}</span>
-                                                            {first.year && <span className="text-slate-400"> · {first.year}</span>}
-                                                            {first.semester && <span className="text-slate-400"> · Sem {first.semester}</span>}
+                                                            {first.year && <span className="text-text-muted"> · {first.year}</span>}
+                                                            {first.semester && <span className="text-text-muted"> · Sem {first.semester}</span>}
                                                         </CardDescription>
                                                     </div>
                                                 </div>
@@ -396,7 +396,7 @@ export default function DeptBatchesDashboard() {
                                                             setError('');
                                                             setIsEditOpen(true);
                                                         }}>
-                                                        <LuPencil className="w-4 h-4 text-slate-500" />
+                                                        <LuPencil className="w-4 h-4 text-text-secondary" />
                                                     </Button>
                                                     <Button variant="ghost" size="sm"
                                                         className="text-red-500 hover:text-red-700 hover:bg-red-50"
@@ -418,22 +418,22 @@ export default function DeptBatchesDashboard() {
                                         <CardContent className="pt-4">
                                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-4">
                                                 {divisions.map(div => (
-                                                    <div key={div.id} className="border border-slate-200 dark:border-white/10 rounded-xl p-3 bg-white/50 dark:bg-black/20 hover:shadow-sm transition-shadow">
+                                                    <div key={div.id} className="border border-slate-200 dark:border-border-hover rounded-xl p-3 bg-surface0 dark:bg-black/20 hover:shadow-sm transition-shadow">
                                                         <div className="flex items-center justify-between mb-3">
                                                             <div className="flex items-center gap-2">
                                                                 <div className="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
                                                                     <span className="text-emerald-700 dark:text-emerald-400 font-bold text-sm">{div.division || '?'}</span>
                                                                 </div>
                                                                 <div>
-                                                                    <div className="text-sm font-bold text-slate-700 dark:text-slate-300">Div {div.division || 'Default'}</div>
-                                                                    <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                                                                    <div className="text-sm font-bold text-slate-700 dark:text-text-muted">Div {div.division || 'Default'}</div>
+                                                                    <div className="text-xs text-text-secondary dark:text-text-muted flex items-center gap-1">
                                                                         <LuUserCheck className="w-3 h-3" /> {div.strength} students
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div className="flex gap-1.5">
-                                                            <Button variant="outline" size="sm" className="flex-1 text-xs hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border-slate-200 dark:border-white/10 dark:text-slate-300 dark:bg-transparent"
+                                                            <Button variant="outline" size="sm" className="flex-1 text-xs hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border-slate-200 dark:border-border-hover dark:text-text-muted dark:bg-transparent"
                                                                 onClick={() => {
                                                                     setSelectedDivId(div.id);
                                                                     setSelectedBatchId(first.id);
@@ -472,9 +472,9 @@ export default function DeptBatchesDashboard() {
                         })}
 
                         {Object.keys(batchGroups).length === 0 && (
-                            <div className="py-20 text-center text-slate-500 dark:text-slate-400 glass-card rounded-xl border-dashed border-2 border-slate-200 dark:border-white/10">
-                                <LuNetwork className="w-14 h-14 text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-                                <h3 className="text-xl font-semibold text-slate-700 dark:text-slate-300">No batches yet</h3>
+                            <div className="py-20 text-center text-text-secondary dark:text-text-muted glass-card rounded-xl border-dashed border-2 border-slate-200 dark:border-border-hover">
+                                <LuNetwork className="w-14 h-14 text-text-muted dark:text-slate-600 mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold text-slate-700 dark:text-text-muted">No batches yet</h3>
                                 <p className="text-sm mt-2 max-w-sm mx-auto">Create a batch like &quot;MCA 25-27&quot; with a total student count, then add divisions within it.</p>
                                 <Button className="mt-5" onClick={() => { setError(''); setIsAddOpen(true); }}>
                                     <LuPlus className="w-4 h-4 mr-2" /> Create First Batch
@@ -497,48 +497,48 @@ export default function DeptBatchesDashboard() {
                                 <label className="text-sm font-medium">Batch Name</label>
                                 <Input placeholder="e.g. MCA 25-27" value={addForm.name}
                                     onChange={(e) => setAddForm({ ...addForm, name: e.target.value })} />
-                                <p className="text-xs text-slate-500">This name is shared across all divisions of this batch.</p>
+                                <p className="text-xs text-text-secondary">This name is shared across all divisions of this batch.</p>
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Total Students (Batch Capacity)</label>
                                 <Input type="number" min="1" placeholder="e.g. 120" value={addForm.totalStudents}
                                     onChange={(e) => setAddForm({ ...addForm, totalStudents: parseInt(e.target.value) || 0 })}
-                                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
-                                <p className="text-xs text-slate-500 dark:text-slate-400">The maximum number of students across ALL divisions of this batch.</p>
+                                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
+                                <p className="text-xs text-text-secondary dark:text-text-muted">The maximum number of students across ALL divisions of this batch.</p>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Program</label>
+                                <label className="text-sm font-medium dark:text-text-muted">Program</label>
                                 <ProgramSelect value={addForm.program} onChange={(v) => setAddForm({ ...addForm, program: v })} programs={programs} />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium dark:text-slate-300">Academic Year</label>
+                                    <label className="text-sm font-medium dark:text-text-muted">Academic Year</label>
                                     <Input placeholder="e.g. 2025-27" value={addForm.year}
                                         onChange={(e) => setAddForm({ ...addForm, year: e.target.value })}
-                                        className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
+                                        className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium dark:text-slate-300">Semester</label>
+                                    <label className="text-sm font-medium dark:text-text-muted">Semester</label>
                                     <Input type="number" min="1" max="12" value={addForm.semester}
                                         onChange={(e) => setAddForm({ ...addForm, semester: parseInt(e.target.value) || 1 })}
-                                        className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
+                                        className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
                                 </div>
                             </div>
                             <div className="rounded-lg bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/30 p-3 text-xs text-indigo-700 dark:text-indigo-300">
                                 <strong>Division A</strong> will be created automatically with full batch capacity. You can add more divisions (B, C…) and adjust student counts after creation.
                             </div>
                         </div>
-                        <DialogFooter className="border-t dark:border-white/5 pt-4">
-                            <Button variant="outline" className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setIsAddOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleCreateBatch} disabled={!addForm.name || addForm.totalStudents < 1}>Create Batch</Button>
+                        <DialogFooter className="border-t dark:border-border pt-4">
+                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsAddOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleCreateBatch} disabled={!addForm.name || addForm.totalStudents < 1}>Create Batch</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
 
                 {/* ── Add Division Dialog ──────────────────────────────────────── */}
                 <Dialog open={isAddDivOpen} onOpenChange={setIsAddDivOpen}>
-                    <DialogContent className="sm:max-w-sm glass-card dark:border-white/10">
-                        <DialogHeader><DialogTitle className="dark:text-white">Add New Division</DialogTitle></DialogHeader>
+                    <DialogContent className="sm:max-w-sm glass-card dark:border-border-hover">
+                        <DialogHeader><DialogTitle className="dark:text-text-primary">Add New Division</DialogTitle></DialogHeader>
                         {(() => {
                             const base = batches.find(b => b.id === selectedBatchId);
                             if (!base) return null;
@@ -548,41 +548,41 @@ export default function DeptBatchesDashboard() {
                             return (
                                 <div className="space-y-4 py-4">
                                     {error && <div className="p-3 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 rounded-lg text-sm border border-red-200 dark:border-red-500/30">{error}</div>}
-                                    <div className="rounded-lg bg-slate-50 dark:bg-slate-900/50 border dark:border-white/10 px-3 py-2 text-sm text-slate-600 dark:text-slate-300">
+                                    <div className="rounded-lg bg-slate-50 dark:bg-slate-900/50 border dark:border-border-hover px-3 py-2 text-sm text-slate-600 dark:text-text-muted">
                                         <strong>{base.name}</strong> — {used} of {base.totalStudents} students allocated.
                                         <span className={`ml-2 font-semibold ${remaining <= 0 ? 'text-red-600' : 'text-emerald-600'}`}>
                                             {remaining > 0 ? `${remaining} available` : 'No capacity left'}
                                         </span>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium dark:text-slate-300">Division Name / Label</label>
+                                        <label className="text-sm font-medium dark:text-text-muted">Division Name / Label</label>
                                         <Input placeholder="e.g. B or C" value={addDivForm.division}
                                             onChange={(e) => setAddDivForm({ ...addDivForm, division: e.target.value })}
-                                            className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
-                                        <p className="text-xs text-slate-500 dark:text-slate-400">Use a short label like A, B, C or Morning, Evening.</p>
+                                            className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
+                                        <p className="text-xs text-text-secondary dark:text-text-muted">Use a short label like A, B, C or Morning, Evening.</p>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium dark:text-slate-300">Students in this Division</label>
+                                        <label className="text-sm font-medium dark:text-text-muted">Students in this Division</label>
                                         <Input type="number" min="1" max={remaining > 0 ? remaining : 1}
                                             value={addDivForm.strength}
                                             onChange={(e) => setAddDivForm({ ...addDivForm, strength: parseInt(e.target.value) || 1 })}
-                                            className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
-                                        <p className="text-xs text-slate-500 dark:text-slate-400">Max allowed: {remaining} students</p>
+                                            className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
+                                        <p className="text-xs text-text-secondary dark:text-text-muted">Max allowed: {remaining} students</p>
                                     </div>
                                 </div>
                             );
                         })()}
-                        <DialogFooter className="border-t dark:border-white/5 pt-4">
-                            <Button variant="outline" className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setIsAddDivOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleAddDivision} disabled={!addDivForm.division.trim() || addDivForm.strength < 1}>Add Division</Button>
+                        <DialogFooter className="border-t dark:border-border pt-4">
+                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsAddDivOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleAddDivision} disabled={!addDivForm.division.trim() || addDivForm.strength < 1}>Add Division</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
 
                 {/* ── Edit Division Dialog ─────────────────────────────────────── */}
                 <Dialog open={isEditDivOpen} onOpenChange={setIsEditDivOpen}>
-                    <DialogContent className="sm:max-w-sm glass-card dark:border-white/10">
-                        <DialogHeader><DialogTitle className="dark:text-white">Edit Division</DialogTitle></DialogHeader>
+                    <DialogContent className="sm:max-w-sm glass-card dark:border-border-hover">
+                        <DialogHeader><DialogTitle className="dark:text-text-primary">Edit Division</DialogTitle></DialogHeader>
                         {(() => {
                             const base = batches.find(b => b.id === selectedBatchId);
                             const div = batches.find(b => b.id === selectedDivId);
@@ -593,25 +593,25 @@ export default function DeptBatchesDashboard() {
                             return (
                                 <div className="space-y-4 py-4">
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium dark:text-slate-300">Division Label</label>
+                                        <label className="text-sm font-medium dark:text-text-muted">Division Label</label>
                                         <Input value={editDivForm.division}
                                             onChange={(e) => setEditDivForm({ ...editDivForm, division: e.target.value })}
-                                            className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
+                                            className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium dark:text-slate-300">Students in this Division</label>
+                                        <label className="text-sm font-medium dark:text-text-muted">Students in this Division</label>
                                         <Input type="number" min="1" max={maxAllowed}
                                             value={editDivForm.strength}
                                             onChange={(e) => setEditDivForm({ ...editDivForm, strength: parseInt(e.target.value) || 1 })}
-                                            className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
-                                        <p className="text-xs text-slate-500 dark:text-slate-400">Max allowed for this division: {maxAllowed} students</p>
+                                            className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
+                                        <p className="text-xs text-text-secondary dark:text-text-muted">Max allowed for this division: {maxAllowed} students</p>
                                     </div>
                                 </div>
                             );
                         })()}
-                        <DialogFooter className="border-t dark:border-white/5 pt-4">
-                            <Button variant="outline" className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setIsEditDivOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleEditDivision}>Save Changes</Button>
+                        <DialogFooter className="border-t dark:border-border pt-4">
+                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsEditDivOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleEditDivision}>Save Changes</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

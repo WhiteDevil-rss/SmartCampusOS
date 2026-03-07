@@ -1,5 +1,5 @@
 {
-    "name": "@nep-scheduler/api",
+    "name": "@smartcampus-os/api",
     "version": "1.0.0",
     "private": true,
     "scripts": {
@@ -12,18 +12,20 @@
         "seed:firebase": "ts-node scripts/seed-firebase.ts"
     },
     "dependencies": {
-        "@nep-scheduler/validation": "workspace:*",
+        "@smartcampus-os/validation": "workspace:*",
         "bcrypt": "^6.0.0",
         "compression": "^1.8.1",
         "cors": "^2.8.5",
+        "date-fns": "^4.1.0",
         "dotenv": "^16.4.5",
         "exceljs": "^4.4.0",
         "helmet": "^7.1.0",
         "redis": "^5.11.0",
-        "socket.io": "^4.8.3"
+        "socket.io": "^4.8.3",
+        "uuid": "^13.0.0"
     },
     "devDependencies": {
-        "@nep-scheduler/types": "workspace:^",
+        "@smartcampus-os/types": "workspace:^",
         "@prisma/client": "^6.19.2",
         "@types/bcrypt": "^6.0.0",
         "@types/compression": "^1.8.1",
@@ -32,6 +34,7 @@
         "@types/node": "^20.19.33",
         "@types/redis": "^4.0.11",
         "@types/socket.io": "^3.0.2",
+        "@types/uuid": "^11.0.0",
         "axios": "^1.13.5",
         "express": "^5.2.1",
         "firebase-admin": "^13.7.0",

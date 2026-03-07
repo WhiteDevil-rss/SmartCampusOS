@@ -1,0 +1,68 @@
+
+> smartcampus-os@1.0.0 build /Users/shivam/Downloads/VNSGU/Code
+> turbo run build "--filter" "@smartcampus-os/web"
+
+• turbo 2.8.11
+• Packages in scope: @smartcampus-os/web
+• Running build in 1 packages
+• Remote caching disabled
+@smartcampus-os/validation:build: cache hit, replaying logs 87fb10d1bde3b490
+@smartcampus-os/types:build: cache hit, replaying logs 8ef60afb3190c4ed
+@smartcampus-os/validation:build: 
+@smartcampus-os/validation:build: > @smartcampus-os/validation@1.0.0 build /Users/shivam/Downloads/VNSGU/Code/packages/validation
+@smartcampus-os/validation:build: > tsc
+@smartcampus-os/validation:build: 
+@smartcampus-os/types:build: 
+@smartcampus-os/types:build: > @smartcampus-os/types@1.0.0 build /Users/shivam/Downloads/VNSGU/Code/packages/types
+@smartcampus-os/types:build: > tsc
+@smartcampus-os/types:build: 
+@smartcampus-os/web:build: cache miss, executing c6282fb7c3e8646c
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build: > @smartcampus-os/web@0.1.0 build /Users/shivam/Downloads/VNSGU/Code/apps/web
+@smartcampus-os/web:build: > next build
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build: ⚠ `eslint` configuration in next.config.mjs is no longer supported. See more info here: https://nextjs.org/docs/app/api-reference/cli/next#next-lint-options
+@smartcampus-os/web:build: ⚠ Invalid next.config.mjs options detected: 
+@smartcampus-os/web:build: ⚠     Unrecognized key(s) in object: 'swcMinify', 'eslint'
+@smartcampus-os/web:build: ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
+@smartcampus-os/web:build: ▲ Next.js 16.1.6 (Turbopack)
+@smartcampus-os/web:build: - Environments: .env.local
+@smartcampus-os/web:build: - Experiments (use with caution):
+@smartcampus-os/web:build:   · optimizePackageImports
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build:   Creating an optimized production build ...
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build: > Build error occurred
+@smartcampus-os/web:build: Error: Turbopack build failed with 1 errors:
+@smartcampus-os/web:build: ./apps/web/app/globals.css
+@smartcampus-os/web:build: Error evaluating Node.js code
+@smartcampus-os/web:build: CssSyntaxError: /Users/shivam/Downloads/VNSGU/Code/apps/web/app/globals.css:152:5: The `shadow-[0_0_15px_rgba(99,` class does not exist. If `shadow-[0_0_15px_rgba(99,` is a custom class, make sure it is defined within a `@layer` directive.
+@smartcampus-os/web:build:     at Input.error (node_modules/.pnpm/postcss@8.5.6/node_modules/postcss/lib/input.js:135:16) [/Users/shivam/Downloads/VNSGU/Code/apps/web/.next/build/chunks/node_modules__pnpm_806d01c0._.js:4651:22]
+@smartcampus-os/web:build:     at AtRule.error (node_modules/.pnpm/postcss@8.5.6/node_modules/postcss/lib/node.js:146:32) [/Users/shivam/Downloads/VNSGU/Code/apps/web/.next/build/chunks/node_modules__pnpm_806d01c0._.js:928:38]
+@smartcampus-os/web:build:     [at processApply (/Users/shivam/Downloads/VNSGU/Code/node_modules/.pnpm/tailwindcss@3.4.19/node_modules/tailwindcss/lib/lib/expandApplyAtRules.js:380:29)]
+@smartcampus-os/web:build:     [at /Users/shivam/Downloads/VNSGU/Code/node_modules/.pnpm/tailwindcss@3.4.19/node_modules/tailwindcss/lib/lib/expandApplyAtRules.js:551:9]
+@smartcampus-os/web:build:     [at /Users/shivam/Downloads/VNSGU/Code/node_modules/.pnpm/tailwindcss@3.4.19/node_modules/tailwindcss/lib/processTailwindFeatures.js:55:50]
+@smartcampus-os/web:build:     [at async plugins (/Users/shivam/Downloads/VNSGU/Code/node_modules/.pnpm/tailwindcss@3.4.19/node_modules/tailwindcss/lib/plugin.js:38:17)]
+@smartcampus-os/web:build:     at async LazyResult.runAsync (node_modules/.pnpm/postcss@8.5.6/node_modules/postcss/lib/lazy-result.js:293:11) [/Users/shivam/Downloads/VNSGU/Code/apps/web/.next/build/chunks/node_modules__pnpm_806d01c0._.js:6206:21]
+@smartcampus-os/web:build:     at async transform (turbopack:///[turbopack-node]/transforms/postcss.ts:70:34) [/Users/shivam/Downloads/VNSGU/Code/apps/web/.next/build/chunks/[root-of-the-server]__4a07fad2._.js:146:36]
+@smartcampus-os/web:build:     at async run (turbopack:///[turbopack-node]/ipc/evaluate.ts:92:23) [/Users/shivam/Downloads/VNSGU/Code/apps/web/.next/build/chunks/[root-of-the-server]__623ed9a7._.js:443:31]
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build: Import trace:
+@smartcampus-os/web:build:   Client Component Browser:
+@smartcampus-os/web:build:     ./apps/web/app/globals.css [Client Component Browser]
+@smartcampus-os/web:build:     ./apps/web/app/layout.tsx [Server Component]
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build: 
+@smartcampus-os/web:build:     at async transform (turbopack:///[turbopack-node]/transforms/postcss.ts:70:34) [/Users/shivam/Downloads/VNSGU/Code/apps/web/.next/build/chunks/[root-of-the-server]__4a07fad2._.js:146:36])
+@smartcampus-os/web:build:     at async run (turbopack:///[turbopack-node]/ipc/evaluate.ts:92:23) [/Users/shivam/Downloads/VNSGU/Code/apps/web/.next/build/chunks/[root-of-the-server]__623ed9a7._.js:443:31])
+@smartcampus-os/web:build:  ELIFECYCLE  Command failed with exit code 1.
+@smartcampus-os/web:build: ERROR: command finished with error: command (/Users/shivam/Downloads/VNSGU/Code/apps/web) /Users/shivam/Library/pnpm/.tools/pnpm/8.15.5/bin/pnpm run build exited (1)
+@smartcampus-os/web#build: command (/Users/shivam/Downloads/VNSGU/Code/apps/web) /Users/shivam/Library/pnpm/.tools/pnpm/8.15.5/bin/pnpm run build exited (1)
+
+ Tasks:    2 successful, 3 total
+Cached:    2 cached, 3 total
+  Time:    18.736s 
+Failed:    @smartcampus-os/web#build
+
+ ERROR  run failed: command  exited (1)
+ ELIFECYCLE  Command failed with exit code 1.

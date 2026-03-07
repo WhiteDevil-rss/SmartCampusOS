@@ -31,6 +31,8 @@ export default function SuperAdminSubscribers() {
     const [statusFilter, setStatusFilter] = useState('');
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    const [isBulkUpdating, setIsBulkUpdating] = useState(false);
 
     const { confirmState, closeConfirm, askConfirm } = useConfirm();
     const { toast, showToast, hideToast } = useToast();
@@ -118,6 +120,61 @@ export default function SuperAdminSubscribers() {
         }
     };
 
+    const handleBulkStatusUpdate = async (status: string) => {
+        if (selectedIds.length === 0) return;
+        setIsBulkUpdating(true);
+        try {
+            await Promise.all(selectedIds.map(id =>
+                api.patch(`/subscribers/${id}/status`, { status })
+            ));
+            showToast('success', `Updated ${selectedIds.length} subscribers to ${status}.`);
+            setSelectedIds([]);
+            fetchSubscribers();
+            fetchStats();
+        } catch {
+            showToast('error', 'Failed to update some subscribers.');
+        } finally {
+            setIsBulkUpdating(false);
+        }
+    };
+
+    const handleBulkDelete = () => {
+        if (selectedIds.length === 0) return;
+        askConfirm({
+            title: 'Bulk Delete',
+            message: `Permanently delete ${selectedIds.length} subscribers?`,
+            requireTypedConfirm: true,
+            onConfirm: async () => {
+                setIsBulkUpdating(true);
+                try {
+                    await Promise.all(selectedIds.map(id => api.delete(`/subscribers/${id}`)));
+                    showToast('success', 'Subscribers deleted.');
+                    setSelectedIds([]);
+                    fetchSubscribers();
+                    fetchStats();
+                } catch {
+                    showToast('error', 'Failed to delete some subscribers.');
+                } finally {
+                    setIsBulkUpdating(false);
+                }
+            }
+        });
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedIds.length === subscribers.length) {
+            setSelectedIds([]);
+        } else {
+            setSelectedIds(subscribers.map(s => s.id));
+        }
+    };
+
+    const toggleSelect = (id: string) => {
+        setSelectedIds(prev =>
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
+    };
+
     const handleExport = async () => {
         try {
             // Trigger browser download via API
@@ -143,52 +200,52 @@ export default function SuperAdminSubscribers() {
                 {/* Header & Export Action */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                     <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white glow-sm">Audience Directory</h2>
-                        <p className="text-slate-600 dark:text-slate-400 mt-1">Manage newsletter subscribers, handle unsubscriptions, and export data.</p>
+                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-text-primary glow-sm">Audience Directory</h2>
+                        <p className="text-slate-600 dark:text-text-muted mt-1">Manage newsletter subscribers, handle unsubscriptions, and export data.</p>
                     </div>
-                    <Button onClick={handleExport} className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all">
+                    <Button onClick={handleExport} className="bg-emerald-500 hover:bg-emerald-600 text-text-primary font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all">
                         <LuDownload className="w-4 h-4 mr-2" /> Export to Excel
                     </Button>
                 </div>
 
                 {/* Metrics Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-white/5 backdrop-blur-md shadow-xl rounded-2xl">
+                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-xl rounded-2xl">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-bold text-slate-500 uppercase">Total Audience</CardTitle>
+                            <CardTitle className="text-sm font-bold text-text-secondary uppercase">Total Audience</CardTitle>
                             <LuUsers className="w-5 h-5 text-neon-cyan" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-black text-slate-900 dark:text-white">{stats.total}</div>
+                            <div className="text-3xl font-black text-slate-900 dark:text-text-primary">{stats.total}</div>
                         </CardContent>
                     </Card>
-                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-white/5 backdrop-blur-md shadow-xl rounded-2xl">
+                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-xl rounded-2xl">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
                             <CardTitle className="text-sm font-bold text-emerald-500 uppercase">Active Subscribers</CardTitle>
                             <LuMailOpen className="w-5 h-5 text-emerald-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-black text-slate-900 dark:text-white">{stats.active}</div>
+                            <div className="text-3xl font-black text-slate-900 dark:text-text-primary">{stats.active}</div>
                         </CardContent>
                     </Card>
-                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-white/5 backdrop-blur-md shadow-xl rounded-2xl">
+                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-xl rounded-2xl">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
                             <CardTitle className="text-sm font-bold text-rose-500 uppercase">Unsubscribed</CardTitle>
                             <LuPowerOff className="w-5 h-5 text-rose-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-black text-slate-900 dark:text-white">{stats.unsubscribed}</div>
+                            <div className="text-3xl font-black text-slate-900 dark:text-text-primary">{stats.unsubscribed}</div>
                         </CardContent>
                     </Card>
                 </div>
 
-                <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-white/5 backdrop-blur-md shadow-xl rounded-2xl overflow-hidden">
-                    <CardHeader className="bg-slate-50 dark:bg-white/5 border-b border-white/5 pb-4">
+                <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-xl rounded-2xl overflow-hidden">
+                    <CardHeader className="bg-slate-50 dark:bg-surface border-b border-border pb-4">
                         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                             <div className="relative w-full md:max-w-xs">
-                                <LuSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                                <LuSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted w-4 h-4" />
                                 <Input
-                                    className="pl-10 bg-white/5 border-white/10 text-white rounded-xl focus:border-neon-cyan"
+                                    className="pl-10 bg-surface border-border-hover text-text-primary rounded-xl focus:border-neon-cyan"
                                     placeholder="Search by email..."
                                     value={searchQuery}
                                     onChange={handleSearch}
@@ -196,7 +253,7 @@ export default function SuperAdminSubscribers() {
                             </div>
                             <div className="relative w-full md:max-w-[200px]">
                                 <select
-                                    className="w-full pl-3 pr-10 py-2 bg-white dark:bg-[#0a0a0c] border border-slate-200 dark:border-white/10 rounded-xl text-sm font-medium focus:outline-none focus:border-neon-cyan appearance-none"
+                                    className="w-full pl-3 pr-10 py-2 bg-white dark:bg-[#0a0a0c] border border-slate-200 dark:border-border-hover rounded-xl text-sm font-medium focus:outline-none focus:border-neon-cyan appearance-none"
                                     value={statusFilter}
                                     onChange={handleFilter}
                                 >
@@ -204,15 +261,58 @@ export default function SuperAdminSubscribers() {
                                     <option value="ACTIVE">Active</option>
                                     <option value="UNSUBSCRIBED">Unsubscribed</option>
                                 </select>
-                                <LuListFilter className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none" />
+                                <LuListFilter className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted w-4 h-4 pointer-events-none" />
                             </div>
+
+                            {selectedIds.length > 0 && (
+                                <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-2 transition-all">
+                                    <span className="text-xs font-bold text-neon-cyan px-2">
+                                        {selectedIds.length} selected
+                                    </span>
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        disabled={isBulkUpdating}
+                                        onClick={() => handleBulkStatusUpdate('ACTIVE')}
+                                        className="h-9 px-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 text-[10px] font-black uppercase"
+                                    >
+                                        Reactivate
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        disabled={isBulkUpdating}
+                                        onClick={() => handleBulkStatusUpdate('UNSUBSCRIBED')}
+                                        className="h-9 px-3 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 text-[10px] font-black uppercase"
+                                    >
+                                        Deactivate
+                                    </Button>
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        disabled={isBulkUpdating}
+                                        onClick={handleBulkDelete}
+                                        className="h-9 px-3 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 text-[10px] font-black uppercase"
+                                    >
+                                        Delete
+                                    </Button>
+                                </div>
+                            )}
                         </div>
                     </CardHeader>
                     <CardContent className="p-0">
-                        <div className="overflow-x-auto">
+                        <div className="table-container">
                             <table className="w-full text-sm text-left">
-                                <thead className="text-xs text-slate-500 uppercase bg-slate-50 dark:bg-white/5">
+                                <thead className="text-xs text-text-secondary uppercase bg-slate-50 dark:bg-surface border-b border-border/50">
                                     <tr>
+                                        <th className="px-6 py-4 w-10">
+                                            <input
+                                                type="checkbox"
+                                                className="w-4 h-4 rounded border-border-hover bg-white/5 checked:bg-neon-cyan transition-all cursor-pointer"
+                                                checked={subscribers.length > 0 && selectedIds.length === subscribers.length}
+                                                onChange={toggleSelectAll}
+                                            />
+                                        </th>
                                         <th className="px-6 py-4 font-bold tracking-wider">Email Address</th>
                                         <th className="px-6 py-4 font-bold tracking-wider">Status</th>
                                         <th className="px-6 py-4 font-bold tracking-wider">Subscribed Date</th>
@@ -222,19 +322,30 @@ export default function SuperAdminSubscribers() {
                                 <tbody className="divide-y divide-white/5">
                                     {loading ? (
                                         <tr>
-                                            <td colSpan={4} className="px-6 py-12 text-center text-slate-500">
+                                            <td colSpan={4} className="px-6 py-12 text-center text-text-secondary">
                                                 <div className="w-6 h-6 rounded-full border-2 border-primary border-t-transparent animate-spin mx-auto" />
                                             </td>
                                         </tr>
                                     ) : subscribers.length === 0 ? (
                                         <tr>
-                                            <td colSpan={4} className="px-6 py-12 text-center text-slate-500">
+                                            <td colSpan={5} className="px-6 py-12 text-center text-text-secondary">
                                                 No subscribers found.
                                             </td>
                                         </tr>
                                     ) : (
                                         subscribers.map((sub) => (
-                                            <tr key={sub.id} className="hover:bg-white/5 transition-colors group">
+                                            <tr key={sub.id} className={cn(
+                                                "hover:bg-slate-50 dark:hover:bg-surface transition-colors group",
+                                                selectedIds.includes(sub.id) && "bg-neon-cyan/5"
+                                            )}>
+                                                <td className="px-6 py-4">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="w-4 h-4 rounded border-border-hover bg-white/5 checked:bg-neon-cyan transition-all cursor-pointer"
+                                                        checked={selectedIds.includes(sub.id)}
+                                                        onChange={() => toggleSelect(sub.id)}
+                                                    />
+                                                </td>
                                                 <td className="px-6 py-4 font-medium text-slate-900 dark:text-slate-100">
                                                     {sub.email}
                                                 </td>
@@ -249,7 +360,7 @@ export default function SuperAdminSubscribers() {
                                                         </span>
                                                     )}
                                                 </td>
-                                                <td className="px-6 py-4 text-slate-500">
+                                                <td className="px-6 py-4 text-text-secondary">
                                                     {new Date(sub.createdAt).toLocaleDateString()}
                                                 </td>
                                                 <td className="px-6 py-4 text-right space-x-2">
@@ -284,15 +395,15 @@ export default function SuperAdminSubscribers() {
                         </div>
                         {/* Pagination Footer */}
                         {!loading && subscribers.length > 0 && (
-                            <div className="flex items-center justify-between p-4 border-t border-white/5 bg-slate-50 dark:bg-black/20">
-                                <span className="text-xs text-slate-500">Page {page} of {totalPages}</span>
+                            <div className="flex items-center justify-between p-4 border-t border-border bg-slate-50 dark:bg-black/20">
+                                <span className="text-xs text-text-secondary">Page {page} of {totalPages}</span>
                                 <div className="space-x-2">
                                     <Button
                                         onClick={() => setPage(p => Math.max(1, p - 1))}
                                         disabled={page === 1}
                                         variant="outline"
                                         size="sm"
-                                        className="h-8 rounded-lg border-white/10"
+                                        className="h-8 rounded-lg border-border-hover"
                                     >
                                         Prev
                                     </Button>
@@ -301,7 +412,7 @@ export default function SuperAdminSubscribers() {
                                         disabled={page === totalPages}
                                         variant="outline"
                                         size="sm"
-                                        className="h-8 rounded-lg border-white/10"
+                                        className="h-8 rounded-lg border-border-hover"
                                     >
                                         Next
                                     </Button>

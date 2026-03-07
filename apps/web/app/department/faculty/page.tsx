@@ -191,20 +191,20 @@ export default function DeptFacultyDashboard() {
                 <Toast toast={toast} onClose={hideToast} />
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
-                        <h2 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-white">Faculty Directory</h2>
-                        <p className="text-slate-500 dark:text-slate-400">Manage all registered teaching bodies and scheduling constraints for your department.</p>
+                        <h2 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-text-primary">Faculty Directory</h2>
+                        <p className="text-text-secondary dark:text-text-muted">Manage all registered teaching bodies and scheduling constraints for your department.</p>
                     </div>
                     <div className="flex gap-2 w-full sm:w-auto">
-                        <div className="flex items-center gap-2 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 shadow-sm w-full sm:w-64">
-                            <LuSearch className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
+                        <div className="flex items-center gap-2 border border-slate-200 dark:border-border-hover bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 shadow-sm w-full sm:w-64">
+                            <LuSearch className="w-4 h-4 text-text-muted dark:text-text-secondary shrink-0" />
                             <Input
                                 placeholder="Search faculty..."
-                                className="border-0 bg-transparent p-0 flex-1 w-full outline-none focus:outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-800 dark:text-white caret-slate-900 dark:caret-white"
+                                className="border-0 bg-transparent p-0 flex-1 w-full outline-none focus:outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none text-sm placeholder:text-text-muted dark:placeholder:text-text-secondary text-slate-800 dark:text-text-primary caret-slate-900 dark:caret-white"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-                        <Button onClick={() => setIsAddOpen(true)} className="bg-primary shadow-md hover:bg-primary/90 text-white shrink-0">
+                        <Button onClick={() => setIsAddOpen(true)} className="bg-primary shadow-md hover:bg-primary/90 text-text-primary shrink-0">
                             <LuPlus className="w-4 h-4 mr-2" /> Register Faculty
                         </Button>
                     </div>
@@ -215,15 +215,15 @@ export default function DeptFacultyDashboard() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filtered.map(fac => (
-                            <Card key={fac.id} className="glass-card shadow-sm border-slate-200 dark:border-white/10 hover:shadow-md transition-shadow overflow-hidden group">
-                                <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 dark:from-indigo-500/10 to-indigo-50/30 dark:to-transparent border-slate-100 dark:border-white/5">
+                            <Card key={fac.id} className="glass-card shadow-sm border-slate-200 dark:border-border-hover hover:shadow-md transition-shadow overflow-hidden group">
+                                <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 dark:from-indigo-500/10 to-indigo-50/30 dark:to-transparent border-slate-100 dark:border-border">
                                     <CardTitle className="flex items-start justify-between">
                                         <div className="flex flex-col">
                                             <span className="font-semibold text-lg text-slate-800 dark:text-slate-200">{fac.name}</span>
                                             <CardDescription className="line-clamp-1 mt-1 font-medium text-emerald-600 dark:text-emerald-400">{fac.designation || 'Lecturer'}</CardDescription>
                                             <div className="flex flex-wrap gap-1 mt-1">
                                                 {fac.departments?.map((fd) => (
-                                                    <span key={fd.departmentId} className="px-2 py-0.5 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-bold rounded-full flex items-center uppercase tracking-tight border dark:border-slate-700">
+                                                    <span key={fd.departmentId} className="px-2 py-0.5 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-text-muted text-[10px] font-bold rounded-full flex items-center uppercase tracking-tight border dark:border-slate-700">
                                                         {departments.find(d => d.id === fd.departmentId)?.shortName || '???'}
                                                     </span>
                                                 ))}
@@ -232,14 +232,14 @@ export default function DeptFacultyDashboard() {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="pt-4 pb-4">
-                                    <div className="flex justify-between text-sm text-slate-600 dark:text-slate-400 mb-2">
-                                        <span className="text-slate-500 dark:text-slate-500 text-xs font-semibold uppercase tracking-wider">Contact</span>
-                                        <span className="font-medium text-slate-700 dark:text-slate-300">{fac.email}</span>
+                                    <div className="flex justify-between text-sm text-slate-600 dark:text-text-muted mb-2">
+                                        <span className="text-text-secondary dark:text-text-secondary text-xs font-semibold uppercase tracking-wider">Contact</span>
+                                        <span className="font-medium text-slate-700 dark:text-text-muted">{fac.email}</span>
                                     </div>
                                     <div className="flex flex-wrap gap-2 mt-5">
                                         <Button
                                             variant="outline"
-                                            className="grow text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border-slate-200 dark:border-white/10 dark:bg-transparent px-2"
+                                            className="grow text-slate-600 dark:text-text-muted hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border-slate-200 dark:border-border-hover dark:bg-transparent px-2"
                                             size="sm"
                                             onClick={() => {
                                                 setSelectedFacId(fac.id);
@@ -254,7 +254,7 @@ export default function DeptFacultyDashboard() {
                                         </Button>
                                         <Button
                                             variant="outline"
-                                            className="grow text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-slate-200 dark:border-white/10 dark:bg-transparent px-2"
+                                            className="grow text-slate-600 dark:text-text-muted hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-slate-200 dark:border-border-hover dark:bg-transparent px-2"
                                             size="sm"
                                             onClick={() => {
                                                 setSelectedFacId(fac.id);
@@ -266,7 +266,7 @@ export default function DeptFacultyDashboard() {
                                         </Button>
                                         <Button
                                             variant="outline"
-                                            className="grow text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 border-slate-200 dark:border-white/10 dark:bg-transparent px-2"
+                                            className="grow text-slate-600 dark:text-text-muted hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 border-slate-200 dark:border-border-hover dark:bg-transparent px-2"
                                             size="sm"
                                             onClick={() => {
                                                 setSelectedFacId(fac.id);
@@ -292,7 +292,7 @@ export default function DeptFacultyDashboard() {
                         ))}
 
                         {filtered.length === 0 && (
-                            <div className="col-span-full py-12 text-center text-slate-500 dark:text-slate-400 glass-card rounded-xl border border-dashed border-slate-300 dark:border-white/10">
+                            <div className="col-span-full py-12 text-center text-text-secondary dark:text-text-muted glass-card rounded-xl border border-dashed border-slate-300 dark:border-border-hover">
                                 {searchTerm ? `No results found for "${searchTerm}"` : 'No faculty members found. Provision teaching personnel to construct schedules.'}
                             </div>
                         )}
@@ -301,67 +301,67 @@ export default function DeptFacultyDashboard() {
 
                 {/* Add Faculty Modal */}
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto glass-card dark:border-white/10">
+                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto glass-card dark:border-border-hover">
                         <DialogHeader>
-                            <DialogTitle className="dark:text-white">Register Department Faculty</DialogTitle>
+                            <DialogTitle className="dark:text-text-primary">Register Department Faculty</DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Department</label>
-                                <div className="w-full h-10 rounded-md border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/50 px-3 py-2 text-sm text-slate-600 dark:text-slate-300 flex items-center">
+                                <label className="text-sm font-medium dark:text-text-muted">Department</label>
+                                <div className="w-full h-10 rounded-md border border-slate-200 dark:border-border-hover bg-slate-50 dark:bg-slate-900/50 px-3 py-2 text-sm text-slate-600 dark:text-text-muted flex items-center">
                                     {departments.find(d => d.id === user?.entityId)?.name || 'Your Department'}
-                                    <span className="ml-2 text-xs text-slate-400 dark:text-slate-500">(auto-assigned)</span>
+                                    <span className="ml-2 text-xs text-text-muted dark:text-text-secondary">(auto-assigned)</span>
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Full Name</label>
+                                <label className="text-sm font-medium dark:text-text-muted">Full Name</label>
                                 <Input
                                     placeholder="e.g. Dr. Apurva Desai"
                                     value={newFacForm.name}
                                     onChange={(e) => setNewFacForm({ ...newFacForm, name: e.target.value })}
-                                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white"
+                                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Contact Email</label>
+                                <label className="text-sm font-medium dark:text-text-muted">Contact Email</label>
                                 <Input
                                     type="email"
                                     placeholder="faculty@dcs.vnsgu.ac.in"
                                     value={newFacForm.email}
                                     onChange={(e) => setNewFacForm({ ...newFacForm, email: e.target.value })}
-                                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white"
+                                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Contact Number <span className="text-red-500">*</span></label>
+                                <label className="text-sm font-medium dark:text-text-muted">Contact Number <span className="text-red-500">*</span></label>
                                 <Input
                                     placeholder="+91 9876543210"
                                     value={newFacForm.phone}
                                     onChange={(e) => setNewFacForm({ ...newFacForm, phone: e.target.value })}
-                                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white"
+                                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Designation</label>
+                                <label className="text-sm font-medium dark:text-text-muted">Designation</label>
                                 <Input
                                     placeholder="e.g. Associate Professor"
                                     value={newFacForm.designation}
                                     onChange={(e) => setNewFacForm({ ...newFacForm, designation: e.target.value })}
-                                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white"
+                                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
                                 />
                             </div>
 
-                            <hr className="my-2 dark:border-white/5" />
+                            <hr className="my-2 dark:border-border" />
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Temporary Portal Password</label>
+                                <label className="text-sm font-medium dark:text-text-muted">Temporary Portal Password</label>
                                 <Input type="password" placeholder="••••••••" value={newFacForm.password}
                                     onChange={(e) => setNewFacForm({ ...newFacForm, password: e.target.value })}
-                                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
+                                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
                             </div>
                         </div>
-                        <DialogFooter className="border-t dark:border-white/5 pt-4">
-                            <Button variant="outline" className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setIsAddOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleCreateFaculty}
+                        <DialogFooter className="border-t dark:border-border pt-4">
+                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsAddOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleCreateFaculty}
                                 disabled={!newFacForm.name || !newFacForm.email || !newFacForm.password || !newFacForm.phone}>
                                 Provision Faculty
                             </Button>
@@ -371,37 +371,37 @@ export default function DeptFacultyDashboard() {
 
                 {/* Edit Faculty Modal */}
                 <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto glass-card dark:border-white/10">
+                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto glass-card dark:border-border-hover">
                         <DialogHeader>
-                            <DialogTitle className="dark:text-white">Edit Faculty Profile</DialogTitle>
+                            <DialogTitle className="dark:text-text-primary">Edit Faculty Profile</DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Full Name</label>
+                                <label className="text-sm font-medium dark:text-text-muted">Full Name</label>
                                 <Input placeholder="e.g. Dr. Smith" value={editFacForm.name}
                                     onChange={(e) => setEditFacForm({ ...editFacForm, name: e.target.value })}
-                                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
+                                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Contact Email</label>
+                                <label className="text-sm font-medium dark:text-text-muted">Contact Email</label>
                                 <Input type="email" value={editFacForm.email}
                                     onChange={(e) => setEditFacForm({ ...editFacForm, email: e.target.value })}
-                                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
+                                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Designation</label>
+                                <label className="text-sm font-medium dark:text-text-muted">Designation</label>
                                 <Input placeholder="e.g. Professor" value={editFacForm.designation}
                                     onChange={(e) => setEditFacForm({ ...editFacForm, designation: e.target.value })}
-                                    className="dark:bg-slate-900/50 dark:border-white/10 dark:text-white" />
+                                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary" />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Department Assignment(s)</label>
-                                <div className="grid grid-cols-2 gap-2 p-3 border dark:border-white/10 rounded-md bg-slate-50/50 dark:bg-slate-900/50">
+                                <label className="text-sm font-medium dark:text-text-muted">Department Assignment(s)</label>
+                                <div className="grid grid-cols-2 gap-2 p-3 border dark:border-border-hover rounded-md bg-slate-50/50 dark:bg-slate-900/50">
                                     {departments.map(dept => (
-                                        <label key={dept.id} className="flex items-center gap-2 text-sm cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-1 rounded transition-colors text-slate-700 dark:text-slate-300">
+                                        <label key={dept.id} className="flex items-center gap-2 text-sm cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-1 rounded transition-colors text-slate-700 dark:text-text-muted">
                                             <input
                                                 type="checkbox"
-                                                className="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-primary focus:ring-primary dark:bg-slate-800"
+                                                className="w-4 h-4 rounded border-slate-300 dark:border-border-hover text-primary focus:ring-primary dark:bg-slate-800"
                                                 checked={editFacForm.departmentIds.includes(dept.id)}
                                                 onChange={(e) => {
                                                     const ids = e.target.checked
@@ -416,9 +416,9 @@ export default function DeptFacultyDashboard() {
                                 </div>
                             </div>
                         </div>
-                        <DialogFooter className="border-t dark:border-white/5 pt-4">
-                            <Button variant="outline" className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setIsEditOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleEditFaculty} disabled={!editFacForm.name || !editFacForm.email}>
+                        <DialogFooter className="border-t dark:border-border pt-4">
+                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsEditOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleEditFaculty} disabled={!editFacForm.name || !editFacForm.email}>
                                 Save Changes
                             </Button>
                         </DialogFooter>
@@ -427,26 +427,26 @@ export default function DeptFacultyDashboard() {
 
                 {/* Assign Subjects Modal */}
                 <Dialog open={isAssignOpen} onOpenChange={setIsAssignOpen}>
-                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto glass-card dark:border-white/10">
+                    <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto glass-card dark:border-border-hover">
                         <DialogHeader>
-                            <DialogTitle className="dark:text-white">Assign Subjects</DialogTitle>
-                            <DialogDescription className="dark:text-slate-400">
+                            <DialogTitle className="dark:text-text-primary">Assign Subjects</DialogTitle>
+                            <DialogDescription className="dark:text-text-muted">
                                 Select the courses this faculty member is qualified to teach.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Available Courses</label>
-                                <div className="flex items-center gap-2 border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 mb-2">
-                                    <LuSearch className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" />
+                                <label className="text-sm font-medium dark:text-text-muted">Available Courses</label>
+                                <div className="flex items-center gap-2 border border-slate-200 dark:border-border-hover bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 mb-2">
+                                    <LuSearch className="w-4 h-4 text-text-muted dark:text-text-secondary shrink-0" />
                                     <Input
                                         placeholder="Search subjects by name or code..."
-                                        className="border-0 bg-transparent p-0 flex-1 w-full outline-none focus:outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none text-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-800 dark:text-white caret-slate-900 dark:caret-white"
+                                        className="border-0 bg-transparent p-0 flex-1 w-full outline-none focus:outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none text-sm placeholder:text-text-muted dark:placeholder:text-text-secondary text-slate-800 dark:text-text-primary caret-slate-900 dark:caret-white"
                                         value={subjectSearchTerm}
                                         onChange={(e) => setSubjectSearchTerm(e.target.value)}
                                     />
                                 </div>
-                                <div className="grid grid-cols-1 gap-2 p-3 border dark:border-white/10 rounded-md bg-slate-50/50 dark:bg-slate-900/50 max-h-64 overflow-y-auto">
+                                <div className="grid grid-cols-1 gap-2 p-3 border dark:border-border-hover rounded-md bg-slate-50/50 dark:bg-slate-900/50 max-h-64 overflow-y-auto">
                                     {courses
                                         .filter(course =>
                                             !subjectSearchTerm ||
@@ -454,10 +454,10 @@ export default function DeptFacultyDashboard() {
                                             course.code.toLowerCase().includes(subjectSearchTerm.toLowerCase())
                                         )
                                         .map(course => (
-                                            <label key={course.id} className="flex items-center gap-3 text-sm cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded transition-colors text-slate-700 dark:text-slate-300">
+                                            <label key={course.id} className="flex items-center gap-3 text-sm cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded transition-colors text-slate-700 dark:text-text-muted">
                                                 <input
                                                     type="checkbox"
-                                                    className="w-4 h-4 rounded border-slate-300 dark:border-white/20 text-primary focus:ring-primary dark:bg-slate-800 shrink-0"
+                                                    className="w-4 h-4 rounded border-slate-300 dark:border-border-hover text-primary focus:ring-primary dark:bg-slate-800 shrink-0"
                                                     checked={assignSubjectsForm.includes(course.id)}
                                                     onChange={(e) => {
                                                         const ids = e.target.checked
@@ -468,26 +468,26 @@ export default function DeptFacultyDashboard() {
                                                 />
                                                 <div className="flex flex-col min-w-0">
                                                     <span className="font-semibold truncate">{course.name}</span>
-                                                    <span className="text-xs text-slate-500 dark:text-slate-400 truncate">{course.code} • {course.credits} Credits</span>
+                                                    <span className="text-xs text-text-secondary dark:text-text-muted truncate">{course.code} • {course.credits} Credits</span>
                                                 </div>
                                             </label>
                                         ))}
                                     {courses.length === 0 && (
-                                        <span className="text-slate-500 dark:text-slate-400 text-sm italic">No courses available.</span>
+                                        <span className="text-text-secondary dark:text-text-muted text-sm italic">No courses available.</span>
                                     )}
                                     {courses.length > 0 && courses.filter(course =>
                                         !subjectSearchTerm ||
                                         course.name.toLowerCase().includes(subjectSearchTerm.toLowerCase()) ||
                                         course.code.toLowerCase().includes(subjectSearchTerm.toLowerCase())
                                     ).length === 0 && (
-                                            <span className="text-slate-500 dark:text-slate-400 text-sm italic text-center py-4">No results for "{subjectSearchTerm}"</span>
+                                            <span className="text-text-secondary dark:text-text-muted text-sm italic text-center py-4">No results for "{subjectSearchTerm}"</span>
                                         )}
                                 </div>
                             </div>
                         </div>
-                        <DialogFooter className="border-t dark:border-white/5 pt-4">
-                            <Button variant="outline" className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setIsAssignOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleAssignSubjects}>
+                        <DialogFooter className="border-t dark:border-border pt-4">
+                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsAssignOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleAssignSubjects}>
                                 Save Assignments
                             </Button>
                         </DialogFooter>
@@ -496,37 +496,37 @@ export default function DeptFacultyDashboard() {
 
                 {/* Advanced Constraints Modal */}
                 <Dialog open={isConstraintsOpen} onOpenChange={setIsConstraintsOpen}>
-                    <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto glass-card dark:border-white/10">
+                    <DialogContent className="sm:max-w-xl max-h-[90vh] overflow-y-auto glass-card dark:border-border-hover">
                         <DialogHeader>
-                            <DialogTitle className="dark:text-white">Professional Constraints</DialogTitle>
-                            <DialogDescription className="dark:text-slate-400">
+                            <DialogTitle className="dark:text-text-primary">Professional Constraints</DialogTitle>
+                            <DialogDescription className="dark:text-text-muted">
                                 Define availability constraints for {faculties.find(f => f.id === selectedFacId)?.name}.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-6 py-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-medium dark:text-slate-300">Availability Map (Blocked Slots)</label>
-                                <p className="text-xs text-slate-500 mb-2">Select slots where this faculty is NOT available to teach.</p>
-                                <div className="overflow-x-auto border dark:border-white/10 rounded-lg">
+                                <label className="text-sm font-medium dark:text-text-muted">Availability Map (Blocked Slots)</label>
+                                <p className="text-xs text-text-secondary mb-2">Select slots where this faculty is NOT available to teach.</p>
+                                <div className="table-container">
                                     <table className="w-full text-xs text-left border-collapse">
                                         <thead>
                                             <tr className="bg-slate-50 dark:bg-slate-900/50">
-                                                <th className="p-2 border-b dark:border-white/10 font-bold dark:text-slate-300">Day</th>
+                                                <th className="p-2 border-b dark:border-border-hover font-bold dark:text-text-muted">Day</th>
                                                 {[1, 2, 3, 4, 5, 6, 7, 8].map(s => (
-                                                    <th key={s} className="p-2 border-b dark:border-white/10 text-center font-bold dark:text-slate-300">S{s}</th>
+                                                    <th key={s} className="p-2 border-b dark:border-border-hover text-center font-bold dark:text-text-muted">S{s}</th>
                                                 ))}
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map(day => (
-                                                <tr key={day} className="border-b dark:border-white/10">
-                                                    <td className="p-2 font-medium bg-slate-50/50 dark:bg-slate-900/30 dark:text-slate-400">{day}</td>
+                                                <tr key={day} className="border-b dark:border-border-hover">
+                                                    <td className="p-2 font-medium bg-slate-50/50 dark:bg-slate-900/30 dark:text-text-muted">{day}</td>
                                                     {[1, 2, 3, 4, 5, 6, 7, 8].map(slot => {
                                                         const isBlocked = constraintsForm.availability[day]?.includes(slot);
                                                         return (
                                                             <td
                                                                 key={slot}
-                                                                className={`p-2 text-center cursor-pointer transition-colors ${isBlocked ? 'bg-red-100 dark:bg-red-500/20' : 'hover:bg-slate-100 dark:hover:bg-white/5'}`}
+                                                                className={`p-2 text-center cursor-pointer transition-colors ${isBlocked ? 'bg-red-100 dark:bg-red-500/20' : 'hover:bg-slate-100 dark:hover:bg-surface'}`}
                                                                 onClick={() => {
                                                                     const currentSlots = constraintsForm.availability[day] || [];
                                                                     const nextSlots = isBlocked
@@ -552,9 +552,9 @@ export default function DeptFacultyDashboard() {
                                 </div>
                             </div>
                         </div>
-                        <DialogFooter className="border-t dark:border-white/5 pt-4">
-                            <Button variant="outline" className="dark:border-white/10 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setIsConstraintsOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-white" onClick={handleUpdateConstraints}>
+                        <DialogFooter className="border-t dark:border-border pt-4">
+                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsConstraintsOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleUpdateConstraints}>
                                 Apply Constraints
                             </Button>
                         </DialogFooter>

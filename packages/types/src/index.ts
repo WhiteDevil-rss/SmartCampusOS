@@ -61,3 +61,28 @@ export interface GenerateRequest {
     excludedRoomIds?: string[];
     excludedDayIds?: number[];
 }
+export enum UserRole {
+    SUPER_ADMIN = 'SUPERADMIN',
+    UNIVERSITY_ADMIN = 'UNI_ADMIN',
+    COLLEGE_ADMIN = 'COLLEGE_ADMIN',
+    DEPARTMENT_ADMIN = 'DEPT_ADMIN',
+    FACULTY = 'FACULTY',
+    STUDENT = 'STUDENT',
+    PARENT = 'PARENT',
+    LIBRARIAN = 'LIBRARIAN',
+    PLACEMENT_OFFICER = 'PLACEMENT_OFFICER',
+    PUBLIC = 'PUBLIC'
+}
+
+export const RoleHierarchy: Record<string, number> = {
+    'SUPERADMIN': 100,
+    'UNI_ADMIN': 90,
+    'COLLEGE_ADMIN': 80,
+    'DEPT_ADMIN': 70,
+    'FACULTY': 60,
+    'LIBRARIAN': 50,
+    'PLACEMENT_OFFICER': 50,
+    'STUDENT': 40,
+    'PARENT': 30,
+    'PUBLIC': 10
+};

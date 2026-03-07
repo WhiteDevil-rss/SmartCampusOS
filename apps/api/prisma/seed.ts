@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../src/generated/client';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';
@@ -43,8 +43,8 @@ async function main() {
         update: {},
         create: {
             id: 'system-config',
-            platformName: 'Zembaa.AI Scheduler',
-            supportEmail: 'support@zembaa.ai',
+            platformName: 'SmartCampus OS',
+            supportEmail: 'support@smartcampus-os.tech',
             maintenanceMode: false,
             sessionTimeout: 600,
             mfaEnabled: false,
@@ -300,6 +300,105 @@ async function main() {
                 courseId: fs.courseId,
                 isPrimary: fs.isPrimary,
                 proficiencyLevel: fs.proficiencyLevel,
+            },
+        });
+    }
+
+    // 11. Programs
+    if (data.programs) {
+        console.log(`Seeding ${data.programs.length} Programs...`);
+        for (const prog of data.programs) {
+            await prisma.program.upsert({
+                where: { id: prog.id },
+                update: { name: prog.name, shortName: prog.shortName, type: prog.type, duration: prog.duration, totalSems: prog.totalSems, universityId: prog.universityId, departmentId: prog.departmentId },
+                create: { id: prog.id, name: prog.name, shortName: prog.shortName, type: prog.type, duration: prog.duration, totalSems: prog.totalSems, universityId: prog.universityId, departmentId: prog.departmentId },
+            });
+        }
+    }
+
+    // 12. Session Types
+    if (data.sessionTypes) {
+        console.log(`Seeding ${data.sessionTypes.length} Session Types...`);
+        for (const st of data.sessionTypes) {
+            await prisma.sessionType.upsert({
+                where: { id: st.id },
+                update: { name: st.name, durationRule: st.durationRule, roomTypeRequired: st.roomTypeRequired, departmentId: st.departmentId },
+                create: { id: st.id, name: st.name, durationRule: st.durationRule, roomTypeRequired: st.roomTypeRequired, departmentId: st.departmentId },
+            });
+        }
+    }
+
+    // 13. Time Blocks
+    if (data.timeBlocks) {
+        console.log(`Seeding ${data.timeBlocks.length} Time Blocks...`);
+        for (const tb of data.timeBlocks) {
+            await prisma.timeBlock.upsert({
+                where: { id: tb.id },
+                update: { name: tb.name, startTime: tb.startTime, endTime: tb.endTime, duration: tb.duration, isBreak: tb.isBreak, slotNumber: tb.slotNumber, departmentId: tb.departmentId },
+                create: { id: tb.id, name: tb.name, startTime: tb.startTime, endTime: tb.endTime, duration: tb.duration, isBreak: tb.isBreak, slotNumber: tb.slotNumber, departmentId: tb.departmentId },
+            });
+        }
+    }
+
+    // 14. Students
+    if (data.students) {
+        console.log(`Seeding ${data.students.length} Students...`);
+        for (const st of data.students) {
+            await prisma.student.upsert({
+                where: { id: st.id },
+                update: { enrollmentNo: st.enrollmentNo, name: st.name, email: st.email, phone: st.phone, batchId: st.batchId, programId: st.programId, admissionYear: st.admissionYear, universityId: st.universityId, departmentId: st.departmentId },
+                create: { id: st.id, enrollmentNo: st.enrollmentNo, name: st.name, email: st.email, phone: st.phone, batchId: st.batchId, programId: st.programId, admissionYear: st.admissionYear, universityId: st.universityId, departmentId: st.departmentId },
+            });
+        }
+    }
+
+    // 15. Assignments
+    if (data.assignments) {
+        console.log(`Seeding ${data.assignments.length} Assignments...`);
+        for (const asm of data.assignments) {
+            await prisma.assignment.upsert({
+                where: { id: asm.id },
+                update: { title: asm.title, description: asm.description, dueDate: asm.dueDate, maxMarks: asm.maxMarks, facultyId: asm.facultyId, courseId: asm.courseId, batchId: asm.batchId },
+                create: { id: asm.id, title: asm.title, description: asm.description, dueDate: asm.dueDate, maxMarks: asm.maxMarks, facultyId: asm.facultyId, courseId: asm.courseId, batchId: asm.batchId },
+            });
+        }
+    }
+
+    // 16. Fee Structures
+    if (data.feeStructures) {
+        console.log(`Seeding ${data.feeStructures.length} Fee Structures...`);
+        for (const fs of data.feeStructures) {
+            await prisma.feeStructure.upsert({
+                where: { id: fs.id },
+                update: { semester: fs.semester, academicYear: fs.academicYear, components: fs.components, totalAmount: fs.totalAmount, universityId: fs.universityId, programId: fs.programId },
+                create: { id: fs.id, semester: fs.semester, academicYear: fs.academicYear, components: fs.components, totalAmount: fs.totalAmount, universityId: fs.universityId, programId: fs.programId },
+            });
+        }
+    }
+
+    // 17. Permissions (SuperAdmin)
+    const superAdminId = '9be572c4-1fc9-48c3-9b30-631316853799';
+    const modules = ['USERS', 'UNIVERSITIES', 'DEPARTMENTS', 'COURSES', 'STUDENTS', 'FACULTY', 'INQUIRIES', 'SUBSCRIBERS', 'NOTIFICATIONS', 'SETTINGS'];
+
+    console.log('Seeding SuperAdmin Permissions...');
+    for (const module of modules) {
+        await prisma.permission.upsert({
+            where: {
+                // Since we don't have a unique constraint on (userId, module, action) yet in schema
+                // we'll use a find-then-create approach or just use a stable ID for seeding
+                id: `perm-superadmin-${module.toLowerCase()}-all`,
+            },
+            update: {
+                allowed: true,
+                action: 'ALL',
+            },
+            create: {
+                id: `perm-superadmin-${module.toLowerCase()}-all`,
+                userId: superAdminId,
+                roleId: 'SUPERADMIN',
+                module: module,
+                action: 'ALL',
+                allowed: true,
             },
         });
     }
