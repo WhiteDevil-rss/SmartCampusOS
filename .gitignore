@@ -75,3 +75,5 @@ build-*.log
 build-*.txt
 build_*.txt
 build_*.log
+
+.logs/
