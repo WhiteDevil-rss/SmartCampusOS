@@ -77,3 +77,7 @@ build_*.txt
 build_*.log
 
 .logs/
+
+test-axios.js
+check_db.js
+EVALUATION_MAP.md
