@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LuX, LuBell, LuCalendar, LuUser, LuExternalLink, LuTrash2 } from 'react-icons/lu';
 import { format } from 'date-fns';
@@ -7,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Notification } from '@/lib/hooks/use-notifications';
 import Link from 'next/link';
+import { createPortal } from 'react-dom';
 
 interface MessageDetailPopupProps {
     notification: Notification | null;
@@ -15,7 +17,13 @@ interface MessageDetailPopupProps {
 }
 
 export function MessageDetailPopup({ notification, onClose, onDelete }: MessageDetailPopupProps) {
-    if (!notification) return null;
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!notification || !mounted) return null;
 
     const categoryStyles = {
         ACADEMIC: 'text-blue-500 bg-blue-500/10 border-blue-500/20',
@@ -24,22 +32,22 @@ export function MessageDetailPopup({ notification, onClose, onDelete }: MessageD
         SYSTEM: 'text-primary bg-primary/10 border-primary/20'
     };
 
-    return (
+    return createPortal(
         <AnimatePresence>
-            <div className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-4">
+            <div className="fixed inset-0 z-[10001] flex items-center justify-center p-4 pointer-events-none">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     onClick={onClose}
-                    className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                    className="absolute inset-0 bg-black/60 backdrop-blur-sm pointer-events-auto"
                 />
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                    className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[32px] shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden"
+                    className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-[32px] shadow-2xl border border-slate-200 dark:border-white/10 overflow-hidden max-h-[90vh] flex flex-col pointer-events-auto"
                 >
                     {/* Header Image/Glow */}
                     <div className={cn(
@@ -61,7 +69,7 @@ export function MessageDetailPopup({ notification, onClose, onDelete }: MessageD
                         </button>
                     </div>
 
-                    <div className="px-8 pb-8 -mt-6 relative z-10">
+                    <div className="px-8 pb-8 -mt-6 relative z-10 overflow-y-auto custom-scrollbar">
                         <div className="space-y-6">
                             {/* Title & Metadata */}
                             <div className="space-y-2">
@@ -85,9 +93,15 @@ export function MessageDetailPopup({ notification, onClose, onDelete }: MessageD
 
                             {/* Content */}
                             <div className="p-6 rounded-2xl bg-slate-50 dark:bg-white/[0.02] border border-slate-100 dark:border-white/5">
-                                <p className="text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
-                                    {notification.message}
-                                </p>
+                                <div className="text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
+                                    {typeof notification.message === 'object' ? (
+                                        <pre className="whitespace-pre-wrap break-words font-sans">
+                                            {JSON.stringify(notification.message, null, 2)}
+                                        </pre>
+                                    ) : (
+                                        <p>{notification.message}</p>
+                                    )}
+                                </div>
                             </div>
 
                             {/* Actions */}
@@ -125,5 +139,5 @@ export function MessageDetailPopup({ notification, onClose, onDelete }: MessageD
                 </motion.div>
             </div>
         </AnimatePresence>
-    );
+        , document.body);
 }

@@ -35,7 +35,7 @@ export function Toast({ toast, onClose }: { toast: ToastState; onClose: () => vo
     if (!toast.show) return null;
 
     return (
-        <div className="fixed top-4 right-4 z-[9999] animate-in slide-in-from-top-2 fade-in duration-300">
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] animate-in slide-in-from-top-2 fade-in duration-300">
             <div className={`flex items-start gap-3 rounded-xl border shadow-lg px-4 py-3 min-w-[300px] max-w-sm ${styles[toast.type]}`}>
                 {icons[toast.type]}
                 <p className="flex-1 text-sm font-medium leading-snug">{toast.message}</p>

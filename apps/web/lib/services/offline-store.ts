@@ -50,10 +50,11 @@ class OfflineMessageStore {
         const db = await this.db;
         const offlineMessage: OfflineMessage = {
             ...message as any,
+            message_id: message.message_id || (message as any).id || crypto.randomUUID(),
             stored_at: new Date().toISOString(),
             accessed_at: new Date().toISOString(),
-            synced_to_server: navigator.onLine,
-            pending_upload: !navigator.onLine,
+            synced_to_server: message.synced_to_server ?? navigator.onLine,
+            pending_upload: message.pending_upload ?? !navigator.onLine,
             expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
         };
         return db.put(STORE_NAME, offlineMessage);

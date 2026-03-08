@@ -2,8 +2,8 @@
 
 import { ProtectedRoute } from '@/components/protected-route';
 import { DashboardLayout } from '@/components/dashboard-layout';
-import { LuPlus, LuHistory, LuUsers, LuReceipt, LuSettings2, LuCheck, LuClock, LuInfo, LuBanknote } from 'react-icons/lu';
-import { useEffect, useState, useCallback } from 'react';
+import { LuPlus, LuHistory, LuUsers, LuReceipt, LuSettings2, LuCheck, LuClock, LuInfo, LuBanknote, LuChartBar } from 'react-icons/lu';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/lib/store/useAuthStore';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -20,7 +20,8 @@ interface FeeStructure {
     academicYear: string;
     totalAmount: number;
     components: any;
-    program?: { name: string };
+    program?: { name: string; shortName?: string; id?: string };
+    programId?: string;
 }
 
 interface Faculty {
@@ -33,10 +34,16 @@ interface Faculty {
     }
 }
 
+interface StudentInfo {
+    id: string;
+    programId: string;
+}
+
 export default function FinanceDashboard() {
     const { user } = useAuthStore();
     const [structures, setStructures] = useState<FeeStructure[]>([]);
     const [faculty, setFaculty] = useState<Faculty[]>([]);
+    const [students, setStudents] = useState<StudentInfo[]>([]);
     const [loading, setLoading] = useState(true);
     const { toast, showToast, hideToast } = useToast();
 
@@ -69,14 +76,16 @@ export default function FinanceDashboard() {
     const fetchData = useCallback(async () => {
         if (!user?.entityId) return;
         try {
-            const [feeRes, facRes, progRes] = await Promise.all([
+            const [feeRes, facRes, progRes, studRes] = await Promise.all([
                 api.get(`/v2/fees/structures?universityId=${user.universityId}`),
                 api.get(`/v2/payroll/configs?universityId=${user.universityId}&departmentId=${user.entityId}`),
-                api.get(`/programs`)
+                api.get(`/programs`),
+                api.get(`/v2/student?departmentId=${user.entityId}`).catch(() => ({ data: [] }))
             ]);
             setStructures(feeRes.data);
             setFaculty(facRes.data);
             setPrograms(progRes.data);
+            setStudents(studRes.data);
         } catch (e) {
             console.error(e);
         } finally {
@@ -87,6 +96,34 @@ export default function FinanceDashboard() {
     useEffect(() => {
         fetchData();
     }, [fetchData]);
+
+    // Calculate program-wise fee totals
+    const programFeeStats = useMemo(() => {
+        const stats: Record<string, { programName: string; shortName: string; studentCount: number; feePerStudent: number; totalApplicable: number }> = {};
+
+        for (const structure of structures) {
+            const progId = structure.programId || structure.program?.id || '';
+            const progName = structure.program?.name || programs.find((p: any) => p.id === progId)?.name || 'Unknown Program';
+            const shortName = structure.program?.shortName || programs.find((p: any) => p.id === progId)?.shortName || 'N/A';
+            const studentCount = students.filter(s => s.programId === progId).length;
+
+            if (!stats[progId]) {
+                stats[progId] = {
+                    programName: progName,
+                    shortName,
+                    studentCount,
+                    feePerStudent: structure.totalAmount,
+                    totalApplicable: structure.totalAmount * studentCount
+                };
+            }
+        }
+
+        return stats;
+    }, [structures, students, programs]);
+
+    const grandTotal = useMemo(() => {
+        return Object.values(programFeeStats).reduce((sum, s) => sum + s.totalApplicable, 0);
+    }, [programFeeStats]);
 
     const handleCreateFeeStructure = async () => {
         try {
@@ -149,14 +186,15 @@ export default function FinanceDashboard() {
                     </div>
                 </div>
 
+                {/* Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <Card className="glass-card bg-indigo-500/5 dark:bg-indigo-500/10 border-indigo-200 dark:border-indigo-500/20">
                         <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium text-text-secondary">Total Fee Collection</CardTitle>
+                            <CardTitle className="text-sm font-medium text-text-secondary">Total Fee Applicable</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">₹ 12,45,000</div>
-                            <p className="text-xs text-text-secondary mt-1 flex items-center gap-1"><LuCheck className="text-emerald-500" /> 84% from current semester</p>
+                            <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">₹ {grandTotal.toLocaleString('en-IN')}</div>
+                            <p className="text-xs text-text-secondary mt-1 flex items-center gap-1"><LuCheck className="text-emerald-500" /> Across {Object.keys(programFeeStats).length} programs</p>
                         </CardContent>
                     </Card>
                     <Card className="glass-card bg-purple-500/5 dark:bg-purple-500/10 border-purple-200 dark:border-purple-500/20">
@@ -164,8 +202,8 @@ export default function FinanceDashboard() {
                             <CardTitle className="text-sm font-medium text-text-secondary">Monthly Payroll</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">₹ 8,12,500</div>
-                            <p className="text-xs text-text-secondary mt-1 flex items-center gap-1"><LuClock className="text-amber-500" /> Next processing: March 31</p>
+                            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">₹ {faculty.filter(f => f.payrollConfig).reduce((sum, f) => sum + (f.payrollConfig?.baseSalary || 0), 0).toLocaleString('en-IN')}</div>
+                            <p className="text-xs text-text-secondary mt-1 flex items-center gap-1"><LuClock className="text-amber-500" /> {faculty.filter(f => f.payrollConfig).length} configured faculty</p>
                         </CardContent>
                     </Card>
                     <Card className="glass-card bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-200 dark:border-emerald-500/20">
@@ -174,7 +212,7 @@ export default function FinanceDashboard() {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{structures.length}</div>
-                            <p className="text-xs text-text-secondary mt-1 flex items-center gap-1"><LuInfo className="text-emerald-500" /> All programs updated</p>
+                            <p className="text-xs text-text-secondary mt-1 flex items-center gap-1"><LuInfo className="text-emerald-500" /> {students.length} total students enrolled</p>
                         </CardContent>
                     </Card>
                 </div>
@@ -194,27 +232,87 @@ export default function FinanceDashboard() {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {structures.map(s => (
-                                <Card key={s.id} className="glass-card border-slate-200 dark:border-border-hover group hover:shadow-lg transition-all">
-                                    <div className="p-1 bg-indigo-500/10 rounded-t-xl group-hover:bg-indigo-500/20 transition-colors" />
-                                    <CardHeader className="pb-3">
-                                        <CardTitle className="text-lg">{s.program?.name || 'Academic Course'}</CardTitle>
-                                        <CardDescription>Sem {s.semester} | {s.academicYear}</CardDescription>
-                                    </CardHeader>
-                                    <CardContent className="space-y-4">
-                                        <div className="text-2xl font-black text-slate-800 dark:text-text-primary">₹ {s.totalAmount.toLocaleString()}</div>
-                                        <div className="pt-3 border-t dark:border-border space-y-2">
-                                            {Object.entries(s.components as any).slice(0, 3).map(([k, v]: any) => (
-                                                <div key={k} className="flex justify-between text-xs text-text-secondary italic">
-                                                    <span>{k}</span>
-                                                    <span>₹ {v}</span>
+                            {structures.map(s => {
+                                const progId = s.programId || s.program?.id || '';
+                                const stat = programFeeStats[progId];
+                                return (
+                                    <Card key={s.id} className="glass-card border-slate-200 dark:border-border-hover group hover:shadow-lg transition-all">
+                                        <div className="p-1 bg-indigo-500/10 rounded-t-xl group-hover:bg-indigo-500/20 transition-colors" />
+                                        <CardHeader className="pb-3">
+                                            <CardTitle className="text-lg">{s.program?.name || programs.find((p: any) => p.id === progId)?.name || 'Academic Course'}</CardTitle>
+                                            <CardDescription>Sem {s.semester} | {s.academicYear}</CardDescription>
+                                        </CardHeader>
+                                        <CardContent className="space-y-4">
+                                            <div className="text-2xl font-black text-slate-800 dark:text-text-primary">₹ {s.totalAmount.toLocaleString('en-IN')}</div>
+                                            <div className="pt-3 border-t dark:border-border space-y-2">
+                                                {(Array.isArray(s.components) ? s.components : Object.entries(s.components as any).map(([k, v]: any) => ({ name: k, amount: v }))).slice(0, 4).map((comp: any, idx: number) => (
+                                                    <div key={idx} className="flex justify-between text-xs text-text-secondary italic">
+                                                        <span>{comp.name || 'Component'}</span>
+                                                        <span>₹ {Number(comp.amount).toLocaleString('en-IN')}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            {stat && (
+                                                <div className="pt-3 border-t dark:border-border">
+                                                    <div className="flex justify-between text-xs font-semibold">
+                                                        <span className="text-text-secondary">Students Enrolled</span>
+                                                        <span className="text-indigo-600 dark:text-indigo-400">{stat.studentCount}</span>
+                                                    </div>
+                                                    <div className="flex justify-between text-xs font-bold mt-1">
+                                                        <span className="text-text-secondary">Total Applicable</span>
+                                                        <span className="text-emerald-600 dark:text-emerald-400">₹ {stat.totalApplicable.toLocaleString('en-IN')}</span>
+                                                    </div>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </CardContent>
-                                </Card>
-                            ))}
+                                            )}
+                                        </CardContent>
+                                    </Card>
+                                );
+                            })}
                         </div>
+
+                        {/* Program Fee Summary / Comparison */}
+                        {Object.keys(programFeeStats).length > 0 && (
+                            <Card className="glass-card border-slate-200 dark:border-border-hover mt-8">
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2">
+                                        <LuChartBar className="h-5 w-5 text-primary" />
+                                        Program Fee Comparison
+                                    </CardTitle>
+                                    <CardDescription>Summary of total fees applicable per program</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-4">
+                                        {Object.entries(programFeeStats).map(([progId, stat]) => {
+                                            const pct = grandTotal > 0 ? (stat.totalApplicable / grandTotal * 100) : 0;
+                                            return (
+                                                <div key={progId} className="space-y-2">
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center gap-3">
+                                                            <span className="px-2.5 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-wider rounded-lg border border-primary/20">{stat.shortName}</span>
+                                                            <div>
+                                                                <div className="font-bold text-sm text-slate-800 dark:text-text-primary">{stat.programName}</div>
+                                                                <div className="text-[10px] text-text-secondary">{stat.studentCount} students × ₹{stat.feePerStudent.toLocaleString('en-IN')}/student</div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <div className="text-lg font-black text-emerald-600 dark:text-emerald-400">₹ {stat.totalApplicable.toLocaleString('en-IN')}</div>
+                                                            <div className="text-[10px] text-text-secondary font-bold">{pct.toFixed(1)}% of total</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5">
+                                                        <div className="bg-gradient-to-r from-primary to-indigo-500 h-2.5 rounded-full transition-all duration-500" style={{ width: `${pct}%` }}></div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                        <div className="pt-4 border-t dark:border-border flex items-center justify-between">
+                                            <span className="text-sm font-black text-slate-800 dark:text-text-primary uppercase tracking-wide">Grand Total</span>
+                                            <span className="text-xl font-black text-indigo-600 dark:text-indigo-400">₹ {grandTotal.toLocaleString('en-IN')}</span>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )}
                     </TabsContent>
 
                     <TabsContent value="payroll" className="space-y-6">
@@ -302,7 +400,7 @@ export default function FinanceDashboard() {
                                     <select className="w-full h-10 rounded-md border dark:border-border-hover bg-white dark:bg-slate-900 px-3 py-2 text-sm"
                                         value={feeForm.programId} onChange={e => setFeeForm({ ...feeForm, programId: e.target.value })}>
                                         <option value="">Select Program</option>
-                                        {programs.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                        {programs.map((p: any) => <option key={p.id} value={p.id}>{p.name}</option>)}
                                     </select>
                                 </div>
                                 <div className="space-y-2">

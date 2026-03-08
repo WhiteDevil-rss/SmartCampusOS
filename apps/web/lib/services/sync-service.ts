@@ -71,8 +71,16 @@ class MessageSyncService {
             if (remoteMessages && remoteMessages.length > 0) {
                 for (const msg of remoteMessages) {
                     await offlineStore.saveMessage({
-                        ...msg,
-                        synced_to_server: true
+                        message_id: msg.id,
+                        subject: msg.title,
+                        body: msg.content,
+                        type: msg.type || 'NOTIFICATION',
+                        category: msg.category || 'SYSTEM',
+                        sender_name: 'University',
+                        sent_at: msg.createdAt,
+                        synced_to_server: true,
+                        pending_upload: false,
+                        status: 'RECEIVED'
                     });
                 }
             }

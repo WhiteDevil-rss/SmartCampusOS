@@ -376,7 +376,55 @@ async function main() {
         }
     }
 
-    // 17. Permissions (SuperAdmin)
+    // 17. Books
+    if (data.books) {
+        console.log(`Seeding ${data.books.length} Books...`);
+        for (const book of data.books) {
+            await prisma.book.upsert({
+                where: { id: book.id },
+                update: { isbn: book.isbn, title: book.title, author: book.author, category: book.category, totalCopies: book.totalCopies, availableCopies: book.availableCopies, universityId: book.universityId, departmentId: book.departmentId || null },
+                create: { id: book.id, isbn: book.isbn, title: book.title, author: book.author, category: book.category, totalCopies: book.totalCopies, availableCopies: book.availableCopies, universityId: book.universityId, departmentId: book.departmentId || null },
+            });
+        }
+    }
+
+    // 18. Book Loans
+    if (data.bookLoans) {
+        console.log(`Seeding ${data.bookLoans.length} Book Loans...`);
+        for (const loan of data.bookLoans) {
+            await prisma.bookLoan.upsert({
+                where: { id: loan.id },
+                update: { studentId: loan.studentId, bookId: loan.bookId, issuedAt: new Date(loan.issuedAt), dueDate: new Date(loan.dueDate), returnedAt: loan.returnedAt ? new Date(loan.returnedAt) : null, fineAmount: loan.fineAmount },
+                create: { id: loan.id, studentId: loan.studentId, bookId: loan.bookId, issuedAt: new Date(loan.issuedAt), dueDate: new Date(loan.dueDate), returnedAt: loan.returnedAt ? new Date(loan.returnedAt) : null, fineAmount: loan.fineAmount },
+            });
+        }
+    }
+
+    // 19. Companies
+    if (data.companies) {
+        console.log(`Seeding ${data.companies.length} Companies...`);
+        for (const company of data.companies) {
+            await prisma.company.upsert({
+                where: { id: company.id },
+                update: { name: company.name, type: company.type, website: company.website, hrContact: company.hrContact, universityId: company.universityId },
+                create: { id: company.id, name: company.name, type: company.type, website: company.website, hrContact: company.hrContact, universityId: company.universityId },
+            });
+        }
+    }
+
+    // 20. Placement Records
+    if (data.placementRecords) {
+        console.log(`Seeding ${data.placementRecords.length} Placement Records...`);
+        for (const pr of data.placementRecords) {
+            await prisma.placementRecord.upsert({
+                where: { id: pr.id },
+                update: { studentId: pr.studentId, companyId: pr.companyId, placedAt: new Date(pr.placedAt), ctc: pr.ctc, role: pr.role },
+                create: { id: pr.id, studentId: pr.studentId, companyId: pr.companyId, placedAt: new Date(pr.placedAt), ctc: pr.ctc, role: pr.role },
+            });
+        }
+    }
+
+    // 21. Permissions (SuperAdmin)
     const superAdminId = '9be572c4-1fc9-48c3-9b30-631316853799';
     const modules = ['USERS', 'UNIVERSITIES', 'DEPARTMENTS', 'COURSES', 'STUDENTS', 'FACULTY', 'INQUIRIES', 'SUBSCRIBERS', 'NOTIFICATIONS', 'SETTINGS'];
 
@@ -402,6 +450,32 @@ async function main() {
             },
         });
     }
+
+    console.log('Seeding UNI_ADMIN Permissions...');
+    await prisma.permission.upsert({
+        where: { id: 'perm-uniadmin-notifications-write' },
+        update: { allowed: true, action: 'WRITE' },
+        create: {
+            id: 'perm-uniadmin-notifications-write',
+            roleId: 'UNI_ADMIN',
+            module: 'NOTIFICATIONS',
+            action: 'WRITE',
+            allowed: true,
+        },
+    });
+
+    console.log('Seeding DEPT_ADMIN Permissions...');
+    await prisma.permission.upsert({
+        where: { id: 'perm-deptadmin-notifications-write' },
+        update: { allowed: true, action: 'WRITE' },
+        create: {
+            id: 'perm-deptadmin-notifications-write',
+            roleId: 'DEPT_ADMIN',
+            module: 'NOTIFICATIONS',
+            action: 'WRITE',
+            allowed: true,
+        },
+    });
 
     console.log('Seeding Complete! 🎉');
 }

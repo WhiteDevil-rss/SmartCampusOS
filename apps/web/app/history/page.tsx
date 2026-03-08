@@ -11,12 +11,22 @@ import { useAuthStore } from '@/lib/store/useAuthStore';
 import { offlineStore, OfflineMessage } from '@/lib/services/offline-store';
 import {
     LuSearch, LuFilter, LuCalendar, LuMessageSquare, LuChevronRight,
-    LuInfo, LuTriangleAlert, LuBell, LuClock, LuHistory
+    LuInfo, LuTriangleAlert, LuBell, LuClock, LuHistory, LuSend, LuUsers, LuBuilding2, LuGraduationCap, LuUser, LuPlus, LuLoader
 } from 'react-icons/lu';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { DEPT_ADMIN_NAV, UNI_ADMIN_NAV, SUPERADMIN_NAV, FACULTY_NAV, STUDENT_NAV } from '@/lib/constants/nav-config';
 import { MessageDetailPopup } from '@/components/shared/message-detail-popup';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Textarea } from '@/components/ui/textarea';
+import { Toast, useToast } from '@/components/ui/toast-alert';
 
 export default function HistoryPage() {
     const { user } = useAuthStore();
@@ -25,6 +35,73 @@ export default function HistoryPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [filterCategory, setFilterCategory] = useState('ALL');
     const [selectedMessage, setSelectedMessage] = useState<any>(null);
+    const { toast, showToast, hideToast } = useToast();
+
+    // Sync Journal State
+    const [isJournalOpen, setIsJournalOpen] = useState(false);
+    const [syncLogs, setSyncLogs] = useState<any[]>([]);
+    const [journalLoading, setJournalLoading] = useState(false);
+
+    const fetchSyncLogs = async () => {
+        setJournalLoading(true);
+        try {
+            const res = await api.get('/v2/history/sync/logs');
+            setSyncLogs(res.data);
+        } catch (error) {
+            console.error('Failed to fetch sync logs:', error);
+            showToast('error', 'Failed to load sync journal');
+        } finally {
+            setJournalLoading(false);
+        }
+    };
+
+    // Broadcast Modal State
+    const [isBroadcastModalOpen, setIsBroadcastModalOpen] = useState(false);
+    const [broadcastLoading, setBroadcastLoading] = useState(false);
+    const [broadcastData, setBroadcastData] = useState({
+        title: '',
+        message: '',
+        category: 'SYSTEM',
+        targetType: 'ALL',
+        targetRoleId: '',
+        link: ''
+    });
+
+    const handleSendBroadcast = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setBroadcastLoading(true);
+        try {
+            const payload: any = {
+                title: broadcastData.title,
+                message: broadcastData.message,
+                category: broadcastData.category,
+                targetType: broadcastData.targetType,
+                link: broadcastData.link || undefined
+            };
+
+            if (broadcastData.targetType === 'ROLE') {
+                payload.targetRoleId = broadcastData.targetRoleId;
+            }
+
+            await api.post('/v2/notifications/broadcast', payload);
+            showToast('success', 'Broadcast message sent successfully');
+            setIsBroadcastModalOpen(false);
+            setBroadcastData({
+                title: '',
+                message: '',
+                category: 'SYSTEM',
+                targetType: 'ALL',
+                targetRoleId: '',
+                link: ''
+            });
+            fetchHistory(); // Refresh history
+        } catch (error: any) {
+            console.error('Broadcast error:', error);
+            showToast('error', error?.response?.data?.error || 'Failed to send broadcast');
+        } finally {
+            setBroadcastLoading(false);
+        }
+    };
 
     const getNavItems = () => {
         switch (user?.role) {
@@ -59,7 +136,7 @@ export default function HistoryPage() {
             const combined = [...serverMessages];
             localMessages.forEach(local => {
                 const exists = combined.some(s =>
-                    s.message_id === local.message_id
+                    (s.message_id || s.id) === local.message_id
                 );
                 if (!exists) {
                     combined.push({
@@ -115,6 +192,7 @@ export default function HistoryPage() {
             case 'ACADEMIC': return <LuInfo className="w-4 h-4 text-blue-500" />;
             case 'ATTENDANCE': return <LuTriangleAlert className="w-4 h-4 text-amber-500" />;
             case 'SYSTEM': return <LuBell className="w-4 h-4 text-emerald-500" />;
+            case 'BROADCAST': return <LuSend className="w-4 h-4 text-primary" />;
             default: return <LuMessageSquare className="w-4 h-4 text-primary" />;
         }
     };
@@ -128,17 +206,37 @@ export default function HistoryPage() {
                         <div className="absolute -right-20 -top-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
                         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div>
-                                <h1 className="text-4xl font-black text-white tracking-tighter flex items-center gap-3">
-                                    <LuHistory className="w-10 h-10 text-primary" />
-                                    Communication History
+                                <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter flex items-center gap-4">
+                                    <div className="p-3 bg-primary/20 rounded-2xl border border-primary/30 shadow-glow flex items-center justify-center">
+                                        <LuHistory className="w-8 h-8 text-primary shadow-glow" />
+                                    </div>
+                                    Message Hub
                                 </h1>
-                                <p className="text-text-muted font-bold mt-2">Access all your past notifications, alerts, and system broadcasts in one secure place.</p>
+                                <p className="text-text-muted font-bold mt-4 text-lg max-w-xl leading-relaxed">
+                                    Strategic communication center for university-wide updates, academic alerts, and mission-critical broadcasts.
+                                </p>
                             </div>
-                            <div className="flex bg-white/5 p-1.5 rounded-2xl border border-white/10 backdrop-blur-sm self-start">
-                                <span className={cn(
-                                    "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-                                    "bg-primary text-white shadow-glow"
-                                )}>Active Journal</span>
+                            <div className="flex flex-col gap-3">
+                                {['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN'].includes(user?.role || '') && (
+                                    <Button
+                                        onClick={() => setIsBroadcastModalOpen(true)}
+                                        className="bg-primary hover:bg-primary/90 text-white font-black px-8 py-7 rounded-2xl shadow-glow-lg transition-all group overflow-hidden relative"
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                                        <LuSend className="w-5 h-5 mr-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                        Initiate Broadcast
+                                    </Button>
+                                )}
+                                <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                        setIsJournalOpen(true);
+                                        fetchSyncLogs();
+                                    }}
+                                    className="bg-white/5 border-white/10 text-white font-black px-8 py-3 rounded-2xl hover:bg-white/10 transition-all backdrop-blur-md"
+                                >
+                                    Active Journal
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -242,7 +340,7 @@ export default function HistoryPage() {
                                                     {msg.title || msg.subject}
                                                 </h3>
                                                 <p className="text-sm text-text-secondary truncate font-medium">
-                                                    {msg.content || msg.body}
+                                                    {typeof (msg.content || msg.body) === 'object' ? JSON.stringify(msg.content || msg.body) : (msg.content || msg.body)}
                                                 </p>
                                             </div>
                                             <LuChevronRight className="w-6 h-6 text-text-muted group-hover:text-primary group-hover:translate-x-1 transition-all" />
@@ -287,7 +385,7 @@ export default function HistoryPage() {
                             id: selectedMessage.id,
                             title: selectedMessage.title || selectedMessage.subject,
                             message: selectedMessage.content || selectedMessage.body,
-                            category: (selectedMessage.type === 'BROADCAST' ? 'SYSTEM' : selectedMessage.type) as any,
+                            category: (['ACADEMIC', 'ATTENDANCE', 'FEES', 'SYSTEM'].includes(selectedMessage.type?.toUpperCase()) ? selectedMessage.type : 'SYSTEM') as any,
                             createdAt: selectedMessage.sent_at || selectedMessage.createdAt,
                             isRead: true,
                             link: selectedMessage.link
@@ -295,6 +393,200 @@ export default function HistoryPage() {
                         onClose={() => setSelectedMessage(null)}
                     />
                 )}
+
+                {/* Broadcast Modal */}
+                <Dialog open={isBroadcastModalOpen} onOpenChange={setIsBroadcastModalOpen}>
+                    <DialogContent className="sm:max-w-[550px] glass-card border-white/10 bg-slate-950/90 backdrop-blur-2xl p-0 overflow-hidden rounded-[2rem] shadow-glow-lg">
+                        <DialogHeader className="p-8 pb-0">
+                            <DialogTitle className="text-3xl font-black text-white tracking-tighter flex items-center gap-3">
+                                <div className="p-2 bg-primary/20 rounded-xl text-primary border border-primary/30">
+                                    <LuSend className="w-6 h-6" />
+                                </div>
+                                Launch Broadcast
+                            </DialogTitle>
+                            <DialogDescription className="text-text-muted font-bold mt-2">
+                                Broadcast vital information across the university network. Precision and clarity are paramount.
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <form onSubmit={handleSendBroadcast} className="p-8 pt-6 space-y-6">
+                            <div className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Broadcast Title</label>
+                                    <Input
+                                        required
+                                        placeholder="e.g. End Semester Examination Schedule Q1"
+                                        className="h-14 bg-white/5 border-white/10 rounded-2xl text-white font-bold focus:ring-primary/20 transition-all"
+                                        value={broadcastData.title}
+                                        onChange={(e) => setBroadcastData({ ...broadcastData, title: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Message Content</label>
+                                    <Textarea
+                                        required
+                                        placeholder="Articulate the details of this broadcast..."
+                                        className="min-h-[120px] bg-white/5 border-white/10 rounded-2xl text-white font-medium focus:ring-primary/20 p-4"
+                                        value={broadcastData.message}
+                                        onChange={(e) => setBroadcastData({ ...broadcastData, message: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Category</label>
+                                        <select
+                                            className="w-full h-14 bg-white/5 border-white/10 rounded-2xl text-white font-bold px-4 outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
+                                            value={broadcastData.category}
+                                            onChange={(e) => setBroadcastData({ ...broadcastData, category: e.target.value })}
+                                        >
+                                            <option value="SYSTEM" className="bg-slate-900">System Alert</option>
+                                            <option value="ACADEMIC" className="bg-slate-900">Academic</option>
+                                            <option value="ATTENDANCE" className="bg-slate-900">Attendance</option>
+                                            <option value="FEES" className="bg-slate-900">Fees / Finance</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Target Audience</label>
+                                        <select
+                                            className="w-full h-14 bg-white/5 border-white/10 rounded-2xl text-white font-bold px-4 outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none"
+                                            value={broadcastData.targetType}
+                                            onChange={(e) => setBroadcastData({ ...broadcastData, targetType: e.target.value })}
+                                        >
+                                            <option value="ALL" className="bg-slate-900">
+                                                {user?.role === 'DEPT_ADMIN' ? 'All My Department' : 'All University'}
+                                            </option>
+                                            <option value="ROLE" className="bg-slate-900">Specific Groups</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {broadcastData.targetType === 'ROLE' && (
+                                    <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
+                                        <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Select Group</label>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {[
+                                                { id: 'STUDENT', label: 'Students', icon: <LuUsers className="w-4 h-4" /> },
+                                                { id: 'FACULTY', label: 'Faculty', icon: <LuUser className="w-4 h-4" /> },
+                                                ...(user?.role !== 'DEPT_ADMIN' ? [
+                                                    { id: 'DEPT_ADMIN', label: 'Dept Admins', icon: <LuBuilding2 className="w-4 h-4" /> },
+                                                    { id: 'PARENT', label: 'Parents', icon: <LuGraduationCap className="w-4 h-4" /> }
+                                                ] : [])
+                                            ].map((role) => (
+                                                <button
+                                                    key={role.id}
+                                                    type="button"
+                                                    onClick={() => setBroadcastData({ ...broadcastData, targetRoleId: role.id })}
+                                                    className={cn(
+                                                        "flex items-center gap-3 p-4 rounded-xl border font-bold transition-all",
+                                                        broadcastData.targetRoleId === role.id
+                                                            ? "bg-primary/20 border-primary text-primary shadow-glow"
+                                                            : "bg-white/5 border-white/10 text-text-muted hover:bg-white/10"
+                                                    )}
+                                                >
+                                                    {role.icon}
+                                                    {role.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black uppercase tracking-widest text-text-muted ml-1">Reference Link (Optional)</label>
+                                    <Input
+                                        placeholder="e.g. /dashboard/results"
+                                        className="h-14 bg-white/5 border-white/10 rounded-2xl text-white font-bold focus:ring-primary/20 transition-all"
+                                        value={broadcastData.link}
+                                        onChange={(e) => setBroadcastData({ ...broadcastData, link: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+
+                            <DialogFooter className="pt-4">
+                                <Button
+                                    type="submit"
+                                    disabled={broadcastLoading}
+                                    className="w-full h-16 bg-primary hover:bg-primary/90 text-white font-black text-lg rounded-2xl shadow-glow-lg flex items-center justify-center gap-3 transition-all"
+                                >
+                                    {broadcastLoading ? (
+                                        <>
+                                            <LuLoader className="w-6 h-6 animate-spin" />
+                                            Launching...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <LuSend className="w-6 h-6" />
+                                            Transmit Broadcast
+                                        </>
+                                    )}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
+
+                <Toast toast={toast} onClose={hideToast} />
+
+                {/* Sync Journal Modal */}
+                <Dialog open={isJournalOpen} onOpenChange={setIsJournalOpen}>
+                    <DialogContent className="sm:max-w-[650px] glass-card border-white/10 bg-slate-950/90 backdrop-blur-2xl p-0 overflow-hidden rounded-[2rem] shadow-glow-lg">
+                        <DialogHeader className="p-8 pb-4">
+                            <DialogTitle className="text-3xl font-black text-white tracking-tighter flex items-center gap-3">
+                                <div className="p-2 bg-emerald-500/20 rounded-xl text-emerald-500 border border-emerald-500/30">
+                                    <LuHistory className="w-6 h-6" />
+                                </div>
+                                System Health Journal
+                            </DialogTitle>
+                            <DialogDescription className="text-text-muted font-bold mt-2">
+                                Real-time activity log of data synchronizations between your local device and the cloud.
+                            </DialogDescription>
+                        </DialogHeader>
+
+                        <div className="px-8 pb-8 max-h-[400px] overflow-y-auto custom-scrollbar">
+                            {journalLoading ? (
+                                <div className="py-12 text-center">
+                                    <LuLoader className="w-8 h-8 text-primary animate-spin mx-auto mb-4" />
+                                    <p className="text-text-muted font-bold">Scanning logs...</p>
+                                </div>
+                            ) : syncLogs.length === 0 ? (
+                                <div className="py-12 text-center border border-white/5 rounded-2xl bg-white/5">
+                                    <p className="text-text-muted font-bold">No sync activity recorded yet.</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-3">
+                                    {syncLogs.map((log: any) => (
+                                        <div key={log.id} className="p-4 rounded-xl border border-white/5 bg-white/5 flex items-center justify-between group hover:bg-white/10 transition-all">
+                                            <div className="flex flex-col">
+                                                <div className="flex items-center gap-2">
+                                                    <span className={cn(
+                                                        "w-2 h-2 rounded-full",
+                                                        log.syncStatus === 'SUCCESS' ? "bg-emerald-500" : "bg-rose-500"
+                                                    )} />
+                                                    <span className="text-sm font-black text-white">Cloud Patch Sync</span>
+                                                </div>
+                                                <span className="text-[10px] font-bold text-text-muted uppercase tracking-widest mt-1">
+                                                    {format(new Date(log.lastSyncAt), 'MMM d, h:mm:ss a')}
+                                                </span>
+                                            </div>
+                                            <div className="text-right">
+                                                <div className="text-sm font-black text-primary">+{log.offlineCount} items</div>
+                                                <div className="text-[10px] font-bold text-text-muted">{log.deviceInfo || 'System Generated'}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="p-6 bg-white/5 border-t border-white/5 flex justify-end">
+                            <Button onClick={() => setIsJournalOpen(false)} className="bg-primary hover:bg-primary/90 text-white font-black px-8 rounded-xl h-12">
+                                Acknowledge & Close
+                            </Button>
+                        </div>
+                    </DialogContent>
+                </Dialog>
             </DashboardLayout>
         </ProtectedRoute>
     );

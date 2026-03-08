@@ -303,6 +303,226 @@
       "entityId": "6290429f-4822-4cdb-9b1f-2bf49faf4f8b",
       "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
       "isActive": true
+    },
+    {
+      "id": "ba92c3d5-03a4-4241-98ec-2a1f33f2d4bd",
+      "username": "arjuniyer10",
+      "email": "arjun.iyer@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "f75c955b-d88f-4eee-9c62-bb5a01720610",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "c24c7cbe-e8e8-4ba8-bab6-a5a735efd358",
+      "username": "ananyanair11",
+      "email": "ananya.nair@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "c34a97e6-3b2c-43fb-af4b-a126834c0ecf",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "60ff52ee-1897-4afa-9073-94daa0be93e2",
+      "username": "karthikraja12",
+      "email": "karthik.raja@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "4002d058-895a-48a0-b430-8a79d2f85d56",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "4b7dbfa4-406b-426e-beb0-50e91e8aaf9b",
+      "username": "meerakrishnan13",
+      "email": "meera.krishnan@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "b58fdd13-6320-4fc5-86fd-cffa3e5960db",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "22ff890e-f737-4c65-af76-e81c64979db3",
+      "username": "siddharthpillai14",
+      "email": "siddharth.pillai@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "bcfb4d74-0eec-4900-8db8-68fc829a15b3",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "08d116cc-2360-4992-a62a-77d77a738802",
+      "username": "kavyamenon15",
+      "email": "kavya.menon@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "79633343-2b4c-46aa-91bd-8e6a2b4356c3",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "b5f832c3-a333-4942-b899-52186facedb1",
+      "username": "varunreddy16",
+      "email": "varun.reddy@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "e8875236-aa89-439b-b06a-969b9d229277",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "04c67b67-7282-40fe-b265-f051d741f31f",
+      "username": "ishaanrao17",
+      "email": "ishaan.rao@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "ac799eb5-faa3-4890-a138-a3a775b22176",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "b7414baf-4285-472a-8abf-29aa023d7388",
+      "username": "tanyagupta18",
+      "email": "tanya.gupta@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "a9232ebf-8243-40b5-a7d5-8a495d63ca88",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "0f55c46a-1f04-40df-8c4c-815679358660",
+      "username": "rohansharma19",
+      "email": "rohan.sharma@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "bdba6f3a-1b55-4ce8-8b0e-3765da53384f",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "1bac03d2-3e3a-40c9-9528-03fad8243988",
+      "username": "rishikapoor10",
+      "email": "rishi.kapoor@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "5acee2c2-a39c-4448-9aa2-436aacb0b9eb",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "6c31c873-ba71-4581-8191-425a8ec4a7af",
+      "username": "nehadhupia11",
+      "email": "neha.dhupia@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "349c0d64-e25f-49bf-a0aa-59a0708c84ae",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "f9de2350-6584-4003-9aff-259981fede94",
+      "username": "akshaykumar12",
+      "email": "akshay.kumar@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "03471d6f-debf-44dc-bfb7-0b40b5e2b84b",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "1415899d-990d-4364-bd87-398b6028827b",
+      "username": "vidyabalan13",
+      "email": "vidya.balan@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "5229af79-7e57-4dfd-bcbb-f03ba2f767e7",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "a72f257b-688c-416f-bc43-622197e3cffc",
+      "username": "hrithikroshan14",
+      "email": "hrithik.roshan@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "c382c2c6-b133-435c-9de5-5d4c6cee82a0",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "62f2010d-3f9d-47e5-9b3b-fdae994b22db",
+      "username": "kareenakapoor15",
+      "email": "kareena.kapoor@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "bd9eca1a-9e69-4be7-9cb1-0e89536292ff",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "acbf4676-cced-4293-a152-f35f64c8df20",
+      "username": "ranbirkapoor16",
+      "email": "ranbir.kapoor@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "5b958b11-8f33-4613-832f-a502fde987be",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "13694e5e-0feb-4fe1-9363-b7af17393061",
+      "username": "aliabhatt17",
+      "email": "alia.bhatt@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "0a72d9ae-3152-4dd0-978f-e53e1f7043b0",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "4403d3fd-dde6-4bee-a19c-8bfa7bf72636",
+      "username": "varundhawan18",
+      "email": "varun.dhawan@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "d8582506-9cf8-492c-b52c-26fc9293d28d",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
+    },
+    {
+      "id": "4ccf6dc0-6782-415d-bc6a-baf0e8c5f4bf",
+      "username": "shraddhakapoor19",
+      "email": "shraddha.kapoor@student.vnsgu.ac.in",
+      "passwordHash": null,
+      "firebaseUid": null,
+      "role": "STUDENT",
+      "entityId": "00f11fe2-62af-407b-b5c3-cf70046eb770",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isActive": true
     }
   ],
   "departments": [
@@ -477,6 +697,20 @@
       "totalStudents": 120,
       "createdAt": "2026-03-04T17:15:30.904Z",
       "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4"
+    },
+    {
+      "id": "b3c00000-0000-0000-0000-000000000001",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "BCA Sem 2 - 2025-26",
+      "program": "BCA",
+      "semester": 2,
+      "division": "A",
+      "year": "2025-26",
+      "strength": 60,
+      "totalStudents": 60,
+      "createdAt": "2026-03-08T13:30:00.000Z",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab"
     }
   ],
   "courses": [
@@ -1182,6 +1416,246 @@
       "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
       "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
       "admissionYear": 2025
+    },
+    {
+      "id": "f75c955b-d88f-4eee-9c62-bb5a01720610",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250010",
+      "name": "Arjun Iyer",
+      "email": "arjun.iyer@student.vnsgu.ac.in",
+      "phone": "9876510010",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "c34a97e6-3b2c-43fb-af4b-a126834c0ecf",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250011",
+      "name": "Ananya Nair",
+      "email": "ananya.nair@student.vnsgu.ac.in",
+      "phone": "9876510011",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "4002d058-895a-48a0-b430-8a79d2f85d56",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250012",
+      "name": "Karthik Raja",
+      "email": "karthik.raja@student.vnsgu.ac.in",
+      "phone": "9876510012",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "b58fdd13-6320-4fc5-86fd-cffa3e5960db",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250013",
+      "name": "Meera Krishnan",
+      "email": "meera.krishnan@student.vnsgu.ac.in",
+      "phone": "9876510013",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "bcfb4d74-0eec-4900-8db8-68fc829a15b3",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250014",
+      "name": "Siddharth Pillai",
+      "email": "siddharth.pillai@student.vnsgu.ac.in",
+      "phone": "9876510014",
+      "batchId": "2999831a-d16f-4e06-b273-91c1bb1b9221",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "79633343-2b4c-46aa-91bd-8e6a2b4356c3",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250015",
+      "name": "Kavya Menon",
+      "email": "kavya.menon@student.vnsgu.ac.in",
+      "phone": "9876510015",
+      "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "e8875236-aa89-439b-b06a-969b9d229277",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250016",
+      "name": "Varun Reddy",
+      "email": "varun.reddy@student.vnsgu.ac.in",
+      "phone": "9876510016",
+      "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "ac799eb5-faa3-4890-a138-a3a775b22176",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250017",
+      "name": "Ishaan Rao",
+      "email": "ishaan.rao@student.vnsgu.ac.in",
+      "phone": "9876510017",
+      "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "a9232ebf-8243-40b5-a7d5-8a495d63ca88",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250018",
+      "name": "Tanya Gupta",
+      "email": "tanya.gupta@student.vnsgu.ac.in",
+      "phone": "9876510018",
+      "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "bdba6f3a-1b55-4ce8-8b0e-3765da53384f",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20250019",
+      "name": "Rohan Sharma",
+      "email": "rohan.sharma@student.vnsgu.ac.in",
+      "phone": "9876510019",
+      "batchId": "a290f72f-40f6-4659-8542-ab97fb9a0611",
+      "programId": "18c5cd19-b68e-48e0-ae55-b8cd2d35b1b4",
+      "admissionYear": 2025
+    },
+    {
+      "id": "5acee2c2-a39c-4448-9aa2-436aacb0b9eb",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20251010",
+      "name": "Rishi Kapoor",
+      "email": "rishi.kapoor@student.vnsgu.ac.in",
+      "phone": "9876520010",
+      "batchId": "b3c00000-0000-0000-0000-000000000001",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "admissionYear": 2025
+    },
+    {
+      "id": "349c0d64-e25f-49bf-a0aa-59a0708c84ae",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20251011",
+      "name": "Neha Dhupia",
+      "email": "neha.dhupia@student.vnsgu.ac.in",
+      "phone": "9876520011",
+      "batchId": "b3c00000-0000-0000-0000-000000000001",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "admissionYear": 2025
+    },
+    {
+      "id": "03471d6f-debf-44dc-bfb7-0b40b5e2b84b",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20251012",
+      "name": "Akshay Kumar",
+      "email": "akshay.kumar@student.vnsgu.ac.in",
+      "phone": "9876520012",
+      "batchId": "b3c00000-0000-0000-0000-000000000001",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "admissionYear": 2025
+    },
+    {
+      "id": "5229af79-7e57-4dfd-bcbb-f03ba2f767e7",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20251013",
+      "name": "Vidya Balan",
+      "email": "vidya.balan@student.vnsgu.ac.in",
+      "phone": "9876520013",
+      "batchId": "b3c00000-0000-0000-0000-000000000001",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "admissionYear": 2025
+    },
+    {
+      "id": "c382c2c6-b133-435c-9de5-5d4c6cee82a0",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20251014",
+      "name": "Hrithik Roshan",
+      "email": "hrithik.roshan@student.vnsgu.ac.in",
+      "phone": "9876520014",
+      "batchId": "b3c00000-0000-0000-0000-000000000001",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "admissionYear": 2025
+    },
+    {
+      "id": "bd9eca1a-9e69-4be7-9cb1-0e89536292ff",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20251015",
+      "name": "Kareena Kapoor",
+      "email": "kareena.kapoor@student.vnsgu.ac.in",
+      "phone": "9876520015",
+      "batchId": "b3c00000-0000-0000-0000-000000000001",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "admissionYear": 2025
+    },
+    {
+      "id": "5b958b11-8f33-4613-832f-a502fde987be",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20251016",
+      "name": "Ranbir Kapoor",
+      "email": "ranbir.kapoor@student.vnsgu.ac.in",
+      "phone": "9876520016",
+      "batchId": "b3c00000-0000-0000-0000-000000000001",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "admissionYear": 2025
+    },
+    {
+      "id": "0a72d9ae-3152-4dd0-978f-e53e1f7043b0",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20251017",
+      "name": "Alia Bhatt",
+      "email": "alia.bhatt@student.vnsgu.ac.in",
+      "phone": "9876520017",
+      "batchId": "b3c00000-0000-0000-0000-000000000001",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "admissionYear": 2025
+    },
+    {
+      "id": "d8582506-9cf8-492c-b52c-26fc9293d28d",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20251018",
+      "name": "Varun Dhawan",
+      "email": "varun.dhawan@student.vnsgu.ac.in",
+      "phone": "9876520018",
+      "batchId": "b3c00000-0000-0000-0000-000000000001",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "admissionYear": 2025
+    },
+    {
+      "id": "00f11fe2-62af-407b-b5c3-cf70046eb770",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "departmentId": "5323988e-1afd-4ed7-b8ee-6aea99077592",
+      "enrollmentNo": "EN20251019",
+      "name": "Shraddha Kapoor",
+      "email": "shraddha.kapoor@student.vnsgu.ac.in",
+      "phone": "9876520019",
+      "batchId": "b3c00000-0000-0000-0000-000000000001",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "admissionYear": 2025
     }
   ],
   "assignments": [
@@ -1231,6 +1705,154 @@
         }
       ],
       "totalAmount": 48500
+    },
+    {
+      "id": "b1c2d3e4-f5a6-4b7c-8d9e-0f1a2b3c4d5e",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "programId": "ce20b8b2-323b-4fab-925c-3246efd6f3ab",
+      "semester": 2,
+      "academicYear": "2025-2026",
+      "components": [
+        {
+          "name": "Tuition Fee",
+          "amount": 30000,
+          "optional": false
+        },
+        {
+          "name": "Lab Fee",
+          "amount": 3000,
+          "optional": false
+        },
+        {
+          "name": "Library Fee",
+          "amount": 1000,
+          "optional": false
+        },
+        {
+          "name": "Sports Fee",
+          "amount": 1000,
+          "optional": false
+        }
+      ],
+      "totalAmount": 35000
+    }
+  ],
+  "books": [
+    {
+      "id": "book-1-ai",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isbn": "978-0136042594",
+      "title": "Artificial Intelligence: A Modern Approach",
+      "author": "Stuart Russell, Peter Norvig",
+      "category": "Computer Science",
+      "totalCopies": 5,
+      "availableCopies": 4
+    },
+    {
+      "id": "book-2-db",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isbn": "978-0073523323",
+      "title": "Database System Concepts",
+      "author": "Abraham Silberschatz",
+      "category": "Computer Science",
+      "totalCopies": 3,
+      "availableCopies": 2
+    },
+    {
+      "id": "book-3-os",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isbn": "978-1118063330",
+      "title": "Operating System Concepts",
+      "author": "Abraham Silberschatz",
+      "category": "Computer Science",
+      "totalCopies": 4,
+      "availableCopies": 4
+    },
+    {
+      "id": "book-4-cn",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "isbn": "978-0132126953",
+      "title": "Computer Networking: A Top-Down Approach",
+      "author": "James Kurose",
+      "category": "Networking",
+      "totalCopies": 2,
+      "availableCopies": 2
+    }
+  ],
+  "bookLoans": [
+    {
+      "id": "loan-1",
+      "studentId": "93846fa8-101e-415b-a9df-c19e7fb644b2",
+      "bookId": "book-1-ai",
+      "issuedAt": "2026-03-01T10:00:00.000Z",
+      "dueDate": "2026-03-15T10:00:00.000Z"
+    },
+    {
+      "id": "loan-2",
+      "studentId": "fd3916af-d640-416d-a207-d3eb42ee077c",
+      "bookId": "book-2-db",
+      "issuedAt": "2026-02-15T10:00:00.000Z",
+      "dueDate": "2026-03-01T10:00:00.000Z"
+    }
+  ],
+  "companies": [
+    {
+      "id": "comp-google",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Google",
+      "type": "IT",
+      "website": "https://google.com",
+      "hrContact": "recruiting@google.com"
+    },
+    {
+      "id": "comp-microsoft",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Microsoft",
+      "type": "IT",
+      "website": "https://microsoft.com",
+      "hrContact": "jobs@microsoft.com"
+    },
+    {
+      "id": "comp-tcs",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "TCS",
+      "type": "MNC",
+      "website": "https://tcs.com",
+      "hrContact": "hr@tcs.com"
+    },
+    {
+      "id": "comp-zomato",
+      "universityId": "b76a8c7f-698a-489c-9e8e-a4c86b4bbe83",
+      "name": "Zomato",
+      "type": "STARTUP",
+      "website": "https://zomato.com",
+      "hrContact": "careers@zomato.com"
+    }
+  ],
+  "placementRecords": [
+    {
+      "id": "place-1",
+      "studentId": "b92a23d4-819d-48f4-9eb6-22b287e27a77",
+      "companyId": "comp-google",
+      "placedAt": "2026-03-01T10:00:00.000Z",
+      "ctc": 45.5,
+      "role": "Software Engineer L3"
+    },
+    {
+      "id": "place-2",
+      "studentId": "16891ece-1ed9-4746-bb00-86a2dd2b9ff3",
+      "companyId": "comp-microsoft",
+      "placedAt": "2026-02-28T10:00:00.000Z",
+      "ctc": 32.0,
+      "role": "SDE-1"
+    },
+    {
+      "id": "place-3",
+      "studentId": "6290429f-4822-4cdb-9b1f-2bf49faf4f8b",
+      "companyId": "comp-zomato",
+      "placedAt": "2026-03-05T10:00:00.000Z",
+      "ctc": 24.5,
+      "role": "Product Engineer"
     }
   ]
 }

@@ -98,3 +98,21 @@ export const getLatestMessages = async (req: AuthRequest, res: Response) => {
         res.status(500).json({ error: 'Failed to fetch latest messages' });
     }
 };
+
+export const getSyncLogs = async (req: AuthRequest, res: Response) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+        const logs = await prisma.messageSyncLog.findMany({
+            where: { userId },
+            orderBy: { lastSyncAt: 'desc' },
+            take: 20
+        });
+
+        res.json(logs);
+    } catch (error) {
+        console.error('Get Sync Logs Error:', error);
+        res.status(500).json({ error: 'Failed to fetch sync logs' });
+    }
+};

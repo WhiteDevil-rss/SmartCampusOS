@@ -81,3 +81,4 @@ build_*.log
 test-axios.js
 check_db.js
 EVALUATION_MAP.md
+any_search.txt

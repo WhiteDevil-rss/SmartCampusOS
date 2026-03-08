@@ -14,7 +14,7 @@ import {
 } from 'react-icons/lu';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import jspdf from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 
 // Diagnostic: V2 API Integration Active
@@ -51,7 +51,7 @@ export default function NaacDashboard() {
         const criteria = data.criteria;
 
         // C1
-        (rootDoc as any).autoTable({
+        autoTable(rootDoc, {
             startY: 40,
             head: [['Criterion 1: Curricular Aspects', 'Value']],
             body: [
@@ -63,7 +63,7 @@ export default function NaacDashboard() {
         });
 
         // C2
-        (rootDoc as any).autoTable({
+        autoTable(rootDoc, {
             head: [['Criterion 2: Teaching-Learning', 'Value']],
             body: [
                 ['Total Enrolled Students', criteria.teachingLearning.totalStudents],
@@ -75,7 +75,7 @@ export default function NaacDashboard() {
         });
 
         // C4
-        (rootDoc as any).autoTable({
+        autoTable(rootDoc, {
             head: [['Criterion 4: Infrastructure', 'Value']],
             body: [
                 ['Instructional Classrooms', criteria.infrastructure.classrooms],
@@ -86,7 +86,7 @@ export default function NaacDashboard() {
         });
 
         // C5
-        (rootDoc as any).autoTable({
+        autoTable(rootDoc, {
             head: [['Criterion 5: Student Support', 'Value']],
             body: [
                 ['Students Placed Internally', criteria.studentSupport.totalPlacedStudents],
@@ -174,7 +174,7 @@ export default function NaacDashboard() {
                     />
                     <MetricCard
                         title="Average Pass Rate"
-                        value={`${cData.teachingLearning.passPercentage}%`}
+                        value={`${cData.teachingLearning.passPercentage}`}
                         icon={LuGraduationCap}
                         criterion="Criterion II"
                         color="indigo"
@@ -211,7 +211,7 @@ export default function NaacDashboard() {
                                 </div>
                                 <div className="text-right">
                                     <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">Weightage</div>
-                                    <div className="text-2xl font-black text-indigo-400">100</div>
+                                    <div className="text-2xl font-black text-indigo-400 underline">W: 100</div>
                                 </div>
                             </div>
                         </CardHeader>

@@ -88,23 +88,62 @@ export const broadcastNotification = async (req: AuthRequest, res: Response) => 
             return res.status(400).json({ error: 'Missing required broadcast fields' });
         }
 
-        let userQuery = {};
+        const sender = req.user!;
+        let where: any = {
+            isActive: true,
+            id: { not: sender.id }
+        };
 
-        if (targetType === 'ALL') {
-            userQuery = { isActive: true };
-        } else if (targetType === 'ROLE') {
-            if (!targetRoleId) return res.status(400).json({ error: 'targetRoleId is required for ROLE broadcast' });
-            userQuery = { role: targetRoleId, isActive: true };
-        } else if (targetType === 'USER') {
-            if (!targetUserId) return res.status(400).json({ error: 'targetUserId is required for USER broadcast' });
-            userQuery = { id: targetUserId, isActive: true };
-        } else {
-            return res.status(400).json({ error: 'Invalid targetType' });
+        // 1. Scoping by Sender's Role
+        if (sender.role === 'UNI_ADMIN') {
+            where.universityId = sender.universityId;
+        } else if (sender.role === 'DEPT_ADMIN') {
+            where.universityId = sender.universityId;
+            // Scoping students and faculty specifically to this department
+            const deptId = sender.entityId;
+            if (!deptId) return res.status(400).json({ error: 'Department ID not found in sender profile' });
+
+            if (targetType === 'ALL' || targetRoleId === 'STUDENT' || targetRoleId === 'FACULTY') {
+                // Determine valid entity IDs in this department
+                const [students, facultyDepts] = await Promise.all([
+                    prisma.student.findMany({ where: { departmentId: deptId }, select: { id: true } }),
+                    prisma.facultyDepartment.findMany({ where: { departmentId: deptId }, select: { facultyId: true } })
+                ]);
+
+                const studentEntityIds = students.map(s => s.id);
+                const facultyEntityIds = facultyDepts.map(fd => fd.facultyId);
+
+                if (targetType === 'ALL') {
+                    where.OR = [
+                        { role: 'STUDENT', entityId: { in: studentEntityIds } },
+                        { role: 'FACULTY', entityId: { in: facultyEntityIds } }
+                    ];
+                } else if (targetRoleId === 'STUDENT') {
+                    where.role = 'STUDENT';
+                    where.entityId = { in: studentEntityIds };
+                } else if (targetRoleId === 'FACULTY') {
+                    where.role = 'FACULTY';
+                    where.entityId = { in: facultyEntityIds };
+                }
+            } else if (targetType === 'ROLE') {
+                // If targeting other roles (like DEPT_ADMIN or UNI_ADMIN), 
+                // Dept Admins generally shouldn't broadcast to them, or should only see same-uni users.
+                // For now, restrict to Stud/Faculty unless Super/Uni admin.
+                return res.status(403).json({ error: 'Department Admins can only broadcast to Students and Faculty' });
+            }
         }
 
-        // Fetch matching users
+        // 2. Applying Original Target Filters (Refined)
+        if (targetType === 'USER') {
+            if (!targetUserId) return res.status(400).json({ error: 'targetUserId is required for USER broadcast' });
+            where.id = targetUserId;
+        } else if (targetType === 'ROLE') {
+            if (!targetRoleId) return res.status(400).json({ error: 'targetRoleId is required for ROLE broadcast' });
+            where.role = targetRoleId;
+        }
+
         const users = await prisma.user.findMany({
-            where: userQuery,
+            where,
             select: { id: true, fcmToken: true }
         });
 
@@ -125,6 +164,23 @@ export const broadcastNotification = async (req: AuthRequest, res: Response) => 
         await prisma.notification.createMany({
             data: notificationData
         });
+
+        // Log this broadcast in the SENDER'S history as well
+        try {
+            await prisma.messageHistory.create({
+                data: {
+                    userId: req.user!.id,
+                    title: `[BROADCAST] ${title}`,
+                    content: message,
+                    type: 'BROADCAST',
+                    link: link || null,
+                    source: 'manual-broadcast',
+                    createdAt: new Date()
+                }
+            });
+        } catch (historyError) {
+            console.warn('Failed to log broadcast to sender history:', historyError);
+        }
 
         // Here we ideally invoke socketService to push the notification or FCM explicitly
         // Since socket instance handles fetching, they'll see it actively or on next fetch.

@@ -8,13 +8,29 @@ import { api } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { LuLibrary, LuBook, LuBookCopy, LuPlus, LuCornerDownLeft, LuSearch, LuCalendarDays } from 'react-icons/lu';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
+import { LuLibrary, LuBook, LuBookCopy, LuPlus, LuCornerDownLeft, LuSearch, LuCalendarDays, LuLoader } from 'react-icons/lu';
 import { format } from 'date-fns';
+import { Toast, useToast } from '@/components/ui/toast-alert';
 
 export default function LibraryDashboard() {
+    const { toast, showToast, hideToast } = useToast();
     const [books, setBooks] = useState<any[]>([]);
     const [loans, setLoans] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // Add Book Modal State
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [newBook, setNewBook] = useState({
+        isbn: '',
+        title: '',
+        author: '',
+        category: '',
+        totalCopies: '1'
+    });
 
     const fetchData = async () => {
         setLoading(true);
@@ -38,22 +54,47 @@ export default function LibraryDashboard() {
 
     const handleReturn = async (loanId: string) => {
         try {
-            const res = await api.post(`/v2/library/loans/${loanId}/return`);
+            await api.post(`/v2/library/loans/${loanId}/return`);
+            showToast('success', 'Book returned successfully');
             fetchData();
         } catch (error) {
             console.error('Failed to return book', error);
+            showToast('error', 'Failed to process return');
         }
     };
+
+    const handleAddBook = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            await api.post('/v2/library/books', newBook);
+            showToast('success', 'Book added to inventory');
+            setIsAddModalOpen(false);
+            setNewBook({ isbn: '', title: '', author: '', category: '', totalCopies: '1' });
+            fetchData();
+        } catch (error) {
+            console.error('Failed to add book', error);
+            showToast('error', 'Failed to add book');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const filteredBooks = books.filter(book =>
+        book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        book.isbn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <ProtectedRoute allowedRoles={['UNI_ADMIN', 'SUPERADMIN']}>
             <DashboardLayout navItems={UNI_ADMIN_NAV} title="Library Management">
-                <div className="max-w-6xl mx-auto space-y-8">
+                <div className="max-w-6xl mx-auto space-y-8 p-4 md:p-0">
 
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
-                            <h1 className="text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-                                <div className="p-2.5 bg-indigo-100 rounded-xl text-indigo-600">
+                            <h1 className="text-3xl font-black text-text-primary tracking-tight flex items-center gap-3">
+                                <div className="p-2.5 bg-primary/10 rounded-xl text-primary">
                                     <LuLibrary className="w-6 h-6" />
                                 </div>
                                 Central Library
@@ -63,48 +104,118 @@ export default function LibraryDashboard() {
                             </p>
                         </div>
                         <div className="flex gap-3">
-                            <Button className="gap-2 bg-indigo-600 hover:bg-indigo-700 text-white">
-                                <LuPlus className="w-4 h-4" /> Add New Book
-                            </Button>
+                            <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+                                <DialogTrigger asChild>
+                                    <Button className="gap-2 bg-primary hover:bg-primary-dark text-white shadow-md glow-button">
+                                        <LuPlus className="w-4 h-4" /> Add New Book
+                                    </Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader>
+                                        <DialogTitle>Add New Book</DialogTitle>
+                                        <DialogDescription>
+                                            Enter the book details to add it to the library catalog.
+                                        </DialogDescription>
+                                    </DialogHeader>
+                                    <form onSubmit={handleAddBook} className="space-y-4 py-4">
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <label className="text-right text-sm font-medium text-text-secondary">ISBN</label>
+                                            <Input
+                                                className="col-span-3"
+                                                value={newBook.isbn}
+                                                onChange={e => setNewBook({ ...newBook, isbn: e.target.value })}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <label className="text-right text-sm font-medium text-text-secondary">Title</label>
+                                            <Input
+                                                className="col-span-3"
+                                                value={newBook.title}
+                                                onChange={e => setNewBook({ ...newBook, title: e.target.value })}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <label className="text-right text-sm font-medium text-text-secondary">Author</label>
+                                            <Input
+                                                className="col-span-3"
+                                                value={newBook.author}
+                                                onChange={e => setNewBook({ ...newBook, author: e.target.value })}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <label className="text-right text-sm font-medium text-text-secondary">Category</label>
+                                            <Input
+                                                className="col-span-3"
+                                                value={newBook.category}
+                                                placeholder="e.g. Computer Science"
+                                                onChange={e => setNewBook({ ...newBook, category: e.target.value })}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <label className="text-right text-sm font-medium text-text-secondary">Copies</label>
+                                            <Input
+                                                type="number"
+                                                className="col-span-3"
+                                                value={newBook.totalCopies}
+                                                onChange={e => setNewBook({ ...newBook, totalCopies: e.target.value })}
+                                                min="1"
+                                                required
+                                            />
+                                        </div>
+                                        <DialogFooter>
+                                            <Button type="submit" disabled={isSubmitting} className="w-full">
+                                                {isSubmitting ? <LuLoader className="w-4 h-4 animate-spin mr-2" /> : <LuPlus className="w-4 h-4 mr-2" />}
+                                                Add Book
+                                            </Button>
+                                        </DialogFooter>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
                         {/* Active Loans Panel */}
-                        <Card className="shadow-md border-indigo-100 h-full flex flex-col">
-                            <CardHeader className="bg-indigo-50/50 pb-4 border-b border-indigo-100">
-                                <CardTitle className="text-indigo-900 flex items-center gap-2">
-                                    <LuBookCopy className="w-5 h-5 text-indigo-500" />
+                        <Card className="glass-card shadow-lg h-full flex flex-col overflow-hidden">
+                            <CardHeader className="bg-primary/5 pb-4 border-b border-border">
+                                <CardTitle className="text-primary flex items-center gap-2">
+                                    <LuBookCopy className="w-5 h-5" />
                                     Active Loans ({loans.length})
                                 </CardTitle>
-                                <CardDescription>Books currently checked out by students.</CardDescription>
+                                <CardDescription className="text-text-muted">Books currently checked out by students.</CardDescription>
                             </CardHeader>
-                            <CardContent className="p-0 flex-1 overflow-auto max-h-[600px]">
+                            <CardContent className="p-0 flex-1 overflow-auto max-h-[600px] custom-scrollbar">
                                 {loading ? (
-                                    <div className="p-8 text-center text-text-muted">Loading loans...</div>
+                                    <div className="p-8 text-center text-text-muted flex items-center justify-center gap-2">
+                                        <LuLoader className="w-4 h-4 animate-spin" /> Loading loans...
+                                    </div>
                                 ) : loans.length === 0 ? (
                                     <div className="p-12 text-center text-text-muted">
                                         <LuLibrary className="w-12 h-12 mx-auto mb-3 opacity-20" />
                                         <p>No active loans.</p>
                                     </div>
                                 ) : (
-                                    <div className="divide-y divide-slate-100">
+                                    <div className="divide-y divide-border">
                                         {loans.map(loan => {
                                             const isOverdue = new Date(loan.dueDate) < new Date();
                                             return (
-                                                <div key={loan.id} className="p-5 hover:bg-slate-50 transition-colors flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+                                                <div key={loan.id} className="p-5 hover:bg-primary/5 transition-colors flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
                                                     <div>
-                                                        <div className="font-bold text-slate-800 line-clamp-1">{loan.book.title}</div>
+                                                        <div className="font-bold text-text-primary line-clamp-1">{loan.book.title}</div>
                                                         <div className="text-xs text-text-secondary mt-1 flex items-center gap-2">
-                                                            <span className="font-medium text-indigo-600">{loan.student.enrollmentNo}</span>
-                                                            &bull;
+                                                            <span className="font-medium text-primary">{loan.student.enrollmentNo}</span>
+                                                            <span className="text-text-disabled">&bull;</span>
                                                             <span>{loan.student.name}</span>
                                                         </div>
-                                                        <div className={`text-xs mt-2 font-medium flex items-center gap-1.5 ${isOverdue ? 'text-red-600' : 'text-text-secondary'}`}>
+                                                        <div className={`text-xs mt-2 font-medium flex items-center gap-1.5 ${isOverdue ? 'text-accent-red' : 'text-text-secondary'}`}>
                                                             <LuCalendarDays className="w-3.5 h-3.5" />
                                                             Due: {format(new Date(loan.dueDate), 'MMM dd, yyyy')}
-                                                            {isOverdue && <Badge variant="destructive" className="text-[10px] ml-1 h-4">OVERDUE</Badge>}
+                                                            {isOverdue && <Badge variant="destructive" className="text-[10px] ml-1 h-4 bg-accent-red">OVERDUE</Badge>}
                                                         </div>
                                                     </div>
                                                     <Button variant={isOverdue ? "destructive" : "outline"} size="sm" className="shrink-0 gap-2 w-full sm:w-auto" onClick={() => handleReturn(loan.id)}>
@@ -119,42 +230,49 @@ export default function LibraryDashboard() {
                         </Card>
 
                         {/* Inventory Panel */}
-                        <Card className="shadow-md border-slate-200 h-full flex flex-col">
-                            <CardHeader className="bg-slate-50 pb-4 border-b border-slate-200">
-                                <CardTitle className="flex justify-between items-center">
-                                    <div className="flex items-center gap-2">
-                                        <LuBook className="w-5 h-5 text-slate-600" />
+                        <Card className="glass-card shadow-lg h-full flex flex-col overflow-hidden">
+                            <CardHeader className="bg-surface pb-4 border-b border-border">
+                                <CardTitle className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
+                                    <div className="flex items-center gap-2 text-text-primary">
+                                        <LuBook className="w-5 h-5 text-text-muted" />
                                         Inventory Catalog
                                     </div>
                                     <div className="relative">
                                         <LuSearch className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                                         <input
                                             type="text"
-                                            placeholder="Search by ISBN or Title..."
-                                            className="text-sm pl-9 pr-4 py-1.5 w-[200px] border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                                            placeholder="Search catalog..."
+                                            value={searchQuery}
+                                            onChange={e => setSearchQuery(e.target.value)}
+                                            className="text-sm pl-9 pr-4 py-1.5 w-full sm:w-[200px] bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-text-primary placeholder:text-text-disabled"
                                         />
                                     </div>
                                 </CardTitle>
                             </CardHeader>
-                            <CardContent className="p-0 flex-1 overflow-auto max-h-[600px]">
+                            <CardContent className="p-0 flex-1 overflow-auto max-h-[600px] custom-scrollbar">
                                 {loading ? (
-                                    <div className="p-8 text-center text-text-muted">Loading catalog...</div>
-                                ) : books.length === 0 ? (
-                                    <div className="p-12 text-center text-text-muted">Catalog is empty.</div>
+                                    <div className="p-8 text-center text-text-muted flex items-center justify-center gap-2">
+                                        <LuLoader className="w-4 h-4 animate-spin" /> Loading catalog...
+                                    </div>
+                                ) : filteredBooks.length === 0 ? (
+                                    <div className="p-12 text-center text-text-muted">
+                                        <LuBook className="w-12 h-12 mx-auto mb-3 opacity-20" />
+                                        <p>{searchQuery ? 'No books match your search.' : 'Catalog is empty.'}</p>
+                                    </div>
                                 ) : (
-                                    <div className="divide-y divide-slate-100">
-                                        {books.map(book => (
-                                            <div key={book.id} className="p-4 flex justify-between items-center">
+                                    <div className="divide-y divide-border">
+                                        {filteredBooks.map(book => (
+                                            <div key={book.id} className="p-4 flex justify-between items-center hover:bg-surface transition-colors">
                                                 <div>
-                                                    <div className="font-bold text-sm text-slate-800 line-clamp-1">{book.title}</div>
+                                                    <div className="font-bold text-sm text-text-primary line-clamp-1">{book.title}</div>
                                                     <div className="text-xs text-text-secondary mt-0.5">{book.author} | {book.category}</div>
-                                                    <div className="text-[10px] text-text-muted font-mono mt-1">ISBN: {book.isbn}</div>
+                                                    <div className="text-[10px] text-text-disabled font-mono mt-1">ISBN: {book.isbn}</div>
                                                 </div>
-                                                <div className="text-right flex flex-col items-end">
-                                                    <Badge variant={book.availableCopies > 0 ? "secondary" : "outline"} className={book.availableCopies > 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}>
+                                                <div className="text-right flex flex-col items-end gap-1">
+                                                    <Badge variant={book.availableCopies > 0 ? "secondary" : "outline"} className={book.availableCopies > 0 ? 'bg-accent-green/10 text-accent-green border-accent-green/20' : 'bg-accent-red/10 text-accent-red border-accent-red/20'}>
                                                         {book.availableCopies} available
                                                     </Badge>
-                                                    <span className="text-[10px] text-text-muted mt-1 font-medium text-right">of {book.totalCopies} total</span>
+                                                    <span className="text-[10px] text-text-disabled font-medium">of {book.totalCopies} total</span>
                                                 </div>
                                             </div>
                                         ))}
@@ -165,6 +283,7 @@ export default function LibraryDashboard() {
 
                     </div>
                 </div>
+                <Toast toast={toast} onClose={hideToast} />
             </DashboardLayout>
         </ProtectedRoute>
     );

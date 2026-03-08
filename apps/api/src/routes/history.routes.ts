@@ -11,5 +11,6 @@ router.get('/latest', historyController.getLatestMessages);
 router.post('/sync', historyController.syncMessages);
 router.post('/sync/upload', historyController.syncMessages);
 router.get('/sync/download', historyController.getLatestMessages);
+router.get('/sync/logs', historyController.getSyncLogs);
 
 export default router;
