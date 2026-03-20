@@ -4,7 +4,7 @@
 [![Version](https://img.shields.io/badge/Version-v2.0.0--Premium-indigo)](https://github.com/WhiteDevil-rss/SmartCampusOS)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](https://opensource.org/licenses/MIT)
 [![Stack: Turbo Monorepo](https://img.shields.io/badge/Architecture-Turbo--Monorepo-slate)](https://turbo.build/)
-[![Engine: Google OR-Tools](https://img.shields.io/badge/AI--Engine-Google_OR--Tools-blue)](https://developers.google.com/optimization)
+[![Engine: Google OR-Tools](https://img.shields.io/badge/AI--Engine-v8.0.0_(OR--Tools)-blue)](https://developers.google.com/optimization)
 
 **SmartCampus OS** is a high-performance, AI-driven academic orchestration platform designed to transform traditional campus management into a seamless digital ecosystem. It leverages cutting-edge constraint-solving algorithms and a premium glassmorphic UI to provide an unparalleled experience for administrators, faculty, and students.
 
@@ -50,7 +50,7 @@ graph TD
 ## 💎 Core Features
 
 ### 1. The SolvEngine™ (AI Scheduler)
-Powered by **Google OR-Tools**, our scheduling engine handles:
+Powered by **Google OR-Tools** (v8.0.0 Engine), our scheduling microservice handles:
 - **Hard Constraints**: Ensuring zero faculty collisions, room conflicts, or batch overlaps.
 - **Soft Constraints**: Balancing faculty workload, minimizing "dead hours", and optimizing preferred time slots.
 - **Real-time Regeneration**: Instantly adapt schedules for faculty leave or resource outages.
@@ -58,7 +58,7 @@ Powered by **Google OR-Tools**, our scheduling engine handles:
 ### 2. Institutional Gateway
 - **Unified Identity**: Seamless Firebase integration with automated PostgreSQL synchronization.
 - **Audit Trails**: Enterprise-grade activity logging with device fingerprinting and IP tracking.
-- **RBAC Matrix**: Deep control for Superadmins, University Admins, and Department Heads.
+- **RBAC Matrix & Navigation**: Deep control for Superadmins, University Admins, and Department Heads. The system dynamically injects fully consistent, role-specific sidebars across over 60 pages autonomously.
 
 ### 3. Smart Resource Management
 - **Occupancy Intelligence**: Track classroom and lab utilization across the campus.
@@ -97,6 +97,16 @@ Deploy the premium interface:
 cd apps/web
 pnpm install
 pnpm run dev
+```
+
+### 4. Launch AI Engine (Local Dev)
+If you prefer not to use the Docker container for the solver engine, you can run the FastAPI microservice directly. Ensure your `Redis` connection is active.
+```bash
+cd apps/ai-engine
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python3 -m uvicorn app.main:app --host 0.0.0.0 --port 5000 --reload
 ```
 
 Visit `http://localhost:3000` to access the OS.
