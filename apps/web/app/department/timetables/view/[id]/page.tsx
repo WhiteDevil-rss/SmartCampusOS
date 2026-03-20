@@ -12,6 +12,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
+
 import { Badge } from '@/components/ui/badge';
 
 export default function TimetableDetailView({ params }: { params: Promise<{ id: string }> }) {

@@ -40,6 +40,7 @@ class Course(BaseModel):
     isElective: bool = False
     requiredRoomType: Optional[str] = None         # "Lab" | "Classroom" | None
     labDuration: int = 1                           # consecutive slots for lab (≥2 = lab block)
+    credits: int = 4                               # NEW v8.0.0: used for session count calculation
     sessionTypeId: Optional[str] = None
 
 
@@ -192,3 +193,4 @@ class GenerateResponse(BaseModel):
     # ── NEW v3.1 ──────────────────────────────────────────────────────────
     gapScore: float = 0.0                          # avg idle slots per batch per day (lower = better)
     electiveGroupCount: int = 0                    # number of elective baskets scheduled
+    stats: Optional[Dict[str, Any]] = None         # NEW v8.0.0 mapping

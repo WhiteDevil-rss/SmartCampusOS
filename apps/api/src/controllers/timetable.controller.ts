@@ -143,8 +143,10 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
                     continuousMode,
                     timeBlocks: timeBlocks.map(tb => ({
                         id: tb.id,
+                        name: tb.name,
                         startTime: tb.startTime,
                         endTime: tb.endTime,
+                        duration: tb.duration,
                         isBreak: tb.isBreak,
                         slotNumber: tb.slotNumber
                     })),
@@ -161,6 +163,7 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
                     name: c.name,
                     code: c.code,
                     weeklyHrs: c.weeklyHrs,
+                    credits: c.credits,
                     type: c.type,
                     isElective: c.isElective || electiveCourseIds.has(c.id),
                     program: c.program,

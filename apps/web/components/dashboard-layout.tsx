@@ -14,6 +14,7 @@ import { useSessionStore } from '@/lib/store/useSessionStore';
 import { auth } from '@/lib/firebase';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Toast, useToast } from '@/components/ui/toast-alert';
+import { DEPT_ADMIN_NAV, UNI_ADMIN_NAV, SUPERADMIN_NAV, FACULTY_NAV, STUDENT_NAV } from '@/lib/constants/nav-config';
 
 // ── Isolated Timer Component ────────────────────────────────────
 // This component manages its own subscription to the session store,
@@ -86,6 +87,14 @@ export function DashboardLayout({ children, navItems, title }: DashboardLayoutPr
 
     useRealtimeUpdates(showToast);
 
+    const resolvedNavItems = 
+        user?.role === 'SUPERADMIN' ? SUPERADMIN_NAV :
+        user?.role === 'UNI_ADMIN' ? UNI_ADMIN_NAV :
+        user?.role === 'DEPT_ADMIN' ? DEPT_ADMIN_NAV :
+        user?.role === 'FACULTY' ? FACULTY_NAV :
+        user?.role === 'STUDENT' ? STUDENT_NAV :
+        (navItems || []);
+
     const handleLogout = useCallback(async (isExpired: boolean = false) => {
         try {
             await auth.signOut();
@@ -112,8 +121,8 @@ export function DashboardLayout({ children, navItems, title }: DashboardLayoutPr
                 </div>
 
                 <div className="flex-1 px-4 py-8 space-y-2 overflow-y-auto custom-scrollbar">
-                    {navItems.map((item) => {
-                        const matches = navItems
+                    {resolvedNavItems.map((item) => {
+                        const matches = resolvedNavItems
                             .filter(i => pathname.startsWith(i.href))
                             .sort((a, b) => b.href.length - a.href.length);
 
