@@ -7,13 +7,10 @@ import { useAuthStore } from "@/lib/store/useAuthStore";
 import { ThemeToggle } from "./theme-toggle";
 
 const navLinks = [
-    { label: "Home", href: "/" },
     { label: "Solutions", href: "/solutions" },
     { label: "Admissions", href: "/admissions" },
     { label: "Verify", href: "/verify" },
     { label: "Careers", href: "/careers" },
-    { label: "About Us", href: "/about-us" },
-    { label: "Contact", href: "/contact" },
 ];
 
 export function LandingNav() {
@@ -48,8 +45,8 @@ export function LandingNav() {
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:border-primary/40 transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.1)]">
                     <span className="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform tracking-tight">domain</span>
                 </div>
-                <div className="flex flex-col">
-                    <span className="text-text-primary text-xl font-black tracking-tight leading-none bg-clip-text text-transparent bg-gradient-to-r from-primary to-neon-cyan">SmartCampus</span>
+            <div className="flex flex-col">
+                    <span className="text-xl font-black tracking-tight leading-none text-indigo-600 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-primary dark:to-neon-cyan">SmartCampus</span>
                     <span className="text-secondary text-[10px] font-bold tracking-[0.2em] uppercase leading-none mt-1">Operating System</span>
                 </div>
             </Link>
@@ -98,13 +95,13 @@ export function LandingNav() {
                     <>
                         <Link
                             href="/login"
-                            className="hidden sm:inline-flex text-sm font-bold text-text-muted hover:text-text-primary transition-colors focus:outline-none"
+                            className="hidden sm:inline-flex text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-none"
                         >
                             Sign In
                         </Link>
                         <Link
                             href="/login?tab=register"
-                            className="glow-button hidden sm:flex items-center justify-center rounded-full bg-foreground text-background px-6 py-2.5 text-sm font-black transition-all hover:scale-105 active:scale-95"
+                            className="glow-button hidden sm:flex items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/30"
                         >
                             Get Started
                         </Link>

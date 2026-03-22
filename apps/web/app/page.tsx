@@ -78,10 +78,10 @@ export default function Home() {
                       <span className="text-primary text-xs font-bold tracking-wider uppercase">Enterprise Edition API Live</span>
                   </div>
 
-                  <h1 className="text-5xl md:text-7xl lg:text-7xl font-black tracking-tighter leading-[1.05]">
-                      Smart Admission <br/>
+                  <h1 className="text-5xl md:text-7xl lg:text-7xl font-black tracking-tighter leading-[1.05] pb-2 overflow-visible">
+                      SmartCampus{" "}
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-400 to-emerald-400 glow-text drop-shadow-sm">
-                          Management Software
+                          OS
                       </span>
                   </h1>
 
@@ -99,7 +99,7 @@ export default function Home() {
                       
                       <button
                           onClick={() => document.getElementById('inquiry')?.scrollIntoView({ behavior: 'smooth' })}
-                          className="w-full xl:w-auto flex items-center justify-center gap-2 rounded-2xl border border-border-hover bg-slate-900/50 backdrop-blur-sm text-slate-300 px-8 py-4 text-lg font-semibold hover:bg-slate-800 transition-all"
+                          className="w-full xl:w-auto flex items-center justify-center gap-2 rounded-2xl border border-slate-300 dark:border-border-hover bg-white/70 dark:bg-slate-900/50 backdrop-blur-sm text-slate-700 dark:text-slate-300 px-8 py-4 text-lg font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
                       >
                           Admission Inquiry
                       </button>
@@ -121,11 +121,11 @@ export default function Home() {
 
                   <div className="mt-8 w-full max-w-md mx-auto relative group">
                       <div className="absolute inset-0 bg-emerald-500/20 rounded-2xl blur-xl group-hover:bg-emerald-500/30 transition-all"></div>
-                      <div className="relative flex items-center bg-black/50 border border-emerald-500/50 rounded-2xl p-1 backdrop-blur-md">
+                      <div className="relative flex items-center bg-white/80 dark:bg-black/50 border border-emerald-500/50 rounded-2xl p-1 backdrop-blur-md shadow-sm">
                           <input 
                               type="text" 
                               placeholder="Enter Verification Hash..." 
-                              className="w-full bg-transparent border-none text-white px-4 outline-none font-mono text-sm"
+                              className="w-full bg-transparent border-none text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 px-4 outline-none font-mono text-sm"
                               value={verifyHash}
                               onChange={(e) => setVerifyHash(e.target.value)}
                               onKeyDown={(e) => {
@@ -136,7 +136,7 @@ export default function Home() {
                           />
                           <Link 
                               href={verifyHash.trim() ? `/verify?code=${encodeURIComponent(verifyHash.trim())}` : '/verify'}
-                              className="p-3 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-colors"
+                              className="p-3 bg-emerald-500 text-white rounded-xl hover:bg-emerald-600 transition-colors shrink-0"
                           >
                               <LuSearch className="w-5 h-5" />
                           </Link>
@@ -163,8 +163,8 @@ export default function Home() {
                                     <LuLayoutDashboard className="text-primary w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h4 className="text-white font-bold text-lg">Multi-Step Processing</h4>
-                                    <p className="text-slate-400 text-sm">Automated saving and structured routing across all application stages.</p>
+                                    <h4 className="text-slate-900 dark:text-white font-bold text-lg">Multi-Step Processing</h4>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm">Automated saving and structured routing across all application stages.</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-4">
@@ -172,8 +172,8 @@ export default function Home() {
                                     <LuShieldCheck className="text-emerald-400 w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h4 className="text-white font-bold text-lg">Instant Verification</h4>
-                                    <p className="text-slate-400 text-sm">Every admission letter is cryptographically signed and hash-verifiable.</p>
+                                    <h4 className="text-slate-900 dark:text-white font-bold text-lg">Instant Verification</h4>
+                                    <p className="text-slate-500 dark:text-slate-400 text-sm">Every admission letter is cryptographically signed and hash-verifiable.</p>
                                 </div>
                             </div>
                         </div>
@@ -187,20 +187,20 @@ export default function Home() {
                         <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-neon-cyan/20 blur-[100px] rounded-full"></div>
                         <div className="relative glass-morphism rounded-[2rem] border border-border p-6 shadow-2xl">
                             {/* Mock Dashboard UI */}
-                            <div className="flex bg-black/40 rounded-xl p-4 gap-4 items-center border border-white/5 mb-4">
+                            <div className="flex bg-slate-100 dark:bg-black/40 rounded-xl p-4 gap-4 items-center border border-slate-200 dark:border-white/5 mb-4">
                                 <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center"><LuUser className="text-primary" /></div>
                                 <div className="flex-1">
-                                    <div className="h-4 w-1/3 bg-white/10 rounded mb-2"></div>
-                                    <div className="h-3 w-1/4 bg-white/5 rounded"></div>
+                                    <div className="h-4 w-1/3 bg-slate-300 dark:bg-white/10 rounded mb-2"></div>
+                                    <div className="h-3 w-1/4 bg-slate-200 dark:bg-white/5 rounded"></div>
                                 </div>
-                                <div className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold">Verified</div>
+                                <div className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-bold">Verified</div>
                             </div>
                             <div className="space-y-3">
                                 {[1,2,3].map(i => (
-                                    <div key={i} className="flex bg-black/40 rounded-xl p-4 gap-4 items-center border border-white/5">
-                                        <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center"><LuFileText className="text-slate-400" /></div>
+                                    <div key={i} className="flex bg-slate-100 dark:bg-black/40 rounded-xl p-4 gap-4 items-center border border-slate-200 dark:border-white/5">
+                                        <div className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-white/5 flex items-center justify-center"><LuFileText className="text-slate-500 dark:text-slate-400" /></div>
                                         <div className="flex-1">
-                                            <div className="h-3 w-1/2 bg-white/10 rounded mb-2"></div>
+                                            <div className="h-3 w-1/2 bg-slate-300 dark:bg-white/10 rounded mb-2"></div>
                                         </div>
                                         <div className="h-6 w-16 rounded bg-emerald-500/20"></div>
                                     </div>
@@ -219,26 +219,26 @@ export default function Home() {
                     
                     <div className="text-center mb-10 relative z-10">
                         <div className="inline-block px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-xs font-bold uppercase tracking-wider mb-4">Lead Generation API</div>
-                        <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">Admission Inquiry</h2>
+                        <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">Admission Inquiry</h2>
                         <p className="text-slate-400 text-lg">
                             Have questions? Drop an inquiry directly into our secure PostgreSQL database node.
                         </p>
                     </div>
 
                     <div className="relative z-10 max-w-2xl mx-auto">
-                        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-10">
+                        <div className="bg-white/80 dark:bg-black/40 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-6 md:p-10 shadow-md">
                             {inquiryStatus === 'success' ? (
                                  <div className="flex flex-col items-center justify-center text-center py-10 space-y-4 animate-in fade-in zoom-in-95">
                                      <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
                                          <LuCircleCheck className="w-10 h-10 text-emerald-400" />
                                      </div>
-                                     <h3 className="text-2xl font-black text-white">Payload Stored!</h3>
-                                     <p className="text-slate-400 max-w-sm mx-auto">
+                                     <h3 className="text-2xl font-black text-slate-900 dark:text-white">Payload Stored!</h3>
+                                     <p className="text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
                                          Your admission inquiry was successfully captured by our systems.
                                      </p>
                                      <button
                                          onClick={() => setInquiryStatus('idle')}
-                                         className="mt-4 px-6 py-2 rounded-full border border-border-hover text-white hover:bg-white/10 transition-colors"
+                                         className="mt-4 px-6 py-2 rounded-full border border-slate-300 dark:border-border-hover text-slate-700 dark:text-white hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
                                      >
                                          Submit Another
                                      </button>
@@ -259,7 +259,7 @@ export default function Home() {
                                             </label>
                                             <div className="relative">
                                                 <LuUser className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5" />
-                                                <input type="text" required value={inquiryData.name} onChange={(e) => setInquiryData({...inquiryData, name: e.target.value})} placeholder="Demo User" className="w-full h-12 rounded-xl bg-black/60 border border-white/10 pl-11 pr-4 text-white text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/20 outline-none transition-all" />
+                                                <input type="text" required value={inquiryData.name} onChange={(e) => setInquiryData({...inquiryData, name: e.target.value})} placeholder="Demo User" className="w-full h-12 rounded-xl bg-white dark:bg-black/60 border border-slate-200 dark:border-white/10 pl-11 pr-4 text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/20 outline-none transition-all" />
                                             </div>
                                         </div>
                                         <div className="space-y-2">
@@ -268,7 +268,7 @@ export default function Home() {
                                             </label>
                                             <div className="relative">
                                                 <LuMail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5" />
-                                                <input type="email" required value={inquiryData.email} onChange={(e) => setInquiryData({...inquiryData, email: e.target.value})} placeholder="demo@example.com" className="w-full h-12 rounded-xl bg-black/60 border border-white/10 pl-11 pr-4 text-white text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/20 outline-none transition-all" />
+                                                <input type="email" required value={inquiryData.email} onChange={(e) => setInquiryData({...inquiryData, email: e.target.value})} placeholder="demo@example.com" className="w-full h-12 rounded-xl bg-white dark:bg-black/60 border border-slate-200 dark:border-white/10 pl-11 pr-4 text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/20 outline-none transition-all" />
                                             </div>
                                         </div>
                                     </div>
@@ -278,14 +278,14 @@ export default function Home() {
                                             <label className="text-xs uppercase font-bold text-slate-400 tracking-widest ml-1">Phone</label>
                                             <div className="relative">
                                                 <LuPhone className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5" />
-                                                <input type="tel" value={inquiryData.phone} onChange={(e) => setInquiryData({...inquiryData, phone: e.target.value})} placeholder="+1 555-0199" className="w-full h-12 rounded-xl bg-black/60 border border-white/10 pl-11 pr-4 text-white text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/20 outline-none transition-all" />
+                                                <input type="tel" value={inquiryData.phone} onChange={(e) => setInquiryData({...inquiryData, phone: e.target.value})} placeholder="+1 555-0199" className="w-full h-12 rounded-xl bg-white dark:bg-black/60 border border-slate-200 dark:border-white/10 pl-11 pr-4 text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/20 outline-none transition-all" />
                                             </div>
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-xs uppercase font-bold text-slate-400 tracking-widest ml-1">Program Pipeline</label>
                                             <div className="relative">
                                                 <LuGraduationCap className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 w-5 h-5" />
-                                                <input type="text" value={inquiryData.program} onChange={(e) => setInquiryData({...inquiryData, program: e.target.value})} placeholder="e.g. B.Tech CS" className="w-full h-12 rounded-xl bg-black/60 border border-white/10 pl-11 pr-4 text-white text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/20 outline-none transition-all" />
+                                                <input type="text" value={inquiryData.program} onChange={(e) => setInquiryData({...inquiryData, program: e.target.value})} placeholder="e.g. B.Tech CS" className="w-full h-12 rounded-xl bg-white dark:bg-black/60 border border-slate-200 dark:border-white/10 pl-11 pr-4 text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/20 outline-none transition-all" />
                                             </div>
                                         </div>
                                     </div>
@@ -294,7 +294,7 @@ export default function Home() {
                                         <label className="text-xs uppercase font-bold text-slate-400 tracking-widest ml-1">
                                             Message <span className="text-rose-500">*</span>
                                         </label>
-                                        <textarea required rows={3} value={inquiryData.message} onChange={(e) => setInquiryData({...inquiryData, message: e.target.value})} placeholder="Enter inquiry details..." className="w-full rounded-xl bg-black/60 border border-white/10 p-4 text-white text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/20 outline-none transition-all resize-none" />
+                                        <textarea required rows={3} value={inquiryData.message} onChange={(e) => setInquiryData({...inquiryData, message: e.target.value})} placeholder="Enter inquiry details..." className="w-full rounded-xl bg-white dark:bg-black/60 border border-slate-200 dark:border-white/10 p-4 text-slate-800 dark:text-white placeholder-slate-400 text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan/20 outline-none transition-all resize-none" />
                                     </div>
 
                                     <button

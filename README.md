@@ -1,6 +1,6 @@
 # SmartCampus OS
 
-> **Smart Admission & Academic Management Software** — A scalable, secure, multi-institution SaaS platform for managing admissions, results, verifications, timetables, and hiring.
+> **SmartCampus OS** — A scalable, secure, multi-institution SaaS platform for managing admissions, results, verifications, timetables, and hiring.
 
 ---
 
