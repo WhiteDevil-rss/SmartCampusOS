@@ -144,4 +144,4 @@ SmartCampusOS/
 
 ## 📝 License
 
-Proprietary software. All rights reserved.
+This project is licensed under the [MIT License](./LICENSE).
