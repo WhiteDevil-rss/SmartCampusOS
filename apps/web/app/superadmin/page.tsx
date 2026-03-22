@@ -20,8 +20,8 @@ export default function SuperAdminOverview() {
             try {
                 const uniRes = await api.get('/universities');
                 setStats({ universities: uniRes.data.length, loading: false });
-            } catch (e) {
-                console.error(e);
+            } catch (e: any) {
+                console.warn("Failed to fetch admin stats:", e.message);
                 setStats((prev) => ({ ...prev, loading: false }));
             }
         };

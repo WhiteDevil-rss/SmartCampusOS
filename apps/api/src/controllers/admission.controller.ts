@@ -139,3 +139,48 @@ export const onboardStudent = async (req: AuthRequest, res: Response) => {
         res.status(500).json({ error: 'Failed to onboard student' });
     }
 };
+
+export const getPublicUniversities = async (req: Request, res: Response) => {
+    try {
+        const universities = await prisma.university.findMany({
+            select: { id: true, name: true, shortName: true }
+        });
+        res.json(universities);
+    } catch (error: any) {
+        console.error('Get Public Universities Error:', error);
+        res.status(500).json({ error: 'Failed to fetch universities' });
+    }
+};
+
+export const getPublicDepartments = async (req: Request, res: Response) => {
+    try {
+        const { universityId } = req.query;
+        if (!universityId) return res.json([]);
+        const departments = await prisma.department.findMany({
+            where: { universityId: universityId as string },
+            select: { id: true, name: true, shortName: true }
+        });
+        res.json(departments);
+    } catch (error: any) {
+        console.error('Get Public Departments Error:', error);
+        res.status(500).json({ error: 'Failed to fetch departments' });
+    }
+};
+
+export const getPublicPrograms = async (req: Request, res: Response) => {
+    try {
+        const { departmentId, universityId } = req.query;
+        const where: any = {};
+        if (departmentId) where.departmentId = departmentId as string;
+        if (universityId) where.universityId = universityId as string;
+        
+        const programs = await prisma.program.findMany({
+            where,
+            select: { id: true, name: true, type: true, duration: true }
+        });
+        res.json(programs);
+    } catch (error: any) {
+        console.error('Get Public Programs Error:', error);
+        res.status(500).json({ error: 'Failed to fetch programs' });
+    }
+};

@@ -1,13 +1,12 @@
 import { Router } from 'express';
-import { publishResultToChain, verifyPublicResult } from '../controllers/verification.controller';
-import { authenticate, requireRole } from '../middlewares/auth.middleware';
+import { verifyStudentRegistration, verifyResultIntegrity } from '../controllers/verification.controller';
 
 const router = Router();
 
-// Public verification portal
-router.get('/v2/public/verify', verifyPublicResult);
+// Endpoint for checking unauthenticated application statuses (Secure Hash needed)
+router.get('/public/student', verifyStudentRegistration);
 
-// Admin action to publish result to immutable ledger
-router.post('/v2/verification/publish/:resultId', authenticate, requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN']), publishResultToChain);
+// Endpoint for auditing academic results via payload hash constraint
+router.get('/public/result', verifyResultIntegrity);
 
 export default router;

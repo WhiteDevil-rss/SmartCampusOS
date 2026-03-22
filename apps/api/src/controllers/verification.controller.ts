@@ -1,164 +1,143 @@
-import { Response, Request } from 'express';
+import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
-import { AuthRequest } from '../middlewares/auth.middleware';
 import crypto from 'crypto';
 
-export const publishResultToChain = async (req: AuthRequest, res: Response) => {
+export const verifyStudentRegistration = async (req: Request, res: Response) => {
     try {
-        const resultId = req.params.resultId as string;
+        const { appId, contact, hash } = req.query;
 
-        const result = await prisma.result.findUnique({
-            where: { id: resultId },
+        if (!appId || !contact || !hash) {
+            return res.status(400).json({ error: 'Missing required validation fields' });
+        }
+
+        const student = await prisma.student.findFirst({
+            where: {
+                enrollmentNo: String(appId),
+                OR: [
+                    { email: String(contact) },
+                    { phone: String(contact) }
+                ]
+            },
             include: {
-                student: true,
-                program: true
+                university: true
             }
-        });
-
-        if (!result) {
-            return res.status(404).json({ error: 'Result not found' });
-        }
-
-        if (result.blockchainTxHash) {
-            return res.status(400).json({ error: 'Result is already published to the blockchain' });
-        }
-
-        // Generate canonical JSON representation of the result
-        const canonicalData = JSON.stringify({
-            studentId: result.studentId,
-            enrollmentNo: (result as any).student.enrollmentNo,
-            programId: result.programId,
-            semester: result.semester,
-            academicYear: result.academicYear,
-            sgpa: result.sgpa,
-            cgpa: result.cgpa,
-            status: result.status
-        });
-
-        // Compute SHA-256 hash
-        const resultHash = crypto.createHash('sha256').update(canonicalData).digest('hex');
-
-        // Simulate Blockchain Transaction
-        const simulatedTxHash = `0x${crypto.randomBytes(32).toString('hex')}`;
-
-        const updatedResult = await prisma.result.update({
-            where: { id: resultId },
-            data: {
-                resultHash,
-                blockchainTxHash: simulatedTxHash,
-                blockchainConfirmedAt: new Date(),
-                publishedAt: new Date()
-            }
-        });
-
-        res.json({
-            message: 'Result successfully published to blockchain',
-            result: updatedResult
-        });
-    } catch (error: any) {
-        console.error('Publish Result to Chain Error:', error);
-        res.status(500).json({ error: 'Failed to publish result to blockchain' });
-    }
-};
-
-export const verifyPublicResult = async (req: Request, res: Response) => {
-    try {
-        const { enrollmentNo, semester } = req.query;
-
-        // Log Verification Request (Simulated IP for now)
-        const requesterIp = (req.ip || req.connection.remoteAddress || 'unknown') as string;
-
-        if (!enrollmentNo || !semester) {
-            return res.status(400).json({ error: 'Enrollment Number and Semester are required' });
-        }
-
-        const student = await prisma.student.findUnique({
-            where: { enrollmentNo: enrollmentNo as string }
         });
 
         if (!student) {
-            return res.status(404).json({ error: 'Student not found' });
+            return res.status(404).json({ error: 'Applicant record not found in registries.' });
         }
 
-        const result = await prisma.result.findFirst({
-            where: {
-                studentId: student.id,
-                semester: parseInt(semester as string, 10),
-                blockchainTxHash: { not: null } // Only verify published results
+        const validationString = `${student.enrollmentNo}:${student.email}:${student.id}:ADMIT_SECURE`;
+        const computedHash = crypto.createHash('sha256').update(validationString).digest('hex');
+
+        if (computedHash !== hash) {
+            return res.status(409).json({ error: 'Cryptographic identity mismatch. Potential tampering caught.' });
+        }
+
+        const securePayload = {
+            student: {
+                name: student.name,
+                email: student.email,
+                phone: student.phone
             },
-            include: {
-                student: { include: { university: true } },
-                program: true
-            }
-        });
+            applicationId: student.enrollmentNo, // Overloading field for MVP
+            university: {
+                name: student.university?.name || 'Central Admitting University',
+                id: student.university.id
+            },
+            status: 'APPROVED',
+            verifyHash: computedHash
+        };
 
-        if (!result) {
-            await prisma.verificationRequest.create({
-                data: {
-                    universityId: student.universityId,
-                    enrollmentNo: enrollmentNo as string,
-                    requesterIp,
-                    requestType: 'RESULT',
-                    blockchainMatch: false
-                }
-            });
-            return res.status(404).json({ error: 'Blockchain-verified result not found for this semester' });
+        return res.status(200).json(securePayload);
+    } catch (error) {
+        console.error('Error verifying admission status: ', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+export const verifyResultIntegrity = async (req: Request, res: Response) => {
+    try {
+        const { enrollNo, hash } = req.query;
+
+        if (!enrollNo || !hash) {
+            return res.status(400).json({ error: 'Missing enrollment query or secure hash.' });
         }
 
-        // Recompute hash
-        const canonicalData = JSON.stringify({
-            studentId: result.studentId,
-            enrollmentNo: result.student.enrollmentNo,
-            programId: result.programId,
-            semester: result.semester,
-            academicYear: result.academicYear,
-            sgpa: result.sgpa,
-            cgpa: result.cgpa,
-            status: result.status
-        });
-
-        const computedHash = crypto.createHash('sha256').update(canonicalData).digest('hex');
-        const match = computedHash === result.resultHash;
-
-        await prisma.verificationRequest.create({
-            data: {
-                universityId: result.student.universityId,
-                enrollmentNo: enrollmentNo as string,
-                requesterIp,
-                requestType: 'RESULT',
-                blockchainMatch: match,
-                resultSnapshot: JSON.parse(canonicalData)
-            }
-        });
-
-        if (match) {
-            res.json({
-                verified: true,
-                message: 'Result is cryptographically verified and tampering-free.',
-                data: {
-                    studentName: result.student.name,
-                    enrollmentNo: result.student.enrollmentNo,
-                    program: result.program.name,
-                    semester: result.semester,
-                    sgpa: result.sgpa,
-                    cgpa: result.cgpa,
-                    status: result.status,
-                    verificationDetails: {
-                        txHash: result.blockchainTxHash,
-                        timestamp: result.blockchainConfirmedAt,
-                        ledger: 'Polygon L2 (Simulated)'
+        const student = await prisma.student.findUnique({
+            where: { enrollmentNo: String(enrollNo) },
+            include: {
+                university: true,
+                results: {
+                    include: {
+                        subjectResults: {
+                            include: { course: true }
+                        }
                     }
                 }
-            });
-        } else {
-            res.status(400).json({
-                verified: false,
-                error: 'Cryptographic mismatch. The result may have been tampered with.'
-            });
+            }
+        });
+
+        if (!student || student.results.length === 0) {
+            return res.status(404).json({ error: 'No published results found.' });
         }
 
-    } catch (error: any) {
-        console.error('Verify Public Result Error:', error);
-        res.status(500).json({ error: 'Internal server error during verification' });
+        const latestResult = student.results[0];
+
+        if (latestResult.resultHash !== hash && latestResult.blockchainTxHash !== hash) {
+            const verifyString = `${student.enrollmentNo}:${latestResult.sgpa}:${latestResult.cgpa}`;
+            const recomputedHas = crypto.createHash('sha256').update(verifyString).digest('hex');
+            
+            if (recomputedHas !== hash) {
+                return res.status(409).json({ error: 'Blockchain cryptographic signature failed.' });
+            }
+        }
+
+        let totalMarks = 0;
+        let maxMarks = 0;
+        
+        // Map subjectResults visually for the Frontend UI structure
+        const mappedSubjects = latestResult.subjectResults.map((sr) => {
+            totalMarks += sr.totalMarks;
+            maxMarks += 100; // Assuming max 100 per course
+            
+            return {
+                courseCode: sr.course.code,
+                courseName: sr.course.name,
+                marksObtained: sr.totalMarks,
+                maxMarks: 100,
+                grade: sr.grade
+            };
+        });
+        
+        const percentage = maxMarks > 0 ? ((totalMarks / maxMarks) * 100).toFixed(2) : 0;
+        const status = Number(percentage) >= 40 ? 'PASS' : 'FAIL';
+
+        const securePayload = {
+            student: {
+                name: student.name,
+                enrollmentNo: student.enrollmentNo,
+                university: student.university.name
+            },
+            result: {
+                program: "Software Engineering Core",
+                semester: latestResult.semester,
+                sgpa: latestResult.sgpa,
+                cgpa: latestResult.cgpa,
+                totalMarks: `${totalMarks}`,
+                percentage: percentage,
+                status: status,
+                subjects: mappedSubjects
+            },
+            blockchain: {
+                txHash: latestResult.blockchainTxHash || "0xUNREGISTERED_STAGING_BLOCK",
+                signatureHash: latestResult.resultHash || hash
+            }
+        };
+
+        return res.status(200).json(securePayload);
+    } catch (error) {
+        console.error('Error verifying result record: ', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 };

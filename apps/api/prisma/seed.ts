@@ -2,6 +2,7 @@ import { PrismaClient } from '../src/generated/client';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import { firebaseAdmin } from '../src/lib/firebase-admin';
 
 const prisma = new PrismaClient();
@@ -424,6 +425,119 @@ async function main() {
         }
     }
 
+    // 20.5 Seed Demo Results & Admissions for SaaS Verify Page Testing
+    console.log(`Seeding Results & Verification Hashes...`);
+    const demoStudents = data.students ? data.students.slice(0, 5) : [];
+    
+    for (const student of demoStudents) {
+        // --- 1. Mock Admission Application ---
+        const applicationHashString = `${student.enrollmentNo}:${student.email}:${student.id}:ADMIT_SECURE`;
+        const admitHash = crypto.createHash('sha256').update(applicationHashString).digest('hex');
+        
+        await prisma.admissionApplication.upsert({
+            where: { id: student.id },
+            update: {
+                universityId: student.universityId,
+                departmentId: student.departmentId,
+                programId: student.programId,
+                applicantName: student.name,
+                email: student.email,
+                phone: student.phone || '9999999999',
+                documents: {},
+                status: 'APPROVED',
+                remarks: 'Verified by SmartCampus OS Seed',
+            },
+            create: {
+                id: student.id,
+                universityId: student.universityId,
+                departmentId: student.departmentId,
+                programId: student.programId,
+                applicantName: student.name,
+                email: student.email,
+                phone: student.phone || '9999999999',
+                documents: {},
+                status: 'APPROVED',
+                remarks: 'Verified by SmartCampus OS Seed',
+            }
+        });
+
+        console.log(`\n🔑 Demo Admission Verify Hash for ${student.name} (${student.enrollmentNo}):\n   ${admitHash}`);
+
+        // --- 2. Mock Semester Result ---
+        const semester = 2; // Fixed to semester 2 for demo
+        const sgpa = parseFloat((Math.random() * (10 - 6) + 6).toFixed(2));
+        const cgpa = parseFloat((Math.random() * (10 - 6) + 6).toFixed(2));
+        const resultString = `${student.enrollmentNo}:${sgpa}:${cgpa}`;
+        const resultHash = crypto.createHash('sha256').update(resultString).digest('hex');
+        const txHash = `0x${crypto.randomBytes(32).toString('hex')}`; // Mock blockchain TX
+
+        const resultRecord = await prisma.result.upsert({
+            where: { id: student.id + '-res' },
+            update: {
+                studentId: student.id,
+                programId: student.programId,
+                semester: semester,
+                academicYear: '2025-26',
+                sgpa: sgpa,
+                cgpa: cgpa,
+                status: 'PASS',
+                resultHash: resultHash,
+                blockchainTxHash: txHash,
+                publishedAt: new Date()
+            },
+            create: {
+                id: student.id + '-res',
+                studentId: student.id,
+                programId: student.programId,
+                semester: semester,
+                academicYear: '2025-26',
+                sgpa: sgpa,
+                cgpa: cgpa,
+                status: 'PASS',
+                resultHash: resultHash,
+                blockchainTxHash: txHash,
+                publishedAt: new Date()
+            }
+        });
+
+        // Get 5 courses for this program to seed SubjectResults
+        const programCourses = data.courses.slice(0, 5);
+        
+        for (const course of programCourses) {
+            const external = Math.floor(Math.random() * (70 - 40) + 40);
+            const internal = Math.floor(Math.random() * (30 - 20) + 20);
+            const total = external + internal;
+            let grade = 'A';
+            if (total > 90) grade = 'O';
+            else if (total > 80) grade = 'A+';
+            else if (total > 70) grade = 'A';
+            else if (total > 60) grade = 'B+';
+            else grade = 'B';
+
+            await prisma.subjectResult.upsert({
+                where: { resultId_courseId: { resultId: resultRecord.id, courseId: course.id } },
+                update: {
+                    internalMarks: internal,
+                    externalMarks: external,
+                    totalMarks: total,
+                    grade: grade,
+                    creditsEarned: course.credits
+                },
+                create: {
+                    resultId: resultRecord.id,
+                    courseId: course.id,
+                    internalMarks: internal,
+                    externalMarks: external,
+                    totalMarks: total,
+                    grade: grade,
+                    creditsEarned: course.credits
+                }
+            });
+        }
+        console.log(`🎓 Demo Result Hash for ${student.name} (${student.enrollmentNo}):\n   ${resultHash}`);
+        console.log(`   Blockchain TX: ${txHash}\n`);
+    }
+
     // 21. Permissions (SuperAdmin)
     const superAdminId = '9be572c4-1fc9-48c3-9b30-631316853799';
     const modules = ['USERS', 'UNIVERSITIES', 'DEPARTMENTS', 'COURSES', 'STUDENTS', 'FACULTY', 'INQUIRIES', 'SUBSCRIBERS', 'NOTIFICATIONS', 'SETTINGS'];
@@ -477,6 +591,82 @@ async function main() {
         },
     });
 
+    // 22. Job Postings — Hiring System Seed Data
+    console.log('Seeding Job Postings & Demo Applications...');
+    
+    const demoJobs = [
+        // SUPERADMIN jobs
+        { id: 'job-sa-001', title: 'System Operations Manager',   description: 'Manage day-to-day operations of the SmartCampus OS platform. Responsible for reliability, performance monitoring, and cross-institutional support coordination.', type: 'FULL_TIME',  location: 'Remote (India)',    panelType: 'SUPERADMIN', panelId: null, departmentName: null,            universityName: null },
+        { id: 'job-sa-002', title: 'Customer Support Executive',  description: 'Provide first-line support to universities and departments using SmartCampus OS. Handle tickets, resolve queries, and escalate critical issues.',                 type: 'FULL_TIME',  location: 'Surat, Gujarat',   panelType: 'SUPERADMIN', panelId: null, departmentName: null,            universityName: null },
+        { id: 'job-sa-003', title: 'DevOps Engineer',             description: 'Maintain and automate CI/CD pipelines, manage cloud infrastructure, and ensure 99.9% uptime for the SmartCampus OS deployment.',                                     type: 'CONTRACT',   location: 'Remote (Worldwide)', panelType: 'SUPERADMIN', panelId: null, departmentName: null,            universityName: null },
+        // UNIVERSITY jobs
+        { id: 'job-uni-001', title: 'Professor – Computer Science', description: 'Lead teaching and research in core CS subjects including Data Structures, Algorithms, and Machine Learning. PhD required.',                                       type: 'FULL_TIME',  location: 'Surat, Gujarat',   panelType: 'UNIVERSITY',  panelId: null, departmentName: 'Computer Science', universityName: 'Veer Narmad South Gujarat University' },
+        { id: 'job-uni-002', title: 'Lab Assistant – Electronics',  description: 'Support faculty in running electronics and embedded systems lab sessions. Maintain lab equipment and assist students.',                                              type: 'PART_TIME',  location: 'Surat, Gujarat',   panelType: 'UNIVERSITY',  panelId: null, departmentName: 'Electronics',      universityName: 'Veer Narmad South Gujarat University' },
+        { id: 'job-uni-003', title: 'Academic Counsellor',          description: 'Guide students in academic planning, credit management, and career decision-making through one-on-one and group sessions.',                                          type: 'FULL_TIME',  location: 'Surat, Gujarat',   panelType: 'UNIVERSITY',  panelId: null, departmentName: null,            universityName: 'Veer Narmad South Gujarat University' },
+        // DEPARTMENT jobs
+        { id: 'job-dept-001', title: 'Lecturer – Data Science',  description: 'Deliver lectures on Data Science, Big Data, and AI. Minimum 2 years of industry or teaching experience required.',              type: 'FULL_TIME',  location: 'Surat, Gujarat',  panelType: 'DEPARTMENT', panelId: null, departmentName: 'Computer Science', universityName: 'Veer Narmad South Gujarat University' },
+        { id: 'job-dept-002', title: 'Program Coordinator',       description: 'Coordinate department-level academic activities, exam planning, and student performance tracking.',                              type: 'FULL_TIME',  location: 'Surat, Gujarat',  panelType: 'DEPARTMENT', panelId: null, departmentName: 'Computer Science', universityName: 'Veer Narmad South Gujarat University' },
+        { id: 'job-dept-003', title: 'Research Intern – AI/ML',   description: 'Collaborate with faculty on applied AI/ML research projects in academic resource management and intelligent scheduling systems.', type: 'INTERNSHIP', location: 'Remote / Hybrid', panelType: 'DEPARTMENT', panelId: null, departmentName: 'Computer Science', universityName: 'Veer Narmad South Gujarat University' },
+    ];
+
+    for (const job of demoJobs) {
+        await prisma.jobPosting.upsert({
+            where: { id: job.id },
+            update: {
+                title: job.title,
+                description: job.description,
+                type: job.type,
+                location: job.location,
+                panelType: job.panelType,
+                departmentName: job.departmentName,
+                universityName: job.universityName,
+                isActive: true,
+            },
+            create: {
+                id: job.id,
+                title: job.title,
+                description: job.description,
+                type: job.type,
+                location: job.location,
+                panelType: job.panelType,
+                panelId: job.panelId,
+                departmentName: job.departmentName,
+                universityName: job.universityName,
+                isActive: true,
+            },
+        });
+    }
+
+    // Demo Applications for the first 3 jobs
+    const demoApplicants = [
+        { name: 'Arjun Mehta',    email: 'arjun.mehta@example.com',  mobile: '9876543210', jobId: 'job-sa-001' },
+        { name: 'Priya Sharma',   email: 'priya.sharma@example.com', mobile: '9123456789', jobId: 'job-uni-001' },
+        { name: 'Rahul Desai',    email: 'rahul.desai@example.com',  mobile: '9988776655', jobId: 'job-dept-001' },
+    ];
+
+    for (const applicant of demoApplicants) {
+        await prisma.jobApplication.upsert({
+            where: { id: `app-${applicant.jobId}` },
+            update: {
+                applicantName: applicant.name,
+                email: applicant.email,
+                mobile: applicant.mobile,
+                status: 'PENDING',
+            },
+            create: {
+                id: `app-${applicant.jobId}`,
+                jobId: applicant.jobId,
+                applicantName: applicant.name,
+                email: applicant.email,
+                mobile: applicant.mobile,
+                coverLetter: 'I am excited to apply for this position at SmartCampus OS. I believe my skills and experience make me a strong candidate.',
+                status: 'PENDING',
+            }
+        });
+    }
+
+    console.log(`✅ Seeded ${demoJobs.length} jobs and ${demoApplicants.length} demo applications.`);
+    
     console.log('Seeding Complete! 🎉');
 }
 

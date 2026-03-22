@@ -80,6 +80,7 @@ import facultyMessagesRoutes from './routes/faculty-messages.routes';
 import studentDocsRoutes from './routes/student-docs.routes';
 import permissionRoutes from './routes/permission.routes';
 import historyRoutes from './routes/history.routes';
+import jobRoutes from './routes/job.routes';
 
 app.use('/v1/auth', authRoutes);
 app.use('/v1/universities/:universityId/departments', departmentRoutes);
@@ -132,6 +133,7 @@ app.use('/v2/faculty/messages', facultyMessagesRoutes);
 app.use('/v2/student/docs', studentDocsRoutes);
 app.use('/v2/permissions', permissionRoutes);
 app.use('/v2/history', historyRoutes);
+app.use('/v2/jobs', jobRoutes);
 
 const server = createServer(app);
 socketService.initialize(server);

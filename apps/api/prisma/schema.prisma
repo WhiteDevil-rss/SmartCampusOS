@@ -1006,3 +1006,37 @@ model TimetableChange {
 
   @@map("timetable_changes")
 }
+
+model JobPosting {
+  id              String           @id @default(uuid())
+  title           String
+  description     String
+  type            String           @default("FULL_TIME")
+  location        String?
+  panelType       String
+  panelId         String?
+  departmentName  String?
+  universityName  String?
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  applications    JobApplication[]
+
+  @@map("job_postings")
+}
+
+model JobApplication {
+  id            String     @id @default(uuid())
+  jobId         String
+  applicantName String
+  email         String
+  mobile        String
+  resumeUrl     String?
+  coverLetter   String?
+  status        String     @default("PENDING")
+  appliedAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  job           JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@map("job_applications")
+}

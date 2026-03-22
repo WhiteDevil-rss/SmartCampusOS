@@ -815,6 +815,34 @@ exports.Prisma.TimetableChangeScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.JobPostingScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  location: 'location',
+  panelType: 'panelType',
+  panelId: 'panelId',
+  departmentName: 'departmentName',
+  universityName: 'universityName',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.JobApplicationScalarFieldEnum = {
+  id: 'id',
+  jobId: 'jobId',
+  applicantName: 'applicantName',
+  email: 'email',
+  mobile: 'mobile',
+  resumeUrl: 'resumeUrl',
+  coverLetter: 'coverLetter',
+  status: 'status',
+  appliedAt: 'appliedAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -905,7 +933,9 @@ exports.Prisma.ModelName = {
   PayrollConfig: 'PayrollConfig',
   SalarySlip: 'SalarySlip',
   StudentElectiveMapping: 'StudentElectiveMapping',
-  TimetableChange: 'TimetableChange'
+  TimetableChange: 'TimetableChange',
+  JobPosting: 'JobPosting',
+  JobApplication: 'JobApplication'
 };
 
 /**
