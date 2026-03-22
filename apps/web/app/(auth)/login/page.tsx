@@ -107,18 +107,18 @@ function LoginContent() {
 
                     <div className="grid grid-cols-2 gap-8 pt-8 border-t border-border">
                         <div className="flex flex-col gap-2">
-                            <span className="text-sm font-bold uppercase tracking-widest text-text-secondary">Security</span>
+                            <span className="text-sm font-bold uppercase tracking-widest text-slate-400">Security</span>
                             <span className="text-white font-medium">Enterprise Grade</span>
                         </div>
                         <div className="flex flex-col gap-2">
-                            <span className="text-sm font-bold uppercase tracking-widest text-text-secondary">Infrastructure</span>
+                            <span className="text-sm font-bold uppercase tracking-widest text-slate-400">Infrastructure</span>
                             <span className="text-white font-medium">99.9% Reliable</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="z-10 flex items-center justify-between">
-                    <span className="text-text-secondary text-xs font-bold uppercase tracking-[0.2em]">Secure Socket Layer Enabled</span>
+                    <span className="text-slate-400 text-xs font-bold uppercase tracking-[0.2em]">Secure Socket Layer Enabled</span>
                     <div className="flex gap-4">
                         <span className="w-2 h-2 rounded-full bg-accent-green shadow-[0_0_8px_#10b981]" />
                         <span className="w-2 h-2 rounded-full bg-primary/40" />
@@ -141,26 +141,26 @@ function LoginContent() {
                 >
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-neon-cyan via-primary to-neon-purple opacity-30" />
 
-                    <div className="text-center mb-10">
-                        <h3 className="text-4xl font-black font-space-grotesk mb-3 tracking-tighter">
+                    <div className="text-center mb-6">
+                        <h3 className="text-4xl font-black font-space-grotesk mb-3 tracking-normal">
                             User <span className="text-neon-cyan">Login</span>
                         </h3>
-                        <p className="text-text-muted text-xs uppercase font-black tracking-[0.2em] opacity-70">
+                        <p className="text-slate-400 text-xs uppercase font-bold tracking-[0.2em]">
                             Authorized Access Only
                         </p>
                     </div>
 
                     {error && (
-                        <div className="mb-8 p-5 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-widest flex items-center gap-4 animate-shake">
+                        <div className="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-bold uppercase tracking-widest flex items-center gap-4 animate-shake">
                             <span className="material-symbols-outlined text-lg">security</span>
                             {error}
                         </div>
                     )}
 
-                    <form onSubmit={handleLogin} className="space-y-8">
+                    <form onSubmit={handleLogin} className="space-y-6">
 
                         <div className="space-y-2.5">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-text-secondary ml-1 opacity-70">Institutional Email</label>
+                            <label className="text-xs font-bold uppercase tracking-widest text-slate-300 ml-1">Institutional Email</label>
                             <div className="relative group">
                                 <span className="absolute left-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-text-secondary group-focus-within:text-neon-cyan transition-colors text-xl">alternate_email</span>
                                 <input
@@ -175,7 +175,7 @@ function LoginContent() {
                         </div>
 
                         <div className="space-y-2.5">
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-text-secondary ml-1 opacity-70">Access Key</label>
+                            <label className="text-xs font-bold uppercase tracking-widest text-slate-300 ml-1">Access Key</label>
                             <div className="relative group">
                                 <span className="absolute left-5 top-1/2 -translate-y-1/2 material-symbols-outlined text-text-secondary group-focus-within:text-neon-cyan transition-colors text-xl">lock</span>
                                 <input
@@ -212,14 +212,14 @@ function LoginContent() {
                         </button>
                     </form>
 
-                    <div className="mt-10 relative text-center">
+                    <div className="mt-8 relative text-center">
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-white/5" />
                         </div>
-                        <span className="relative px-6 bg-[#0d0f14] text-[9px] font-black uppercase tracking-[0.4em] text-text-disabled">Secure Federated Access</span>
+                        <span className="relative px-4 py-1.5 bg-slate-900/60 rounded-full border border-white/5 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400 backdrop-blur-md">Secure Federated Access</span>
                     </div>
 
-                    <div className="mt-10">
+                    <div className="mt-6">
                         <button
                             onClick={handleGoogleSignIn}
                             className="w-full flex items-center justify-center gap-4 bg-white/5 border border-white/5 rounded-2xl py-5 hover:bg-white/10 transition-all group"
@@ -236,7 +236,7 @@ function LoginContent() {
 
                 </motion.div>
 
-                <p className="mt-12 text-slate-600 text-[10px] font-black uppercase tracking-[0.4em] opacity-50">SmartCampus Enterprise Security Protocol</p>
+                <p className="mt-8 text-slate-400 text-[10px] font-bold uppercase tracking-widest">SmartCampus Enterprise Security Protocol</p>
             </div>
         </div>
     );

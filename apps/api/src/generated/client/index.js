@@ -891,7 +891,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/shivam/Downloads/VNSGU/Code/apps/api/src/generated/client",
+      "value": "/Users/shivam/Downloads/VNSGU/SmartCampusOS/apps/api/src/generated/client",
       "fromEnvVar": null
     },
     "config": {
@@ -905,7 +905,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/shivam/Downloads/VNSGU/Code/apps/api/prisma/schema.prisma",
+    "sourceFilePath": "/Users/shivam/Downloads/VNSGU/SmartCampusOS/apps/api/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -919,7 +919,6 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

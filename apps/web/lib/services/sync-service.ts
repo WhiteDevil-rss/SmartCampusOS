@@ -1,5 +1,6 @@
 import { api } from '../api';
 import { offlineStore, OfflineMessage } from './offline-store';
+import { useAuthStore } from '../store/useAuthStore';
 
 class MessageSyncService {
     private isSyncing = false;
@@ -42,6 +43,10 @@ class MessageSyncService {
 
     async sync() {
         if (this.isSyncing || !offlineStore || !navigator.onLine) return;
+        
+        // Prevent sync if user is not authenticated
+        if (!useAuthStore.getState().isAuthenticated) return;
+
         this.isSyncing = true;
 
         try {
