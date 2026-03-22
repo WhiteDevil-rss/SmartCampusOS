@@ -59,6 +59,7 @@ firebase-key.json
 
 #Others
 .engineering/
+sample/
 PROJECT.md
 REQUIREMENTS.md
 ROADMAP.md
