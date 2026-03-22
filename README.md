@@ -76,8 +76,8 @@ pnpm run dev
 | Super Admin | `admin@smartcampus.os` | `/superadmin` |
 | University Admin | `admin@vnsgu.ac.in` | `/dashboard` |
 | Department Admin | `admin_dcs@vnsgu.ac.in` | `/department` |
+| Faculty | `rustam@vnsgu.ac.in` | `/faculty-panel` |
 | Faculty | `dharmen@vnsgu.ac.in` | `/faculty-panel` |
-| Faculty | `ravi@vnsgu.ac.in` | `/faculty-panel` |
 
 ---
 
