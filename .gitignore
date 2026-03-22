@@ -77,16 +77,11 @@ build_*.txt
 build_*.log
 
 .logs/
-
-test-axios.js
-check_db.js
-EVALUATION_MAP.md
-any_search.txt
-
 apps/api/logs/
 *logs/
-*.log
+EVALUATION_MAP.md
+
+# Test / Debug / Search scratch files
 any_search.txt
 check_db.js
 test-axios.js
-
