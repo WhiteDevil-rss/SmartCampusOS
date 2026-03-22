@@ -85,3 +85,9 @@ EVALUATION_MAP.md
 any_search.txt
 check_db.js
 test-axios.js
+apps/api/check*.ts
+apps/api/test_*.ts
+apps/api/src/check_*.ts
+apps/api/src/debug.ts
+apps/ai-engine/test_*.py
+apps/web/test-results/
