@@ -37,8 +37,11 @@ export function LandingNav() {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-[100] flex items-center justify-between transition-all duration-300 px-6 lg:px-12 py-4 ${scrolled ? "bg-background/80 backdrop-blur-xl border-b border-border shadow-sm py-3" : "bg-transparent py-4"
-                }`}
+            className={`fixed top-0 left-0 right-0 z-[100] flex items-center justify-between transition-all duration-500 px-6 lg:px-12 ${
+                scrolled 
+                ? "bg-background/70 backdrop-blur-2xl border-b border-border/50 shadow-[0_8px_32px_rgba(31,38,135,0.07)] py-3" 
+                : "bg-background/20 backdrop-blur-[6px] border-b border-transparent py-5"
+            }`}
         >
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 group">
@@ -122,7 +125,7 @@ export function LandingNav() {
 
             {/* Mobile Dropdown */}
             {mobileOpen && (
-                <div className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-2xl border-b border-border p-6 flex flex-col gap-4 xl:hidden animate-in slide-in-from-top-4 duration-300">
+           <div className="absolute top-full left-0 right-0 bg-background/80 backdrop-blur-2xl border-b border-border/50 p-6 flex flex-col gap-4 xl:hidden animate-in slide-in-from-top-4 duration-300">
                     {navLinks.map((link) => (
                         <Link
                             key={link.label}

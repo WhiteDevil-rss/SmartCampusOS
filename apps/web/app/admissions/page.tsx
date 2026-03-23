@@ -166,10 +166,14 @@ export default function AdmissionPortal() {
                         </div>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <Button onClick={() => setIsApplying(true)} className="px-10 py-6 rounded-2xl bg-primary text-white font-black text-lg shadow-lg hover:scale-105 active:scale-95 transition-all w-full sm:w-auto">
+                            <Button onClick={() => setIsApplying(true)} className="px-8 py-5 rounded-2xl bg-primary text-white font-black text-base shadow-lg hover:scale-105 active:scale-95 transition-all w-full sm:w-auto">
                                 Apply Now <LuArrowRight className="ml-2 w-5 h-5" />
                             </Button>
-                            <Link href="/#inquiry" className="px-10 py-6 rounded-2xl border border-slate-700 bg-slate-900 text-white font-bold text-lg hover:bg-slate-800 transition-all w-full sm:w-auto">
+                            <Link 
+                                href="/#inquiry" 
+                                className="px-8 py-5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white/70 dark:bg-slate-900/50 backdrop-blur-sm text-slate-700 dark:text-slate-300 font-bold text-base hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-105 active:scale-95 transition-all w-full sm:w-auto flex items-center justify-center gap-2"
+                            >
+                                <span className="material-symbols-outlined text-[20px]">contact_support</span>
                                 General Inquiry
                             </Link>
                         </div>

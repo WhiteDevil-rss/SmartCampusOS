@@ -54,9 +54,13 @@ cd apps/api
 npx prisma db push
 npx prisma db seed
 
-# Start all services
-cd ../..
-pnpm run dev
+# Start all services (Infrastructure + Dev Servers)
+# This starts PostgreSQL, Redis, AI Engine, API, and Web
+pnpm run dev:all
+
+# Alternatively, if you want more control:
+# docker compose up -d
+# pnpm run dev
 ```
 
 | Service | URL |
@@ -87,18 +91,18 @@ pnpm run dev
 
 | Student | Enrollment No. | Admission Hash | Result Hash |
 |---|---|---|---|
-| Aarav Patel | `EN20250000` | `f8c195f943c0ef2114f4ca966cefaf2aa0a66e15c96f55e9b8dfe8030b6e2777` | `873b9709839d10cb0e5df09c166bf29f6cf6700a95867817021a7db33a1b2eca` |
-| Diya Sharma | `EN20250001` | `b6183bf04f490ae449bdcd81ea8aca17f0ffc81136c2d61c2a323fd0b4bb4644` | `7aa98ca0f1ee6a40c0234e4bbf948fad6edcc4ecb1d0aeff5bc3ab8746e7d99f` |
-| Rahul Verma | `EN20250002` | `7d4db8585f131e5e2842164c73146af793041c6df8a6c1e83b81dc6b958636e9` | `ce6a4f29a42bfee019b4ce76a16dcb69fdfb4349ae7bd1db936d79bfd54292a1` |
-| Sneha Iyer | `EN20250003` | `492d32d872515de6c00dfc0f0997234e83f393a55f292a4f8921d4909859c3a3` | `7a7f96502f4b284d0bf6b4432838a906d707999efcbb9346a655e348dc6ec471` |
-| Rohan Mehta | `EN20250004` | `3617872100d4d83bd0f50dbb8040f7356d70ef500a1d275c5ffc5992d94b043a` | `999c3bcbacdf46ea4bb6bb6acf65e7ba587573bc41f74f9f7f5063472105ed56` |
-| **TAMPERED TEST** | `EN20250000` | `f8c195f943c0ef2114f4ca966cefaf2aa0a66e15c96f55e9b8dfe8030b6e2777` | `0e1e5280950a8ddc79868f10bde0b0160acdd0186d7e4a21a1467e61ea4e7120` |
+| Aarav Patel | `EN20250000` | `f8c195f943c0ef2114f4ca966cefaf2aa0a66e15c96f55e9b8dfe8030b6e2777` | `e8e9179b4ca99f93537660d61ec333e750bb83e19a55d34b7dde0efdb86bc80c` |
+| Diya Sharma | `EN20250001` | `b6183bf04f490ae449bdcd81ea8aca17f0ffc81136c2d61c2a323fd0b4bb4644` | `8823540396f0128e31d598abeb004412a5cf197a3e2d5ccd0e85ffc9f5dfde63` |
+| Rahul Verma | `EN20250002` | `7d4db8585f131e5e2842164c73146af793041c6df8a6c1e83b81dc6b958636e9` | `943e078652fd55555b144d1c81c8f4a61afd2f15617228cb15ef5a1ba0d38274` |
+| Sneha Iyer | `EN20250003` | `492d32d872515de6c00dfc0f0997234e83f393a55f292a4f8921d4909859c3a3` | `e2f1051eae31191c68c702d0473c79dcb32246a959ab3801a029e92c4258d137` |
+| Rohan Mehta | `EN20250004` | `3617872100d4d83bd0f50dbb8040f7356d70ef500a1d275c5ffc5992d94b043a` | `0aad3d454f3a8af83c8d0443e612f1791895409c50dfae27156ceeac7d0f6352` |
+| **TAMPERED TEST** | `EN20250000` | `f8c195f943c0ef2114f4ca966cefaf2aa0a66e15c96f55e9b8dfe8030b6e2777` | `47af10368b89674c860c593b386f1bfd023714bd0638f4a817adb9772ef3aa7f` |
 | | | | (Use this to test tampering detection - will return 409) |
 
 **Quick test on `/verify`:**
 ```
 Enrollment:  EN20250000
-Result Code: 873b9709839d10cb0e5df09c166bf29f6cf6700a95867817021a7db33a1b2eca
+Result Code: e8e9179b4ca99f93537660d61ec333e750bb83e19a55d34b7dde0efdb86bc80c
 ```
 
 Each student has **5 subject results** for Semester 2 (2025-26): Internal, External, Total, Grade, Credits, SGPA, CGPA, and a Blockchain TX hash.
