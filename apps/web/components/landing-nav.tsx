@@ -37,7 +37,7 @@ export function LandingNav() {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between transition-all duration-300 px-6 lg:px-12 py-4 ${scrolled ? "bg-background/80 backdrop-blur-xl border-b border-border shadow-sm py-3" : "bg-transparent py-4"
+            className={`fixed top-0 left-0 right-0 z-[100] flex items-center justify-between transition-all duration-300 px-6 lg:px-12 py-4 ${scrolled ? "bg-background/80 backdrop-blur-xl border-b border-border shadow-sm py-3" : "bg-transparent py-4"
                 }`}
         >
             {/* Logo */}
