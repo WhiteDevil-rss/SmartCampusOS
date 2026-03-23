@@ -18,7 +18,9 @@ api.interceptors.request.use(async (config) => {
 
         if (base.endsWith('/v1')) {
             config.baseURL = base.replace('/v1', '');
-            console.log(`[API Debug] Routing to V2: ${config.baseURL}${config.url}`);
+            if (process.env.NODE_ENV === 'development') {
+                console.log(`[API V2 Proxy] ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
+            }
         }
     }
 
