@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LuCheck, LuLoader, LuShieldCheck, LuTriangleAlert, LuArrowLeft, LuSearch, LuGraduationCap, LuUserCheck, LuPrinter, LuDownload } from 'react-icons/lu';
+import { LuCheck, LuLoader, LuShieldCheck, LuTriangleAlert, LuArrowLeft, LuSearch, LuGraduationCap, LuUserCheck, LuPrinter, LuDownload, LuShieldAlert } from 'react-icons/lu';
 import { Toast, useToast } from '@/components/ui/toast-alert';
 import Link from 'next/link';
 import { api } from '@/lib/api';
@@ -15,7 +15,7 @@ export default function DualVerificationPortal() {
     const [activeTab, setActiveTab] = useState<'student' | 'result'>('student');
     const [loading, setLoading] = useState(false);
     const [verifiedData, setVerifiedData] = useState<any>(null);
-    const [verificationFailed, setVerificationFailed] = useState(false);
+    const [errorCode, setErrorCode] = useState<number | null>(null);
     const { toast, showToast, hideToast } = useToast();
 
     // Student Form State
@@ -37,7 +37,7 @@ export default function DualVerificationPortal() {
         }
 
         setLoading(true);
-        setVerificationFailed(false);
+        setErrorCode(null);
         setVerifiedData(null);
 
         try {
@@ -48,9 +48,7 @@ export default function DualVerificationPortal() {
             const response = await api.get(endpoint);
             setVerifiedData({ type: activeTab, payload: response.data });
             showToast('success', 'Cryptographic verification successful. Data integrity confirmed.');
-        } catch (error: any) {
-            console.error(error);
-            setVerificationFailed(true);
+            setErrorCode(error.response?.status || 500);
             if (error.response?.status === 409) {
                 showToast('error', 'INTEGRITY COMPROMISED: Cryptographic signature mismatch.');
             } else if (error.response?.status === 404) {
@@ -65,7 +63,7 @@ export default function DualVerificationPortal() {
 
     const resetForms = () => {
         setVerifiedData(null);
-        setVerificationFailed(false);
+        setErrorCode(null);
         setStudentForm({ appId: '', contactRef: '', secureHash: '' });
         setResultForm({ enrollmentNo: '', secureHash: '' });
     };
@@ -93,7 +91,7 @@ export default function DualVerificationPortal() {
                     </p>
                 </div>
 
-                {!verifiedData && !verificationFailed && (
+                {!verifiedData && !errorCode && (
                     <Card className="bg-slate-900/60 backdrop-blur-xl border border-slate-700 shadow-2xl rounded-3xl overflow-hidden relative">
                         <div className="flex w-full border-b border-slate-800 bg-slate-950/40">
                             <button
@@ -150,24 +148,48 @@ export default function DualVerificationPortal() {
                     </Card>
                 )}
 
-                {verificationFailed && (
-                    <Card className="bg-rose-950/40 backdrop-blur-xl border border-rose-500/50 shadow-[0_0_50px_rgba(244,63,94,0.1)] rounded-3xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+                {errorCode && (
+                    <Card className={`${errorCode === 409 ? 'bg-rose-950/40 border-rose-500/50 shadow-[0_0_50px_rgba(244,63,94,0.1)]' : 'bg-slate-900/60 border-slate-700 shadow-2xl'} backdrop-blur-xl border rounded-3xl overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500`}>
                         <CardContent className="p-10 flex flex-col items-center justify-center text-center space-y-4">
-                            <div className="w-20 h-20 rounded-full bg-rose-500/20 flex items-center justify-center animate-pulse border border-rose-500/30">
-                                <LuTriangleAlert className="w-10 h-10 text-rose-500" />
-                            </div>
-                            <h3 className="text-3xl font-black text-rose-400 tracking-tight">Integrity Compromised</h3>
-                            <p className="text-slate-300 text-lg max-w-lg">
-                                The mathematical token provided does not resolve with our secure signatures. Tampering detected or record absent.
-                            </p>
-                            <Button onClick={resetForms} className="mt-6 bg-rose-500/10 border border-rose-500/30 text-rose-400 hover:bg-rose-500 hover:text-white transition-all px-8 py-6 rounded-full font-bold">
+                            {errorCode === 409 ? (
+                                <>
+                                    <div className="w-20 h-20 rounded-full bg-rose-500/20 flex items-center justify-center animate-pulse border border-rose-500/30">
+                                        <LuShieldAlert className="w-10 h-10 text-rose-500" />
+                                    </div>
+                                    <h3 className="text-3xl font-black text-rose-400 tracking-tight">Security Alert: Tampering Detected</h3>
+                                    <p className="text-slate-300 text-lg max-w-lg">
+                                        The cryptographic signature provided does not match our secure ledger. This indicates unauthorized data modification or a fraudulent claim.
+                                    </p>
+                                </>
+                            ) : errorCode === 404 ? (
+                                <>
+                                    <div className="w-20 h-20 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
+                                        <LuSearch className="w-10 h-10 text-slate-400" />
+                                    </div>
+                                    <h3 className="text-3xl font-black text-white tracking-tight">Record Not Found</h3>
+                                    <p className="text-slate-400 text-lg max-w-lg">
+                                        We could not find any active student or result record matching these credentials. Please check for typos in the enrollment number or hash.
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center border border-amber-500/30">
+                                        <LuTriangleAlert className="w-10 h-10 text-amber-500" />
+                                    </div>
+                                    <h3 className="text-3xl font-black text-amber-400 tracking-tight">System Node Offline</h3>
+                                    <p className="text-slate-400 text-lg max-w-lg">
+                                        Unable to reach the verification network. Please try again or contact system administration.
+                                    </p>
+                                </>
+                            )}
+                            <Button onClick={resetForms} className={`${errorCode === 409 ? 'bg-rose-500/10 border-rose-500/30 text-rose-400 hover:bg-rose-500 hover:text-white' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white'} mt-6 border transition-all px-8 py-6 rounded-full font-bold`}>
                                 Return to Authenticator
                             </Button>
                         </CardContent>
                     </Card>
                 )}
 
-                {verifiedData && !verificationFailed && verifiedData.type === 'student' && (
+                {verifiedData && !errorCode && verifiedData.type === 'student' && (
                     <Card className="bg-slate-900/80 backdrop-blur-xl border border-neon-cyan/30 shadow-[0_0_80px_rgba(0,255,255,0.05)] rounded-3xl overflow-hidden animate-in fade-in zoom-in-95 duration-500">
                          <div className="p-8 border-b border-slate-800 flex justify-between items-start bg-slate-950/50">
                             <div>
@@ -212,7 +234,7 @@ export default function DualVerificationPortal() {
                     </Card>
                 )}
 
-                {verifiedData && !verificationFailed && verifiedData.type === 'result' && (
+                {verifiedData && !errorCode && verifiedData.type === 'result' && (
                     <Card className="bg-slate-900/80 backdrop-blur-xl border border-neon-cyan/30 shadow-[0_0_80px_rgba(0,255,255,0.05)] rounded-3xl overflow-hidden animate-in fade-in zoom-in-95 duration-500">
                         <div className="p-8 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-slate-950/50 gap-4">
                             <div>
