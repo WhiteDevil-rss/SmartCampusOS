@@ -3,7 +3,8 @@ import { authenticate, requireRole } from '../middlewares/auth.middleware';
 import {
     getComplaints,
     createComplaint,
-    resolveComplaint
+    resolveComplaint,
+    getStudentComplaints
 } from '../controllers/admin-request.controller';
 
 const router = Router();
@@ -11,6 +12,7 @@ const router = Router();
 router.use(authenticate);
 
 // Student Endpoints
+router.get('/student/:studentId', requireRole(['STUDENT']), getStudentComplaints);
 router.post('/student', requireRole(['STUDENT']), createComplaint);
 
 // Admin Endpoints

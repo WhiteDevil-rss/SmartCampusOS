@@ -10,11 +10,10 @@ class SocketService {
     initialize(server: HttpServer) {
         this.io = new Server(server, {
             cors: {
-                origin: true,
+                origin: (origin, callback) => callback(null, true), // Development permissive
                 methods: ['GET', 'POST'],
                 credentials: true
-            },
-            allowEIO3: true
+            }
         });
 
         const notificationsNs = this.io.of('/notifications');
@@ -77,7 +76,14 @@ class SocketService {
     private initializeTimetablesNamespace() {
         if (!this.io) return;
         const timetablesNs = this.io.of('/timetables');
-        // ... (preserving existing logic if needed, but for now we focus on notifications)
+        
+        timetablesNs.on('connection', (socket) => {
+            console.log(`[Socket.io] Client connected to /timetables namespace (${socket.id})`);
+            
+            socket.on('disconnect', () => {
+                console.log(`[Socket.io] Client disconnected from /timetables (${socket.id})`);
+            });
+        });
     }
 
     emitToUser(userId: string, event: string, data: any) {

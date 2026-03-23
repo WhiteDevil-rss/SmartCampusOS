@@ -20,7 +20,7 @@ export const useRealtimeUpdates = (showToast?: (type: ToastType, message: string
             if (!token) return;
 
             // Initialize Socket connection
-            socket = io(`${process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:8000'}/timetables`, {
+            socket = io(`${process.env.NEXT_PUBLIC_SOCKET_URL || 'http://127.0.0.1:5001'}/timetables`, {
                 auth: { token },
                 transports: ['websocket', 'polling']
             });

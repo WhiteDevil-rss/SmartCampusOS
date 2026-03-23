@@ -15,8 +15,10 @@ interface AuthState {
     isAuthenticated: boolean;
     hasHydrated: boolean;
     isAuthReady: boolean;
+    backendError: string | null;
     setHasHydrated: (state: boolean) => void;
     setAuthReady: (state: boolean) => void;
+    setBackendError: (error: string | null) => void;
     login: (user: User) => void;
     logout: () => void;
 }
@@ -28,10 +30,12 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: false,
             hasHydrated: false,
             isAuthReady: false,
+            backendError: null,
             setHasHydrated: (state) => set({ hasHydrated: state }),
             setAuthReady: (state) => set({ isAuthReady: state }),
+            setBackendError: (error) => set({ backendError: error }),
             login: (user) => {
-                set({ user, isAuthenticated: true, isAuthReady: true });
+                set({ user, isAuthenticated: true, isAuthReady: true, backendError: null });
             },
             logout: () => {
                 set({ user: null, isAuthenticated: false, isAuthReady: true });

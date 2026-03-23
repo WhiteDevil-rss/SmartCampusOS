@@ -1,15 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { LuCheck, LuArrowRight, LuArrowLeft, LuUpload, LuBuilding, LuGraduationCap, LuInfo, LuHouse, LuSettings, LuShieldCheck, LuBookOpen, LuUserCheck } from 'react-icons/lu';
+import { LuCheck, LuArrowRight, LuArrowLeft, LuUpload, LuBuilding, LuGraduationCap, LuInfo, LuHouse, LuSettings, LuShieldCheck, LuBookOpen, LuUserCheck, LuUser } from 'react-icons/lu';
 import { Toast, useToast } from '@/components/ui/toast-alert';
 import Link from 'next/link';
 import { LandingNav } from '@/components/landing-nav';
 import { LandingFooter } from '@/components/landing-footer';
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 export default function AdmissionPortal() {
     const [isApplying, setIsApplying] = useState(false);
@@ -105,194 +107,251 @@ export default function AdmissionPortal() {
         return (
             <div className="min-h-screen bg-background text-text-primary flex flex-col items-center justify-center p-6 relative overflow-hidden">
                 <LandingNav />
-                <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
-                    <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-neon-cyan to-blue-500 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
+                {/* Background effects */}
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] opacity-50 animate-pulse" />
                 </div>
 
-                <Card className="relative z-10 max-w-md w-full text-center p-8 space-y-6 bg-slate-900/40 border border-slate-700/50 backdrop-blur-xl shadow-2xl rounded-2xl glow-sm mt-20">
-                    <div className="mx-auto w-16 h-16 bg-neon-cyan/20 border border-neon-cyan/50 text-neon-cyan rounded-full flex items-center justify-center glow-cyan mt-6">
-                        <LuCheck className="w-10 h-10" />
+                <motion.div 
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    className="relative z-10 max-w-md w-full text-center p-12 space-y-8 glass-morphism border border-primary/20 shadow-2xl rounded-[2.5rem]"
+                >
+                    <div className="mx-auto w-24 h-24 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-3xl flex items-center justify-center shadow-[0_0_50px_rgba(16,185,129,0.2)]">
+                        <LuCheck className="w-12 h-12" />
                     </div>
-                    <div className="space-y-2">
-                        <h2 className="text-2xl font-bold text-white">Application Received!</h2>
-                        <p className="text-slate-400">Your admission request has been securely submitted. We'll contact you via email ({formData.email}).</p>
+                    <div className="space-y-4">
+                        <h2 className="text-4xl font-black font-space-grotesk tracking-tighter text-text-primary">Transmission Successful</h2>
+                        <p className="text-text-secondary font-medium leading-relaxed">Your admission packet for <span className="text-text-primary font-bold">{formData.applicantName}</span> has been securely hashed and broadcasted to the institutional node.</p>
                     </div>
-                    <Button onClick={() => window.location.href = '/'} className="w-full bg-neon-cyan/10 text-neon-cyan border border-neon-cyan/30 hover:bg-neon-cyan hover:text-slate-900 transition-all">
-                        Back to Origin
-                    </Button>
-                </Card>
+                    <div className="pt-4">
+                        <Button 
+                            onClick={() => window.location.href = '/'} 
+                            className="w-full h-14 rounded-2xl bg-primary text-text-primary font-black text-lg shadow-glow hover:scale-105 active:scale-95 transition-all"
+                        >
+                            Return to Command Center
+                        </Button>
+                    </div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Secure Protocol v2.4.1</p>
+                </motion.div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-background text-text-primary selection:bg-neon-cyan/30 flex flex-col relative overflow-x-hidden pt-20">
+        <div className="min-h-screen bg-background text-text-primary selection:bg-primary/30 flex flex-col relative overflow-x-hidden pt-20">
             <LandingNav />
-            <div className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[150px] mix-blend-screen pointer-events-none z-0" />
+            
+            {/* Ambient Background */}
+            <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-[100px]" />
+            </div>
             
             <Toast toast={toast} onClose={hideToast} />
 
             <main className="flex-1 flex flex-col items-center relative z-10">
                 {!isApplying ? (
-                    // Admissions Guide Section
-                    <section className="w-full max-w-5xl mx-auto px-6 py-20 text-center">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full mb-6">
-                            <LuBookOpen className="w-4 h-4 text-primary" />
-                            <span className="text-xs font-bold text-primary tracking-widest uppercase">Admissions Guide</span>
-                        </div>
-                        <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-6">
-                            Start Your Journey
-                        </h1>
-                        <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-12">
-                            A seamless, multi-step application workflow engineered for speed. Zero friction, no login required. Track your progress with cryptographic hashes.
-                        </p>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16 text-left">
-                            <div className="glass-morphism p-6 rounded-2xl border border-slate-700/50 bg-slate-900/40">
-                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mb-4"><LuSettings className="text-primary w-5 h-5"/></div>
-                                <h3 className="text-lg font-bold text-white mb-2">1. Select Pipeline</h3>
-                                <p className="text-slate-400 text-sm">Choose your preferred organization, department, and program hierarchy seamlessly.</p>
-                            </div>
-                            <div className="glass-morphism p-6 rounded-2xl border border-slate-700/50 bg-slate-900/40">
-                                <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center mb-4"><LuUserCheck className="text-blue-400 w-5 h-5"/></div>
-                                <h3 className="text-lg font-bold text-white mb-2">2. Provide Details</h3>
-                                <p className="text-slate-400 text-sm">Submit your core personal and contact details. No complex onboarding, just efficient data mapping.</p>
-                            </div>
-                            <div className="glass-morphism p-6 rounded-2xl border border-slate-700/50 bg-slate-900/40">
-                                <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4"><LuShieldCheck className="text-emerald-400 w-5 h-5"/></div>
-                                <h3 className="text-lg font-bold text-white mb-2">3. Immutable Review</h3>
-                                <p className="text-slate-400 text-sm">Verify your submission. All records map perfectly to the Verify Engine for future status checks.</p>
-                            </div>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <Button onClick={() => setIsApplying(true)} className="px-8 py-5 rounded-2xl bg-primary text-white font-black text-base shadow-lg hover:scale-105 active:scale-95 transition-all w-full sm:w-auto">
-                                Apply Now <LuArrowRight className="ml-2 w-5 h-5" />
-                            </Button>
-                            <Link 
-                                href="/#inquiry" 
-                                className="px-8 py-5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white/70 dark:bg-slate-900/50 backdrop-blur-sm text-slate-700 dark:text-slate-300 font-bold text-base hover:bg-slate-100 dark:hover:bg-slate-800 hover:scale-105 active:scale-95 transition-all w-full sm:w-auto flex items-center justify-center gap-2"
+                    <div className="w-full max-w-7xl mx-auto px-6 py-24">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                            {/* Copy Side */}
+                            <motion.div 
+                                initial={{ opacity: 0, x: -30 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                className="space-y-10"
                             >
-                                <span className="material-symbols-outlined text-[20px]">contact_support</span>
-                                General Inquiry
-                            </Link>
-                        </div>
-                    </section>
-                ) : (
-                    // Application Form Section
-                    <div className="w-full max-w-3xl px-6 py-12">
-                        <div className="flex items-center gap-4 mb-8">
-                            <Button variant="ghost" onClick={() => setIsApplying(false)} className="text-slate-400 hover:text-white">
-                                <LuArrowLeft className="w-4 h-4 mr-2" /> Back to Guide
-                            </Button>
-                        </div>
-                        
-                        <div className="flex justify-between items-center mb-8 relative px-4 text-xs font-bold uppercase tracking-wider text-slate-500">
-                            <div className={step >= 1 ? 'text-primary transition-colors' : ''}>1. Section</div>
-                            <div className={step >= 2 ? 'text-primary transition-colors' : ''}>2. Details</div>
-                            <div className={step >= 3 ? 'text-primary transition-colors' : ''}>3. Review</div>
-                        </div>
+                                <div className="inline-flex items-center gap-3 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full">
+                                    <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
+                                    <span className="text-[10px] font-black text-primary tracking-[0.3em] uppercase">Admission Pipeline Active</span>
+                                </div>
+                                
+                                <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] text-text-primary">
+                                    Initialize Your <span className="text-primary italic">Future</span>
+                                </h1>
+                                
+                                <p className="text-xl text-text-secondary font-medium leading-relaxed max-w-lg">
+                                    SmartOS provides a frictionless, zero-trust admission workflow. Your credentials are cryptographically secured and instantly verifiable.
+                                </p>
 
-                        <Card className="bg-slate-900/60 border border-slate-700/50 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden hover:border-slate-600/50 transition-colors duration-300">
-                            <CardHeader className="border-b border-slate-800 bg-slate-900/40">
-                                <CardTitle className="text-xl font-semibold text-white">
-                                    {step === 1 && "Choose Your Path"}
-                                    {step === 2 && "Personal Information"}
-                                    {step === 3 && "Finalize Submission"}
-                                </CardTitle>
-                                <CardDescription className="text-slate-400">
-                                    {step === 1 && "Select the university and program you wish to apply for."}
-                                    {step === 2 && "Enter your contact details accurately."}
-                                    {step === 3 && "Review your information before sending."}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-6 pt-6 p-6 sm:p-8">
-                                {step === 1 && (
-                                    <div className="space-y-5">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
-                                                <span>Organization <span className="text-rose-500">*</span></span>
-                                            </label>
-                                            <select className={`w-full h-12 px-4 bg-slate-950/50 border ${!formData.universityId ? 'border-amber-500/30 ring-1 ring-amber-500/10' : 'border-slate-700'} rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all`} onChange={(e) => setFormData({ ...formData, universityId: e.target.value })} value={formData.universityId}>
-                                                <option value="" className="text-slate-500">Select Organization</option>
-                                                {universities.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
-                                            </select>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
-                                                <span>Department <span className="text-rose-500">*</span></span>
-                                            </label>
-                                            <select disabled={!formData.universityId} className={`w-full h-12 px-4 bg-slate-950/50 border ${formData.universityId && !formData.departmentId ? 'border-amber-500/30 ring-1 ring-amber-500/10' : 'border-slate-700'} rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:opacity-40 disabled:cursor-not-allowed`} onChange={(e) => setFormData({ ...formData, departmentId: e.target.value })} value={formData.departmentId}>
-                                                <option value="" className="text-slate-500">Select Department</option>
-                                                {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
-                                            </select>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center justify-between">
-                                                <span>Academic Program <span className="text-rose-500">*</span></span>
-                                            </label>
-                                            <select disabled={!formData.departmentId} className={`w-full h-12 px-4 bg-slate-950/50 border ${formData.departmentId && !formData.programId ? 'border-amber-500/30 ring-1 ring-amber-500/10' : 'border-slate-700'} rounded-xl text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:opacity-40 disabled:cursor-not-allowed`} onChange={(e) => setFormData({ ...formData, programId: e.target.value })} value={formData.programId}>
-                                                <option value="" className="text-slate-500">Select Program</option>
-                                                {programs.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                                            </select>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {step === 2 && (
-                                    <div className="space-y-5">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Full Name <span className="text-rose-500">*</span></label>
-                                            <Input className={`h-12 bg-slate-950/50 text-white rounded-xl ${touched.applicantName && !isNameValid ? 'border-rose-500/50 focus:ring-rose-500/50' : 'border-slate-700 focus:ring-primary'}`} placeholder="John Doe" value={formData.applicantName} onBlur={() => setTouched(t => ({ ...t, applicantName: true }))} onChange={(e) => { setFormData({ ...formData, applicantName: e.target.value }); setTouched(t => ({ ...t, applicantName: true })); }} />
-                                            {touched.applicantName && !isNameValid && <p className="text-[11px] text-rose-400 flex items-center mt-1"><LuInfo className="w-3 h-3 mr-1"/> Required</p>}
-                                        </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Email <span className="text-rose-500">*</span></label>
-                                                <Input type="email" className={`h-12 bg-slate-950/50 text-white rounded-xl ${touched.email && !isEmailValid ? 'border-rose-500/50 focus:ring-rose-500/50' : 'border-slate-700 focus:ring-primary'}`} placeholder="john@example.com" value={formData.email} onBlur={() => setTouched(t => ({ ...t, email: true }))} onChange={(e) => { setFormData({ ...formData, email: e.target.value }); setTouched(t => ({ ...t, email: true })); }} />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Phone <span className="text-rose-500">*</span></label>
-                                                <Input className={`h-12 bg-slate-950/50 text-white rounded-xl ${touched.phone && !isPhoneValid ? 'border-rose-500/50 focus:ring-rose-500/50' : 'border-slate-700 focus:ring-primary'}`} placeholder="+1 5550199" value={formData.phone} onBlur={() => setTouched(t => ({ ...t, phone: true }))} onChange={(e) => { setFormData({ ...formData, phone: e.target.value }); setTouched(t => ({ ...t, phone: true })); }} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {step === 3 && (
-                                    <div className="space-y-4 bg-slate-950/50 p-6 rounded-xl border border-slate-700/50">
-                                        <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-                                            <span className="text-slate-400 text-sm font-medium">Applicant</span>
-                                            <span className="font-bold text-sm text-white">{formData.applicantName}</span>
-                                        </div>
-                                        <div className="flex justify-between items-center border-b border-slate-800 py-4">
-                                            <span className="text-slate-400 text-sm font-medium">Program Target</span>
-                                            <span className="font-bold text-sm text-primary">{programs.find(p => p.id === formData.programId)?.name || 'N/A'}</span>
-                                        </div>
-                                        <div className="flex justify-between items-center pt-4">
-                                            <span className="text-slate-400 text-sm font-medium">Contact Comm</span>
-                                            <span className="font-bold text-sm text-white">{formData.email}</span>
-                                        </div>
-                                    </div>
-                                )}
-
-                                <div className="flex justify-between pt-8 mt-4 border-t border-slate-800">
-                                    <Button variant="ghost" disabled={step === 1} onClick={() => setStep(s => s - 1)} className="text-slate-400 hover:text-white hover:bg-slate-800">
-                                        <LuArrowLeft className="mr-2 h-4 w-4" /> Go Back
+                                <div className="flex flex-col sm:flex-row items-center gap-6 pt-4">
+                                    <Button 
+                                        onClick={() => setIsApplying(true)} 
+                                        className="h-16 px-10 rounded-2xl bg-primary text-text-primary font-black text-lg shadow-glow hover:scale-105 active:scale-95 transition-all w-full sm:w-auto"
+                                    >
+                                        Start Application <LuArrowRight className="ml-3 w-6 h-6" />
                                     </Button>
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] font-black text-text-muted uppercase tracking-widest leading-none mb-1">Process Time</span>
+                                        <span className="text-lg font-bold text-text-primary tracking-tight">~ 2.4 Minutes</span>
+                                    </div>
+                                </div>
+                            </motion.div>
 
-                                    {step < 3 ? (
-                                        <Button onClick={handleNextStep} disabled={!canProceed} className={`transition-all ${!canProceed ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-primary text-white hover:bg-primary/90'}`}>
-                                            Next Step <LuArrowRight className="ml-2 h-4 w-4" />
-                                        </Button>
-                                    ) : (
-                                        <Button onClick={handleSubmit} disabled={loading || !isStep1Valid || !isStep2Valid} className={`transition-all px-8 ${loading || !isStep1Valid || !isStep2Valid ? 'bg-slate-800 text-slate-500' : 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.4)]'}`}>
-                                            {loading ? 'Submitting...' : 'Confirm Transmission'}
-                                        </Button>
+                            {/* Features Side */}
+                            <motion.div 
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                className="grid grid-cols-1 sm:grid-cols-2 gap-6"
+                            >
+                                {[
+                                    { icon: <LuSettings />, title: "Secure Routing", desc: "Select your institutional hierarchy with 100% data integrity.", color: "primary" },
+                                    { icon: <LuUserCheck />, title: "Instant Mapping", desc: "Personal data is mapped to secure institutional nodes immediately.", color: "blue" },
+                                    { icon: <LuShieldCheck />, title: "Hash Anchoring", desc: "Every submission generates a verifiable SHA-256 protocol hash.", color: "emerald" },
+                                    { icon: <LuBookOpen />, title: "Program Sync", desc: "Live curriculum and seat availability synchronization.", color: "purple" }
+                                ].map((feature, i) => (
+                                    <div key={i} className="p-8 rounded-[2rem] glass-morphism border border-white/5 hover:border-primary/20 transition-all group">
+                                        <div className={`w-12 h-12 rounded-2xl bg-${feature.color}-500/10 flex items-center justify-center text-${feature.color}-400 mb-6 group-hover:scale-110 transition-transform`}>
+                                            {React.cloneElement(feature.icon as React.ReactElement, { className: "w-6 h-6" })}
+                                        </div>
+                                        <h3 className="text-xl font-bold text-text-primary mb-2">{feature.title}</h3>
+                                        <p className="text-sm text-text-secondary font-medium leading-relaxed">{feature.desc}</p>
+                                    </div>
+                                ))}
+                            </motion.div>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="w-full max-w-4xl px-6 py-20 pb-40">
+                        {/* Header Controls */}
+                        <div className="flex items-center justify-between mb-16 px-4">
+                            <Button variant="ghost" onClick={() => setIsApplying(false)} className="h-12 rounded-xl text-text-muted hover:text-text-primary hover:bg-surface font-bold">
+                                <LuArrowLeft className="w-5 h-5 mr-3" /> Abort Mission
+                            </Button>
+                            
+                            <div className="flex items-center gap-6">
+                                {[1, 2, 3].map((s) => (
+                                    <div key={s} className="flex items-center gap-3">
+                                        <div className={cn(
+                                            "w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm border transition-all duration-500",
+                                            step >= s ? "bg-primary border-primary text-text-primary shadow-glow" : "bg-surface border-border text-text-muted"
+                                        )}>
+                                            {step > s ? <LuCheck className="w-5 h-5" /> : s}
+                                        </div>
+                                        {s < 3 && <div className={cn("w-8 h-0.5 rounded-full transition-colors duration-500", step > s ? "bg-primary" : "bg-border")} />}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Form Card */}
+                        <motion.div 
+                            key={step}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="glass-morphism border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl"
+                        >
+                            <div className="p-10 md:p-14 space-y-12">
+                                <div className="space-y-4">
+                                    <h2 className="text-4xl font-black font-space-grotesk tracking-tighter text-text-primary">
+                                        {step === 1 && "Targeting Hierarchy"}
+                                        {step === 2 && "Personal Credentials"}
+                                        {step === 3 && "Final Audit"}
+                                    </h2>
+                                    <p className="text-lg text-text-secondary font-medium">
+                                        {step === 1 && "Identify your destination university and program stream."}
+                                        {step === 2 && "Input your identifying details for institutional record creation."}
+                                        {step === 3 && "Perform a final verification of your admission packet."}
+                                    </p>
+                                </div>
+
+                                <div className="space-y-8">
+                                    {step === 1 && (
+                                        <div className="grid grid-cols-1 gap-8">
+                                            {[
+                                                { label: "University Node", value: formData.universityId, options: universities, setter: (val: string) => setFormData({ ...formData, universityId: val }), icon: <LuBuilding /> },
+                                                { label: "Department Cluster", value: formData.departmentId, options: departments, setter: (val: string) => setFormData({ ...formData, departmentId: val }), icon: <LuSettings />, disabled: !formData.universityId },
+                                                { label: "Academic Stream", value: formData.programId, options: programs, setter: (val: string) => setFormData({ ...formData, programId: val }), icon: <LuGraduationCap />, disabled: !formData.departmentId }
+                                            ].map((field, i) => (
+                                                <div key={i} className="space-y-3">
+                                                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 pl-4">{field.label}</label>
+                                                    <div className="relative group">
+                                                        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none group-focus-within:text-primary transition-colors">
+                                                            {React.cloneElement(field.icon as React.ReactElement, { className: "w-5 h-5" })}
+                                                        </div>
+                                                        <select 
+                                                            disabled={field.disabled}
+                                                            className="w-full h-16 pl-14 pr-10 bg-surface border border-border rounded-2xl text-text-primary font-bold appearance-none focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all disabled:opacity-30"
+                                                            onChange={(e) => field.setter(e.target.value)} 
+                                                            value={field.value}
+                                                        >
+                                                            <option value="">Select Path...</option>
+                                                            {field.options.map((opt: any) => <option key={opt.id} value={opt.id} className="bg-[#0a0a0c]">{opt.name}</option>)}
+                                                        </select>
+                                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none">
+                                                            <LuArrowRight className="w-5 h-5 text-slate-700 rotate-90" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {step === 2 && (
+                                        <div className="space-y-8">
+                                            <div className="space-y-3">
+                                                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 pl-4">Full Identity Name</label>
+                                                <div className="relative">
+                                                    <LuUser className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted" />
+                                                    <Input className="h-16 pl-14 bg-surface border-border rounded-2xl text-text-primary font-bold focus:ring-primary/50" placeholder="e.g. Satoshi Nakamoto" value={formData.applicantName} onBlur={() => setTouched(t => ({ ...t, applicantName: true }))} onChange={(e) => setFormData({ ...formData, applicantName: e.target.value })} />
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                                <div className="space-y-3">
+                                                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted pl-4">Email Address</label>
+                                                    <Input type="email" className="h-16 px-6 bg-surface border-border rounded-2xl text-text-primary font-bold" placeholder="satosh@p2p.foundation" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+                                                </div>
+                                                <div className="space-y-3">
+                                                    <label className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted pl-4">Contact Protocol</label>
+                                                    <Input className="h-16 px-6 bg-surface border-border rounded-2xl text-text-primary font-bold" placeholder="+44 20 7946 0958" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {step === 3 && (
+                                        <div className="space-y-4">
+                                            {[
+                                                { label: "Identity", value: formData.applicantName },
+                                                { label: "Program", value: programs.find(p => p.id === formData.programId)?.name },
+                                                { label: "Contact", value: formData.email }
+                                            ].map((attr, i) => (
+                                                <div key={i} className="p-6 rounded-2xl bg-surface border border-border flex justify-between items-center group hover:bg-surface-hover transition-colors">
+                                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted">{attr.label}</span>
+                                                    <span className="font-bold text-text-primary tracking-tight">{attr.value}</span>
+                                                </div>
+                                            ))}
+                                            <div className="p-8 rounded-[2rem] bg-amber-500/5 border border-amber-500/20 text-center space-y-2">
+                                                <p className="text-amber-400 font-bold text-sm">System Ready for Transmission</p>
+                                                <p className="text-[10px] text-amber-500/60 uppercase font-black tracking-widest">A secure SHA-256 hash will be generated upon confirmation.</p>
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
-                            </CardContent>
-                        </Card>
+
+                                <div className="flex items-center justify-between pt-12 border-t border-white/10">
+                                    <Button 
+                                        variant="ghost" 
+                                        disabled={step === 1} 
+                                        onClick={() => setStep(s => s - 1)} 
+                                        className="h-14 px-8 rounded-2xl text-slate-500 hover:text-white font-bold"
+                                    >
+                                        <LuArrowLeft className="mr-3 h-5 w-5" /> Previous Phase
+                                    </Button>
+
+                                    <Button 
+                                        onClick={step < 3 ? handleNextStep : handleSubmit} 
+                                        disabled={!canProceed || loading}
+                                        className={cn(
+                                            "h-16 px-12 rounded-2x rounded-[1.5rem] font-black text-lg transition-all shadow-glow",
+                                            step < 3 ? "bg-primary text-text-primary" : "bg-emerald-500 text-white hover:bg-emerald-400"
+                                        )}
+                                    >
+                                        {loading ? "Transmitting..." : step < 3 ? "Next Configuration" : "Initialize Submission"}
+                                        <LuArrowRight className="ml-3 h-6 w-6" />
+                                    </Button>
+                                </div>
+                            </div>
+                        </motion.div>
                     </div>
                 )}
             </main>
@@ -300,3 +359,4 @@ export default function AdmissionPortal() {
         </div>
     );
 }
+

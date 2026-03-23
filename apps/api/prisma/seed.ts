@@ -429,7 +429,17 @@ async function main() {
     console.log(`Seeding Results & Verification Hashes...`);
     const demoStudents = data.students ? data.students.slice(0, 5) : [];
     
-    for (const student of demoStudents) {
+    // Fixed SGPA/CGPA for the first 5 students to ensure deterministic hashes for README
+    const deterministicResults = [
+        { sgpa: 8.50, cgpa: 8.25 },
+        { sgpa: 9.20, cgpa: 9.10 },
+        { sgpa: 7.80, cgpa: 7.95 },
+        { sgpa: 8.85, cgpa: 8.70 },
+        { sgpa: 9.50, cgpa: 9.45 }
+    ];
+
+    for (let i = 0; i < demoStudents.length; i++) {
+        const student = demoStudents[i];
         // --- 1. Mock Admission Application ---
         const applicationHashString = `${student.enrollmentNo}:${student.email}:${student.id}:ADMIT_SECURE`;
         const admitHash = crypto.createHash('sha256').update(applicationHashString).digest('hex');
@@ -465,11 +475,11 @@ async function main() {
 
         // --- 2. Mock Semester Result ---
         const semester = 2; // Fixed to semester 2 for demo
-        const sgpa = parseFloat((Math.random() * (10 - 6) + 6).toFixed(2));
-        const cgpa = parseFloat((Math.random() * (10 - 6) + 6).toFixed(2));
+        const sgpa = deterministicResults[i].sgpa;
+        const cgpa = deterministicResults[i].cgpa;
         const resultString = `${student.enrollmentNo}:${sgpa}:${cgpa}`;
         const resultHash = crypto.createHash('sha256').update(resultString).digest('hex');
-        const txHash = `0x${crypto.randomBytes(32).toString('hex')}`; // Mock blockchain TX
+        const txHash = `0x${crypto.createHash('sha256').update(student.enrollmentNo + '_TX_SECURE').digest('hex')}`; // Deterministic TX hash
 
         const resultRecord = await prisma.result.upsert({
             where: { id: student.id + '-res' },

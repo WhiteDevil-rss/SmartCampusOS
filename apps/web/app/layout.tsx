@@ -25,13 +25,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="h-full">
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
       </head>
       <body
         suppressHydrationWarning
-        className={`${spaceGrotesk.variable} ${inter.variable} font-sans bg-background text-text-primary antialiased overflow-x-hidden max-w-[100vw] min-h-screen`}
+        className={`${spaceGrotesk.variable} ${inter.variable} font-sans bg-background text-text-primary antialiased w-full h-full`}
       >
         <AuthProvider>
           <ThemeProvider

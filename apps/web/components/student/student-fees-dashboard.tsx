@@ -36,7 +36,7 @@ export function StudentFeesDashboard() {
     useEffect(() => {
         const fetchFees = async () => {
             try {
-                const res = await api.get('/student/fees');
+                const res = await api.get('/v2/student/fees');
                 setStructures(res.data.feeStructures || []);
                 setPayments(res.data.feePayments || []);
             } catch (error) {
@@ -81,7 +81,7 @@ export function StudentFeesDashboard() {
 
             showToast('success', 'Payment successful! Your balance has been updated.');
             // Refresh counts
-            const res = await api.get('/student/fees');
+            const res = await api.get('/v2/student/fees');
             setStructures(res.data.feeStructures || []);
             setPayments(res.data.feePayments || []);
         } catch (error) {

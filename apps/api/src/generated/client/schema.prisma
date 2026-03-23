@@ -524,6 +524,8 @@ model Student {
   results          Result[]
   serviceRequests  ServiceRequest[]
   electiveMappings StudentElectiveMapping[]
+  marksComplaints  MarksComplaint[]
+  reassessments    ReassessmentRequest[]
   batch            Batch                    @relation(fields: [batchId], references: [id])
   department       Department               @relation(fields: [departmentId], references: [id])
   program          Program                  @relation(fields: [programId], references: [id])
@@ -598,20 +600,56 @@ model Result {
 }
 
 model SubjectResult {
-  id            String @id @default(uuid())
+  id            String                @id @default(uuid())
   resultId      String
   courseId      String
   internalMarks Float?
   midTermMarks  Float?
   externalMarks Float?
   totalMarks    Float
+  status        String                @default("DRAFT")
   grade         String
   creditsEarned Float
-  course        Course @relation(fields: [courseId], references: [id])
-  result        Result @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  course        Course                @relation(fields: [courseId], references: [id])
+  result        Result                @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  complaints    MarksComplaint[]
+  reassessments ReassessmentRequest[]
 
   @@unique([resultId, courseId])
   @@map("subject_results")
+}
+
+model MarksComplaint {
+  id              String        @id @default(uuid())
+  studentId       String
+  subjectResultId String
+  description     String
+  status          String        @default("PENDING")
+  resolution      String?
+  logs            Json?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  student         Student       @relation(fields: [studentId], references: [id])
+  subjectResult   SubjectResult @relation(fields: [subjectResultId], references: [id])
+
+  @@map("marks_complaints")
+}
+
+model ReassessmentRequest {
+  id              String        @id @default(uuid())
+  studentId       String
+  subjectResultId String
+  reason          String?
+  status          String        @default("PENDING")
+  oldMarks        Float?
+  newMarks        Float?
+  paymentStatus   String        @default("PENDING")
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  student         Student       @relation(fields: [studentId], references: [id])
+  subjectResult   SubjectResult @relation(fields: [subjectResultId], references: [id])
+
+  @@map("reassessment_requests")
 }
 
 model VerificationRequest {
@@ -847,6 +885,7 @@ model Complaint {
   category     String
   subject      String
   description  String
+  recipient    String?
   status       String     @default("OPEN")
   isAnonymous  Boolean    @default(false)
   resolution   String?

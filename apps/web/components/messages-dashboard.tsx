@@ -79,7 +79,7 @@ export function MessagesDashboard({ role = 'STUDENT' }: { role?: string }) {
 
     const fetchThreads = async () => {
         try {
-            const apiPath = role === 'FACULTY' ? '/faculty/messages/threads' : '/student/messages/threads';
+            const apiPath = role === 'FACULTY' ? '/faculty/messages/threads' : '/v2/student/messages/threads';
             const res = await api.get(apiPath);
             setThreads(res.data);
             if (res.data.length > 0 && !activeThread) {
@@ -96,7 +96,7 @@ export function MessagesDashboard({ role = 'STUDENT' }: { role?: string }) {
         try {
             const apiPath = role === 'FACULTY'
                 ? `/faculty/messages/threads/${threadId}/messages`
-                : `/student/messages/threads/${threadId}/messages`;
+                : `/v2/student/messages/threads/${threadId}/messages`;
             const res = await api.get(apiPath);
             setMessages(res.data);
         } catch (error) {
@@ -110,7 +110,7 @@ export function MessagesDashboard({ role = 'STUDENT' }: { role?: string }) {
 
         setSending(true);
         try {
-            const apiPath = role === 'FACULTY' ? '/faculty/messages/send' : '/student/messages/send';
+            const apiPath = role === 'FACULTY' ? '/faculty/messages/send' : '/v2/student/messages/send';
             const res = await api.post(apiPath, {
                 threadId: activeThread.id,
                 content: inputMessage,

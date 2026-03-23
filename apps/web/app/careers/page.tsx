@@ -92,24 +92,24 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    className="bg-slate-950 border border-slate-800 rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto"
+                    className="bg-card backdrop-blur-3xl border border-border rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto"
                     onClick={(e) => e.stopPropagation()}
                 >
                     {/* Header */}
-                    <div className="p-6 border-b border-slate-800 flex items-start justify-between gap-4 sticky top-0 bg-slate-950 z-10">
+                    <div className="p-6 border-b border-border flex items-start justify-between gap-4 sticky top-0 bg-card/80 backdrop-blur-md z-10">
                         <div>
-                            <p className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-1">Apply For</p>
-                            <h2 className="text-xl font-black text-white leading-tight">{job.title}</h2>
+                            <p className="text-xs font-bold uppercase tracking-widest text-text-muted mb-1">Apply For</p>
+                            <h2 className="text-xl font-black text-text-primary leading-tight">{job.title}</h2>
                             <div className="flex flex-wrap items-center gap-2 mt-2">
                                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${panel?.bg} ${panel?.color} ${panel?.border}`}>
                                     {panel?.label ?? job.panelType}
                                 </span>
-                                {job.universityName && <span className="text-xs text-slate-500">{job.universityName}</span>}
-                                {job.departmentName && <span className="text-xs text-slate-500">• {job.departmentName}</span>}
-                                {job.location && <span className="text-xs text-slate-500">• {job.location}</span>}
+                                {job.universityName && <span className="text-xs text-text-muted">{job.universityName}</span>}
+                                {job.departmentName && <span className="text-xs text-text-muted">• {job.departmentName}</span>}
+                                {job.location && <span className="text-xs text-text-muted">• {job.location}</span>}
                             </div>
                         </div>
-                        <button onClick={onClose} className="w-9 h-9 shrink-0 flex items-center justify-center rounded-xl text-slate-500 hover:text-white hover:bg-slate-800 transition-colors">
+                        <button onClick={onClose} className="w-9 h-9 shrink-0 flex items-center justify-center rounded-xl text-text-muted hover:text-text-primary hover:bg-surface transition-colors">
                             <LuX className="w-5 h-5" />
                         </button>
                     </div>
@@ -121,9 +121,9 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
                                 <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
                                     <LuCircleCheck className="w-8 h-8 text-emerald-400" />
                                 </div>
-                                <h3 className="text-xl font-black text-white">Application Submitted!</h3>
-                                <p className="text-slate-400 text-sm max-w-xs">Your application has been received and routed to the hiring panel.</p>
-                                <button onClick={onClose} className="mt-2 px-6 py-2.5 rounded-xl border border-slate-700 text-white hover:bg-slate-800 transition-colors text-sm font-bold">Close</button>
+                                <h3 className="text-xl font-black text-text-primary">Application Submitted!</h3>
+                                <p className="text-text-secondary text-sm max-w-xs">Your application has been received and routed to the hiring panel.</p>
+                                <button onClick={onClose} className="mt-2 px-6 py-2.5 rounded-xl border border-border text-text-primary hover:bg-surface transition-colors text-sm font-bold">Close</button>
                             </div>
                         ) : (
                             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -136,15 +136,15 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
 
                                 {/* Full Name */}
                                 <div className="space-y-1.5">
-                                    <label className="text-xs uppercase font-bold text-slate-400 tracking-widest">Full Name <span className="text-rose-500">*</span></label>
+                                    <label className="text-xs uppercase font-bold text-text-muted tracking-widest">Full Name <span className="text-rose-500">*</span></label>
                                     <div className="relative">
-                                        <LuUser className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                        <LuUser className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                                         <input
                                             type="text" required
                                             placeholder="Ravi Shankar"
                                             value={form.applicantName}
                                             onChange={e => setForm(f => ({ ...f, applicantName: e.target.value }))}
-                                            className="w-full h-11 bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 text-white text-sm focus:border-primary focus:outline-none transition-colors"
+                                            className="w-full h-11 bg-surface border border-border rounded-xl pl-10 pr-4 text-text-primary text-sm focus:border-primary focus:outline-none transition-colors"
                                         />
                                     </div>
                                 </div>
@@ -152,28 +152,28 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
                                 {/* Email + Mobile */}
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="space-y-1.5">
-                                        <label className="text-xs uppercase font-bold text-slate-400 tracking-widest">Email <span className="text-rose-500">*</span></label>
+                                        <label className="text-xs uppercase font-bold text-text-muted tracking-widest">Email <span className="text-rose-500">*</span></label>
                                         <div className="relative">
-                                            <LuMail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                            <LuMail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                                             <input
                                                 type="email" required
                                                 placeholder="you@example.com"
                                                 value={form.email}
                                                 onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                                                className="w-full h-11 bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 text-white text-sm focus:border-primary focus:outline-none transition-colors"
+                                                className="w-full h-11 bg-surface border border-border rounded-xl pl-10 pr-4 text-text-primary text-sm focus:border-primary focus:outline-none transition-colors"
                                             />
                                         </div>
                                     </div>
                                     <div className="space-y-1.5">
-                                        <label className="text-xs uppercase font-bold text-slate-400 tracking-widest">Mobile <span className="text-rose-500">*</span></label>
+                                        <label className="text-xs uppercase font-bold text-text-muted tracking-widest">Mobile <span className="text-rose-500">*</span></label>
                                         <div className="relative">
-                                            <LuPhone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                                            <LuPhone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                                             <input
                                                 type="tel" required
                                                 placeholder="+91 98765 43210"
                                                 value={form.mobile}
                                                 onChange={e => setForm(f => ({ ...f, mobile: e.target.value }))}
-                                                className="w-full h-11 bg-slate-900 border border-slate-700 rounded-xl pl-10 pr-4 text-white text-sm focus:border-primary focus:outline-none transition-colors"
+                                                className="w-full h-11 bg-surface border border-border rounded-xl pl-10 pr-4 text-text-primary text-sm focus:border-primary focus:outline-none transition-colors"
                                             />
                                         </div>
                                     </div>
@@ -181,7 +181,7 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
 
                                 {/* Resume Upload — MANDATORY */}
                                 <div className="space-y-1.5">
-                                    <label className="text-xs uppercase font-bold text-slate-400 tracking-widest">Resume <span className="text-rose-500">*</span></label>
+                                    <label className="text-xs uppercase font-bold text-text-muted tracking-widest">Resume <span className="text-rose-500">*</span></label>
                                     <input
                                         ref={fileInputRef}
                                         type="file"
@@ -195,7 +195,7 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
                                         className={`w-full h-24 rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center gap-2 ${
                                             resumeFile
                                                 ? 'border-emerald-500/50 bg-emerald-500/5 text-emerald-400'
-                                                : 'border-slate-700 text-slate-500 hover:border-primary/50 hover:text-primary hover:bg-primary/5'
+                                                : 'border-border text-text-muted hover:border-primary/50 hover:text-primary hover:bg-primary/5'
                                         }`}
                                     >
                                         {resumeFile ? (
@@ -216,13 +216,13 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
 
                                 {/* Cover Letter */}
                                 <div className="space-y-1.5">
-                                    <label className="text-xs uppercase font-bold text-slate-400 tracking-widest">Cover Letter <span className="text-slate-600">(Optional)</span></label>
+                                    <label className="text-xs uppercase font-bold text-text-muted tracking-widest">Cover Letter <span className="text-text-muted/60">(Optional)</span></label>
                                     <textarea
                                         rows={3}
                                         placeholder="Tell us why you're a great fit..."
                                         value={form.coverLetter}
                                         onChange={e => setForm(f => ({ ...f, coverLetter: e.target.value }))}
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3.5 text-white text-sm focus:border-primary focus:outline-none transition-colors resize-none"
+                                        className="w-full bg-surface border border-border rounded-xl p-3.5 text-text-primary text-sm focus:border-primary focus:outline-none transition-colors resize-none"
                                     />
                                 </div>
 
@@ -237,7 +237,7 @@ function ApplyModal({ job, onClose }: { job: Job; onClose: () => void }) {
                                     }
                                 </button>
 
-                                <p className="text-center text-xs text-slate-600">
+                                <p className="text-center text-[10px] text-text-muted font-black uppercase tracking-widest">
                                     No login required · Application routed to hiring panel securely
                                 </p>
                             </form>
@@ -258,7 +258,7 @@ function JobCard({ job, onApply }: { job: Job; onApply: (j: Job) => void }) {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             layout
-            className="group bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-2xl p-6 flex flex-col gap-4 transition-all duration-200 hover:shadow-[0_0_30px_rgba(99,102,241,0.06)]"
+            className="group bg-card backdrop-blur-xl border border-border hover:border-primary/50 rounded-2xl p-6 flex flex-col gap-4 transition-all duration-200 hover:shadow-[0_0_30px_var(--primary-glow)]"
         >
             <div className="flex items-start justify-between gap-3">
                 <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:shadow-lg transition-all">
@@ -270,8 +270,8 @@ function JobCard({ job, onApply }: { job: Job; onApply: (j: Job) => void }) {
             </div>
 
             <div>
-                <h3 className="text-lg font-black text-white leading-tight mb-1 group-hover:text-primary transition-colors">{job.title}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed line-clamp-2">{job.description}</p>
+                <h3 className="text-lg font-black text-text-primary leading-tight mb-1 group-hover:text-primary transition-colors">{job.title}</h3>
+                <p className="text-text-secondary text-sm leading-relaxed line-clamp-2">{job.description}</p>
             </div>
 
             {/* Tags */}
@@ -281,21 +281,21 @@ function JobCard({ job, onApply }: { job: Job; onApply: (j: Job) => void }) {
                     {panel.label}
                 </span>
                 {job.universityName && (
-                    <span className="text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">{job.universityName}</span>
+                    <span className="text-text-muted bg-surface/50 border border-border px-2 py-0.5 rounded-full">{job.universityName}</span>
                 )}
                 {job.departmentName && (
-                    <span className="text-slate-500 bg-slate-800 px-2 py-0.5 rounded-full">{job.departmentName}</span>
+                    <span className="text-text-muted bg-surface/50 border border-border px-2 py-0.5 rounded-full">{job.departmentName}</span>
                 )}
             </div>
 
             {/* Footer */}
-            <div className="flex items-center gap-3 mt-auto pt-2 border-t border-slate-800/60">
+            <div className="flex items-center gap-3 mt-auto pt-2 border-t border-border/60">
                 {job.location && (
-                    <span className="flex items-center gap-1 text-xs text-slate-500">
+                    <span className="flex items-center gap-1 text-xs text-text-muted">
                         <LuMapPin className="w-3.5 h-3.5" /> {job.location}
                     </span>
                 )}
-                <span className="flex items-center gap-1 text-xs text-slate-500 ml-auto">
+                <span className="flex items-center gap-1 text-xs text-text-muted ml-auto">
                     <LuClock className="w-3.5 h-3.5" />
                     {new Date(job.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                 </span>
@@ -324,7 +324,7 @@ function FilterSelect({
             <select
                 value={value}
                 onChange={e => onChange(e.target.value)}
-                className="h-11 bg-slate-900/80 border border-slate-800 hover:border-slate-700 focus:border-primary rounded-xl pl-4 pr-10 text-sm text-white outline-none transition-colors appearance-none cursor-pointer min-w-[160px]"
+                className="h-11 bg-surface border border-border hover:border-primary/50 focus:border-primary rounded-xl pl-4 pr-10 text-sm text-text-primary outline-none transition-colors appearance-none cursor-pointer min-w-[160px]"
             >
                 <option value="">{label}</option>
                 {options.map(o => (
@@ -383,8 +383,8 @@ export default function CareersPage() {
 
     return (
         <div className="min-h-screen bg-background text-text-primary flex flex-col relative overflow-x-hidden">
-            <div className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] bg-purple-500/10 rounded-full blur-[150px] mix-blend-screen pointer-events-none z-0" />
-            <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[150px] mix-blend-screen pointer-events-none z-0" />
+            <div className="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] bg-purple-500/10 rounded-full blur-[150px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0" />
+            <div className="fixed bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[150px] mix-blend-multiply dark:mix-blend-screen pointer-events-none z-0" />
 
             <LandingNav />
 
@@ -414,7 +414,7 @@ export default function CareersPage() {
                             </span>
                         </h1>
 
-                        <p className="text-slate-400 text-lg md:text-xl leading-relaxed max-w-2xl">
+                        <p className="text-text-secondary text-lg md:text-xl leading-relaxed max-w-2xl">
                             Join the team building next-generation academic management tools for universities, departments, and students across India.
                         </p>
 
@@ -425,8 +425,8 @@ export default function CareersPage() {
                                 { value: '100%', label: 'Remote Friendly' },
                             ].map(s => (
                                 <div key={s.label} className="text-center">
-                                    <p className="text-3xl font-black text-white">{s.value}</p>
-                                    <p className="text-xs text-slate-500 mt-1">{s.label}</p>
+                                    <p className="text-3xl font-black text-text-primary">{s.value}</p>
+                                    <p className="text-xs text-text-muted mt-1">{s.label}</p>
                                 </div>
                             ))}
                         </div>
@@ -435,21 +435,21 @@ export default function CareersPage() {
 
                 {/* Search + Filter Bar */}
                 <section className="px-6 md:px-12 max-w-7xl mx-auto pb-8">
-                    <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 flex flex-col lg:flex-row gap-3 items-stretch lg:items-center">
+                    <div className="bg-surface/60 backdrop-blur-xl border border-border rounded-2xl p-4 flex flex-col lg:flex-row gap-3 items-stretch lg:items-center shadow-sm">
                         {/* Search */}
                         <div className="relative flex-1">
-                            <LuSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                            <LuSearch className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                             <input
                                 type="text"
                                 placeholder="Search by job title or keywords..."
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
-                                className="w-full h-11 bg-slate-950/80 border border-slate-700 hover:border-slate-600 focus:border-primary rounded-xl pl-10 pr-4 text-white text-sm outline-none transition-colors"
+                                className="w-full h-11 bg-surface border border-border hover:border-primary focus:border-primary rounded-xl pl-10 pr-4 text-text-primary text-sm outline-none transition-colors"
                             />
                         </div>
 
                         <div className="flex items-center gap-2 flex-wrap">
-                            <LuFilter className="w-4 h-4 text-slate-500 shrink-0" />
+                            <LuFilter className="w-4 h-4 text-text-muted shrink-0" />
 
                             {universities.length > 0 && (
                                 <FilterSelect
@@ -494,7 +494,7 @@ export default function CareersPage() {
 
                     {/* Results count */}
                     {!loading && (
-                        <p className="text-slate-500 text-sm mt-3 px-1">
+                        <p className="text-text-muted text-sm mt-3 px-1 font-medium">
                             {hasFilters
                                 ? `${filtered.length} of ${jobs.length} positions match your filters`
                                 : `${jobs.length} open positions`
@@ -508,17 +508,17 @@ export default function CareersPage() {
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-24 gap-4">
                             <LuLoader className="w-8 h-8 text-primary animate-spin" />
-                            <p className="text-slate-400 text-sm">Loading positions...</p>
+                            <p className="text-text-muted text-sm font-medium">Loading institutional positions...</p>
                         </div>
                     ) : filtered.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
-                            <div className="w-16 h-16 rounded-2xl bg-slate-800 flex items-center justify-center">
-                                <LuBriefcase className="w-8 h-8 text-slate-600" />
+                            <div className="w-16 h-16 rounded-2xl bg-surface border border-border flex items-center justify-center">
+                                <LuBriefcase className="w-8 h-8 text-text-disabled" />
                             </div>
-                            <p className="text-white font-bold text-lg">No positions match</p>
-                            <p className="text-slate-500 text-sm max-w-xs">Try adjusting your search or filters to find open roles.</p>
+                            <p className="text-text-primary font-bold text-lg">No positions match</p>
+                            <p className="text-text-muted text-sm max-w-xs">Try adjusting your search or filters to find open roles.</p>
                             {hasFilters && (
-                                <button onClick={clearFilters} className="px-5 py-2 rounded-xl border border-slate-700 text-white hover:bg-slate-800 text-sm font-bold transition-colors">
+                                <button onClick={clearFilters} className="px-5 py-2 rounded-xl border border-border bg-surface text-text-primary hover:bg-surface-hover text-sm font-bold transition-colors">
                                     Clear Filters
                                 </button>
                             )}
@@ -531,9 +531,9 @@ export default function CareersPage() {
                         </motion.div>
                     )}
 
-                    <div className="mt-16 flex items-center justify-center gap-2 text-slate-500 text-xs">
-                        <LuShieldCheck className="w-4 h-4 text-emerald-500" />
-                        No login required. All applications are securely routed to the respective hiring panel.
+                    <div className="mt-16 flex items-center justify-center gap-2 text-text-muted text-xs font-mono">
+                        <LuShieldCheck className="w-4 h-4 text-accent-green" />
+                        No login required. All applications are securely routed to the respective institutional nodes.
                     </div>
                 </section>
             </main>

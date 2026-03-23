@@ -125,15 +125,16 @@ export const getComplaints = async (req: AuthRequest, res: Response) => {
 
 export const createComplaint = async (req: AuthRequest, res: Response) => {
     try {
-        const { universityId, studentId, category, subject, description, isAnonymous } = req.body;
+        const { universityId, studentId, category, subject, description, isAnonymous, recipient } = req.body;
 
         const complaint = await prisma.complaint.create({
             data: {
                 universityId,
-                studentId: isAnonymous ? null : studentId,
+                studentId, // Store always for internal tracking/student view
                 category,
                 subject,
                 description,
+                recipient,
                 isAnonymous: !!isAnonymous,
                 status: 'OPEN'
             }
@@ -164,5 +165,19 @@ export const resolveComplaint = async (req: AuthRequest, res: Response) => {
     } catch (error: any) {
         console.error('Resolve Complaint Error:', error);
         res.status(500).json({ error: 'Failed to resolve complaint' });
+    }
+};
+
+export const getStudentComplaints = async (req: AuthRequest, res: Response) => {
+    try {
+        const studentId = req.params.studentId as string;
+        const complaints = await prisma.complaint.findMany({
+            where: { studentId },
+            orderBy: { createdAt: 'desc' }
+        });
+        res.json(complaints);
+    } catch (error: any) {
+        console.error('Get Student Complaints Error:', error);
+        res.status(500).json({ error: 'Failed to fetch student complaints' });
     }
 };

@@ -9,9 +9,12 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
+import Link from 'next/link';
+
+import { useStudentData } from '@/lib/hooks/use-student-data';
 
 export function StudentProfile() {
-    const { user } = useAuthStore();
+    const { profile, stats, loading: profileLoading } = useStudentData();
     const [docs, setDocs] = useState<any>(null);
     const [loadingDocs, setLoadingDocs] = useState(true);
 
@@ -21,7 +24,7 @@ export function StudentProfile() {
 
     const fetchVerifiedDocs = async () => {
         try {
-            const res = await api.get('/student/docs/vault');
+            const res = await api.get('/v2/student/docs/vault');
             setDocs(res.data);
         } catch (error) {
             console.error('Failed to fetch docs', error);
@@ -30,33 +33,25 @@ export function StudentProfile() {
         }
     };
 
-    // Mock student data for demonstration
-    const studentInfo = {
-        fullName: user?.username || 'John Doe',
-        email: user?.email || 'john.doe@university.edu',
-        enrollmentNo: 'EN-2023-00124',
-        phone: '+91 98765 43210',
-        program: 'B.Tech Computer Science & Engineering',
-        batch: '2023-2027',
-        semester: 4,
-        address: '123 University Campus, Academic Block, City, State - 400001',
-        photoUrl: null,
-        academicStats: {
-            cgpa: 8.75,
-            backlogs: 0,
-            creditsEarned: 72,
-            totalCredits: 160
-        }
-    };
+    if (profileLoading) {
+        return (
+            <div className="space-y-12">
+                <Skeleton className="h-64 bg-surface rounded-[40px]" />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <Skeleton className="lg:col-span-2 h-96 bg-surface rounded-[32px]" />
+                    <Skeleton className="h-96 bg-surface rounded-[32px]" />
+                </div>
+            </div>
+        );
+    }
 
     const details = [
-        { label: 'Enrollment No', value: studentInfo.enrollmentNo, icon: <LuHash /> },
-        { label: 'Program', value: studentInfo.program, icon: <LuGraduationCap /> },
-        { label: 'Batch', value: studentInfo.batch, icon: <LuCalendar /> },
-        { label: 'Academic Standing', value: `CGPA ${studentInfo.academicStats.cgpa}`, icon: <LuAward /> },
-        { label: 'Email', value: studentInfo.email, icon: <LuMail /> },
-        { label: 'Phone', value: studentInfo.phone, icon: <LuPhone /> },
-        { label: 'Address', value: studentInfo.address, icon: <LuMapPin /> },
+        { label: 'Enrollment No', value: profile?.enrollmentNo, icon: <LuHash /> },
+        { label: 'Program', value: profile?.program?.name, icon: <LuGraduationCap /> },
+        { label: 'Batch', value: profile?.batch?.name, icon: <LuCalendar /> },
+        { label: 'Academic Standing', value: `CGPA ${stats?.overallCGPA?.toFixed(2) || '0.00'}`, icon: <LuAward /> },
+        { label: 'Email', value: profile?.email, icon: <LuMail /> },
+        { label: 'Department', value: profile?.department?.name, icon: <LuMapPin /> },
     ];
 
     return (
@@ -67,9 +62,7 @@ export function StudentProfile() {
 
                 <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
                     <div className="relative group/avatar">
-                        <div className="w-40 h-40 rounded-[32px] bg-black/40 border border-primary/20 flex items-center justify-center text-5xl font-bold font-space-grotesk text-primary shadow-glow overflow-hidden transition-transform group-hover/avatar:scale-105 duration-500">
-                            {studentInfo.fullName.charAt(0).toUpperCase()}
-                        </div>
+                            {profile?.name?.charAt(0).toUpperCase() || 'S'}
                         <Button size="icon" variant="outline" className="absolute -bottom-2 -right-2 rounded-xl shadow-lg bg-[#020617] border border-border-hover hover:bg-surface-hover hover:border-border-hover transition-all text-slate-300">
                             <LuPencil className="w-4 h-4" />
                         </Button>
@@ -77,13 +70,13 @@ export function StudentProfile() {
 
                     <div className="flex-1 text-center md:text-left">
                         <div className="flex flex-col md:flex-row md:items-center gap-4 mb-3">
-                            <h2 className="text-4xl md:text-5xl font-bold font-space-grotesk text-text-primary tracking-tight">{studentInfo.fullName}</h2>
+                            <h2 className="text-4xl md:text-5xl font-bold font-space-grotesk text-text-primary tracking-tight">{profile?.name}</h2>
                             <span className="px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest self-center md:self-auto">
                                 Active Node
                             </span>
                         </div>
                         <p className="text-lg text-text-muted max-w-2xl">
-                            {studentInfo.program} <span className="mx-2 text-slate-600">•</span> Semester {studentInfo.semester}
+                            {profile?.program?.name} <span className="mx-2 text-slate-600">•</span> {profile?.batch?.name}
                         </p>
                         <div className="flex flex-wrap justify-center md:justify-start gap-4 mt-8">
                             <Button className="glow-button bg-primary text-text-primary rounded-[16px] px-8 font-bold h-12">
@@ -147,7 +140,7 @@ export function StudentProfile() {
                                 <div className="space-y-10 relative z-10">
                                     <div className="text-center">
                                         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-500 mb-3">Protocol Standing</p>
-                                        <p className="text-7xl font-bold font-space-grotesk text-text-primary tracking-tighter tabular-nums drop-shadow-lg">{studentInfo.academicStats.cgpa}</p>
+                                        <p className="text-7xl font-bold font-space-grotesk text-text-primary tracking-tighter tabular-nums drop-shadow-lg">{stats?.overallCGPA?.toFixed(2)}</p>
                                         <div className="mt-4 inline-flex items-center px-4 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold tracking-widest uppercase">
                                             Top 5% of Cluster
                                         </div>
@@ -157,12 +150,12 @@ export function StudentProfile() {
                                         <div>
                                             <div className="flex justify-between text-[11px] uppercase tracking-widest font-bold mb-3">
                                                 <span className="text-text-muted">Credits</span>
-                                                <span className="text-text-primary">{studentInfo.academicStats.creditsEarned} <span className="text-slate-600">/ {studentInfo.academicStats.totalCredits}</span></span>
+                                                <span className="text-text-primary">{stats?.creditsEarned} <span className="text-slate-600">/ 160</span></span>
                                             </div>
                                             <div className="h-2 w-full bg-surface rounded-full overflow-hidden border border-border">
                                                 <div
                                                     className="h-full bg-gradient-to-r from-emerald-500 to-primary shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all duration-1000"
-                                                    style={{ width: `${(studentInfo.academicStats.creditsEarned / studentInfo.academicStats.totalCredits) * 100}%` }}
+                                                    style={{ width: `${((stats?.creditsEarned || 0) / 160) * 100}%` }}
                                                 />
                                             </div>
                                         </div>
@@ -171,7 +164,7 @@ export function StudentProfile() {
                                             <div className="text-center p-4 rounded-[20px] bg-black/40 border border-border relative overflow-hidden">
                                                 <div className="absolute inset-x-0 top-0 h-0.5 bg-rose-500/50" />
                                                 <p className="text-[9px] font-bold text-text-secondary uppercase tracking-widest mb-1.5">Anomalies</p>
-                                                <p className="text-2xl font-bold font-space-grotesk text-text-primary">{studentInfo.academicStats.backlogs}</p>
+                                                <p className="text-2xl font-bold font-space-grotesk text-text-primary">0</p>
                                             </div>
                                             <div className="text-center p-4 rounded-[20px] bg-black/40 border border-border relative overflow-hidden">
                                                 <div className="absolute inset-x-0 top-0 h-0.5 bg-primary/50" />
@@ -253,6 +246,47 @@ export function StudentProfile() {
                                     </div>
                                     <h3 className="text-xl font-bold font-space-grotesk text-text-primary mb-2">Vault Empty</h3>
                                     <p className="text-text-secondary font-medium">No trustless documents instantiated for this node.</p>
+                                </div>
+                            )}
+
+                            {docs?.admission && (
+                                <div className="p-8 glass-morphism rounded-[32px] border border-primary/20 hover:border-primary/40 transition-all duration-500 relative overflow-hidden group md:col-span-2">
+                                    <div className="absolute top-0 right-0 p-6 pointer-events-none">
+                                        <LuFileCheck className="w-12 h-12 text-primary/10 group-hover:text-primary/30 transition-colors duration-500 transform group-hover:scale-110" />
+                                    </div>
+                                    <div className="mb-8 relative z-10">
+                                        <h4 className="text-2xl font-bold font-space-grotesk text-text-primary mb-2">Admission Protocol Hash</h4>
+                                        <p className="text-[10px] text-text-secondary font-bold uppercase tracking-[0.2em]">Application Status: {docs.admission.status}</p>
+                                    </div>
+                                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-[9px] font-bold text-text-secondary uppercase tracking-widest mb-2 font-mono">Institutional Secure Hash (SHA-256)</p>
+                                            <code className="text-[11px] text-primary font-bold block bg-primary/10 px-4 py-2.5 rounded-xl border border-primary/20 break-all font-mono">
+                                                {docs.admission.id}
+                                            </code>
+                                        </div>
+                                        <div className="flex gap-3 shrink-0">
+                                            <Button
+                                                size="icon"
+                                                variant="ghost"
+                                                className="h-12 w-12 rounded-2xl bg-surface hover:bg-surface-hover text-slate-300 transition-colors"
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(docs.admission.id);
+                                                }}
+                                            >
+                                                <LuCopy className="w-5 h-5" />
+                                            </Button>
+                                            <Link href={`/verify`} target="_blank">
+                                                <Button className="h-12 px-8 gap-2 rounded-2xl bg-primary text-text-primary font-bold shadow-glow hover:scale-105 active:scale-95 transition-all">
+                                                    <LuExternalLink className="w-5 h-5" /> Verify Status
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                    <div className="mt-8 pt-6 border-t border-border flex items-center gap-3">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Anchored on Mainnet • {new Date(docs.admission.appliedAt).toLocaleDateString()}</span>
+                                    </div>
                                 </div>
                             )}
                         </div>

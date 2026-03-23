@@ -108,7 +108,7 @@ export function DashboardLayout({ children, navItems, title }: DashboardLayoutPr
     }, [logout, router, forceReset]);
 
     return (
-        <div className="h-screen flex overflow-hidden w-full overflow-x-hidden bg-background text-text-primary font-sans antialiased mesh-gradient max-w-[100vw] selection:bg-primary/30">
+        <div className="fixed inset-0 flex overflow-hidden w-full bg-background text-text-primary font-sans antialiased mesh-gradient selection:bg-primary/30">
             <Toast toast={toast} onClose={hideToast} />
             {/* Sidebar */}
             <aside className="w-[280px] bg-surface border-r border-border hidden md:flex flex-col flex-shrink-0 z-20">
@@ -168,10 +168,10 @@ export function DashboardLayout({ children, navItems, title }: DashboardLayoutPr
                 </div>
             </aside>
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col overflow-x-hidden relative">
+            {/* Main Content Area */}
+            <div className="flex-1 flex flex-col min-w-0 relative">
                 {/* Top Navbar for Mobile */}
-                <header className="h-20 bg-background/80 backdrop-blur-xl border-b border-border flex items-center justify-between px-6 md:hidden flex-shrink-0 z-[var(--z-sticky)] sticky top-0 transition-all duration-500">
+                <header className="h-20 bg-background/80 backdrop-blur-xl border-b border-border flex items-center justify-between px-6 md:hidden flex-shrink-0 z-[100] sticky top-0 transition-all duration-500">
                     <span className="font-bold font-space-grotesk text-text-primary text-xl tracking-tight">Smart<span className="text-primary italic">OS</span></span>
                     <div className="flex items-center gap-3">
                         <ThemeToggle />
@@ -184,7 +184,7 @@ export function DashboardLayout({ children, navItems, title }: DashboardLayoutPr
                 </header>
 
                 {/* Top Header */}
-                <header className="h-24 bg-background/60 backdrop-blur-2xl border-b border-border hidden md:flex items-center justify-between px-10 z-[var(--z-sticky)] sticky top-0 flex-shrink-0 transition-all duration-500">
+                <header className="h-24 bg-background/60 backdrop-blur-2xl border-b border-border hidden md:flex items-center justify-between px-10 z-[90] sticky top-0 flex-shrink-0 transition-all duration-500">
                     <h1 className="text-3xl font-bold font-space-grotesk text-text-primary tracking-tight">{title}</h1>
                     <div className="flex items-center gap-6">
                         <ThemeToggle />

@@ -37,118 +37,143 @@ export function LandingNav() {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-[100] flex items-center justify-between transition-all duration-500 px-6 lg:px-12 ${
+            className={`fixed top-0 left-0 right-0 z-[100] flex items-center justify-between transition-all duration-700 px-6 lg:px-12 ${
                 scrolled 
-                ? "bg-background/70 backdrop-blur-2xl border-b border-border/50 shadow-[0_8px_32px_rgba(31,38,135,0.07)] py-3" 
-                : "bg-background/20 backdrop-blur-[6px] border-b border-transparent py-5"
+                ? "bg-background/40 backdrop-blur-2xl border-b border-border shadow-sm py-3" 
+                : "bg-transparent py-6"
             }`}
         >
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 group">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:border-primary/40 transition-all duration-300 shadow-[0_0_20px_rgba(99,102,241,0.1)]">
-                    <span className="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform tracking-tight">domain</span>
+            <Link href="/" className="flex items-center gap-3 group relative">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border border-primary/20 group-hover:border-primary/50 transition-all duration-500 shadow-inner overflow-hidden">
+                    <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
+                    <span className="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform relative z-10">hub</span>
                 </div>
-            <div className="flex flex-col">
-                    <span className="text-xl font-black tracking-tight leading-none text-indigo-600 dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-primary dark:to-neon-cyan">SmartCampus</span>
-                    <span className="text-secondary text-[10px] font-bold tracking-[0.2em] uppercase leading-none mt-1">Operating System</span>
+                <div className="flex flex-col">
+                    <span className="text-2xl font-black tracking-tighter leading-none font-space-grotesk text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                        Smart<span className="text-primary italic">OS</span>
+                    </span>
+                    <div className="flex items-center gap-1.5 mt-1">
+                        <span className="relative flex h-1.5 w-1.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                        </span>
+                        <span className="text-[9px] font-black text-slate-500 dark:text-text-muted tracking-[0.15em] uppercase">System Live</span>
+                    </div>
                 </div>
             </Link>
 
             {/* Center Nav */}
-            <nav className="hidden xl:flex items-center gap-8">
+            <nav className="hidden xl:flex items-center bg-surface/50 backdrop-blur-md rounded-full px-8 py-2.5 border border-border/50 shadow-sm">
                 {navLinks.map((link) => (
                     <Link
                         key={link.label}
                         href={link.href}
-                        className={`text-sm font-semibold transition-all hover:text-primary ${pathname === link.href ? "text-primary" : "text-text-secondary"
-                            }`}
+                        className={`text-sm font-bold transition-all px-4 py-1 rounded-full relative group ${
+                            pathname === link.href 
+                            ? "text-primary bg-primary/10" 
+                            : "text-slate-600 dark:text-text-secondary hover:text-primary"
+                        }`}
                     >
                         {link.label}
+                        {! (pathname === link.href) && (
+                            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary rounded-full transition-all group-hover:w-2/3" />
+                        )}
                     </Link>
                 ))}
             </nav>
 
             {/* Right Actions */}
-            <div className="flex items-center gap-4">
-                <Link
-                    href="/admissions"
-                    className="hidden lg:flex items-center justify-center rounded-full bg-transparent border border-primary/50 text-text-primary hover:bg-primary/10 px-5 py-2 text-sm font-bold transition-all"
-                >
-                    Apply Now
-                </Link>
-                
-                <Link
-                    href="/verify"
-                    className="hidden lg:flex items-center justify-center rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 px-5 py-2 text-sm font-bold transition-all glow-sm"
-                >
-                    Verify
-                    <span className="material-symbols-outlined ml-1.5 text-[18px]">verified</span>
-                </Link>
-
-                <div className="w-px h-6 bg-border mx-2 hidden sm:block" />
-
-                {isAuthenticated ? (
+            <div className="flex items-center gap-5">
+                <div className="hidden lg:flex items-center gap-3">
                     <Link
-                        href={getDashboardPath()}
-                        className="glow-button hidden sm:flex items-center justify-center rounded-full bg-primary text-white px-6 py-2.5 text-sm font-black transition-all hover:scale-105 active:scale-95"
+                        href="/admissions"
+                        className="text-sm font-bold text-slate-700 dark:text-slate-300 hover:text-primary transition-colors px-2"
                     >
-                        Admin Portal
+                        Admissions
                     </Link>
-                ) : (
-                    <>
-                        <Link
-                            href="/login"
-                            className="hidden sm:inline-flex text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors focus:outline-none"
-                        >
-                            Sign In
-                        </Link>
-                        <Link
-                            href="/login?tab=register"
-                            className="glow-button hidden sm:flex items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/30"
-                        >
-                            Get Started
-                        </Link>
-                    </>
-                )}
+                    <Link
+                        href="/verify"
+                        className="flex items-center gap-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 px-4 py-2 text-sm font-black transition-all hover:bg-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                    >
+                        Verify <span className="material-symbols-outlined text-[18px]">verified_user</span>
+                    </Link>
+                </div>
 
-                <ThemeToggle />
+                <div className="w-px h-8 bg-slate-200 dark:bg-white/10 hidden sm:block" />
 
-                {/* Mobile Menu Button */}
-                <button
-                    className="xl:hidden w-10 h-10 flex items-center justify-center rounded-xl border border-border text-text-muted hover:text-text-primary transition-colors"
-                    onClick={() => setMobileOpen(!mobileOpen)}
-                    aria-label="Toggle menu"
-                >
-                    <span className="material-symbols-outlined">{mobileOpen ? 'close' : 'menu'}</span>
-                </button>
+                <div className="flex items-center gap-4">
+                    {isAuthenticated ? (
+                        <Link
+                            href={getDashboardPath()}
+                            className="bg-primary text-white px-6 py-2.5 rounded-2xl text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-[0_10px_20px_rgba(99,102,241,0.2)] hover:shadow-[0_15px_30px_rgba(99,102,241,0.3)]"
+                        >
+                            Portal Access
+                        </Link>
+                    ) : (
+                        <div className="flex items-center gap-3">
+                            <Link
+                                href="/login"
+                                className="hidden md:inline-flex text-sm font-black text-slate-500 dark:text-text-muted hover:text-primary transition-colors"
+                            >
+                                Login
+                            </Link>
+                            <Link
+                                href="/login?tab=register"
+                                className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-7 py-3 rounded-2xl text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-xl hover:shadow-2xl"
+                            >
+                                Get Started
+                            </Link>
+                        </div>
+                    )}
+                    
+                    <div className="hidden sm:block">
+                        <ThemeToggle />
+                    </div>
+
+                    {/* Mobile Menu Button */}
+                    <button
+                        className="xl:hidden w-12 h-12 flex items-center justify-center rounded-2xl bg-surface border border-border text-text-muted hover:text-primary transition-all active:scale-90"
+                        onClick={() => setMobileOpen(!mobileOpen)}
+                        aria-label="Toggle menu"
+                    >
+                        <span className="material-symbols-outlined text-2xl">{mobileOpen ? 'close' : 'menu'}</span>
+                    </button>
+                </div>
             </div>
 
             {/* Mobile Dropdown */}
             {mobileOpen && (
-           <div className="absolute top-full left-0 right-0 bg-background/80 backdrop-blur-2xl border-b border-border/50 p-6 flex flex-col gap-4 xl:hidden animate-in slide-in-from-top-4 duration-300">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.label}
-                            href={link.href}
-                            onClick={() => setMobileOpen(false)}
-                            className="text-lg font-medium text-text-muted hover:text-primary py-2"
-                        >
-                            {link.label}
-                        </Link>
-                    ))}
-
-                    <div className="grid grid-cols-2 gap-4 mt-4">
-                        <Link href="/admissions" onClick={() => setMobileOpen(false)} className="py-3 rounded-xl border border-primary/50 text-center text-primary font-bold">Apply Now</Link>
-                        <Link href="/verify" onClick={() => setMobileOpen(false)} className="py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center text-emerald-400 font-bold">Verify Data</Link>
+                <div className="fixed inset-0 top-[72px] bg-background/95 backdrop-blur-3xl z-[100] p-8 flex flex-col gap-6 xl:hidden animate-in fade-in slide-in-from-right-10 duration-500 border-t border-white/5">
+                    <div className="flex flex-col gap-4">
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.label}
+                                href={link.href}
+                                onClick={() => setMobileOpen(false)}
+                                className="text-3xl font-black text-slate-900 dark:text-white hover:text-primary transition-colors py-2 flex items-center justify-between group"
+                            >
+                                {link.label}
+                                <span className="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0">arrow_forward</span>
+                            </Link>
+                        ))}
                     </div>
-                    <div className="border-t border-border pt-6 mt-2 flex flex-col gap-4">
+
+                    <div className="mt-auto space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <Link href="/admissions" onClick={() => setMobileOpen(false)} className="h-14 flex items-center justify-center rounded-2xl border border-primary/30 text-primary font-black">Admissions</Link>
+                            <Link href="/verify" onClick={() => setMobileOpen(false)} className="h-14 flex items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-black">Verify</Link>
+                        </div>
                         <Link
                             href="/login"
                             onClick={() => setMobileOpen(false)}
-                            className="w-full text-center py-4 rounded-xl bg-foreground text-background font-black"
+                            className="w-full h-16 flex items-center justify-center rounded-3xl bg-primary text-white text-lg font-black shadow-lg shadow-primary/20"
                         >
-                            System Login
+                            Open SmartOS Portal
                         </Link>
+                        <div className="flex justify-center pt-4">
+                            <ThemeToggle />
+                        </div>
                     </div>
                 </div>
             )}

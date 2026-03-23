@@ -80,11 +80,11 @@ export default function DualVerificationPortal() {
             <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-32 relative z-10">
                 <div className="w-full max-w-3xl space-y-12">
                 <div className="text-center space-y-3">
-                    <div className="inline-flex items-center justify-center gap-2 mb-2 px-3 py-1 bg-neon-cyan/10 border border-neon-cyan/20 rounded-full">
-                        <LuShieldCheck className="w-4 h-4 text-neon-cyan" />
-                        <span className="text-xs font-bold text-neon-cyan tracking-widest uppercase">Immutable Ledger Access</span>
+                    <div className="inline-flex items-center justify-center gap-2 mb-2 px-3 py-1 bg-primary/10 border border-primary/20 rounded-full">
+                        <LuShieldCheck className="w-4 h-4 text-primary" />
+                        <span className="text-xs font-bold text-primary tracking-widest uppercase">Immutable Ledger Access</span>
                     </div>
-                    <h1 className="text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-primary dark:from-white dark:via-slate-200 dark:to-neon-cyan tracking-tight drop-shadow-sm glow-sm">
+                    <h1 className="text-4xl md:text-5xl font-black bg-clip-text text-transparent bg-gradient-to-r from-text-primary via-primary to-secondary tracking-tight drop-shadow-sm transition-all duration-700">
                         Dual Verification Engine
                     </h1>
                     <p className="text-text-secondary text-lg max-w-xl mx-auto">
@@ -97,14 +97,14 @@ export default function DualVerificationPortal() {
                         <div className="flex w-full border-b border-border bg-background/40">
                             <button
                                 onClick={() => setActiveTab('student')}
-                                className={`flex-1 flex items-center justify-center gap-2 py-5 text-sm font-bold uppercase tracking-widest transition-all ${activeTab === 'student' ? 'text-primary dark:text-neon-cyan border-b-2 border-primary dark:border-neon-cyan bg-surface/50' : 'text-text-muted hover:text-text-primary'}`}
+                                className={`flex-1 flex items-center justify-center gap-2 py-5 text-sm font-bold uppercase tracking-widest transition-all ${activeTab === 'student' ? 'text-primary border-b-2 border-primary bg-surface/50' : 'text-text-muted hover:text-text-primary'}`}
                             >
                                 <LuUserCheck className="w-5 h-5" />
                                 Admission Status
                             </button>
                             <button
                                 onClick={() => setActiveTab('result')}
-                                className={`flex-1 flex items-center justify-center gap-2 py-5 text-sm font-bold uppercase tracking-widest transition-all ${activeTab === 'result' ? 'text-primary dark:text-neon-cyan border-b-2 border-primary dark:border-neon-cyan bg-surface/50' : 'text-text-muted hover:text-text-primary'}`}
+                                className={`flex-1 flex items-center justify-center gap-2 py-5 text-sm font-bold uppercase tracking-widest transition-all ${activeTab === 'result' ? 'text-primary border-b-2 border-primary bg-surface/50' : 'text-text-muted hover:text-text-primary'}`}
                             >
                                 <LuGraduationCap className="w-5 h-5" />
                                 Academic Results
@@ -130,13 +130,13 @@ export default function DualVerificationPortal() {
                                     </div>
                                 ) : (
                                     <div className="space-y-5 animate-in slide-in-from-right-4 fade-in duration-300">
-                                         <div className="space-y-2">
+                                        <div className="space-y-2">
                                             <label className="text-xs font-bold text-text-secondary uppercase tracking-widest">Seat / Enroll Number</label>
-                                            <Input placeholder="e.g. EN20251019" value={resultForm.enrollmentNo} onChange={e => setResultForm({...resultForm, enrollmentNo: e.target.value})} className="h-12 bg-surface/50 border-border text-text-primary focus:border-primary dark:focus:border-neon-cyan" />
+                                            <Input placeholder="e.g. EN20251019" value={resultForm.enrollmentNo} onChange={e => setResultForm({...resultForm, enrollmentNo: e.target.value})} className="h-12 bg-surface/50 border-border text-text-primary focus:border-primary" />
                                         </div>
                                         <div className="space-y-2">
                                             <label className="text-xs font-bold text-text-secondary uppercase tracking-widest">Result Verification Hash</label>
-                                            <Input placeholder="0x..." value={resultForm.secureHash} onChange={e => setResultForm({...resultForm, secureHash: e.target.value})} className="h-12 bg-surface/50 border-border text-primary dark:text-neon-cyan font-mono focus:border-primary dark:focus:border-neon-cyan" />
+                                            <Input placeholder="0x..." value={resultForm.secureHash} onChange={e => setResultForm({...resultForm, secureHash: e.target.value})} className="h-12 bg-surface/50 border-border text-primary font-mono focus:border-primary" />
                                         </div>
                                     </div>
                                 )}
@@ -211,7 +211,7 @@ export default function DualVerificationPortal() {
                                      </div>
                                      <div>
                                         <p className="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">Status</p>
-                                        <span className={`inline-block px-3 py-1 rounded text-sm font-bold ${verifiedData.payload.status === 'APPROVED' ? 'bg-accent-green/20 text-accent-green dark:text-emerald-400' : verifiedData.payload.status === 'REJECTED' ? 'bg-accent-red/20 text-accent-red dark:text-rose-400' : 'bg-accent-yellow/20 text-accent-yellow dark:text-amber-400'}`}>
+                                        <span className={`inline-block px-3 py-1 rounded text-sm font-bold ${verifiedData.payload.status === 'APPROVED' ? 'bg-accent-green/20 text-accent-green dark:text-emerald-400' : verifiedData.payload.status === 'REJECTED' ? 'bg-accent-red/20 text-accent-red dark:text-rose-400' : 'bg-accent-yellow/20 text-accent-yellow'}`}>
                                             {verifiedData.payload.status}
                                         </span>
                                      </div>
@@ -223,7 +223,7 @@ export default function DualVerificationPortal() {
                                     </div>
                                     <div>
                                         <p className="text-xs font-bold text-text-muted uppercase tracking-widest mb-1">Application ID</p>
-                                        <p className="text-primary dark:text-neon-cyan font-mono font-bold">{verifiedData.payload.applicationId}</p>
+                                        <p className="text-primary font-mono font-bold">{verifiedData.payload.applicationId}</p>
                                     </div>
                                 </div>
                             </div>
@@ -243,7 +243,7 @@ export default function DualVerificationPortal() {
                                     <LuCheck className="w-3 h-3" /> VERIFIED ON CHAIN
                                 </div>
                                 <h2 className="text-3xl font-black text-text-primary tracking-tight">{verifiedData.payload.student.name}</h2>
-                                <p className="text-primary dark:text-neon-cyan font-mono text-sm tracking-wider font-bold">{verifiedData.payload.student.enrollmentNo}</p>
+                                <p className="text-primary font-mono text-sm tracking-wider font-bold">{verifiedData.payload.student.enrollmentNo}</p>
                             </div>
                             <div className="flex gap-2">
                                 <Button className="bg-primary hover:bg-primary-dark text-white"><LuDownload className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Download PDF</span></Button>
@@ -264,7 +264,7 @@ export default function DualVerificationPortal() {
                                 </div>
                                 <div className="space-y-1">
                                     <span className="text-[10px] text-text-muted uppercase font-black tracking-widest">Percentage</span>
-                                    <p className="text-2xl font-black text-primary dark:text-neon-cyan">{verifiedData.payload.result.percentage}%</p>
+                                    <p className="text-2xl font-black text-primary">{verifiedData.payload.result.percentage}%</p>
                                 </div>
                                 <div className="space-y-1">
                                     <span className="text-[10px] text-text-muted uppercase font-black tracking-widest">Status / CGPA</span>

@@ -9,7 +9,11 @@ const hashPassword = async (password: string) => bcrypt.hash(password, 12);
 
 export const getDepartments = async (req: AuthRequest, res: Response) => {
     try {
-        const { universityId } = req.params as { universityId: string };
+        let { universityId } = req.params as { universityId: string };
+        if (!universityId && req.user?.universityId) {
+            universityId = req.user.universityId;
+        }
+
         console.log('[DEBUG] GET /departments -> universityId param:', universityId, 'User:', req.user?.universityId);
 
         // Authorization Check: SUPERADMIN can see all, others can see own university

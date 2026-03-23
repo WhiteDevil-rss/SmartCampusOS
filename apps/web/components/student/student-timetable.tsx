@@ -36,7 +36,7 @@ export function StudentTimetable() {
 
         const fetchTimetable = async () => {
             try {
-                const res = await api.get(`/student/timetable?view=week`);
+                const res = await api.get(`/v2/student/timetable?view=week`);
                 setTimetable(res.data);
             } catch (err) {
                 console.error('Failed to fetch timetable:', err);

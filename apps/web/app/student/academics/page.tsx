@@ -4,38 +4,14 @@ import { DashboardLayout } from '@/components/dashboard-layout';
 import { StudentMarksVisualizer } from '@/components/student/student-marks-visualizer';
 import { AcademicsContent } from '@/components/student/academics-content';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-    LuLayoutDashboard,
-    LuCalendar,
-    LuCheck,
-    LuBookOpen,
-    LuCreditCard,
-    LuLibrary,
-    LuBriefcase,
-    LuUser,
-    LuMessageSquare,
-    LuCircleHelp,
-    LuGraduationCap
-} from 'react-icons/lu';
-
-const studentNavItems = [
-    { title: 'Dashboard', href: '/student', icon: <LuLayoutDashboard className="w-5 h-5" /> },
-    { title: 'Timetable', href: '/student/timetable', icon: <LuCalendar className="w-5 h-5" /> },
-    { title: 'Attendance', href: '/student/attendance', icon: <LuCheck className="w-5 h-5" /> },
-    { title: 'Academics', href: '/student/academics', icon: <LuBookOpen className="w-5 h-5" /> },
-    { title: 'Fees & Finance', href: '/student/fees', icon: <LuCreditCard className="w-5 h-5" /> },
-    { title: 'Library', href: '/student/library', icon: <LuLibrary className="w-5 h-5" /> },
-    { title: 'Placement', href: '/student/placement', icon: <LuBriefcase className="w-5 h-5" /> },
-    { title: 'Service Requests', href: '/student/requests', icon: <LuCircleHelp className="w-5 h-5" /> },
-    { title: 'Messages', href: '/student/messages', icon: <LuMessageSquare className="w-5 h-5" /> },
-    { title: 'Profile', href: '/student/profile', icon: <LuUser className="w-5 h-5" /> },
-];
+import { STUDENT_NAV } from '@/lib/constants/nav-config';
+import { LuGraduationCap, LuBookOpen } from 'react-icons/lu';
 
 export default function AcademicsPage() {
     return (
         <DashboardLayout
             title="Academic Excellence"
-            navItems={studentNavItems}
+            navItems={STUDENT_NAV}
         >
             <div className="space-y-10 max-w-7xl mx-auto pb-12">
                 <Tabs defaultValue="performance" className="space-y-10">

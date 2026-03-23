@@ -45,9 +45,24 @@ export const getVerifiedDocs = async (req: AuthRequest, res: Response) => {
             orderBy: { appliedAt: 'desc' }
         });
 
+        // Fetch admission application (for status hash visibility)
+        const admission = await prisma.admissionApplication.findFirst({
+            where: {
+                OR: [
+                    { id: student.id },
+                    { email: student.email }
+                ]
+            }
+        });
+
         res.json({
             results,
             flags,
+            admission: admission ? {
+                id: admission.id,
+                status: admission.status,
+                appliedAt: admission.appliedAt
+            } : null,
             identity: {
                 enrollmentNo: student.enrollmentNo,
                 name: student.name,

@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { auth } from './firebase';
+import { useAuthStore } from './store/useAuthStore';
 
 export const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/v1',
+    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:5001/v1',
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-api.interceptors.request.use(async (config) => {
+api.interceptors.request.use(async (config: any) => {
     // Dynamically adjust baseURL if the route expects v2
     if (config.url && config.url.startsWith('/v2/')) {
         let base = config.baseURL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/v1');
@@ -35,9 +36,18 @@ api.interceptors.request.use(async (config) => {
 });
 
 api.interceptors.response.use(
-    (response) => response,
-    async (error) => {
+    (response: any) => response,
+    async (error: any) => {
         const originalRequest = error.config;
+
+        // Handle Network Errors (No response from server)
+        if (!error.response) {
+            console.warn('API: Network Error - Server might be offline');
+            if (typeof window !== 'undefined') {
+                useAuthStore.getState().setBackendError('NETWORK_ERROR');
+            }
+            return Promise.reject(error);
+        }
 
         // If 401 and it hasn't been retried yet
         if (error.response?.status === 401 && !originalRequest._retry) {

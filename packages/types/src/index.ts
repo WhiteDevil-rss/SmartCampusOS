@@ -71,6 +71,7 @@ export enum UserRole {
     PARENT = 'PARENT',
     LIBRARIAN = 'LIBRARIAN',
     PLACEMENT_OFFICER = 'PLACEMENT_OFFICER',
+    APPROVAL_ADMIN = 'APPROVAL_ADMIN',
     PUBLIC = 'PUBLIC'
 }
 
@@ -80,6 +81,7 @@ export const RoleHierarchy: Record<string, number> = {
     'COLLEGE_ADMIN': 80,
     'DEPT_ADMIN': 70,
     'FACULTY': 60,
+    'APPROVAL_ADMIN': 55,
     'LIBRARIAN': 50,
     'PLACEMENT_OFFICER': 50,
     'STUDENT': 40,

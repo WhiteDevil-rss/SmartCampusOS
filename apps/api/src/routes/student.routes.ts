@@ -21,6 +21,7 @@ router.put('/:id', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN']), updat
 router.delete('/:id', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN']), deleteStudent);
 
 // Student Profile / Stats
+router.get('/me', getStudentProfile);
 router.get('/stats', getStudentStats); // Get logged in student stats
 router.get('/performance/:studentId', getStudentPerformance);
 router.get('/:studentId', getStudentProfile);

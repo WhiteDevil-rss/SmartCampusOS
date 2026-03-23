@@ -7,7 +7,7 @@ import { LuLoader } from 'react-icons/lu';
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
-    allowedRoles: Array<'SUPERADMIN' | 'UNI_ADMIN' | 'DEPT_ADMIN' | 'FACULTY' | 'STUDENT'>;
+    allowedRoles: Array<'SUPERADMIN' | 'UNI_ADMIN' | 'DEPT_ADMIN' | 'FACULTY' | 'STUDENT' | 'APPROVAL_ADMIN'>;
 }
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
@@ -31,6 +31,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
                 case 'DEPT_ADMIN': router.push('/department'); break;
                 case 'FACULTY': router.push('/faculty-panel'); break;
                 case 'STUDENT': router.push('/student'); break;
+                case 'APPROVAL_ADMIN': router.push('/approval'); break;
                 default: router.push('/login');
             }
         }

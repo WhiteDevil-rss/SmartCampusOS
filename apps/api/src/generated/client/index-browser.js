@@ -506,8 +506,34 @@ exports.Prisma.SubjectResultScalarFieldEnum = {
   midTermMarks: 'midTermMarks',
   externalMarks: 'externalMarks',
   totalMarks: 'totalMarks',
+  status: 'status',
   grade: 'grade',
   creditsEarned: 'creditsEarned'
+};
+
+exports.Prisma.MarksComplaintScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  subjectResultId: 'subjectResultId',
+  description: 'description',
+  status: 'status',
+  resolution: 'resolution',
+  logs: 'logs',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ReassessmentRequestScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  subjectResultId: 'subjectResultId',
+  reason: 'reason',
+  status: 'status',
+  oldMarks: 'oldMarks',
+  newMarks: 'newMarks',
+  paymentStatus: 'paymentStatus',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.VerificationRequestScalarFieldEnum = {
@@ -693,6 +719,7 @@ exports.Prisma.ComplaintScalarFieldEnum = {
   category: 'category',
   subject: 'subject',
   description: 'description',
+  recipient: 'recipient',
   status: 'status',
   isAnonymous: 'isAnonymous',
   resolution: 'resolution',
@@ -907,6 +934,8 @@ exports.Prisma.ModelName = {
   AttendanceFlag: 'AttendanceFlag',
   Result: 'Result',
   SubjectResult: 'SubjectResult',
+  MarksComplaint: 'MarksComplaint',
+  ReassessmentRequest: 'ReassessmentRequest',
   VerificationRequest: 'VerificationRequest',
   FeeStructure: 'FeeStructure',
   FeePayment: 'FeePayment',

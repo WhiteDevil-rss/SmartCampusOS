@@ -8,7 +8,7 @@ const router = Router({ mergeParams: true });
 router.use(authenticate);
 
 // These routes assume they are mounted on /universities/:universityId/departments
-router.get('/', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN', 'FACULTY']), getDepartments);
+router.get('/', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN', 'FACULTY', 'STUDENT']), getDepartments);
 router.get('/:id', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN', 'FACULTY']), getDepartmentById);
 router.post('/', requireRole(['SUPERADMIN', 'UNI_ADMIN']), createDepartment);
 router.put('/:id', requireRole(['SUPERADMIN', 'UNI_ADMIN']), updateDepartment);

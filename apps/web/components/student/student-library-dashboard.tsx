@@ -33,7 +33,7 @@ export function StudentLibraryDashboard() {
     useEffect(() => {
         const fetchLibrary = async () => {
             try {
-                const res = await api.get('/student/assets/library');
+                const res = await api.get('/v2/student/assets/library');
                 setLoans(res.data.bookLoans || []);
             } catch (error) {
                 console.error('Failed to load library:', error);

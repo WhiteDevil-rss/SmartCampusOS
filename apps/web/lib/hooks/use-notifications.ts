@@ -52,7 +52,7 @@ export function useNotifications() {
 
             if (firebaseUser) {
                 const token = await firebaseUser.getIdToken();
-                socket = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/notifications`, {
+                socket = io(`${process.env.NEXT_PUBLIC_SOCKET_URL || 'http://127.0.0.1:5001'}/notifications`, {
                     auth: { token }
                 });
 

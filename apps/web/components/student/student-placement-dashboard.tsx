@@ -32,7 +32,7 @@ export function StudentPlacementDashboard() {
     useEffect(() => {
         const fetchPlacement = async () => {
             try {
-                const res = await api.get('/student/assets/placement');
+                const res = await api.get('/v2/student/assets/placement');
                 setPlacement(res.data.placementRecord || null);
                 setCompanies(res.data.visitingCompanies || []);
             } catch (error) {

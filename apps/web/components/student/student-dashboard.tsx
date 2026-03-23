@@ -20,10 +20,8 @@ export function StudentDashboard() {
 
         const fetchTodaySchedule = async () => {
             try {
-                const today = new Date().getDay(); // 1-6 for Mon-Sat (Prisma logic)
-                const res = await api.get(`/timetables/latest/${profile.departmentId}?batchId=${profile.batchId}`);
-                const slots = res.data?.slots?.filter((s: any) => s.dayOfWeek === (today === 0 ? 1 : today)) || [];
-                setTodaySchedule(slots);
+                const res = await api.get('/v2/student/timetable/today');
+                setTodaySchedule(res.data?.slots || []);
             } catch (err) {
                 console.error('Failed to fetch today schedule:', err);
             } finally {

@@ -87,6 +87,7 @@ import studentDocsRoutes from './routes/student-docs.routes';
 import permissionRoutes from './routes/permission.routes';
 import historyRoutes from './routes/history.routes';
 import jobRoutes from './routes/job.routes';
+import marksRoutes from './routes/marks.routes';
 
 app.use('/v1/auth', authRoutes);
 app.use('/v1/universities/:universityId/departments', departmentRoutes);
@@ -106,27 +107,23 @@ app.use('/v1/firebase-sync', firebaseSyncRoutes);
 app.use('/v1/seed', seedManagementRoutes);
 app.use('/v1/inquiries', inquiryRoutes);
 app.use('/v1/subscribers', subscriberRoutes);
-app.use('/v2/student', studentRoutes);
-app.use('/v2/admissions', admissionRoutes);
-app.use('/v2/verification', verificationRoutes);
+app.use('/v1/assignments', assignmentRoutes);
+app.use('/v1/materials', materialRoutes);
+app.use('/v2/complaints', complaintRoutes);
+app.use('/v2/service-requests', serviceRequestRoutes);
 app.use('/v2/fees', feesRoutes);
 app.use('/v2/payroll', payrollRoutes);
 app.use('/v2/attendance', attendanceRoutes);
 app.use('/v2/results', resultRoutes);
-app.use('/v2/assignments', assignmentRoutes);
-app.use('/v2/materials', materialRoutes);
-app.use('/v2/notifications', notificationRoutes);
-app.use('/v2/storage', storageRoutes);
-app.use('/v2/complaints', complaintRoutes);
-app.use('/v2/service-requests', serviceRequestRoutes);
-app.use('/public/v2', publicPortalRoutes);
 app.use('/v2/accreditation', accreditationRoutes);
-app.use('/v2/chatbot', chatbotRoutes);
+app.use('/v2/storage', storageRoutes);
 app.use('/v2/career-planner', careerPlannerRoutes);
 app.use('/v2/iot', iotRoutes);
 app.use('/v2/library', libraryRoutes);
 app.use('/v2/placements', placementRoutes);
-app.use('/v2/analytics', analyticsRoutes);
+app.use('/v2/faculty/messages', facultyMessagesRoutes);
+
+// Specific Student Sub-routes FIRST to prevent shadowing by general /v2/student
 app.use('/v2/student/timetable', studentTimetableRoutes);
 app.use('/v2/student/attendance', studentAttendanceRoutes);
 app.use('/v2/student/attendance/flags', studentAttendanceFlagRoutes);
@@ -135,11 +132,20 @@ app.use('/v2/student/fees', studentFeesRoutes);
 app.use('/v2/student/assets', studentAssetsRoutes);
 app.use('/v2/student/requests', studentRequestsRoutes);
 app.use('/v2/student/messages', messagesRoutes);
-app.use('/v2/faculty/messages', facultyMessagesRoutes);
 app.use('/v2/student/docs', studentDocsRoutes);
+app.use('/v2/notifications', notificationRoutes);
+
+app.use('/v2/chatbot', chatbotRoutes);
+app.use('/v2/analytics', analyticsRoutes);
+app.use('/v1/public', publicPortalRoutes);
+
+app.use('/v2/student', studentRoutes);
+app.use('/v2/admissions', admissionRoutes);
+app.use('/v2/verification', verificationRoutes);
 app.use('/v2/permissions', permissionRoutes);
 app.use('/v2/history', historyRoutes);
 app.use('/v2/jobs', jobRoutes);
+app.use('/v2/marks', marksRoutes);
 
 const server = createServer(app);
 socketService.initialize(server);

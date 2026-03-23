@@ -1,153 +1,112 @@
-# SmartCampus OS
+# SmartCampus OS — Institutional Orchestration Platform
 
-> **SmartCampus OS** — A scalable, secure, multi-institution SaaS platform for managing admissions, results, verifications, timetables, and hiring.
-
----
-
-## Overview
-
-SmartCampus OS is a B2B SaaS platform for universities, departments, and academic institutions. It covers the full student lifecycle — from admission through result publication — with built-in cryptographic verification, AI-powered timetable generation, and a panel-based hiring system.
+> **SmartCampus OS** is a definitive, secure, multi-institution SaaS platform for managing admissions, academic results, cryptographic verifications, AI-powered timetabling, and high-fidelity institutional hiring.
 
 ---
 
-## ✨ Features
+## 🏛 Architecture Overview
 
-| Feature | Description |
-|---|---|
-| **Admissions** | Multi-step application form, no login required |
-| **Result Management** | Full semester results with SGPA/CGPA |
-| **Cryptographic Verification** | SHA-256 hash verification for applications and results |
-| **Blockchain Audit Trail** | Immutable TX hash recorded per result |
-| **AI Timetable Generation** | OR-Tools powered conflict-free scheduler |
-| **Careers & Hiring** | Panel-linked job board with search & filters |
-| **Job Applications** | No-login apply with mandatory resume upload |
-| **Faculty Panel** | Timetable, assignments, quizzes, attendance |
-| **Student Panel** | Timetable, assignments, library, fee payments |
-| **Attendance** | QR-based session attendance with flag management |
-| **Notifications** | Role-scoped push notifications via FCM |
+SmartCampus OS is designed as a high-performance monorepo for maximum scalability and developer velocity.
+
+- **`apps/web`**: Next.js 14 App Router (React 18) — Premium, theme-aware frontend using Tailwind CSS and Framer Motion.
+- **`apps/api`**: Node.js 20 & Express 5 — High-throughput RESTful gateway with Prisma ORM and Socket.IO for real-time telemetry.
+- **`apps/ai-engine`**: Python 3.10 & FastAPI — Distributed microservice for multidimensional optimization and AI scheduling.
+- **`packages/types`**: Shared TypeScript definitions ensuring end-to-end type safety across the stack.
 
 ---
 
-## 🛠 Tech Stack
+## ✨ Core Modules
 
-| Layer | Technology |
-|---|---|
-| **Frontend** | Next.js 14 (App Router), Tailwind CSS, Zustand, Shadcn UI |
-| **Backend** | Node.js 20, Express.js v5, Prisma, PostgreSQL |
-| **Auth** | Firebase Admin SDK |
-| **Real-time** | Socket.io, Redis |
-| **AI Service** | Python 3.10, FastAPI, OR-Tools (Docker, port `5000`) |
+### 🛡 Cryptographic Verification Hub
+Built with a "Security-First" approach, this module allows third parties (employers, agencies) to verify student admissions and academic results using immutable SHA-256 hashes.
+- **Terminal Interface**: A high-fidelity, command-line styled verification desk.
+- **Blockchain Ready**: Integrated audit trails with unique transaction hashes for every published record.
+
+### 🤖 AI Timetable Engine
+A sophisticated scheduling system that solves complex constraints for universities.
+- **Conflict Resolution**: Resolves overlapping faculty schedules, classroom availability, and elective constraints using Google's **OR-Tools**.
+- **Optimization**: Maximizes resource utilization across multiple departments.
+
+### 💼 Integrated Hiring Ecosystem
+A multi-tier recruitment portal that links graduates directly with institutional opportunities.
+- **Role-Based Interaction**: SuperAdmins manage university-wide postings; Departments manage niche clinical or research roles.
+- **Live Filtering**: Real-time job boards with deep indexing and status tracking.
+
+### 🎓 Premium Student Portal
+A centralized, all-in-one dashboard providing a 360-degree view of the student experience.
+- **Fees & Finance**: Real-time balances and virtual receipt generation.
+- **Academic Hub**: Integrated library loans, assignment tracking, and material distribution (LMS lite).
+- **AI Assistant**: A specialized AI chatbot (Zembaa AI) for answering syllabus and institutional queries.
 
 ---
 
-## 🚀 Getting Started
+## 🔑 Demo Access Protocols
 
+| Role | Environment | Email | Credentials |
+|---|---|---|---|
+| **Super Admin** | `/superadmin` | `admin@smartcampus.os` | `password123` |
+| **University Admin**| `/dashboard`  | `admin@vnsgu.ac.in` | `password123` |
+| **Department Admin**| `/department` | `admin_dcs@vnsgu.ac.in` | `password123` |
+| **Faculty Member**  | `/faculty-panel` | `rustam@vnsgu.ac.in` | `password123` |
+| **Student**         | `/` (Login)      | `aarav.patel@student.vnsgu.ac.in`| `password123` |
+
+---
+
+## 💎 Technical Specifications (The Stack)
+
+Handcrafted for visual excellence and technical stability:
+
+- **Frontend Core**: Next.js 15+, Tailwind CSS 3.4, Shadcn UI, Framer Motion.
+- **Backend Core**: Express 5.0 (Beta), Prisma ORM, Socket.IO 4.7.
+- **Datastore**: PostgreSQL (Primary), Redis (Caching & Job Queues).
+- **AI Core**: Python 3.10, FastAPI, Google OR-Tools (Constraint Programming).
+- **Security**: Firebase Admin SDK (Auth & UID verification), SHA-256 Hashing.
+
+---
+
+## 🛠 Setup & Deployment
+
+Ensure you have **Docker**, **Node.js 20+**, and **PNPM 9+** installed.
+
+### 1. External Infrastructure
+Launch the essential services (PostgreSQL, Redis) via Docker:
+```bash
+docker-compose up -d
+```
+
+### 2. Environment Configuration
+Populate `.env` files in `apps/api` and `apps/web`:
+```bash
+# apps/api/.env
+DATABASE_URL="postgresql://user:pass@localhost:5432/smartcampus"
+REDIS_URL="redis://localhost:6379"
+PORT=8001
+
+# apps/web/.env.local
+NEXT_PUBLIC_API_URL="http://localhost:5001/v1"
+NEXT_PUBLIC_SOCKET_URL="http://localhost:5001"
+```
+
+### 3. Initialize Domain
 ```bash
 pnpm install
-
-# Configure environment
-cp apps/api/.env.example apps/api/.env
-# Fill in: DATABASE_URL, Firebase credentials, REDIS_URL
-
-# Setup database
-cd apps/api
-npx prisma db push
-npx prisma db seed
-
-# Start all services (Infrastructure + Dev Servers)
-# This starts PostgreSQL, Redis, AI Engine, API, and Web
-pnpm run dev:all
-
-# Alternatively, if you want more control:
-# docker compose up -d
-# pnpm run dev
+pnpm run dev:all # Simultaneously starts API, Web, and AI Engine
 ```
 
-| Service | URL |
-|---|---|
-| Web | `http://localhost:3000` |
-| API | `http://localhost:5001` |
-| AI Microservice | `http://localhost:5000` |
-
 ---
 
-## 🔑 Demo Login Credentials
+## 🎓 Verification Suite (Stable Hashes)
 
-**Password for all accounts:** `password123`
+Use these deterministic hashes to verify the system integrity:
 
-| Role | Email | Panel Route |
-|---|---|---|
-| Super Admin | `admin@smartcampus.os` | `/superadmin` |
-| University Admin | `admin@vnsgu.ac.in` | `/dashboard` |
-| Department Admin | `admin_dcs@vnsgu.ac.in` | `/department` |
-| Faculty | `rustam@vnsgu.ac.in` | `/faculty-panel` |
-| Faculty | `dharmen@vnsgu.ac.in` | `/faculty-panel` |
-
----
-
-## 🎓 Demo Students & Verification Codes
-
-> **Note:** Hashes are regenerated on each `npx prisma db seed` run (SGPA/CGPA are randomized). The console always prints current values.
-
-| Student | Enrollment No. | Admission Hash | Result Hash |
+| Profile | Enrollment | Admission Verify Hash (SHA-256) | Result SHA-256 Hash |
 |---|---|---|---|
-| Aarav Patel | `EN20250000` | `f8c195f943c0ef2114f4ca966cefaf2aa0a66e15c96f55e9b8dfe8030b6e2777` | `e8e9179b4ca99f93537660d61ec333e750bb83e19a55d34b7dde0efdb86bc80c` |
-| Diya Sharma | `EN20250001` | `b6183bf04f490ae449bdcd81ea8aca17f0ffc81136c2d61c2a323fd0b4bb4644` | `8823540396f0128e31d598abeb004412a5cf197a3e2d5ccd0e85ffc9f5dfde63` |
-| Rahul Verma | `EN20250002` | `7d4db8585f131e5e2842164c73146af793041c6df8a6c1e83b81dc6b958636e9` | `943e078652fd55555b144d1c81c8f4a61afd2f15617228cb15ef5a1ba0d38274` |
-| Sneha Iyer | `EN20250003` | `492d32d872515de6c00dfc0f0997234e83f393a55f292a4f8921d4909859c3a3` | `e2f1051eae31191c68c702d0473c79dcb32246a959ab3801a029e92c4258d137` |
-| Rohan Mehta | `EN20250004` | `3617872100d4d83bd0f50dbb8040f7356d70ef500a1d275c5ffc5992d94b043a` | `0aad3d454f3a8af83c8d0443e612f1791895409c50dfae27156ceeac7d0f6352` |
-| **TAMPERED TEST** | `EN20250000` | `f8c195f943c0ef2114f4ca966cefaf2aa0a66e15c96f55e9b8dfe8030b6e2777` | `47af10368b89674c860c593b386f1bfd023714bd0638f4a817adb9772ef3aa7f` |
-| | | | (Use this to test tampering detection - will return 409) |
-
-**Quick test on `/verify`:**
-```
-Enrollment:  EN20250000
-Result Code: e8e9179b4ca99f93537660d61ec333e750bb83e19a55d34b7dde0efdb86bc80c
-```
-
-Each student has **5 subject results** for Semester 2 (2025-26): Internal, External, Total, Grade, Credits, SGPA, CGPA, and a Blockchain TX hash.
+| **Aarav Patel** | `EN20250000` | `f8c195f943c0ef2114f4ca966cefaf2aa0a66e15c96f55e9b8dfe8030b6e2777` | `cb288f88854cdbb641faf5897e46c8a958a4bdfdbececbf63de6a6c49230fa51` |
+| **Diya Sharma** | `EN20250001` | `b6183bf04f490ae449bdcd81ea8aca17f0ffc81136c2d61c2a323fd0b4bb4644` | `c92866f70f28bac579f3c1d36ccacae24fdc44401b834b1acc249440b1c5ac53` |
+| **Sneha Iyer**  | `EN20250003` | `492d32d872515de6c00dfc0f0997234e83f393a55f292a4f8921d4909859c3a3` | `c22aa491893c94c9e8e1200e506d6cf73390a0b8daf389267eb1ccdc94258068` |
 
 ---
 
-## 📡 Key API Endpoints
-
-### Public
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/v1/inquiries` | Submit an inquiry |
-| `POST` | `/v2/admissions/public/submit` | Submit an admission application |
-| `GET` | `/v2/verification/public/student` | Verify a student |
-| `GET` | `/v2/verification/public/result` | Verify a result |
-| `GET` | `/v2/jobs` | List active job postings |
-| `POST` | `/v2/jobs/:jobId/apply` | Apply for a job |
-
-### Panel (Auth Required)
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/v2/students` | List students |
-| `GET` | `/v2/faculty` | List faculty |
-| `GET` | `/v2/timetable/:batchId` | Get batch timetable |
-| `GET` | `/v2/results/:enrollmentNo` | Get student results |
-| `GET` | `/v2/audit-logs` | Audit logs (SuperAdmin) |
-
----
-
-## 📁 Project Structure
-
-```
-SmartCampusOS/
-├── apps/
-│   ├── web/              # Next.js 14 frontend
-│   └── api/              # Express.js backend
-│       └── prisma/       # Schema, seed, migrations
-├── docker-compose.yml    # AI microservice + Redis
-└── turbo.json
-```
-
----
-
-## 📝 License
-
-This project is licensed under the [MIT License](./LICENSE).
+## ⚖️ License & Integrity
+© 2026 SmartCampus OS — **Handcrafted by Zembaa Solution**. This platform is private intellectual property.
+Licensed under the [MIT License](./LICENSE).
