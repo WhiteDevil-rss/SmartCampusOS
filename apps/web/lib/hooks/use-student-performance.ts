@@ -46,7 +46,7 @@ export function useStudentPerformance() {
         const fetchPerformance = async () => {
             try {
                 setLoading(true);
-                const response = await api.get('/students/performance/me');
+                const response = await api.get('/v2/student/performance/me');
                 setPerformance(response.data);
             } catch (err: any) {
                 console.error('Failed to fetch student performance:', err);

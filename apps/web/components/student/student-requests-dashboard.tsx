@@ -48,7 +48,7 @@ export function StudentRequestsDashboard() {
 
     const fetchData = async () => {
         try {
-            const res = await api.get('/student/requests');
+            const res = await api.get('/v2/student/requests');
             setServiceRequests(res.data.serviceRequests || []);
             setComplaints(res.data.complaints || []);
         } catch (error) {
@@ -66,7 +66,7 @@ export function StudentRequestsDashboard() {
     const onServiceRequestSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.post('/student/requests/service', {
+            await api.post('/v2/student/requests/service', {
                 description: requestDesc,
                 type: requestType
             });
@@ -82,7 +82,7 @@ export function StudentRequestsDashboard() {
     const onComplaintSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await api.post('/student/requests/complaint', {
+            await api.post('/v2/student/requests/complaint', {
                 subject: complaintSubject,
                 description: complaintDesc,
                 category: complaintCategory

@@ -442,3 +442,36 @@ export const getFacultyPerformance = async (req: AuthRequest, res: Response) => 
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+export const getFacultyCourses = async (req: AuthRequest, res: Response) => {
+    try {
+        const facultyId = req.user?.entityId;
+        if (!facultyId) return res.status(400).json({ error: 'Faculty ID not found' });
+
+        const subjects = await prisma.facultySubject.findMany({
+            where: { facultyId },
+            include: { course: true }
+        });
+
+        res.json(subjects.map(s => s.course));
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch courses' });
+    }
+};
+
+export const getFacultyBatches = async (req: AuthRequest, res: Response) => {
+    try {
+        const facultyId = req.user?.entityId;
+        if (!facultyId) return res.status(400).json({ error: 'Faculty ID not found' });
+
+        const slots = await prisma.timetableSlot.findMany({
+            where: { facultyId },
+            include: { batch: true },
+            distinct: ['batchId']
+        });
+
+        res.json(slots.map(s => s.batch).filter(Boolean));
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch batches' });
+    }
+};

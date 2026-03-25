@@ -3,19 +3,33 @@ import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import { NotificationService } from '../services/notification.service';
 import { format } from 'date-fns';
+import { RoleHierarchy } from '@smartcampus-os/types';
 
 export const getAssignments = async (req: AuthRequest, res: Response) => {
     try {
         const { role, entityId, email } = req.user!;
-        let assignments;
+        const userLevel = RoleHierarchy[role] || 0;
+        let assignments: any[];
 
-        if (role === 'FACULTY') {
+        // If user is Faculty or higher (Admins, etc.)
+        if (userLevel >= RoleHierarchy['FACULTY']) {
             const facultyId = req.user?.entityId;
-            if (!facultyId) return res.status(400).json({ error: 'Faculty ID not found' });
-            assignments = await prisma.assignment.findMany({
-                where: { facultyId },
-                include: { course: true, batch: true, _count: { select: { submissions: true } } }
-            });
+            // If they have an entityId, filter by it. Otherwise (Superadmins), they might see all or none.
+            // For now, if no entityId, we'll return an empty array instead of 403 to prevent UI crashes.
+            if (!facultyId) {
+                if (userLevel >= RoleHierarchy['UNI_ADMIN']) {
+                    assignments = await prisma.assignment.findMany({
+                        include: { course: true, batch: true, _count: { select: { submissions: true } } }
+                    });
+                } else {
+                    assignments = [];
+                }
+            } else {
+                assignments = await prisma.assignment.findMany({
+                    where: { facultyId },
+                    include: { course: true, batch: true, _count: { select: { submissions: true } } }
+                });
+            }
         } else if (role === 'STUDENT') {
             const student = await prisma.student.findFirst({
                 where: { email },

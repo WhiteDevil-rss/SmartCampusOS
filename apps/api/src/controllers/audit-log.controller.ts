@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
+import { RoleHierarchy } from '@smartcampus-os/types';
 import prisma from '../lib/prisma';
 
-export const getAuditLogs = async (req: Request, res: Response) => {
+export const getAuditLogs = async (req: any, res: Response) => {
     try {
         const {
             page = 1,
@@ -19,23 +20,48 @@ export const getAuditLogs = async (req: Request, res: Response) => {
 
         const where: any = {};
 
-        if (status) where.status = status;
-        if (entityType) where.entityType = entityType;
-        if (userId) where.userId = userId;
+        // --- Role-Based Filtering Logic ---
+        // Get current user's level. If anonymous (dev bypass), default to lowest level (STUDENT = 40).
+        const currentUserRole = req.user?.role || 'STUDENT';
+        const currentUserLevel = RoleHierarchy[currentUserRole] || 40;
+
+        // We only want to see logs of users whose role level is <= ours
+        const allowedRoles = Object.entries(RoleHierarchy)
+            .filter(([_, level]) => level <= currentUserLevel)
+            .map(([role, _]) => role);
+
+        // Build the base role filter
+        const roleFilter = {
+            OR: [
+                { user: { role: { in: allowedRoles } } },
+                { userId: null } // Always allow system-level logs without a specific user
+            ]
+        };
+
+        const conditions: any[] = [roleFilter];
+
+        if (status) conditions.push({ status });
+        if (entityType) conditions.push({ entityType });
+        if (userId) conditions.push({ userId });
 
         if (search) {
-            where.OR = [
-                { action: { contains: String(search), mode: 'insensitive' } },
-                { entityId: { contains: String(search), mode: 'insensitive' } },
-                { ipAddress: { contains: String(search), mode: 'insensitive' } },
-            ];
+            conditions.push({
+                OR: [
+                    { action: { contains: String(search), mode: 'insensitive' } },
+                    { entityId: { contains: String(search), mode: 'insensitive' } },
+                    { ipAddress: { contains: String(search), mode: 'insensitive' } },
+                ]
+            });
         }
 
         if (startDate || endDate) {
-            where.createdAt = {};
-            if (startDate) where.createdAt.gte = new Date(String(startDate));
-            if (endDate) where.createdAt.lte = new Date(String(endDate));
+            const dateFilter: any = {};
+            if (startDate) dateFilter.gte = new Date(String(startDate));
+            if (endDate) dateFilter.lte = new Date(String(endDate));
+            conditions.push({ createdAt: dateFilter });
         }
+
+        where.AND = conditions;
 
         const [logs, total] = await Promise.all([
             prisma.auditLog.findMany({
@@ -43,7 +69,7 @@ export const getAuditLogs = async (req: Request, res: Response) => {
                 skip,
                 take,
                 orderBy: { createdAt: 'desc' },
-                include: { user: { select: { username: true } } }
+                include: { user: { select: { username: true, role: true } } }
             }),
             prisma.auditLog.count({ where })
         ]);
@@ -63,11 +89,26 @@ export const getAuditLogs = async (req: Request, res: Response) => {
     }
 };
 
-export const exportAuditLogs = async (req: Request, res: Response) => {
+export const exportAuditLogs = async (req: any, res: Response) => {
     try {
+        const currentUserRole = req.user?.role || 'STUDENT';
+        const currentUserLevel = RoleHierarchy[currentUserRole] || 40;
+
+        const allowedRoles = Object.entries(RoleHierarchy)
+            .filter(([_, level]) => level <= currentUserLevel)
+            .map(([role, _]) => role);
+
+        const where = {
+            OR: [
+                { user: { role: { in: allowedRoles } } },
+                { userId: null }
+            ]
+        };
+
         const logs = await prisma.auditLog.findMany({
+            where,
             orderBy: { createdAt: 'desc' },
-            take: 5000 // Limit for CSV export to avoid memory issues
+            take: 5000 
         });
 
         // Simple CSV generation
@@ -88,6 +129,7 @@ export const exportAuditLogs = async (req: Request, res: Response) => {
         res.setHeader('Content-Disposition', 'attachment; filename=audit-logs.csv');
         res.status(200).send(csv);
     } catch (error) {
+        console.error('Export failed:', error);
         res.status(500).json({ error: 'Export failed' });
     }
 };

@@ -74,6 +74,18 @@ export const recordSmartAttendance = async (req: Request, res: Response) => {
         });
 
         if (!activeSlot) {
+            if (process.env.NODE_ENV === 'development') {
+                console.log(`[IOT] [DEV] No active slot found, recording as Standalone Telemetry for ${student.enrollmentNo}`);
+                // In dev, we can still record a 'STANDALONE' record just for the log feed
+                return res.status(201).json({
+                    status: 'success',
+                    studentName: student.name,
+                    room: room.name,
+                    timestamp: new Date(),
+                    isStandalone: true,
+                    message: '[DEV] Simulated Telemetry Received (No active slot)'
+                });
+            }
             return res.status(400).json({ error: 'No active class currently scheduled in this room.' });
         }
 

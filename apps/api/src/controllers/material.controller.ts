@@ -1,18 +1,27 @@
 import { Request, Response } from 'express';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
+import { RoleHierarchy } from '@smartcampus-os/types';
 
 export const getMaterials = async (req: AuthRequest, res: Response) => {
     try {
         const { role, entityId, email } = req.user!;
-        let materials;
+        const userLevel = RoleHierarchy[role] || 0;
+        let materials: any[];
 
-        if (role === 'FACULTY') {
-            if (!entityId) return res.status(400).json({ error: 'Faculty ID not found' });
-            materials = await prisma.studyMaterial.findMany({
-                where: { facultyId: entityId },
-                include: { course: true, batch: true }
-            });
+        if (userLevel >= RoleHierarchy['FACULTY']) {
+            if (entityId) {
+                materials = await prisma.studyMaterial.findMany({
+                    where: { facultyId: entityId },
+                    include: { course: true, batch: true }
+                });
+            } else if (userLevel >= RoleHierarchy['UNI_ADMIN']) {
+                materials = await prisma.studyMaterial.findMany({
+                    include: { course: true, batch: true }
+                });
+            } else {
+                materials = [];
+            }
         } else if (role === 'STUDENT') {
             const student = await prisma.student.findFirst({
                 where: { email },

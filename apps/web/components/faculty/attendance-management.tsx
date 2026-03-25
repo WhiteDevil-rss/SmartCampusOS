@@ -30,7 +30,7 @@ export function AttendanceManagement() {
         const fetchStudents = async () => {
             try {
                 setLoading(true);
-                const res = await api.get(`/attendance/students/${slotId}`);
+                const res = await api.get(`/v2/attendance/students/${slotId}`);
                 setStudents(res.data);
                 // Initialize all as Present by default
                 const initial: Record<string, 'PRESENT' | 'ABSENT'> = {};
@@ -65,7 +65,7 @@ export function AttendanceManagement() {
         try {
             setSaving(true);
             // 1. Create session
-            const sessionRes = await api.post('/attendance/session', {
+            const sessionRes = await api.post('/v2/attendance/session', {
                 timetableSlotId: slotId,
                 date: new Date().toISOString(),
                 method: 'MANUAL',
@@ -81,7 +81,7 @@ export function AttendanceManagement() {
                 method: 'MANUAL'
             }));
 
-            await api.post('/attendance/bulk-mark', {
+            await api.post('/v2/attendance/bulk-mark', {
                 sessionId,
                 records
             });

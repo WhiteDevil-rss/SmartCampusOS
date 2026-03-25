@@ -32,28 +32,37 @@ const studentNavItems = [
 export default function FeesPage() {
     return (
         <DashboardLayout
-            title="Fees & Finance"
+            title="Student Financial Portal"
             navItems={studentNavItems}
         >
-            <div className="p-6 md:p-10 space-y-10 max-w-7xl mx-auto">
-                <div className="relative mb-8">
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-3 text-emerald-400">
-                            <span className="p-2 rounded-xl bg-emerald-500/10">
-                                <LuLandmark className="w-5 h-5" />
-                            </span>
-                            <span className="text-xs font-black uppercase tracking-widest">Financial Dashboard</span>
-                        </div>
-                        <h1 className="text-5xl font-black text-white tracking-tighter">
-                            Fees & <span className="text-emerald-400 italic">Finance</span>
-                        </h1>
-                        <p className="text-text-secondary text-lg font-medium max-w-xl">
-                            Manage your academic payments, track outstanding dues, and download fee receipts digitally.
-                        </p>
-                    </div>
-                </div>
+            <div className="min-h-screen bg-slate-50/50 dark:bg-[#0a0a0c] selection:bg-indigo-500/30">
+                <div className="p-6 md:p-10 space-y-10 max-w-7xl mx-auto relative">
+                    {/* Background Decorative Element */}
+                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] -mr-64 -mt-64 pointer-events-none" />
 
-                <StudentFeesDashboard />
+                    <div className="relative mb-12">
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3">
+                                <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">
+                                    Financial Dashboard
+                                </span>
+                                <div className="h-px w-12 bg-border" />
+                            </div>
+                            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                                <div className="space-y-2">
+                                    <h1 className="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-[0.9]">
+                                        Fees & <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-indigo-400 italic">Finance</span>
+                                    </h1>
+                                    <p className="text-slate-500 dark:text-slate-400 text-lg font-medium max-w-2xl leading-relaxed">
+                                        Executive command center for academic investments, digital receipts, and real-time financial tracking.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <StudentFeesDashboard />
+                </div>
             </div>
         </DashboardLayout>
     );

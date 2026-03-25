@@ -20,6 +20,18 @@ const nextConfig = {
       'date-fns'
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/v1/:path*',
+        destination: 'http://127.0.0.1:5001/v1/:path*',
+      },
+      {
+        source: '/v2/:path*',
+        destination: 'http://127.0.0.1:5001/v2/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;

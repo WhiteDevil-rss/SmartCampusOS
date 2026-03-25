@@ -68,6 +68,7 @@ Handcrafted for visual excellence and technical stability:
 - **Datastore**: PostgreSQL (Primary), Redis (Caching & Job Queues).
 - **Blockchain Core**: Solidity 0.8.24 (14 Modular Contracts), Hardhat, Ethers.js 6.
 - **AI Core**: Python 3.10, FastAPI, Google OR-Tools (Constraint Programming).
+- **Versioning Standard**: Unified `/v1` (Legacy/Core) and `/v2` (Premium/Student) routing protocols.
 - **Security**: Firebase Admin SDK (Auth & UID verification), SHA-256 Hashing.
 
 ---
@@ -86,11 +87,11 @@ docker-compose up -d
 Populate `.env` files in `apps/api` and `apps/web`:
 ```bash
 # apps/api/.env
-DATABASE_URL="postgresql://user:pass@localhost:5432/smartcampus"
+PORT=5001
+DATABASE_URL="postgresql://user:pass@localhost:5432/smartcampus?schema=public"
 REDIS_URL="redis://localhost:6379"
-PORT=8001
 
-# apps/web/.env.local
+# apps/web/.env
 NEXT_PUBLIC_API_URL="http://localhost:5001/v1"
 NEXT_PUBLIC_SOCKET_URL="http://localhost:5001"
 ```
