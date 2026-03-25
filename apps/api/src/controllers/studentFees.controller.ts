@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
+import { blockchainService } from '../services/blockchain.service';
 
 export const getFeeDetails = async (req: AuthRequest, res: Response) => {
     try {
@@ -86,6 +87,20 @@ export const processPayment = async (req: AuthRequest, res: Response) => {
                 feeStructure: true
             }
         });
+
+        // Record on Blockchain
+        try {
+            if (student.enrollmentNo && payment.transactionId) {
+                await blockchainService.recordFeePayment(
+                    student.enrollmentNo,
+                    payment.feeStructure.academicYear || 'FEE',
+                    payment.amount,
+                    payment.transactionId
+                );
+            }
+        } catch (bcError) {
+            console.error('Blockchain Finance Sync Failed:', bcError);
+        }
 
         res.status(201).json(payment);
     } catch (error: any) {

@@ -1,6 +1,8 @@
 import { Response, Request } from 'express';
 import prisma from '../lib/prisma';
+import { ethers } from 'ethers';
 import { AuthRequest } from '../middlewares/auth.middleware';
+import { blockchainService } from '../services/blockchain.service';
 
 export const submitApplication = async (req: Request, res: Response) => {
     try {
@@ -21,6 +23,19 @@ export const submitApplication = async (req: Request, res: Response) => {
                 status: 'SUBMITTED'
             }
         });
+
+        // Record on Blockchain
+        try {
+            await blockchainService.updateAdmissionStatus(
+                application.id,
+                'PENDING', // Enrollment number not yet assigned
+                programId,
+                0, // Status: Submitted
+                ethers.id(JSON.stringify(application.documents))
+            );
+        } catch (bcError) {
+            console.error('Blockchain Admission Sync Failed (Submit):', bcError);
+        }
 
         res.status(201).json(application);
     } catch (error: any) {
@@ -68,6 +83,28 @@ export const updateApplicationStatus = async (req: AuthRequest, res: Response) =
                 updatedAt: new Date()
             }
         });
+
+        // Record on Blockchain
+        try {
+            const statusMap: Record<string, number> = {
+                'SUBMITTED': 0,
+                'REVIEWING': 1,
+                'SHORTLISTED': 2,
+                'SELECTED': 3,
+                'REJECTED': 4,
+                'ONBOARDED': 5
+            };
+
+            await blockchainService.updateAdmissionStatus(
+                application.id,
+                'N/A', 
+                application.programId,
+                statusMap[status] || 1,
+                ethers.id(remarks || 'Status Update')
+            );
+        } catch (bcError) {
+            console.error('Blockchain Admission Sync Failed (Update):', bcError);
+        }
 
         res.json(application);
     } catch (error: any) {

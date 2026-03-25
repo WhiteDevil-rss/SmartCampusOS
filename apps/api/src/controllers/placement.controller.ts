@@ -1,6 +1,8 @@
 import { Response } from 'express';
+import { ethers } from 'ethers';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
+import { blockchainService } from '../services/blockchain.service';
 
 /**
  * Get all recruiting companies for the university.
@@ -110,6 +112,17 @@ export const recordPlacement = async (req: AuthRequest, res: Response) => {
                 company: { select: { name: true } }
             }
         });
+
+        // Record on Blockchain
+        try {
+            await blockchainService.recordPlacement(
+                student.enrollmentNo,
+                companyId,
+                ethers.id(JSON.stringify(placement)) // Simple hash of placement data
+            );
+        } catch (bcError) {
+            console.error('Blockchain Placement Sync Failed:', bcError);
+        }
 
         res.status(201).json(placement);
     } catch (error) {

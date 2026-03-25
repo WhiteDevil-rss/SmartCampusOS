@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { LuFileText, LuMessageSquare, LuPlus, LuClock, LuCircleCheck, LuCircleX, LuInfo, LuSend, LuFileSearch } from 'react-icons/lu';
+import { LuFileText, LuMessageSquare, LuPlus, LuClock, LuCircleCheck, LuCircleX, LuInfo, LuSend, LuFileSearch, LuShield } from 'react-icons/lu';
 import { cn } from '@/lib/utils';
 import { useToast, Toast } from '@/components/ui/toast-alert';
 
@@ -137,10 +137,13 @@ export function StudentRequestsDashboard() {
             ESCALATED: <LuInfo className="w-3 h-3" />,
         };
         return (
-            <span className={cn("text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest flex items-center gap-1 w-fit", colors[status] || "bg-surface text-text-muted")}>
-                {icons[status] || <LuClock className="w-3 h-3" />}
-                {status.replace('_', ' ')}
-            </span>
+            <div className="flex items-center gap-2">
+                <span className={cn("text-[10px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest flex items-center gap-1 w-fit", colors[status] || "bg-surface text-text-muted")}>
+                    {icons[status] || <LuClock className="w-3.5 h-3.5" />}
+                    {status.replace('_', ' ')}
+                </span>
+                {status === 'RESOLVED' && <LuShield className="w-3.5 h-3.5 text-emerald-500" title="On-Chain Verified Resolution" />}
+            </div>
         );
     };
 

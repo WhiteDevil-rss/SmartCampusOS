@@ -8,7 +8,7 @@ import { useAuthStore } from '@/lib/store/useAuthStore';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { STUDENT_NAV } from '@/lib/constants/nav-config';
-import { LuLayoutDashboard, LuCalendar, LuCheck, LuCreditCard, LuLibrary, LuBriefcase, LuUser, LuCircleHelp, LuCircleCheck, LuTrendingUp, LuBookOpen, LuRotateCcw, LuMessageSquare, LuShieldCheck, LuCopy, LuFileText } from 'react-icons/lu';
+import { LuLayoutDashboard, LuCalendar, LuCheck, LuCreditCard, LuLibrary, LuBriefcase, LuUser, LuCircleHelp, LuCircleCheck, LuTrendingUp, LuBookOpen, LuRotateCcw, LuMessageSquare, LuShield, LuCopy, LuFileText } from 'react-icons/lu';
 import { Badge } from '@/components/ui/badge';
 import { useToast, Toast } from '@/components/ui/toast-alert';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -101,7 +101,7 @@ export default function StudentResultsPage() {
 
                         <Card className="rounded-[2rem] border-slate-200 dark:border-border-hover dark:bg-[#0a0a0c] p-8 bg-white shadow-xl flex flex-col justify-between">
                             <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center mb-4">
-                                <LuShieldCheck className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                                <LuShield className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                             </div>
                             <div>
                                 <h3 className="text-xl font-black text-slate-900 dark:text-white mb-1">Verified Results</h3>
@@ -121,7 +121,10 @@ export default function StudentResultsPage() {
                                     <div className="flex items-center gap-4">
                                         <div className="w-1.5 h-8 bg-indigo-600 rounded-full" />
                                         <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Semester {res.semester}</h3>
-                                        <Badge className="bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 font-bold border-indigo-100 dark:border-indigo-800">SGPA: {res.sgpa?.toFixed(2) || '0.00'}</Badge>
+                                        <Badge className="bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 font-bold border-indigo-100 dark:border-indigo-800 flex items-center gap-1.5 px-3">
+                                            SGPA: {res.sgpa?.toFixed(2) || '0.00'}
+                                            <LuShield className="w-3.5 h-3.5" title="On-Chain Verified" />
+                                        </Badge>
                                     </div>
                                     {res.resultHash && (
                                         <div className="flex items-center gap-2 p-2 px-4 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-border-hover max-w-md">

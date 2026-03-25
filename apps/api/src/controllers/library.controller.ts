@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
+import { blockchainService } from '../services/blockchain.service';
 
 /**
  * Get all library books with current availability.
@@ -92,6 +93,17 @@ export const issueBook = async (req: AuthRequest, res: Response) => {
             return newLoan;
         });
 
+        // Record on Blockchain
+        try {
+            await blockchainService.recordBookLoan(
+                loan.id,
+                book.isbn,
+                student.enrollmentNo
+            );
+        } catch (bcError) {
+            console.error('Blockchain Library Issue Sync Failed:', bcError);
+        }
+
         res.status(201).json(loan);
     } catch (error) {
         console.error('Failed to issue book:', error);
@@ -135,6 +147,16 @@ export const returnBook = async (req: AuthRequest, res: Response) => {
                 data: { availableCopies: { increment: 1 } }
             });
         });
+
+        // Record on Blockchain
+        try {
+            await blockchainService.recordBookReturn(
+                loan.id,
+                fineAmount
+            );
+        } catch (bcError) {
+            console.error('Blockchain Library Return Sync Failed:', bcError);
+        }
 
         res.json({ message: 'Book returned successfully', fineAmount });
     } catch (error) {

@@ -6,6 +6,9 @@ const prisma = new PrismaClient();
 async function getHashes() {
     try {
         const students = await prisma.student.findMany({
+            orderBy: {
+                enrollmentNo: 'asc'
+            },
             take: 5,
             include: {
                 results: true

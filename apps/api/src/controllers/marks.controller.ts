@@ -2,6 +2,7 @@ import { Response } from 'express';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import { UserRole } from '@smartcampus-os/types';
+import { blockchainService } from '../services/blockchain.service';
 import crypto from 'crypto';
 
 /**
@@ -319,6 +320,15 @@ export const resolveComplaint = async (req: AuthRequest, res: Response) => {
             data: { resolution, status, updatedAt: new Date() }
         });
 
+        // Record on Blockchain
+        try {
+            if (status === 'RESOLVED') {
+                await blockchainService.resolveComplaintOnChain(complaintId);
+            }
+        } catch (bcError) {
+            console.error('Blockchain Complaint Sync Failed:', bcError);
+        }
+
         res.json(complaint);
     } catch (error) {
         res.status(500).json({ error: 'Failed to resolve complaint' });
@@ -349,6 +359,14 @@ export const applyForReassessment = async (req: AuthRequest, res: Response) => {
                 status: 'PENDING'
             }
         });
+
+        // Record on Blockchain
+        try {
+            // Simulated re-evaluation fee of 0.01 ETH
+            await blockchainService.applyForReevaluation(request.id, "0.01");
+        } catch (bcError) {
+            console.error('Blockchain Reassessment Sync Failed:', bcError);
+        }
 
         res.json(request);
     } catch (error) {

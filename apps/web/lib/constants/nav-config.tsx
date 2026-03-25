@@ -3,7 +3,7 @@ import {
     LuMonitor, LuCalendar, LuShieldCheck, LuBuilding2, LuUser,
     LuClipboardList, LuMailOpen, LuBanknote, LuLifeBuoy, LuTrendingUp,
     LuFileText as LuFileLineChart, LuShieldAlert, LuCompass, LuCpu,
-    LuLibrary, LuBriefcase, LuTrophy, LuSend
+    LuLibrary, LuBriefcase, LuTrophy, LuSend, LuVote, LuShield, LuRocket, LuCircleHelp
 } from 'react-icons/lu';
 import { ReactNode } from 'react';
 
@@ -88,11 +88,15 @@ export const STUDENT_NAV: NavItem[] = [
     { title: 'Fees & Finance', href: '/student/fees', icon: <LuBanknote className="w-5 h-5" /> },
     { title: 'Library', href: '/student/library', icon: <LuLibrary className="w-5 h-5" /> },
     { title: 'Placement', href: '/student/placement', icon: <LuBriefcase className="w-5 h-5" /> },
-    { title: 'Service Requests', href: '/student/requests', icon: <LuClipboardList className="w-5 h-5" /> },
+    { title: 'Governance', href: '/student/governance', icon: <LuVote className="w-5 h-5" /> },
+    { title: 'Identity', href: '/student/identity', icon: <LuShield className="w-5 h-5" /> },
+    { title: 'Scholarships', href: '/student/scholarships', icon: <LuGraduationCap className="w-5 h-5" /> },
+    { title: 'Learning Hub', href: '/student/learning', icon: <LuMonitor className="w-5 h-5" /> },
+    { title: 'Equity Hub', href: '/student/equity', icon: <LuRocket className="w-5 h-5" /> },
+    { title: 'Service Requests', href: '/student/requests', icon: <LuCircleHelp className="w-5 h-5" /> },
     { title: 'Career Path', href: '/student/career', icon: <LuCompass className="w-5 h-5" /> },
     { title: 'AI Assistant', href: '/student/assistant', icon: <LuCpu className="w-5 h-5" /> },
     { title: 'Messages', href: '/student/messages', icon: <LuMailOpen className="w-5 h-5" /> },
-    { title: 'Message History', href: '/history', icon: <LuClipboardList className="w-5 h-5" /> },
     { title: 'Materials', href: '/student/materials', icon: <LuBookOpen className="w-5 h-5" /> },
     { title: 'Grievances', href: '/student/complaints', icon: <LuShieldAlert className="w-5 h-5" /> },
     { title: 'Profile', href: '/student/profile', icon: <LuUser className="w-5 h-5" /> },

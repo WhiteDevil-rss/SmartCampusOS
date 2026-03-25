@@ -1,0 +1,611 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusVerify.sol": {
+      "lastModificationDate": 1774470085923,
+      "contentHash": "38bdf455434f16f090d88437d868e833",
+      "sourceName": "contracts/SmartCampusVerify.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "SmartCampusVerify"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/node_modules/.pnpm/@openzeppelin+contracts@5.6.1/node_modules/@openzeppelin/contracts/access/Ownable.sol": {
+      "lastModificationDate": 1774470147785,
+      "contentHash": "d3c790edc9ccf808a17c5a6cd13614fd",
+      "sourceName": "@openzeppelin/contracts/access/Ownable.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "../utils/Context.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Ownable"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/node_modules/.pnpm/@openzeppelin+contracts@5.6.1/node_modules/@openzeppelin/contracts/utils/Context.sol": {
+      "lastModificationDate": 1774470147754,
+      "contentHash": "67bfbc07588eb8683b3fd8f6f909563e",
+      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusAdmission.sol": {
+      "lastModificationDate": 1774470980604,
+      "contentHash": "e9a050580505de45095961d301e18500",
+      "sourceName": "contracts/SmartCampusAdmission.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "SmartCampusAdmission"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusHiring.sol": {
+      "lastModificationDate": 1774470976047,
+      "contentHash": "422fc07432163e41fbbfd05f3c8a6cc7",
+      "sourceName": "contracts/SmartCampusHiring.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "SmartCampusHiring"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusFinance.sol": {
+      "lastModificationDate": 1774470978592,
+      "contentHash": "46946811660bab138186c768fc47ede9",
+      "sourceName": "contracts/SmartCampusFinance.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "SmartCampusFinance"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusReevaluation.sol": {
+      "lastModificationDate": 1774471946812,
+      "contentHash": "625debb8de7bd688273188b07a5d0c48",
+      "sourceName": "contracts/SmartCampusReevaluation.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SmartCampusReevaluation"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusLibrary.sol": {
+      "lastModificationDate": 1774471949641,
+      "contentHash": "66e44bf795e8482e6613fc31d04471bd",
+      "sourceName": "contracts/SmartCampusLibrary.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SmartCampusLibrary"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusComplaints.sol": {
+      "lastModificationDate": 1774471951663,
+      "contentHash": "7ba3340bb90d0628517ab53412ea0f0d",
+      "sourceName": "contracts/SmartCampusComplaints.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SmartCampusComplaints"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusAcademicPlus.sol": {
+      "lastModificationDate": 1774472145906,
+      "contentHash": "bd089f4b60875d1f77ce3bfc1b124c5b",
+      "sourceName": "contracts/SmartCampusAcademicPlus.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SmartCampusAcademicPlus"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusWorkplace.sol": {
+      "lastModificationDate": 1774472160105,
+      "contentHash": "026047cf00bd975a7048e5303c546c6a",
+      "sourceName": "contracts/SmartCampusWorkplace.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SmartCampusWorkplace"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusLearning.sol": {
+      "lastModificationDate": 1774472172960,
+      "contentHash": "5eabe341a6583a3ac5319ff082520a93",
+      "sourceName": "contracts/SmartCampusLearning.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SmartCampusLearning"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusIdentity.sol": {
+      "lastModificationDate": 1774472176225,
+      "contentHash": "5edab403a01c58f97e7772f46a0872d7",
+      "sourceName": "contracts/SmartCampusIdentity.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SmartCampusIdentity"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusGovernance.sol": {
+      "lastModificationDate": 1774472143882,
+      "contentHash": "358d2ffabc9af897d436e4691637d9d1",
+      "sourceName": "contracts/SmartCampusGovernance.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SmartCampusGovernance"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusEquity.sol": {
+      "lastModificationDate": 1774472178237,
+      "contentHash": "ed03ee4bd29c5634fe0abf1851f834cc",
+      "sourceName": "contracts/SmartCampusEquity.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SmartCampusEquity"
+      ]
+    },
+    "/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/blockchain-core/contracts/SmartCampusCampusLife.sol": {
+      "lastModificationDate": 1774472162163,
+      "contentHash": "fdf8507c2db942ae17d0fbdb484835a6",
+      "sourceName": "contracts/SmartCampusCampusLife.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/Ownable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SmartCampusCampusLife"
+      ]
+    }
+  }
+}

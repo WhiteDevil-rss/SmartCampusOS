@@ -88,6 +88,7 @@ import permissionRoutes from './routes/permission.routes';
 import historyRoutes from './routes/history.routes';
 import jobRoutes from './routes/job.routes';
 import marksRoutes from './routes/marks.routes';
+import blockchainExtendedRoutes from './routes/blockchain-extended.routes';
 
 app.use('/v1/auth', authRoutes);
 app.use('/v1/universities/:universityId/departments', departmentRoutes);
@@ -146,6 +147,7 @@ app.use('/v2/permissions', permissionRoutes);
 app.use('/v2/history', historyRoutes);
 app.use('/v2/jobs', jobRoutes);
 app.use('/v2/marks', marksRoutes);
+app.use('/v2/blockchain', blockchainExtendedRoutes);
 
 const server = createServer(app);
 socketService.initialize(server);

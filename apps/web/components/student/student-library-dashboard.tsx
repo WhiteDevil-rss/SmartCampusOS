@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { LuBookLock, LuBookOpen, LuCalendarMinus, LuClock, LuLibrary, LuInfo, LuCircleCheck } from 'react-icons/lu';
+import { LuBookLock, LuBookOpen, LuCalendarMinus, LuClock, LuLibrary, LuInfo, LuCircleCheck, LuShield } from 'react-icons/lu';
 import { cn } from '@/lib/utils';
 import { useToast, Toast } from '@/components/ui/toast-alert';
 import { isPast, formatDistanceToNow, differenceInDays } from 'date-fns';
@@ -130,7 +130,10 @@ export function StudentLibraryDashboard() {
                                         <div className="pt-4 border-t border-border flex items-center justify-between">
                                             <div className="flex flex-col">
                                                 <span className="text-[10px] font-black uppercase tracking-widest text-text-muted mb-1">Due Date</span>
-                                                <span className="text-sm font-medium text-text-primary">{new Date(loan.dueDate).toLocaleDateString()}</span>
+                                                <span className="text-sm font-medium text-text-primary uppercase tracking-tight flex items-center gap-2">
+                                                    {new Date(loan.dueDate).toLocaleDateString()}
+                                                    <LuShield className="w-4 h-4 text-emerald-500" title="On-Chain Secured" />
+                                                </span>
                                             </div>
                                             <div className={cn("px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5", isOverdue ? "bg-rose-500/10 text-rose-500" : "bg-primary/10 text-primary")}>
                                                 {isOverdue ? <LuInfo className="w-3.5 h-3.5" /> : <LuClock className="w-3.5 h-3.5" />}
