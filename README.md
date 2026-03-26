@@ -100,12 +100,21 @@ NEXT_PUBLIC_SOCKET_URL="http://localhost:5001"
 ```bash
 pnpm install
 
-# Option A: Full Initialization (First time or reset)
+# Option A: Initial Setup (Required once)
 pnpm run db:init   # Starts Docker, pushes schema, and seeds data
-pnpm run dev       # Starts the application services
 
-# Option B: Daily Development
-pnpm run dev:all   # Simultaneously starts Docker and API/Web/AI services
+# Option B: Standard Start (Docker + Services)
+pnpm run dev:all   # Starts everything without re-initializing the database
+
+# Option C: Service Only (If Docker is already running)
+pnpm run dev       # Starts only the application services
+
+### 4. Stopping Services
+To stop all application services and the Docker infrastructure:
+```bash
+# First, terminate the terminal process (Ctrl + C)
+pnpm run stop      # Stops Docker containers (Postgres, Redis, AI Engine)
+```
 
 ## 🏛 Blockchain Modular Architecture
 
