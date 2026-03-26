@@ -58,13 +58,27 @@ export class UserService {
         let firebaseUid: string | undefined;
 
         try {
-            // 1. Create in Firebase
-            const firebaseRecord = await firebaseAdmin.auth().createUser({
-                email,
-                password: password || 'Welcome@123', // Default if not provided
-                displayName: username,
-            });
-            firebaseUid = firebaseRecord.uid;
+            // 1. Create or sync with Firebase
+            try {
+                const firebaseRecord = await firebaseAdmin.auth().createUser({
+                    email,
+                    password: password || 'Welcome@123',
+                    displayName: username,
+                });
+                firebaseUid = firebaseRecord.uid;
+            } catch (fbError: any) {
+                if (fbError.code === 'auth/email-already-exists') {
+                    const existingFbUser = await firebaseAdmin.auth().getUserByEmail(email);
+                    firebaseUid = existingFbUser.uid;
+                    // Update the existing user to match the new request (consistent with seeding)
+                    await firebaseAdmin.auth().updateUser(firebaseUid, {
+                        password: password || 'Welcome@123',
+                        displayName: username,
+                    });
+                } else {
+                    throw fbError;
+                }
+            }
 
             // 2. Create in Postgres
             const passwordHash = password ? await bcrypt.hash(password, 12) : null;

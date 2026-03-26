@@ -1,11 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as dotenv from 'dotenv';
-import { PrismaClient } from '@prisma/client';
-
-// Load environment variables
-dotenv.config({ path: path.join(__dirname, '../.env') });
+import { PrismaClient } from '../src/generated/client';
 
 const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT;
 const prisma = new PrismaClient();
