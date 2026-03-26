@@ -475,11 +475,49 @@ async function main() {
 
         // --- 2. Mock Semester Result ---
         const semester = 2; // Fixed to semester 2 for demo
-        const sgpa = deterministicResults[i].sgpa;
-        const cgpa = deterministicResults[i].cgpa;
-        const resultString = `${student.enrollmentNo}:${sgpa}:${cgpa}`;
+        // Get 5 courses for this program to seed SubjectResults
+        const programCourses = data.courses.slice(0, 5);
+        let totalCredits = 0;
+        let earnedPoints = 0;
+        let totalMarksObtained = 0;
+        
+        const subjectResultsData = [];
+        for (const course of programCourses) {
+            const external = Math.floor(Math.random() * (70 - 45) + 50); // Ensuring mostly passing marks
+            const internal = Math.floor(Math.random() * (25 - 15) + 15);
+            const total = external + internal;
+            
+            let grade = 'F';
+            let points = 0;
+            if (total >= 90) { grade = 'O'; points = 10; }
+            else if (total >= 80) { grade = 'A+'; points = 9; }
+            else if (total >= 70) { grade = 'A'; points = 8; }
+            else if (total >= 60) { grade = 'B+'; points = 7; }
+            else if (total >= 50) { grade = 'B'; points = 6; }
+            else if (total >= 45) { grade = 'C'; points = 5; }
+            else if (total >= 40) { grade = 'P'; points = 4; }
+
+            totalCredits += course.credits;
+            earnedPoints += (points * course.credits);
+            totalMarksObtained += total;
+
+            subjectResultsData.push({
+                courseId: course.id,
+                internalMarks: internal,
+                externalMarks: external,
+                totalMarks: total,
+                grade: grade,
+                creditsEarned: course.credits
+            });
+        }
+
+        const sgpa = earnedPoints / totalCredits;
+        const cgpa = sgpa; // For demo purposes, set CGPA = SGPA if only one sem exists, or slightly lower/higher
+        
+        // Use toFixed(2) for resultHash string as standardized in previous step
+        const resultString = `${student.enrollmentNo}:${sgpa.toFixed(2)}:${cgpa.toFixed(2)}`;
         const resultHash = crypto.createHash('sha256').update(resultString).digest('hex');
-        const txHash = `0x${crypto.createHash('sha256').update(student.enrollmentNo + '_TX_SECURE').digest('hex')}`; // Deterministic TX hash
+        const txHash = `0x${crypto.createHash('sha256').update(student.enrollmentNo + '_TX_SECURE').digest('hex')}`;
 
         const resultRecord = await prisma.result.upsert({
             where: { id: student.id + '-res' },
@@ -510,41 +548,31 @@ async function main() {
             }
         });
 
-        // Get 5 courses for this program to seed SubjectResults
-        const programCourses = data.courses.slice(0, 5);
-        
-        for (const course of programCourses) {
-            const external = Math.floor(Math.random() * (70 - 40) + 40);
-            const internal = Math.floor(Math.random() * (30 - 20) + 20);
-            const total = external + internal;
-            let grade = 'A';
-            if (total > 90) grade = 'O';
-            else if (total > 80) grade = 'A+';
-            else if (total > 70) grade = 'A';
-            else if (total > 60) grade = 'B+';
-            else grade = 'B';
-
+        for (const sr of subjectResultsData) {
             await prisma.subjectResult.upsert({
-                where: { resultId_courseId: { resultId: resultRecord.id, courseId: course.id } },
+                where: { resultId_courseId: { resultId: resultRecord.id, courseId: sr.courseId } },
                 update: {
-                    internalMarks: internal,
-                    externalMarks: external,
-                    totalMarks: total,
-                    grade: grade,
-                    creditsEarned: course.credits
+                    internalMarks: sr.internalMarks,
+                    externalMarks: sr.externalMarks,
+                    totalMarks: sr.totalMarks,
+                    grade: sr.grade,
+                    creditsEarned: sr.creditsEarned
                 },
                 create: {
                     resultId: resultRecord.id,
-                    courseId: course.id,
-                    internalMarks: internal,
-                    externalMarks: external,
-                    totalMarks: total,
-                    grade: grade,
-                    creditsEarned: course.credits
+                    courseId: sr.courseId,
+                    internalMarks: sr.internalMarks,
+                    externalMarks: sr.externalMarks,
+                    totalMarks: sr.totalMarks,
+                    grade: sr.grade,
+                    creditsEarned: sr.creditsEarned
                 }
             });
         }
-        console.log(`🎓 Demo Result Hash for ${student.name} (${student.enrollmentNo}):\n   ${resultHash}`);
+        console.log(`🎓 Demo Result for ${student.name} (${student.enrollmentNo}):`);
+        console.log(`   SGPA: ${sgpa.toFixed(2)}, CGPA: ${cgpa.toFixed(2)}`);
+        console.log(`   Hash: ${resultHash}`);
+        console.log(`   Table Row: | **${student.name}** | \`${student.enrollmentNo}\` | \`${admitHash}\` | \`${resultHash}\` |`);
         console.log(`   Blockchain TX: ${txHash}\n`);
     }
 

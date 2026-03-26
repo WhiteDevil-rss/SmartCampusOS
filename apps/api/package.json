@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "build": "tsc",
-        "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+        "dev": "ts-node-dev --respawn --transpile-only --ignore-watch ../../packages src/app.ts",
         "start": "node dist/app.js",
         "lint": "eslint src/**/*.ts",
         "db:push": "prisma db push",

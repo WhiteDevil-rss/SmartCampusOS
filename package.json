@@ -5,7 +5,8 @@
     "scripts": {
         "build": "turbo run build",
         "dev": "turbo run dev",
-        "dev:all": "docker compose up -d && pnpm run dev",
+        "clean": "rm -rf .turbo apps/api/dist apps/web/.next node_modules/.cache",
+        "dev:all": "docker compose up -d && pnpm run clean && pnpm run dev",
         "stop": "docker compose stop",
         "db:init": "docker compose up -d && cd apps/api && npx prisma db push && npx prisma db seed && npx ts-node scripts/seed-firebase.ts",
         "lint": "turbo run lint",

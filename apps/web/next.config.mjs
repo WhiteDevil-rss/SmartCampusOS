@@ -7,6 +7,8 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  incremental: true,
+  transpilePackages: ['@smartcampus-os/types', '@smartcampus-os/validation'],
   typescript: {
     ignoreBuildErrors: true,
   },

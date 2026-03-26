@@ -222,7 +222,7 @@ export const publishResults = async (req: AuthRequest, res: Response) => {
                 const external = sr.externalMarks || 0;
                 const total = internal + external;
                 
-                // Simple grade calculation (Mock logic)
+                // Standardized 10-point absolute grading scale
                 let grade = 'F';
                 let points = 0;
                 if (total >= 90) { grade = 'O'; points = 10; }
@@ -230,6 +230,7 @@ export const publishResults = async (req: AuthRequest, res: Response) => {
                 else if (total >= 70) { grade = 'A'; points = 8; }
                 else if (total >= 60) { grade = 'B+'; points = 7; }
                 else if (total >= 50) { grade = 'B'; points = 6; }
+                else if (total >= 45) { grade = 'C'; points = 5; }
                 else if (total >= 40) { grade = 'P'; points = 4; }
 
                 totalCredits += sr.course.credits;
@@ -254,14 +255,27 @@ export const publishResults = async (req: AuthRequest, res: Response) => {
             });
 
             if (result) {
-                // Align with verification.controller.ts pattern: `${enrollmentNo}:${sgpa}:${cgpa}`
-                const verificationString = `${result.student.enrollmentNo}:${sgpa.toFixed(2)}:${result.cgpa}`;
+                // Calculate CGPA (Average of all published SGPA for the student)
+                const previousResults = await prisma.result.findMany({
+                    where: { 
+                        studentId: result.studentId, 
+                        status: 'PUBLISHED',
+                        NOT: { id: resultId } 
+                    }
+                });
+
+                const allSgpas = [...previousResults.map(r => r.sgpa), sgpa];
+                const cgpa = allSgpas.reduce((acc, val) => acc + val, 0) / allSgpas.length;
+
+                // Standardized Verification Hash: enrollmentNo:SGPA:CGPA (toFixed(2) for both)
+                const verificationString = `${result.student.enrollmentNo}:${sgpa.toFixed(2)}:${cgpa.toFixed(2)}`;
                 const resultHash = crypto.createHash('sha256').update(verificationString).digest('hex');
 
                 await prisma.result.update({
                     where: { id: resultId },
                     data: {
                         sgpa,
+                        cgpa,
                         status: 'PUBLISHED',
                         publishedAt: new Date(),
                         resultHash

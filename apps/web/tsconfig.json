@@ -23,9 +23,9 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"],
+      "@smartcampus-os/types": ["../../packages/types/src"],
+      "@smartcampus-os/validation": ["../../packages/validation/src"]
     },
     "target": "ES2017"
   },

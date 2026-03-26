@@ -35,7 +35,8 @@ export const verifyResultPublicly = async (req: Request, res: Response) => {
 
         // Recalculate hash dynamically to prove database integrity
         // Pattern: studentId + sgpa + cgpa + semester
-        const verificationString = `${student.id}-${latestResult.sgpa}-${latestResult.cgpa}-${latestResult.semester}`;
+        // Standardized Verification Hash: enrollmentNo:SGPA:CGPA (toFixed(2) for both)
+        const verificationString = `${student.enrollmentNo}:${latestResult.sgpa.toFixed(2)}:${latestResult.cgpa.toFixed(2)}`;
         const computedHash = crypto.createHash('sha256').update(verificationString).digest('hex');
 
         const isVerified = (computedHash === latestResult.resultHash);

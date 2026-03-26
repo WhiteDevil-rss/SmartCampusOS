@@ -85,7 +85,7 @@ export const verifyResultIntegrity = async (req: Request, res: Response) => {
         const latestResult = student.results[0];
 
         if (latestResult.resultHash !== hash && latestResult.blockchainTxHash !== hash) {
-            const verifyString = `${student.enrollmentNo}:${latestResult.sgpa}:${latestResult.cgpa}`;
+            const verifyString = `${student.enrollmentNo}:${latestResult.sgpa.toFixed(2)}:${latestResult.cgpa.toFixed(2)}`;
             const recomputedHas = crypto.createHash('sha256').update(verifyString).digest('hex');
             
             if (recomputedHas !== hash) {
