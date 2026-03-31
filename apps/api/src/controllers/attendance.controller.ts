@@ -134,6 +134,7 @@ export const getStudentsForSlot = async (req: AuthRequest, res: Response) => {
         });
 
         if (!slot) return res.status(404).json({ error: 'Timetable slot not found' });
+        if (!slot.batchId) return res.status(400).json({ error: 'Timetable slot has no assigned batch' });
 
         const students = await prisma.student.findMany({
             where: { batchId: slot.batchId },

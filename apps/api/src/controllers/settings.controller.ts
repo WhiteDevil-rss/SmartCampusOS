@@ -10,7 +10,7 @@ export const getSettings = async (req: Request, res: Response) => {
 
         if (!settings) {
             // Should have been seeded, but handle just in case
-            return res.status(404).json({ error: 'System configuration not found' });
+            return res.status(200).json(null);
         }
 
         res.json(settings);

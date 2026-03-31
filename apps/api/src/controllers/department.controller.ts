@@ -43,7 +43,7 @@ export const getDepartmentById = async (req: AuthRequest, res: Response) => {
             where: { id },
         });
 
-        if (!department) return res.status(404).json({ error: 'Not found' });
+        if (!department) return res.status(200).json(null);
 
         // Authorization Check: SUPERADMIN can see all, others can see own university
         if (req.user!.role !== 'SUPERADMIN' && String(req.user!.universityId) !== String(department.universityId)) {
@@ -136,7 +136,7 @@ export const updateDepartment = async (req: AuthRequest, res: Response) => {
         const { name, shortName, hod, email } = req.body;
 
         const targetDept = await prisma.department.findUnique({ where: { id } });
-        if (!targetDept) return res.status(404).json({ error: 'Not found' });
+        if (!targetDept) return res.status(200).json(null);
 
         if (req.user!.role === 'UNI_ADMIN' && req.user!.universityId !== targetDept.universityId) {
             return res.status(403).json({ error: 'Forbidden' });
@@ -190,7 +190,7 @@ export const deleteDepartment = async (req: AuthRequest, res: Response) => {
             where: { id },
             include: { _count: { select: { courses: true, batches: true, faculty: true, timetables: true } } }
         }) as any;
-        if (!targetDept) return res.status(404).json({ error: 'Not found' });
+        if (!targetDept) return res.status(200).json(null);
 
         if (req.user!.role === 'UNI_ADMIN' && req.user!.universityId !== targetDept.universityId) {
             return res.status(403).json({ error: 'Forbidden' });

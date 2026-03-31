@@ -404,7 +404,7 @@ export default function CareersPage() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
                                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-purple-400" />
                             </span>
-                            <span className="text-purple-300 text-xs font-bold tracking-wider uppercase">We're Hiring</span>
+                            <span className="text-purple-300 text-xs font-bold tracking-wider uppercase">We&apos;re Hiring</span>
                         </div>
 
                         <h1 className="text-5xl md:text-7xl font-black tracking-tighter leading-tight">

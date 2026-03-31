@@ -17,7 +17,7 @@ export const getVerifiedDocs = async (req: AuthRequest, res: Response) => {
         });
 
         if (!student) {
-            return res.status(404).json({ error: 'Student profile not found' });
+            return res.status(200).json(null);
         }
 
         // Fetch verified results

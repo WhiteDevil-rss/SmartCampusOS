@@ -17,20 +17,63 @@ export const getBatches = async (req: AuthRequest, res: Response) => {
         if (universityId) filters.universityId = universityId;
         if (departmentId) filters.departmentId = departmentId;
 
-        if (req.user!.role === 'UNI_ADMIN' && !universityId) filters.universityId = req.user!.universityId;
-        if (req.user!.role === 'DEPT_ADMIN' && !departmentId) filters.departmentId = req.user!.entityId;
+        if (req.user!.role === 'UNI_ADMIN' && !universityId) {
+            if (req.user!.universityId) {
+                filters.universityId = req.user!.universityId;
+            } else {
+                // If a UNI_ADMIN has no universityId assigned, they shouldn't see any batches
+                return res.json([]);
+            }
+        }
 
-        const batches = await prisma.batch.findMany({ where: filters, orderBy: { name: 'asc' } });
+        if (req.user!.role === 'DEPT_ADMIN' && !departmentId) {
+            if (req.user!.entityId) {
+                filters.departmentId = req.user!.entityId;
+            } else {
+                // If a DEPT_ADMIN has no entityId (departmentId) assigned, they shouldn't see any batches
+                return res.json([]);
+            }
+        }
+
+        const batches = await prisma.batch.findMany({ 
+            where: filters, 
+            orderBy: { name: 'asc' },
+            include: {
+                divisions: {
+                    select: {
+                        id: true,
+                        name: true,
+                        capacity: true,
+                        _count: { select: { studentAssignments: true } }
+                    }
+                }
+            }
+        });
         res.json(batches);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch batches' });
+    } catch (error: any) {
+        console.error('Fetch batches error:', error);
+        res.status(500).json({ 
+            error: 'Failed to fetch batches', 
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined 
+        });
     }
 };
 
 export const getBatchById = async (req: AuthRequest, res: Response) => {
     try {
         const id = req.params.id as string;
-        const batch = await prisma.batch.findUnique({ where: { id } });
+        const batch = await prisma.batch.findUnique({ 
+            where: { id },
+            include: {
+                divisions: {
+                    include: {
+                        classTeacher: { select: { id: true, name: true } },
+                        primaryRoom: { select: { id: true, name: true } },
+                        _count: { select: { studentAssignments: true } }
+                    }
+                }
+            }
+        });
         if (!batch) return res.status(404).json({ error: 'Not found' });
 
         if (req.user!.role === 'UNI_ADMIN' && req.user!.universityId !== batch.universityId) {
@@ -48,7 +91,7 @@ export const getBatchById = async (req: AuthRequest, res: Response) => {
 
 export const createBatch = async (req: AuthRequest, res: Response) => {
     try {
-        const { universityId, departmentId, name, program, semester, division, year, strength, totalStudents } = req.body;
+        const { universityId, departmentId, name, program, semester, year } = req.body;
 
         if (req.user!.role === 'UNI_ADMIN' && req.user!.universityId !== universityId) {
             return res.status(403).json({ error: 'Forbidden' });
@@ -58,7 +101,7 @@ export const createBatch = async (req: AuthRequest, res: Response) => {
         }
 
         const batch = await prisma.batch.create({
-            data: { universityId, departmentId, name, program, semester, division, year, strength, totalStudents: totalStudents || 0 }
+            data: { universityId, departmentId, name, program, semester, year }
         });
 
         res.status(201).json(batch);
@@ -70,7 +113,7 @@ export const createBatch = async (req: AuthRequest, res: Response) => {
 export const updateBatch = async (req: AuthRequest, res: Response) => {
     try {
         const id = req.params.id as string;
-        const { name, program, semester, division, year, strength, totalStudents } = req.body;
+        const { name, program, semester, year } = req.body;
 
         const targetBatch = await prisma.batch.findUnique({ where: { id } });
         if (!targetBatch) return res.status(404).json({ error: 'Not found' });
@@ -84,7 +127,7 @@ export const updateBatch = async (req: AuthRequest, res: Response) => {
 
         const batch = await prisma.batch.update({
             where: { id },
-            data: { name, program, semester, division, year, strength, totalStudents }
+            data: { name, program, semester, year }
         });
 
         res.json(batch);
@@ -106,16 +149,15 @@ export const deleteBatch = async (req: AuthRequest, res: Response) => {
             return res.status(403).json({ error: 'Forbidden' });
         }
 
-        // Cascade-delete: remove dependent timetable slots first, then timetable references
-        await prisma.timetableSlot.deleteMany({ where: { batchId: id } });
+        // Cleanup: remove all divisions and classes first
+        await prisma.$transaction([
+            prisma.studentDivisionAssignment.deleteMany({ where: { division: { batchId: id } } }),
+            prisma.timetableSlot.deleteMany({ where: { division: { batchId: id } } }),
+            prisma.class.deleteMany({ where: { division: { batchId: id } } }),
+            prisma.division.deleteMany({ where: { batchId: id } }),
+            prisma.batch.delete({ where: { id } })
+        ]);
 
-        // Remove this batch from any timetables that reference it
-        await prisma.timetable.updateMany({
-            where: { batchId: id },
-            data: { batchId: null }
-        });
-
-        await prisma.batch.delete({ where: { id } });
         res.status(204).send();
     } catch (error: any) {
         console.error('Delete batch error:', error);

@@ -89,6 +89,11 @@ import historyRoutes from './routes/history.routes';
 import jobRoutes from './routes/job.routes';
 import marksRoutes from './routes/marks.routes';
 import blockchainExtendedRoutes from './routes/blockchain-extended.routes';
+import admissionInquiryRoutes from './routes/admission-inquiry.routes';
+import divisionRoutes from './routes/division.routes';
+import classRoutes from './routes/class.routes';
+import studentTransferRoutes from './routes/student-transfer.routes';
+import collaborationRoutes from './routes/collaboration.routes';
 
 app.use('/v1/auth', authRoutes);
 app.use('/v1/universities/:universityId/departments', departmentRoutes);
@@ -148,6 +153,39 @@ app.use('/v2/history', historyRoutes);
 app.use('/v2/jobs', jobRoutes);
 app.use('/v2/marks', marksRoutes);
 app.use('/v2/blockchain', blockchainExtendedRoutes);
+app.use('/v2/admission-inquiries', admissionInquiryRoutes);
+app.use('/v2/divisions', divisionRoutes);
+app.use('/v2/classes', classRoutes);
+app.use('/v2/student-transfers', studentTransferRoutes);
+app.use('/v2/collaboration', collaborationRoutes);
+
+// Health Check
+import { cacheService } from './services/redis.service';
+import prisma from './lib/prisma';
+
+app.get('/v2/health', async (req, res) => {
+    try {
+        const dbStatus = await prisma.$queryRaw`SELECT 1`.then(() => 'online').catch(() => 'offline');
+        const aiStatus = await checkAiHealth();
+        const redisStatus = await cacheService.get('health-check').then(() => 'online').catch(() => 'offline');
+
+        res.json({
+            status: dbStatus === 'online' && aiStatus.reachable ? 'healthy' : 'degraded',
+            services: {
+                database: dbStatus,
+                aiEngine: aiStatus.status,
+                redis: redisStatus,
+            },
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        res.status(500).json({ status: 'unhealthy', error: 'Diagnostic failed' });
+    }
+});
+
+// Global Error Handler
+import { errorMiddleware } from './middlewares/error.middleware';
+app.use(errorMiddleware);
 
 const server = createServer(app);
 socketService.initialize(server);

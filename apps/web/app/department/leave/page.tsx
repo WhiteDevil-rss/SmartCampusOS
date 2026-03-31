@@ -183,7 +183,7 @@ export default function LeaveApprovalsPage() {
                                     </div>
                                     <div className="space-y-1">
                                         <div className="text-xs uppercase font-black text-text-muted">Reason/Context</div>
-                                        <div className="text-sm text-slate-700 dark:text-text-muted italic">"{selectedFlag.reason || 'No reason provided.'}"</div>
+                                        <div className="text-sm text-slate-700 dark:text-text-muted italic">&ldquo;{selectedFlag.reason || 'No reason provided.'}&rdquo;</div>
                                     </div>
                                     {selectedFlag.documentUrl && (
                                         <Button variant="outline" className="w-full flex items-center gap-2" asChild>

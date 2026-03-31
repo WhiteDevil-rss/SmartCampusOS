@@ -180,10 +180,7 @@ async function main() {
                 name: batch.name,
                 program: batch.program,
                 semester: batch.semester,
-                division: batch.division,
                 year: batch.year,
-                strength: batch.strength,
-                totalStudents: batch.totalStudents,
                 universityId: batch.universityId,
                 departmentId: batch.departmentId,
             },
@@ -192,10 +189,7 @@ async function main() {
                 name: batch.name,
                 program: batch.program,
                 semester: batch.semester,
-                division: batch.division,
                 year: batch.year,
-                strength: batch.strength,
-                totalStudents: batch.totalStudents,
                 universityId: batch.universityId,
                 departmentId: batch.departmentId,
             },
@@ -447,6 +441,7 @@ async function main() {
         await prisma.admissionApplication.upsert({
             where: { id: student.id },
             update: {
+                applicationId: `ADM-2025-${student.id.substring(0, 8).toUpperCase()}`,
                 universityId: student.universityId,
                 departmentId: student.departmentId,
                 programId: student.programId,
@@ -459,6 +454,7 @@ async function main() {
             },
             create: {
                 id: student.id,
+                applicationId: `ADM-2025-${student.id.substring(0, 8).toUpperCase()}`,
                 universityId: student.universityId,
                 departmentId: student.departmentId,
                 programId: student.programId,

@@ -1,18 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Force aggressive SWC minification and production compression
-  swcMinify: true,
   compress: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  incremental: true,
   transpilePackages: ['@smartcampus-os/types', '@smartcampus-os/validation'],
   typescript: {
     ignoreBuildErrors: true,
   },
   experimental: {
+    viewTransition: true,
     // Optimize package imports, preventing heavy libraries from increasing initial chunk sizes
     optimizePackageImports: [
       '@radix-ui/react-icons',
@@ -21,6 +16,11 @@ const nextConfig = {
       'recharts',
       'date-fns'
     ],
+  },
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
   },
   async rewrites() {
     return [

@@ -1,17 +1,43 @@
 'use client';
 
-import { LuCalendar, LuCheck, LuBookOpen, LuCreditCard, LuBell, LuChevronRight, LuCalendarDays } from 'react-icons/lu';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { 
+  Calendar, 
+  CheckCircle2, 
+  BookOpen, 
+  CreditCard, 
+  Bell, 
+  ChevronRight, 
+  Clock,
+  Zap,
+  LayoutDashboard,
+  BrainCircuit,
+  GraduationCap,
+  History,
+  Activity,
+  ArrowRight,
+  User,
+  MapPin
+} from 'lucide-react';
+import { GlassCard, StatCard } from '@/components/v2/shared/cards';
+import { IndustrialButton } from '@/components/v2/shared/inputs';
 import { cn } from '@/lib/utils';
 import { useStudentData } from '@/lib/hooks/use-student-data';
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api';
 import Link from 'next/link';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useRouter } from 'next/navigation';
+import { GreetingCard } from '@/components/v2/shared/greeting-card';
+import { LuSparkles } from 'react-icons/lu';
+import { CareerIntelligencePanel } from '@/components/v2/student/career-intelligence-panel';
+import { FinancialLedger } from '@/components/student/financial-ledger';
+import { GrantMatcher } from '@/components/student/grant-matcher';
+import { SentinelPanel } from '@/components/student/sentinel-panel';
+import { StudyHub } from '@/components/student/study-hub';
 
 export function StudentDashboard() {
     const { profile, stats, loading: dataLoading } = useStudentData();
+    const router = useRouter();
     const [todaySchedule, setTodaySchedule] = useState<any[]>([]);
     const [loadingSchedule, setLoadingSchedule] = useState(true);
 
@@ -32,145 +58,243 @@ export function StudentDashboard() {
         fetchTodaySchedule();
     }, [profile]);
 
-    const studentStats = [
-        { label: 'Attendance', value: `${stats?.attendancePercentage || 0}%`, icon: <LuCalendarDays />, color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/20' },
-        { label: 'Current SGPA', value: stats?.currentSGPA.toFixed(2) || '0.00', icon: <LuCheck />, color: 'text-emerald-400', bg: 'bg-emerald-500/10', border: 'border-emerald-500/20' },
-        { label: 'Credits', value: stats?.creditsEarned || '0', icon: <LuBookOpen />, color: 'text-amber-400', bg: 'bg-amber-500/10', border: 'border-amber-500/20' },
-        { label: 'Assignments', value: stats?.pendingAssignments || '0', icon: <LuCreditCard />, color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/20' },
-    ];
-
     if (dataLoading) {
         return (
             <div className="space-y-10">
+                <Skeleton className="h-64 md:h-80 w-full bg-[#0a1120]/50 rounded-[3rem] border border-white/5" />
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-28 bg-surface rounded-[24px]" />)}
+                    {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 bg-[#0a1120]/50 rounded-[24px] border border-white/5" />)}
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    <Skeleton className="lg:col-span-2 h-96 bg-surface rounded-[32px]" />
-                    <Skeleton className="h-96 bg-surface rounded-[32px]" />
+                    <Skeleton className="lg:col-span-2 h-96 bg-[#0a1120]/50 rounded-[32px] border border-white/5" />
+                    <Skeleton className="h-96 bg-[#0a1120]/50 rounded-[32px] border border-white/5" />
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="space-y-12 animate-fade-in pb-12">
-            {/* Stats Grid */}
+        <div className="space-y-10 pb-24">
+            {/* Greeting Command Center */}
+            <GreetingCard 
+                name={profile?.name || 'Academic'}
+                role="Student"
+                stats={[
+                    { label: "Today's Sessions", value: todaySchedule.length || 0, icon: Clock },
+                    { label: "Pending Coursework", value: stats?.pendingAssignments || 0, icon: BookOpen }
+                ]}
+                quickAction={{
+                    label: "Launch AI Assistant",
+                    onClick: () => router.push('/student/assistant')
+                }}
+            />
+
+            {/* Humanized Stats Matrix */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {studentStats.map((stat, i) => (
-                    <div key={i} className="p-6 glass-morphism rounded-[24px] group transition-all duration-500 border hover:border-border-hover relative overflow-hidden">
-                        <div className={cn("absolute -top-10 -right-10 w-32 h-32 rounded-full blur-[40px] opacity-20 transition-opacity group-hover:opacity-40", stat.bg)} />
-                        <div className="flex items-center gap-5 relative z-10">
-                            <div className={cn("p-4 rounded-[16px] transition-transform group-hover:scale-110 duration-500 border", stat.bg, stat.color, stat.border)}>
-                                {stat.icon}
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-bold text-text-muted uppercase tracking-[0.2em]">{stat.label}</p>
-                                <p className="text-3xl font-bold font-space-grotesk text-text-primary mt-1 tracking-tight">{stat.value}</p>
-                            </div>
-                        </div>
+                <StatCard
+                    title="Campus Presence"
+                    value={stats?.attendancePercentage || 0}
+                    suffix="%"
+                    icon={Calendar}
+                    change={2.4}
+                    changeDescription="vs last month"
+                />
+                <StatCard
+                    title="Academic Standing"
+                    value={stats?.currentSGPA || 0}
+                    precision={2}
+                    icon={GraduationCap}
+                    change={0.12}
+                    changeDescription="performance delta"
+                />
+                <StatCard
+                    title="Course Progression"
+                    value={Number(stats?.creditsEarned) || 0}
+                    icon={BrainCircuit}
+                    change={0}
+                    changeDescription="verified credits"
+                />
+                <StatCard
+                    title="Upcoming Deadlines"
+                    value={Number(stats?.pendingAssignments) || 0}
+                    icon={History}
+                    change={-1}
+                    changeDescription="unresolved items"
+                />
+            </div>
+
+            <div className="relative z-10">
+                <CareerIntelligencePanel />
+            </div>
+
+            {/* AI Academic Sentinel Portal */}
+            <div className="relative z-10">
+                <SentinelPanel />
+            </div>
+
+            <div className="relative z-10">
+                <StudyHub />
+            </div>
+
+            {/* AI Financial Intelligence Hub */}
+            <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                    <div className="p-2 bg-indigo-500/10 rounded-lg border border-indigo-500/20">
+                        <CreditCard className="w-4 h-4 text-indigo-500" />
                     </div>
-                ))}
+                    <h2 className="text-xl font-black uppercase tracking-tighter text-slate-100">
+                        Financial Intelligence Hub
+                    </h2>
+                </div>
+                <FinancialLedger />
+                <div className="pt-4">
+                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-500 mb-6 flex items-center gap-2">
+                        <LuSparkles className="w-4 h-4 text-indigo-400" />
+                        AI-Curated Grant Matches
+                    </h3>
+                    <GrantMatcher />
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                {/* Upcoming Classes */}
-                <div className="lg:col-span-2 space-y-8">
+                {/* Main: "My Day at a Glance" */}
+                <div className="lg:col-span-2 space-y-6">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-2xl font-bold font-space-grotesk text-text-primary tracking-tight flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
-                                <LuCalendar className="text-primary w-4 h-4" />
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
+                                <Clock className="w-4 h-4 text-primary" />
                             </div>
-                            Today's Schedule
-                        </h2>
-                        <Link href="/student/timetable">
-                            <Button variant="ghost" className="text-text-muted hover:text-text-primary hover:bg-surface-hover font-bold rounded-xl transition-all">
-                                View Full Timetable <LuChevronRight className="ml-1" />
-                            </Button>
+                            <h2 className="text-xl font-black uppercase tracking-tighter text-slate-100">
+                                My Day at a Glance
+                            </h2>
+                        </div>
+                        <Link href="/student/schedule">
+                            <IndustrialButton variant="secondary" size="sm" className="hidden sm:flex text-[9px] uppercase font-black tracking-widest">
+                                Full Timetable <ChevronRight className="ml-1 w-3 h-3" />
+                            </IndustrialButton>
                         </Link>
                     </div>
 
-                    <div className="space-y-4">
-                        {loadingSchedule ? (
-                            [1, 2].map(i => <Skeleton key={i} className="h-28 bg-surface rounded-[24px]" />)
-                        ) : todaySchedule.length > 0 ? (
-                            todaySchedule.map((slot, i) => (
-                                <div key={i} className={cn("p-6 glass-morphism rounded-[24px] flex items-center justify-between group cursor-pointer border hover:border-primary/30 transition-all duration-300", slot.isBreak ? "opacity-60 grayscale" : "")}>
-                                    <div className="flex items-center gap-6">
-                                        <div className="flex flex-col items-center justify-center w-20 h-20 rounded-[18px] bg-black/40 border border-border shadow-inner">
-                                            <span className="text-2xl font-bold font-space-grotesk text-primary tracking-tighter">{slot.startTime.split(':')[0]}</span>
-                                            <span className="text-[11px] font-bold text-text-secondary uppercase tracking-widest leading-none mt-1">{slot.startTime.split(':')[1]}</span>
+                    <GlassCard className="p-2 border-primary/10">
+                        <div className="space-y-1">
+                            {loadingSchedule ? (
+                                [1, 2].map(i => <Skeleton key={i} className="h-24 bg-white/5 rounded-2xl" />)
+                            ) : todaySchedule.length > 0 ? (
+                                todaySchedule.map((slot, i) => (
+                                    <div 
+                                        key={i} 
+                                        className={cn(
+                                            "group p-5 rounded-3xl border border-transparent hover:border-primary/20 hover:bg-primary/[0.03] transition-all duration-300 flex items-center justify-between",
+                                            slot.isBreak ? "opacity-30 grayscale pointer-events-none" : "cursor-pointer"
+                                        )}
+                                    >
+                                        <div className="flex items-center gap-6">
+                                            <div className="flex flex-col items-center justify-center w-16 h-16 rounded-2xl bg-slate-900 border border-white/5 shadow-xl group-hover:border-primary/40 transition-all duration-300 shrink-0">
+                                                <span className="text-2xl font-black font-space-grotesk text-primary leading-none">{slot.startTime.split(':')[0]}</span>
+                                                <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mt-1">{slot.startTime.split(':')[1]}</span>
+                                            </div>
+                                            <div>
+                                                <h3 className="text-lg font-black text-slate-100 group-hover:text-primary transition-all duration-300 flex items-center gap-2">
+                                                    {slot.isBreak ? 'Interval Period' : slot.course?.name}
+                                                    {!slot.isBreak && <span className="text-[10px] bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full font-black uppercase tracking-widest border border-emerald-500/20">Direct</span>}
+                                                </h3>
+                                                {!slot.isBreak && (
+                                                    <div className="flex items-center gap-4 mt-2 flex-wrap">
+                                                        <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                                                            <User className="w-3 h-3" /> {slot.faculty?.name}
+                                                        </span>
+                                                        <div className="w-1 h-1 rounded-full bg-slate-800" />
+                                                        <span className="text-[9px] font-black text-primary/80 bg-primary/5 px-2 py-0.5 rounded-lg border border-primary/20 flex items-center gap-1">
+                                                            <MapPin className="w-3 h-3" /> Hall: {slot.room?.name}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="text-xl font-bold font-space-grotesk text-text-primary group-hover:text-primary transition-colors">
-                                                {slot.isBreak ? 'Break' : slot.course?.name}
-                                            </h3>
-                                            {!slot.isBreak && (
-                                                <p className="text-text-muted text-sm mt-1 flex items-center gap-2">
-                                                    <span className="font-medium text-text-muted">{slot.faculty?.name}</span>
-                                                    <span className="w-1 h-1 rounded-full bg-slate-600"></span>
-                                                    <span className="text-primary/80 font-mono text-xs bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20">{slot.room?.name}</span>
-                                                </p>
-                                            )}
-                                        </div>
+                                        {!slot.isBreak && (
+                                            <IndustrialButton 
+                                                variant="outline" 
+                                                size="sm" 
+                                                className="opacity-0 group-hover:opacity-100 transition-all shrink-0 rounded-xl uppercase font-black tracking-widest text-[9px]"
+                                                onClick={() => router.push(`/student/attendance?slot=${slot.id}`)}
+                                            >
+                                                Initialize Presence
+                                            </IndustrialButton>
+                                        )}
                                     </div>
-                                    {!slot.isBreak && (
-                                        <div className="hidden sm:block">
-                                            <Button variant="outline" className="rounded-xl border-border-hover hover:bg-surface-hover hover:border-border-hover text-text-muted transition-all glow-button">
-                                                Track Session
-                                            </Button>
-                                        </div>
-                                    )}
+                                ))
+                            ) : (
+                                <div className="py-24 text-center flex flex-col items-center justify-center">
+                                    <div className="w-20 h-20 rounded-3xl bg-white/5 flex items-center justify-center mb-6 border border-white/5 animate-float">
+                                        <Zap className="w-10 h-10 text-slate-700" />
+                                    </div>
+                                    <h3 className="text-xl font-black text-slate-300 uppercase tracking-tighter">Campus Silence</h3>
+                                    <p className="text-sm text-slate-500 max-w-[320px] mx-auto mt-2 font-medium">Your current sector has no active sessions. Enjoy the focused deep work time.</p>
                                 </div>
-                            ))
-                        ) : (
-                            <div className="p-12 glass-morphism rounded-[32px] text-center border-dashed border-border-hover flex flex-col items-center justify-center">
-                                <div className="w-16 h-16 rounded-2xl bg-surface flex items-center justify-center mb-4">
-                                    <LuCalendar className="w-8 h-8 text-text-secondary" />
-                                </div>
-                                <h3 className="text-xl font-bold font-space-grotesk text-text-primary mb-2">Clear Schedule</h3>
-                                <p className="text-text-secondary">No active academic protocol nodes scheduled for today.</p>
-                            </div>
-                        )}
-                    </div>
+                            )}
+                        </div>
+                    </GlassCard>
                 </div>
 
-                {/* Sidebar Cards */}
-                <div className="space-y-10 lg:pl-4">
-                    <div className="space-y-8">
-                        <h2 className="text-2xl font-bold font-space-grotesk text-text-primary tracking-tight flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-                                <LuBell className="text-amber-500 w-4 h-4" />
+                {/* Sidebar: "My Campus Services" */}
+                <div className="space-y-8">
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                                <Activity className="w-4 h-4 text-emerald-500" />
                             </div>
-                            System Alerts
-                        </h2>
-                        <div className="space-y-4">
-                            <div className="p-5 rounded-[20px] bg-black/40 border border-border hover:border-border-hover transition-all cursor-pointer group shadow-inner">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary bg-primary/10 px-2 py-1 rounded-md">Academic</span>
-                                    <span className="text-[10px] uppercase font-bold text-text-secondary tracking-wider">Today</span>
-                                </div>
-                                <p className="text-sm font-bold text-text-muted group-hover:text-text-primary transition-colors leading-relaxed">
-                                    New neural network assignment uploaded for AI & ML track. Ensure submission before deadline.
-                                </p>
-                            </div>
+                            <h2 className="text-xl font-black uppercase tracking-tighter text-zinc-100">
+                                Hub Shortcuts
+                            </h2>
                         </div>
-                        <Button variant="ghost" className="w-full text-text-muted hover:text-text-primary hover:bg-surface-hover rounded-[16px] font-bold border border-border hover:border-border-hover transition-all h-12">
-                            Access Alert Center
-                        </Button>
+                        
+                        <div className="grid grid-cols-1 gap-3">
+                             {[
+                                { title: 'Verified Records', href: '/student/results', icon: CheckCircle2, label: 'Performance Review' },
+                                { title: 'Financial Ledger', href: '/student/fees', icon: CreditCard, label: 'Tuition & Grants' },
+                                { title: 'Learning Matrix', href: '/student/academics', icon: BookOpen, label: 'Course Catalog' },
+                            ].map((item, idx) => (
+                                <Link key={idx} href={item.href} className="flex items-center justify-between p-5 rounded-3xl bg-white/5 border border-white/5 hover:border-primary/40 hover:bg-primary/[0.02] transition-all duration-300 group cursor-pointer shadow-lg shadow-black/20">
+                                    <div className="flex items-center gap-4">
+                                        <div className="p-3 rounded-2xl bg-white/5 text-slate-500 group-hover:text-primary group-hover:bg-primary/10 transition-all duration-300">
+                                            <item.icon className="w-5 h-5" />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600 group-hover:text-primary/70 transition-colors">{item.title}</span>
+                                            <span className="text-base font-black text-slate-300 group-hover:text-white transition-colors duration-200 font-space-grotesk">{item.label}</span>
+                                        </div>
+                                    </div>
+                                    <ChevronRight className="w-4 h-4 text-slate-700 group-hover:text-primary transition-all duration-300 group-hover:translate-x-1" />
+                                </Link>
+                            ))}
+                        </div>
+
+                        <Link href="/helpdesk" className="block w-full">
+                            <IndustrialButton variant="secondary" className="w-full h-14 uppercase tracking-[0.2em] text-[10px] font-black rounded-2xl border-white/5 hover:border-primary/20">
+                                Access Control Center
+                            </IndustrialButton>
+                        </Link>
                     </div>
 
-                    <div className="glass-morphism rounded-[32px] p-8 mt-10 border border-border relative overflow-hidden group">
-                        <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/20 blur-[50px] rounded-full group-hover:scale-150 transition-transform duration-700" />
-                        <h3 className="text-xl font-bold font-space-grotesk text-text-primary mb-2 relative z-10">AI Copilot</h3>
-                        <p className="text-sm text-text-muted mb-6 relative z-10 relative z-10">Your institutional intelligence assistant is ready.</p>
-                        <Button className="w-full glow-button bg-primary text-text-primary font-bold rounded-xl h-12 relative z-10">
-                            Initialize Query
-                        </Button>
-                    </div>
+                    {/* Pro AI Assistant Card */}
+                    <GlassCard className="p-10 relative overflow-hidden group border-primary/30 bg-primary/[0.05] rounded-[3rem]">
+                        <div className="absolute -top-12 -right-12 w-48 h-48 bg-primary/20 blur-[60px] rounded-full pointer-events-none group-hover:bg-primary/30 transition-all duration-500" />
+                        <div className="relative z-10">
+                            <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-white mb-6 shadow-xl shadow-primary/30 group-hover:scale-110 transition-transform duration-500">
+                                <BrainCircuit className="w-8 h-8" />
+                            </div>
+                            <h3 className="text-2xl font-black uppercase tracking-tight text-slate-100 mb-2 font-space-grotesk">Campus AI</h3>
+                            <p className="text-sm text-slate-400 mb-8 leading-relaxed font-medium">Your personal academic liaison. Ask anything about your schedule, grades, or faculty feedback.</p>
+                            <IndustrialButton 
+                                className="w-full glow-button uppercase font-black tracking-widest text-[10px] h-14 rounded-2xl"
+                                onClick={() => router.push('/student/assistant')}
+                            >
+                                Initiate Inquiry <ArrowRight className="ml-2 w-4 h-4" />
+                            </IndustrialButton>
+                        </div>
+                    </GlassCard>
                 </div>
             </div>
         </div>
     );
 }
-

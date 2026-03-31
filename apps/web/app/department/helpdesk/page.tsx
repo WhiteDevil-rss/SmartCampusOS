@@ -231,7 +231,7 @@ export default function HelpdeskPage() {
                                                 </div>
                                                 {getStatusBadge(comp.status)}
                                             </div>
-                                            <p className="text-sm text-slate-600 dark:text-text-muted line-clamp-2 italic">"{comp.description}"</p>
+                                            <p className="text-sm text-slate-600 dark:text-text-muted line-clamp-2 italic">&ldquo;{comp.description}&rdquo;</p>
                                             <div className="text-[11px] text-text-muted flex items-center gap-4">
                                                 <span className="flex items-center gap-1"><LuClock className="h-3 w-3" /> {new Date(comp.createdAt).toLocaleString()}</span>
                                                 {!comp.isAnonymous && <span className="flex items-center gap-1 font-medium text-slate-600 dark:text-text-muted"><LuUser className="h-3 w-3" /> {comp.student?.name}</span>}
@@ -269,7 +269,7 @@ export default function HelpdeskPage() {
                                     </div>
                                     <div className="space-y-1">
                                         <div className="text-xs uppercase font-black text-text-muted">Request Motive</div>
-                                        <div className="text-sm text-slate-700 dark:text-text-muted italic">"{selectedRequest.description}"</div>
+                                        <div className="text-sm text-slate-700 dark:text-text-muted italic">&ldquo;{selectedRequest.description}&rdquo;</div>
                                     </div>
                                 </div>
                                 <div className="flex gap-3">
@@ -301,7 +301,7 @@ export default function HelpdeskPage() {
                             <div className="space-y-4 pt-4">
                                 <div className="p-4 bg-rose-500/5 rounded-xl border border-rose-500/10">
                                     <div className="font-bold text-slate-900 dark:text-text-primary mb-1">{selectedComplaint.subject}</div>
-                                    <p className="text-sm text-slate-600 dark:text-text-muted">"{selectedComplaint.description}"</p>
+                                    <p className="text-sm text-slate-600 dark:text-text-muted">&ldquo;{selectedComplaint.description}&rdquo;</p>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium">Official Resolution / Response</label>

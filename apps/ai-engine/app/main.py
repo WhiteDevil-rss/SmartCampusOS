@@ -4,16 +4,17 @@ FastAPI entrypoint for the AI Timetable Engine — v3.1.0
 
 import math
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.models import GenerateRequest, GenerateResponse
-from app.engine import generate
+from app.models import GenerateRequest, GenerateResponse, ForecastRequest, ForecastResponse
+from app.solver import TimetableScheduler
+from app.predictor import calculate_forecast
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
-app = FastAPI(title="AI Timetable Engine", version="8.0.0")
+app = FastAPI(title="AI Timetable Engine", version="11.0.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -31,14 +32,14 @@ def health():
     return {
         "status": "ok",
         "service": "ai-engine",
-        "solver": "Standard Lib Greedy CSP",
-        "version": "8.0.0",
+        "solver": "ortools-cp-sat-v3.1.0",
+        "version": "11.0.0",
         "features": [
-            "credit-based-slot-calculation",
-            "multi-faculty-rotation",
-            "timeline-config",
-            "preflight-capacity-checks",
-            "json-csv-output",
+            "constraint-satisfaction-opt",
+            "predictive-resource-forecast",
+            "elective-basket-sync",
+            "gap-minimization",
+            "realtime-solver-stats",
         ],
     }
 
@@ -49,28 +50,34 @@ def health():
 
 @app.post("/solve", response_model=GenerateResponse)
 def solve_timetable(req: GenerateRequest):
+    """
+    Main entry point for timetable generation.
+    Uses OR-Tools CP-SAT solver for global optimization.
+    """
     try:
-        # 1. Convert Pydantic request to dictionary
-        # The new engine expects a flat dict or a { "data": ... } structure.
-        # We'll pass it the whole thing as a dict.
-        payload = req.dict()
-        
-        # 2. Call the new engine
-        result = generate(payload)
-        
-        # 3. Map result to GenerateResponse
-        # Note: 'slots' in GenerateResponse expects 'SlotResult' objects.
-        # The engine's result['slots'] already matches most fields.
-        
-        return GenerateResponse(
-            status=result["status"],
-            message=result["message"],
-            slots=result["slots"],
-            stats=result["stats"]
-        )
+        scheduler = TimetableScheduler(req)
+        response = scheduler.solve()
+        return response
     except Exception as exc:
         log.exception("Solver crashed: %s", exc)
         return GenerateResponse(
             status="ERROR",
             message=f"Internal solver error: {str(exc)}",
         )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Forecast endpoint
+# ─────────────────────────────────────────────────────────────────────────────
+
+@app.post("/forecast", response_model=ForecastResponse)
+def forecast_resource_usage(req: ForecastRequest):
+    """
+    Predictive resource management endpoint.
+    Calculates overcrowding risks based on historical attendance patterns.
+    """
+    try:
+        return calculate_forecast(req)
+    except Exception as exc:
+        log.exception("Forecaster failed: %s", exc)
+        raise HTTPException(status_code=500, detail=str(exc))

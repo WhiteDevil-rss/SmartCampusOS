@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { api } from '@/lib/api';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,51 +20,49 @@ export function AttendanceManagement() {
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const fetchStudents = useCallback(async () => {
+        if (!slotId) return;
+        try {
+            setLoading(true);
+            const res = await api.get(`/v2/attendance/students/${slotId}`);
+            setStudents(res.data);
+            const initial: Record<string, 'PRESENT' | 'ABSENT'> = {};
+            res.data.forEach((s: any) => initial[s.id] = 'PRESENT');
+            setAttendance(initial);
+        } catch (err: any) {
+            console.error('Fetch Students Error:', err);
+            setError(err.response?.data?.error || 'Failed to load students');
+        } finally {
+            setLoading(false);
+        }
+    }, [slotId]);
+
     useEffect(() => {
         if (!slotId) {
             setError('No timetable slot selected');
             setLoading(false);
             return;
         }
-
-        const fetchStudents = async () => {
-            try {
-                setLoading(true);
-                const res = await api.get(`/v2/attendance/students/${slotId}`);
-                setStudents(res.data);
-                // Initialize all as Present by default
-                const initial: Record<string, 'PRESENT' | 'ABSENT'> = {};
-                res.data.forEach((s: any) => initial[s.id] = 'PRESENT');
-                setAttendance(initial);
-            } catch (err: any) {
-                console.error('Fetch Students Error:', err);
-                setError(err.response?.data?.error || 'Failed to load students');
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchStudents();
-    }, [slotId]);
+    }, [slotId, fetchStudents]);
 
-    const toggleStatus = (studentId: string) => {
+    const toggleStatus = useCallback((studentId: string) => {
         setAttendance(prev => ({
             ...prev,
             [studentId]: prev[studentId] === 'PRESENT' ? 'ABSENT' : 'PRESENT'
         }));
-    };
+    }, []);
 
-    const markAll = (status: 'PRESENT' | 'ABSENT') => {
+    const markAll = useCallback((status: 'PRESENT' | 'ABSENT') => {
         const updated: Record<string, 'PRESENT' | 'ABSENT'> = {};
         students.forEach(s => updated[s.id] = status);
         setAttendance(updated);
-    };
+    }, [students]);
 
-    const handleSave = async () => {
+    const handleSave = useCallback(async () => {
         if (!slotId) return;
         try {
             setSaving(true);
-            // 1. Create session
             const sessionRes = await api.post('/v2/attendance/session', {
                 timetableSlotId: slotId,
                 date: new Date().toISOString(),
@@ -73,8 +71,6 @@ export function AttendanceManagement() {
             });
 
             const sessionId = sessionRes.data.id;
-
-            // 2. Bulk mark
             const records = students.map(s => ({
                 studentId: s.id,
                 status: attendance[s.id],
@@ -89,16 +85,18 @@ export function AttendanceManagement() {
             router.push('/faculty?attendance=success');
         } catch (err: any) {
             console.error('Save Attendance Error:', err);
-            alert('Failed to save attendance: ' + (err.response?.data?.error || 'Internal Error'));
+            setError('Failed to save attendance. Please try again.');
         } finally {
             setSaving(false);
         }
-    };
+    }, [slotId, students, attendance, router]);
+
+    const presentCount = useMemo(() => 
+        Object.values(attendance).filter(s => s === 'PRESENT').length,
+    [attendance]);
 
     if (loading) return <Skeleton className="h-96 rounded-3xl bg-surface" />;
     if (error) return <div className="p-10 text-center text-rose-500 font-bold">{error}</div>;
-
-    const presentCount = Object.values(attendance).filter(s => s === 'PRESENT').length;
 
     return (
         <div className="space-y-8 animate-fade-in">

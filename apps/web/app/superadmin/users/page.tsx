@@ -3,6 +3,7 @@
 import { ProtectedRoute } from '@/components/protected-route';
 import { DashboardLayout } from '@/components/dashboard-layout';
 import { LuBuilding2, LuUsers, LuLayoutDashboard, LuUserPlus, LuShieldAlert, LuKeyRound, LuPower, LuPowerOff, LuClipboardList, LuUser } from 'react-icons/lu';
+import { UserListView } from '@/components/users/user-list-view';
 import { SUPERADMIN_NAV } from '@/lib/constants/nav-config';
 import { useEffect, useState, useCallback } from 'react';
 import { api } from '@/lib/api';
@@ -31,8 +32,7 @@ interface University {
 }
 
 export default function SuperAdminUsers() {
-    const [usersList, setUsersList] = useState<User[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false); // Users handled by UserListView
     const { confirmState, closeConfirm, askConfirm } = useConfirm();
     const { toast, showToast, hideToast } = useToast();
 
@@ -59,22 +59,12 @@ export default function SuperAdminUsers() {
         }
     }, []);
 
-    const fetchUsers = useCallback(async () => {
-        setLoading(true);
-        try {
-            const { data } = await api.get('/users');
-            setUsersList(data);
-        } catch (e) {
-            console.error(e);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
+    const [refreshKey, setRefreshKey] = useState(0);
+    const triggerRefresh = () => setRefreshKey(prev => prev + 1);
 
     useEffect(() => {
-        fetchUsers();
         fetchUniversities();
-    }, [fetchUsers, fetchUniversities]);
+    }, [fetchUniversities]);
 
     const handleCreateUser = async () => {
         try {
@@ -82,7 +72,8 @@ export default function SuperAdminUsers() {
             await api.post('/users', payload);
             setIsAddUserOpen(false);
             setNewUserForm({ username: '', email: '', password: '', role: 'SUPERADMIN', universityId: '', phoneNumber: '' });
-            fetchUsers();
+            triggerRefresh();
+            showToast('success', 'User account provisioned successfully.');
         } catch {
             showToast('error', 'Failed to create user. Ensure username/email are unique.');
         }
@@ -94,33 +85,18 @@ export default function SuperAdminUsers() {
             const payload = { ...editUserForm, entityId: editUserForm.universityId || null };
             await api.put(`/users/${selectedUserId}`, payload);
             setIsEditUserOpen(false);
-            fetchUsers();
+            triggerRefresh();
             showToast('success', 'User updated successfully!');
         } catch {
             showToast('error', 'Failed to update user. Username or email might be in use.');
         }
     };
 
-    const handleDeleteUser = (id: string) => {
-        askConfirm({
-            title: 'Delete User',
-            message: 'Permanently delete this user account? This action cannot be undone.',
-            requireTypedConfirm: true,
-            onConfirm: async () => {
-                try {
-                    await api.delete(`/users/${id}`);
-                    fetchUsers();
-                } catch {
-                    showToast('error', 'Failed to delete user. Cannot delete your own account.');
-                }
-            },
-        });
-    };
-
     const handleToggleStatus = async (id: string, currentStatus: boolean) => {
         try {
             await api.patch(`/users/${id}/status`, { isActive: !currentStatus });
-            fetchUsers();
+            triggerRefresh();
+            showToast('success', `User ${currentStatus ? 'disabled' : 'enabled'} successfully.`);
         } catch {
             showToast('error', 'Failed to update status. Cannot disable your own account.');
         }
@@ -142,7 +118,6 @@ export default function SuperAdminUsers() {
         }
     };
 
-
     const navItems = SUPERADMIN_NAV;
 
     return (
@@ -161,111 +136,25 @@ export default function SuperAdminUsers() {
                     </Button>
                 </div>
 
-                {loading ? (
-                    <div className="flex justify-center p-12"><div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin" /></div>
-                ) : (
-                    <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-xl dark:shadow-2xl overflow-hidden rounded-2xl">
-                        <CardHeader className="bg-slate-50 dark:bg-surface border-b border-slate-200 dark:border-border pb-6">
-                            <CardTitle className="text-xl text-slate-900 dark:text-text-primary">Registered Accounts</CardTitle>
-                            <CardDescription className="text-slate-600 dark:text-text-muted">A complete list of users registered across the multi-tenant architecture.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="p-0">
-                            <div className="table-container">
-                                <table className="w-full text-sm text-left">
-                                    <thead className="text-xs text-text-secondary dark:text-text-muted uppercase bg-slate-50 dark:bg-surface">
-                                        <tr>
-                                            <th className="px-6 py-5 font-bold tracking-wider">User</th>
-                                            <th className="px-6 py-5 font-bold tracking-wider">Role</th>
-                                            <th className="px-6 py-5 font-bold tracking-wider">Affiliation</th>
-                                            <th className="px-6 py-5 font-bold tracking-wider">Status</th>
-                                            <th className="px-6 py-5 font-bold tracking-wider text-right">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-slate-100 dark:divide-white/5">
-                                        {usersList.map((user) => (
-                                            <tr key={user.id} className="hover:bg-slate-50 dark:hover:bg-surface transition-colors group">
-                                                <td className="px-6 py-5">
-                                                    <div className="font-bold text-slate-900 dark:text-slate-100 group-hover:text-neon-cyan transition-colors">{user.username}</div>
-                                                    <div className="text-text-secondary dark:text-text-secondary text-xs mt-0.5">{user.email || 'No email provided'}</div>
-                                                </td>
-                                                <td className="px-6 py-5">
-                                                    <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 uppercase tracking-wider">
-                                                        {user.role}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-5 text-slate-700 dark:text-text-muted font-medium">
-                                                    {user.university ? user.university.shortName : 'System Wide'}
-                                                </td>
-                                                <td className="px-6 py-5">
-                                                    {user.isActive ? (
-                                                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2 animate-pulse"></div> Active
-                                                        </span>
-                                                    ) : (
-                                                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20 uppercase tracking-wider">
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-rose-500 mr-2"></div> Disabled
-                                                        </span>
-                                                    )}
-                                                </td>
-                                                <td className="px-6 py-5 text-right space-x-2">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="text-slate-900 dark:text-text-primary hover:bg-slate-100 dark:hover:bg-surface-hover border border-slate-200 dark:border-border rounded-xl font-bold"
-                                                        onClick={() => {
-                                                            setSelectedUserId(user.id);
-                                                            setEditUserForm({
-                                                                username: user.username,
-                                                                email: user.email || '',
-                                                                role: user.role,
-                                                                universityId: user.universityId || '',
-                                                                phoneNumber: (user as any).phoneNumber || '',
-                                                                address: (user as any).address || ''
-                                                            });
-                                                            setIsEditUserOpen(true);
-                                                        }}
-                                                    >
-                                                        Edit
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="text-amber-400 hover:bg-amber-500/10 hover:text-amber-300 border border-amber-500/10 rounded-xl font-bold"
-                                                        onClick={() => { setSelectedUserId(user.id); setIsResetPasswordOpen(true); }}
-                                                    >
-                                                        <LuKeyRound className="w-3.5 h-3.5 mr-1" /> Reset
-                                                    </Button>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className={cn(
-                                                            "rounded-xl font-bold border transition-all",
-                                                            user.isActive
-                                                                ? "text-rose-400 border-rose-500/10 hover:bg-rose-500/10 hover:text-rose-300"
-                                                                : "text-emerald-400 border-emerald-500/10 hover:bg-emerald-500/10 hover:text-emerald-300"
-                                                        )}
-                                                        onClick={() => handleToggleStatus(user.id, user.isActive)}
-                                                    >
-                                                        {user.isActive ? <LuPowerOff className="w-3.5 h-3.5 mr-1" /> : <LuPower className="w-3.5 h-3.5 mr-1" />}
-                                                        {user.isActive ? 'Disable' : 'Enable'}
-                                                    </Button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                        {usersList.length === 0 && (
-                                            <tr>
-                                                <td colSpan={5} className="px-6 py-12 text-center text-text-secondary">
-                                                    <LuShieldAlert className="w-8 h-8 mx-auto text-text-muted mb-2" />
-                                                    No users found in the system.
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </CardContent>
-                    </Card>
-                )}
+                <UserListView 
+                    key={refreshKey}
+                    title="Identities Directory"
+                    description="Comprehensive multi-tenant identity mesh with hierarchical sector filtering."
+                    onEdit={(u: any) => {
+                        setSelectedUserId(u.id);
+                        setEditUserForm({
+                            username: u.username,
+                            email: u.email || '',
+                            role: u.role,
+                            universityId: u.universityId || '',
+                            phoneNumber: u.phoneNumber || '',
+                            address: u.address || ''
+                        });
+                        setIsEditUserOpen(true);
+                    }}
+                    onToggleStatus={(u: any) => handleToggleStatus(u.id, u.isActive)}
+                    onResetPassword={(u: any) => { setSelectedUserId(u.id); setIsResetPasswordOpen(true); }}
+                />
 
                 {/* Add User Modal */}
                 <Dialog open={isAddUserOpen} onOpenChange={setIsAddUserOpen}>

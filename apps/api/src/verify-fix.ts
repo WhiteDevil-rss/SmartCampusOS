@@ -79,7 +79,6 @@ async function verifyFix(departmentId: string) {
             batches: batches.map(b => ({
                 id: b.id,
                 name: b.name,
-                strength: b.strength,
                 program: b.program,
                 semester: b.semester
             })),

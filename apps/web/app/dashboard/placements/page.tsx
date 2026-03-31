@@ -144,7 +144,7 @@ export default function PlacementsDashboard() {
                             </CardContent>
                         </Card>
 
-                        <Card className="glass-card shadow-sm border-border-subtle group">
+                        <Card className="bg-surface border-border shadow-md rounded-[1.5rem] group">
                             <CardContent className="p-8">
                                 <div className="flex justify-between items-start">
                                     <div>
@@ -158,7 +158,7 @@ export default function PlacementsDashboard() {
                             </CardContent>
                         </Card>
 
-                        <Card className="glass-card shadow-sm border-border-subtle group">
+                        <Card className="bg-surface border-border shadow-md rounded-[1.5rem] group">
                             <CardContent className="p-8">
                                 <div className="flex justify-between items-start">
                                     <div>
@@ -177,7 +177,7 @@ export default function PlacementsDashboard() {
 
                         {/* Recent Placements Table */}
                         <div className="lg:col-span-2">
-                            <Card className="glass-card shadow-sm border-border-subtle h-full flex flex-col overflow-hidden">
+                            <Card className="bg-surface border-border shadow-md rounded-[1.5rem] h-full flex flex-col overflow-hidden">
                                 <CardHeader className="bg-surface-secondary/50 border-b border-border-subtle p-6">
                                     <div className="flex items-center justify-between">
                                         <div>
@@ -252,7 +252,7 @@ export default function PlacementsDashboard() {
 
                         {/* Recruiting Companies */}
                         <div className="lg:col-span-1">
-                            <Card className="glass-card shadow-sm border-border-subtle h-full flex flex-col overflow-hidden">
+                            <Card className="bg-surface border-border shadow-md rounded-[1.5rem] h-full flex flex-col overflow-hidden">
                                 <CardHeader className="bg-surface-secondary/50 border-b border-border-subtle p-6">
                                     <div className="flex items-center justify-between">
                                         <CardTitle className="flex items-center gap-2 text-xl font-black text-text-primary">

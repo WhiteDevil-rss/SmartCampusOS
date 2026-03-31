@@ -1,27 +1,39 @@
 import { Router } from 'express';
 import { authenticate, requireRole } from '../middlewares/auth.middleware';
-import {
-    submitApplication,
-    getApplications,
-    updateApplicationStatus,
-    onboardStudent,
-    getPublicUniversities,
-    getPublicDepartments,
-    getPublicPrograms
-} from '../controllers/admission.controller';
+import { AdmissionController } from '../controllers/admission.controller';
 
 const router = Router();
 
-// Public Admission Route
-router.post('/public/submit', submitApplication);
-router.get('/public/universities', getPublicUniversities);
-router.get('/public/departments', getPublicDepartments);
-router.get('/public/programs', getPublicPrograms);
+// Public Admission Submission (Should probably be in public-portal routes, but keeping here for now)
+// router.post('/public/submit', AdmissionController.submitApplication); 
 
-// Admin Admission Routes
 router.use(authenticate);
-router.get('/admin', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN']), getApplications);
-router.patch('/admin/:id/status', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN']), updateApplicationStatus);
-router.post('/admin/:id/onboard', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN']), onboardStudent);
+
+// University Admin: Read-only access to all admissions in their university
+router.get('/university/:universityId', 
+    requireRole(['SUPERADMIN', 'UNI_ADMIN']), 
+    AdmissionController.getUniversityAdmissions
+);
+
+// Department Admin/Staff: Full control over their department admissions
+router.get('/department/:departmentId', 
+    requireRole(['SUPERADMIN', 'DEPT_ADMIN', 'DEPT_STAFF']), 
+    AdmissionController.getDepartmentAdmissions
+);
+
+router.get('/:appId', 
+    requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN', 'DEPT_STAFF']), 
+    AdmissionController.getApplicationDetail
+);
+
+router.post('/:appId/action', 
+    requireRole(['SUPERADMIN', 'DEPT_ADMIN', 'DEPT_STAFF']), 
+    AdmissionController.processAction
+);
+
+router.post('/:appId/notes', 
+    requireRole(['SUPERADMIN', 'DEPT_ADMIN', 'DEPT_STAFF']), 
+    AdmissionController.addNote
+);
 
 export default router;

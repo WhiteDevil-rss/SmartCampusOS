@@ -83,7 +83,8 @@ export const TimetableExport: React.FC<TimetableExportProps> = ({ targetId, file
             const batchSlots = new Map<string, any[]>();
             slots.forEach(s => {
                 if (s.isBreak) return;
-                const batchName = s.batch?.name || s.batchId;
+                // Use the new hierarchy: Division -> Batch
+                const batchName = s.division?.batch?.name || s.batch?.name || s.batchId || 'Unassigned';
                 if (!batchSlots.has(batchName)) batchSlots.set(batchName, []);
                 batchSlots.get(batchName)!.push(s);
             });
@@ -124,11 +125,11 @@ export const TimetableExport: React.FC<TimetableExportProps> = ({ targetId, file
                         } else {
                             // Format slot content
                             const cellTexts = daySlots.map(s => {
-                                const course = s.course?.code || s.courseCode;
-                                const fac1 = s.faculty?.name || s.facultyName;
+                                const course = s.classRecord?.subject?.code || s.course?.code || s.courseCode || 'Unknown';
+                                const fac1 = s.classRecord?.faculty?.name || s.faculty?.name || s.facultyName || 'Staff';
                                 const fac2 = s.faculty2?.name ? ` / ${s.faculty2?.name}` : '';
                                 const room = s.room?.name ? ` [${s.room?.name}]` : '';
-                                const type = s.slotType || s.sessionType?.name || s.course?.type || '';
+                                const type = s.slotType || s.sessionType?.name || s.classRecord?.subject?.type || '';
                                 return `${course} - ${fac1}${fac2}${room} (${type})`;
                             });
                             rowData.push(cellTexts.join('\n\n'));
@@ -152,7 +153,7 @@ export const TimetableExport: React.FC<TimetableExportProps> = ({ targetId, file
                 ['Day', 'Slot', 'Time', 'Batch', 'Course', 'Type', 'Faculty', 'Room', 'Elective']
             ];
 
-            let sortedSlots = [...slots].sort((a, b) => a.dayOfWeek - b.dayOfWeek || a.slotNumber - b.slotNumber);
+            const sortedSlots = [...slots].sort((a, b) => a.dayOfWeek - b.dayOfWeek || a.slotNumber - b.slotNumber);
             sortedSlots.forEach(s => {
                 if (s.isBreak) return;
 

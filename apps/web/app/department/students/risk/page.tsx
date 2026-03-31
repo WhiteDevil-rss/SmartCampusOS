@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import {
     LuShieldAlert, LuTrendingDown, LuActivity, LuSearch,
-    LuActivity as LuAlertTriangle, LuCheck, LuInfo
+    LuTriangleAlert, LuCheck, LuInfo
 } from 'react-icons/lu';
 import { Progress } from '@/components/ui/progress';
 
@@ -93,7 +93,7 @@ export default function StudentRiskAnalyticsPage() {
                             </CardHeader>
                             <CardContent>
                                 <div className="flex items-center gap-2">
-                                    <LuAlertTriangle className="w-5 h-5 text-red-500" />
+                                    <LuTriangleAlert className="w-5 h-5 text-red-500" />
                                     <span className="text-3xl font-bold text-red-600">
                                         {data.filter(d => d.riskCategory === 'High').length}
                                     </span>

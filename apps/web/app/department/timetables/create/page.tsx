@@ -13,12 +13,15 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { DEPT_ADMIN_NAV } from '@/lib/constants/nav-config';
 
-interface BatchItem {
+interface DivisionItem {
     id: string;
     name: string;
-    program: string | null;
-    semester: number | null;
-    strength: number;
+    capacity: number;
+    batch: {
+        name: string;
+        program: string | null;
+        semester: number | null;
+    };
 }
 
 export default function GenerateTimetablePage() {
@@ -32,22 +35,13 @@ export default function GenerateTimetablePage() {
     const [lockedSlots, setLockedSlots] = useState<any[]>([]);
     const [activeTimetable, setActiveTimetable] = useState<any>(null);
 
-    // Batch selection
-    const [batches, setBatches] = useState<BatchItem[]>([]);
-    const [batchesLoading, setBatchesLoading] = useState(true);
-    const [selectedBatchIds, setSelectedBatchIds] = useState<Set<string>>(new Set());
-    const [batchSearch, setBatchSearch] = useState('');
+    // Division selection
+    const [divisions, setDivisions] = useState<DivisionItem[]>([]);
+    const [divisionsLoading, setDivisionsLoading] = useState(true);
+    const [selectedDivisionIds, setSelectedDivisionIds] = useState<Set<string>>(new Set());
+    const [divisionSearch, setDivisionSearch] = useState('');
 
-    // AI Engine health
-    interface AiHealth {
-        status: string;
-        reachable: boolean;
-        solver?: string;
-        solverTimeoutMs?: number;
-        hardConstraints?: number;
-        softConstraints?: number;
-        version?: string;
-    }
+    // ... AiHealth ...
     const [aiHealth, setAiHealth] = useState<AiHealth | null>(null);
 
     const [config, setConfig] = useState({
@@ -56,18 +50,18 @@ export default function GenerateTimetablePage() {
         lectureDuration: 60,
         breakDuration: 60,
         numberOfBreaks: 1,
-        daysPerWeek: 6
+        daysPerWeek: 5
     });
 
-    // Fetch batches + AI health on mount
+    // Fetch divisions + AI health on mount
     useEffect(() => {
-        async function loadBatches() {
+        async function loadDivisions() {
             try {
-                const res = await api.get('/batches');
-                const data: BatchItem[] = res.data;
-                setBatches(data);
-                setSelectedBatchIds(new Set(data.map(b => b.id)));
-            } catch { /* ignore */ } finally { setBatchesLoading(false); }
+                const res = await api.get('/v2/divisions');
+                const data: DivisionItem[] = res.data;
+                setDivisions(data);
+                setSelectedDivisionIds(new Set(data.map(d => d.id)));
+            } catch { /* ignore */ } finally { setDivisionsLoading(false); }
         }
         async function loadAiHealth() {
             try {
@@ -75,85 +69,88 @@ export default function GenerateTimetablePage() {
                 setAiHealth(res.data);
             } catch { setAiHealth({ status: 'offline', reachable: false }); }
         }
-        loadBatches();
+        loadDivisions();
         loadAiHealth();
     }, []);
 
     const fetchLatestTimetable = useCallback(async () => {
         if (!user?.entityId) return;
         try {
-            const res = await api.get(`/departments/${user.entityId}/timetables/latest`);
+            const res = await api.get(`/v2/timetable/latest?departmentId=${user.entityId}`);
             setActiveTimetable(res.data.timetable);
         } catch {
-            console.log("No active timetable found.");
             setActiveTimetable(null);
         }
     }, [user?.entityId]);
 
     useEffect(() => { fetchLatestTimetable(); }, [user, fetchLatestTimetable]);
 
-    // Filter batches by semester
-    const filteredBatches = useMemo(() => {
-        let result = batches;
-        if (semesterFilter === 'odd') result = result.filter(b => b.semester && [1, 3, 5, 7, 9].includes(b.semester));
-        else if (semesterFilter === 'even') result = result.filter(b => b.semester && [2, 4, 6, 8, 10].includes(b.semester));
-        if (batchSearch) result = result.filter(b => b.name.toLowerCase().includes(batchSearch.toLowerCase()));
+    // Filter divisions by semester
+    const filteredDivisions = useMemo(() => {
+        let result = divisions;
+        if (semesterFilter === 'odd') result = result.filter(d => d.batch.semester && [1, 3, 5, 7, 9].includes(d.batch.semester));
+        else if (semesterFilter === 'even') result = result.filter(d => d.batch.semester && [2, 4, 6, 8, 10].includes(d.batch.semester));
+        
+        if (divisionSearch) {
+            const s = divisionSearch.toLowerCase();
+            result = result.filter(d => 
+                d.name.toLowerCase().includes(s) || 
+                d.batch.name.toLowerCase().includes(s)
+            );
+        }
         return result;
-    }, [batches, semesterFilter, batchSearch]);
+    }, [divisions, semesterFilter, divisionSearch]);
 
-    // When semester filter changes, auto-select all matching batches
+    // When semester filter changes, auto-select all matching divisions
     useEffect(() => {
-        const matching = batches.filter(b => {
-            if (semesterFilter === 'odd') return b.semester && [1, 3, 5, 7, 9].includes(b.semester);
-            if (semesterFilter === 'even') return b.semester && [2, 4, 6, 8, 10].includes(b.semester);
+        const matching = divisions.filter(d => {
+            if (semesterFilter === 'odd') return d.batch.semester && [1, 3, 5, 7, 9].includes(d.batch.semester);
+            if (semesterFilter === 'even') return d.batch.semester && [2, 4, 6, 8, 10].includes(d.batch.semester);
             return true;
         });
-        setSelectedBatchIds(new Set(matching.map(b => b.id)));
-    }, [semesterFilter, batches]);
+        setSelectedDivisionIds(new Set(matching.map(d => d.id)));
+    }, [semesterFilter, divisions]);
 
-    const allFilteredSelected = filteredBatches.length > 0 && filteredBatches.every(b => selectedBatchIds.has(b.id));
+    const allFilteredSelected = filteredDivisions.length > 0 && filteredDivisions.every(d => selectedDivisionIds.has(d.id));
 
     const toggleSelectAll = () => {
-        const next = new Set(selectedBatchIds);
+        const next = new Set(selectedDivisionIds);
         if (allFilteredSelected) {
-            filteredBatches.forEach(b => next.delete(b.id));
+            filteredDivisions.forEach(d => next.delete(d.id));
         } else {
-            filteredBatches.forEach(b => next.add(b.id));
+            filteredDivisions.forEach(d => next.add(d.id));
         }
-        setSelectedBatchIds(next);
+        setSelectedDivisionIds(next);
     };
 
-    const toggleBatch = (id: string) => {
-        const next = new Set(selectedBatchIds);
+    const toggleDivision = (id: string) => {
+        const next = new Set(selectedDivisionIds);
         if (next.has(id)) next.delete(id); else next.add(id);
-        setSelectedBatchIds(next);
+        setSelectedDivisionIds(next);
     };
 
     const handleGenerate = async () => {
         if (!user?.entityId) return;
-        if (selectedBatchIds.size === 0) {
-            setError('Please select at least one batch to generate a timetable.');
-            return;
+        if (selectedDivisionIds.size === 0) {
+            return setError('Please select at least one division to generate a timetable.');
         }
         setLoading(true);
         setError('');
         setSuccess('');
 
         try {
-            const response = await api.post(`/departments/${user.entityId}/timetables/generate`, {
+            const response = await api.post(`/v2/timetable/generate`, {
                 departmentId: user.entityId,
                 config,
-                semesterFilter,
-                selectedBatchIds: Array.from(selectedBatchIds),
+                selectedDivisionIds: Array.from(selectedDivisionIds),
                 continuousMode,
                 generationType,
                 lockedSlots: lockedSlots.length > 0 ? lockedSlots : undefined
             });
             setSuccess(`Success! Timetable generated in ${response.data.timetable.generationMs}ms.`);
             await fetchLatestTimetable();
-        } catch (e) {
-            const errorMsg = (e as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to generate timetable.';
-            setError(errorMsg);
+        } catch (e: any) {
+            setError(e.response?.data?.error || 'Failed to generate timetable.');
         } finally {
             setLoading(false);
         }
@@ -169,7 +166,7 @@ export default function GenerateTimetablePage() {
                         <Card className="glass-card shadow-sm border-slate-200 dark:border-border-hover">
                             <CardHeader>
                                 <CardTitle className="text-xl dark:text-text-primary">Generate Timetable</CardTitle>
-                                <CardDescription className="dark:text-text-muted">Configure time parameters and select batches to schedule.</CardDescription>
+                                <CardDescription className="dark:text-text-muted">Configure time parameters and select divisions to schedule.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 {error && <div className="p-3 bg-red-50 text-red-600 rounded text-sm font-medium">{error}</div>}
@@ -210,9 +207,9 @@ export default function GenerateTimetablePage() {
                                 </div>
                             </CardContent>
                             <CardFooter className="bg-slate-50/50 dark:bg-surface border-t dark:border-border-hover p-6">
-                                <Button onClick={handleGenerate} disabled={loading || selectedBatchIds.size === 0} className="w-full bg-neon-cyan hover:bg-cyan-600 dark:text-[#0a0a0c] text-text-primary shadow-[0_0_15px_rgba(57,193,239,0.4)] h-12 text-base font-bold transition-all">
+                                <Button onClick={handleGenerate} disabled={loading || selectedDivisionIds.size === 0} className="w-full bg-neon-cyan hover:bg-cyan-600 dark:text-[#0a0a0c] text-text-primary shadow-[0_0_15px_rgba(57,193,239,0.4)] h-12 text-base font-bold transition-all">
                                     {loading ? <LuLoaderCircle className="w-5 h-5 mr-2 animate-spin" /> : <LuPlay className="w-5 h-5 mr-2" />}
-                                    {loading ? 'Solving Constraints...' : `Generate for ${selectedBatchIds.size} Batch${selectedBatchIds.size !== 1 ? 'es' : ''}`}
+                                    {loading ? 'Solving Constraints...' : `Generate for ${selectedDivisionIds.size} Division${selectedDivisionIds.size !== 1 ? 's' : ''}`}
                                 </Button>
                             </CardFooter>
                         </Card>
@@ -394,15 +391,15 @@ export default function GenerateTimetablePage() {
                         </Card>
                     </div>
 
-                    {/* ── Right: Batch Selection ────────────── */}
+                    {/* ── Right: Division Selection ────────────── */}
                     <div className="lg:col-span-1">
                         <Card className="glass-card shadow-sm border-slate-200 dark:border-border-hover sticky top-4">
                             <CardHeader className="pb-3">
                                 <CardTitle className="text-lg flex items-center gap-2 dark:text-text-primary">
                                     <LuUsers className="w-5 h-5 text-indigo-500 dark:text-neon-cyan" />
-                                    Batch Selection
+                                    Division Selection
                                 </CardTitle>
-                                <CardDescription className="dark:text-text-muted">Choose which batches to include in timetable generation.</CardDescription>
+                                <CardDescription className="dark:text-text-muted">Choose which divisions to include in generation.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-3">
                                 {/* Semester Filter */}
@@ -420,47 +417,47 @@ export default function GenerateTimetablePage() {
                                 </div>
 
                                 {/* Search */}
-                                <Input placeholder="Search batches..." value={batchSearch} onChange={(e) => setBatchSearch(e.target.value)} className="h-8 text-sm dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary" />
+                                <Input placeholder="Search divisions..." value={divisionSearch} onChange={(e) => setDivisionSearch(e.target.value)} className="h-8 text-sm dark:bg-[#0a0a0c] dark:border-border-hover dark:text-text-primary" />
 
                                 {/* Select All */}
                                 <div className="flex items-center justify-between px-1">
                                     <span className="text-xs font-bold text-text-muted dark:text-text-secondary uppercase tracking-wide">
-                                        {selectedBatchIds.size} of {filteredBatches.length} selected
+                                        {selectedDivisionIds.size} of {filteredDivisions.length} selected
                                     </span>
                                     <button onClick={toggleSelectAll} className="text-xs font-bold text-indigo-600 dark:text-neon-cyan hover:text-indigo-800 dark:hover:text-cyan-400 uppercase tracking-wide transition-colors">
                                         {allFilteredSelected ? 'Deselect All' : 'Select All'}
                                     </button>
                                 </div>
 
-                                {/* Batch List */}
+                                {/* Division List */}
                                 <div className="space-y-1 max-h-[400px] overflow-y-auto pr-1">
-                                    {batchesLoading ? (
+                                    {divisionsLoading ? (
                                         <div className="flex items-center justify-center py-8 text-text-muted dark:text-slate-600">
                                             <LuLoaderCircle className="w-5 h-5 animate-spin" />
                                         </div>
-                                    ) : filteredBatches.length === 0 ? (
-                                        <p className="text-xs text-text-muted dark:text-text-secondary text-center py-4">No batches match this filter.</p>
+                                    ) : filteredDivisions.length === 0 ? (
+                                        <p className="text-xs text-text-muted dark:text-text-secondary text-center py-4">No divisions match this filter.</p>
                                     ) : (
-                                        filteredBatches.map(b => (
+                                        filteredDivisions.map(d => (
                                             <div
-                                                key={b.id}
-                                                onClick={() => toggleBatch(b.id)}
+                                                key={d.id}
+                                                onClick={() => toggleDivision(d.id)}
                                                 className={cn(
                                                     "flex items-center gap-3 p-2.5 rounded-lg border cursor-pointer transition-all",
-                                                    selectedBatchIds.has(b.id)
+                                                    selectedDivisionIds.has(d.id)
                                                         ? "bg-indigo-50/80 border-indigo-200 dark:bg-neon-cyan/20 dark:border-neon-cyan/50 shadow-[0_0_10px_rgba(57,193,239,0.1)]"
                                                         : "bg-surface border-slate-100 hover:border-slate-300 hover:bg-slate-50 dark:bg-surface dark:border-border-hover dark:hover:border-primary/30 dark:hover:bg-surface-hover"
                                                 )}
                                             >
-                                                {selectedBatchIds.has(b.id) ? (
+                                                {selectedDivisionIds.has(d.id) ? (
                                                     <LuSquareCheck className="w-4 h-4 text-indigo-500 dark:text-neon-cyan flex-shrink-0" />
                                                 ) : (
                                                     <LuSquare className="w-4 h-4 text-text-muted dark:text-slate-600 flex-shrink-0" />
                                                 )}
                                                 <div className="flex flex-col min-w-0">
-                                                    <span className="text-sm font-semibold truncate dark:text-slate-200">{b.name}</span>
+                                                    <span className="text-sm font-semibold truncate dark:text-slate-200">Div {d.name} — {d.batch.name}</span>
                                                     <span className="text-[10px] text-text-muted dark:text-text-secondary font-medium uppercase tracking-tight">
-                                                        Sem {b.semester ?? '—'} • {b.program || 'General'} • {b.strength} students
+                                                        Sem {d.batch.semester ?? '—'} • Cap: {d.capacity}
                                                     </span>
                                                 </div>
                                             </div>
@@ -474,4 +471,14 @@ export default function GenerateTimetablePage() {
             </DashboardLayout>
         </ProtectedRoute >
     );
+}
+
+interface AiHealth {
+    status: string;
+    reachable: boolean;
+    solver?: string;
+    solverTimeoutMs?: number;
+    hardConstraints?: number;
+    softConstraints?: number;
+    version?: string;
 }

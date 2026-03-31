@@ -29,12 +29,20 @@ export const getFaculty = async (req: AuthRequest, res: Response) => {
 
         // Default fallback to user's scope if no query params
         if ((req.user!.role === 'UNI_ADMIN' || req.user!.role === 'STUDENT') && !universityId) {
-            filters.universityId = req.user!.universityId;
+            if (req.user!.universityId) {
+                filters.universityId = req.user!.universityId;
+            } else {
+                return res.json([]);
+            }
         }
         if (req.user!.role === 'DEPT_ADMIN' && !departmentId) {
-            filters.departments = {
-                some: { departmentId: req.user!.entityId }
-            };
+            if (req.user!.entityId) {
+                filters.departments = {
+                    some: { departmentId: req.user!.entityId }
+                };
+            } else {
+                return res.json([]);
+            }
         }
 
         const faculty = await prisma.faculty.findMany({

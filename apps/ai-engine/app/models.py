@@ -194,3 +194,40 @@ class GenerateResponse(BaseModel):
     gapScore: float = 0.0                          # avg idle slots per batch per day (lower = better)
     electiveGroupCount: int = 0                    # number of elective baskets scheduled
     stats: Optional[Dict[str, Any]] = None         # NEW v8.0.0 mapping
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Predictive / Forecasting Models
+# ─────────────────────────────────────────────────────────────────────────────
+
+class HistoricalAttendance(BaseModel):
+    courseId: str
+    dayOfWeek: int
+    slotNumber: int
+    attendancePercentage: float  # 0.0 to 1.0
+
+
+class ResourceSnapshot(BaseModel):
+    resourceId: str
+    capacity: int
+    currentAllocation: int
+
+
+class ForecastRequest(BaseModel):
+    departmentId: str
+    slots: List[SlotResult]
+    history: List[HistoricalAttendance] = []
+    resources: List[ResourceSnapshot] = []
+
+
+class ResourceRisk(BaseModel):
+    slotId: str
+    riskScore: float  # 0.0 (low) to 1.0 (high)
+    reason: str
+    predictedAttendance: int
+
+
+class ForecastResponse(BaseModel):
+    status: str = "SUCCESS"
+    risks: List[ResourceRisk] = []
+    overallEfficiency: float = 0.0

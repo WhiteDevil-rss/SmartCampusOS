@@ -36,10 +36,10 @@ export function StudentProfile() {
     if (profileLoading) {
         return (
             <div className="space-y-12">
-                <Skeleton className="h-64 bg-surface rounded-[40px]" />
+                <Skeleton className="h-64 bg-[#0a1120] rounded-[40px]" />
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    <Skeleton className="lg:col-span-2 h-96 bg-surface rounded-[32px]" />
-                    <Skeleton className="h-96 bg-surface rounded-[32px]" />
+                    <Skeleton className="lg:col-span-2 h-96 bg-[#0a1120] rounded-[32px]" />
+                    <Skeleton className="h-96 bg-[#0a1120] rounded-[32px]" />
                 </div>
             </div>
         );
@@ -57,16 +57,20 @@ export function StudentProfile() {
     return (
         <div className="space-y-12 animate-fade-in pb-12">
             {/* Header / Profile Hero */}
-            <div className="p-8 md:p-12 glass-morphism rounded-[40px] border border-border relative overflow-hidden group">
+            <div className="p-8 md:p-12 bg-[#0a1120]/40 backdrop-blur-xl rounded-[40px] border border-white/5 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-80 h-80 bg-primary/20 blur-[120px] rounded-full group-hover:scale-110 transition-transform duration-1000" />
 
                 <div className="flex flex-col md:flex-row items-center gap-10 relative z-10">
+                    {/* Avatar - Fixed: was orphaned text node before */}
                     <div className="relative group/avatar">
+                        <div className="w-28 h-28 rounded-[24px] bg-[#020817] border border-white/10 flex items-center justify-center text-4xl font-black text-primary shadow-[0_0_30px_rgba(0,112,255,0.15)] select-none">
                             {profile?.name?.charAt(0).toUpperCase() || 'S'}
-                        <Button size="icon" variant="outline" className="absolute -bottom-2 -right-2 rounded-xl shadow-lg bg-[#020617] border border-border-hover hover:bg-surface-hover hover:border-border-hover transition-all text-slate-300">
+                        </div>
+                        <button className="absolute -bottom-2 -right-2 w-9 h-9 rounded-xl bg-[#0a1120] border border-white/10 hover:border-primary/40 hover:bg-primary/10 transition-all flex items-center justify-center text-slate-400 hover:text-primary cursor-pointer shadow-lg">
                             <LuPencil className="w-4 h-4" />
-                        </Button>
+                        </button>
                     </div>
+
 
                     <div className="flex-1 text-center md:text-left">
                         <div className="flex flex-col md:flex-row md:items-center gap-4 mb-3">
@@ -91,11 +95,11 @@ export function StudentProfile() {
             </div>
 
             <Tabs defaultValue="info" className="w-full">
-                <TabsList className="glass-morphism border border-border p-1.5 rounded-[20px] mb-12 inline-flex h-auto gap-2">
-                    <TabsTrigger value="info" className="rounded-[14px] px-8 py-3 font-bold data-[state=active]:bg-primary data-[state=active]:text-text-primary text-text-muted transition-all">Identity Details</TabsTrigger>
-                    <TabsTrigger value="vault" className="rounded-[14px] px-8 py-3 font-bold data-[state=active]:bg-primary data-[state=active]:text-text-primary text-text-muted transition-all flex items-center gap-2">
+                <TabsList className="bg-[#0a1120]/60 backdrop-blur-xl border border-white/5 p-1.5 rounded-[20px] mb-12 inline-flex h-auto gap-2">
+                    <TabsTrigger value="info" className="rounded-[14px] px-8 py-3 font-bold data-[state=active]:bg-primary data-[state=active]:text-white text-slate-500 transition-all cursor-pointer">Identity Details</TabsTrigger>
+                    <TabsTrigger value="vault" className="rounded-[14px] px-8 py-3 font-bold data-[state=active]:bg-primary data-[state=active]:text-white text-slate-500 transition-all flex items-center gap-2 cursor-pointer">
                         <LuShieldCheck className="w-4 h-4" />
-                        Trustless Vault
+                        Blockchain Vault
                     </TabsTrigger>
                 </TabsList>
 
@@ -112,14 +116,14 @@ export function StudentProfile() {
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {details.map((detail, i) => (
-                                    <div key={i} className="p-6 rounded-[24px] bg-surface border border-border group hover:border-primary/20 transition-all duration-300">
+                                    <div key={i} className="p-6 rounded-[24px] bg-[#0a1120] border border-white/5 group hover:border-primary/20 transition-colors duration-200 cursor-default">
                                         <div className="flex items-center gap-5">
-                                            <div className="p-3.5 rounded-[16px] bg-surface text-text-muted group-hover:bg-primary/10 group-hover:text-primary group-hover:scale-110 transition-all">
+                                            <div className="p-3.5 rounded-[16px] bg-white/5 text-slate-500 group-hover:bg-primary/10 group-hover:text-primary transition-colors duration-200">
                                                 {detail.icon}
                                             </div>
                                             <div>
-                                                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-secondary mb-1">{detail.label}</p>
-                                                <p className="text-sm font-bold text-text-primary group-hover:text-primary transition-colors">{detail.value}</p>
+                                                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 mb-1">{detail.label}</p>
+                                                <p className="text-sm font-bold text-slate-200 group-hover:text-primary transition-colors duration-200">{detail.value}</p>
                                             </div>
                                         </div>
                                     </div>

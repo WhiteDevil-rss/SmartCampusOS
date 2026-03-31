@@ -113,11 +113,17 @@ export const TimetableCell: React.FC<TimetableCellProps> = ({ slot, viewMode, cl
     const colorKey = resolveSessionColor(slot);
     const c = SESSION_COLORS[colorKey];
 
-    const courseCode = slot.course?.code || slot.courseCode || '—';
-    const facultyName = slot.faculty?.name || '—';
+    const subject = slot.classRecord?.subject;
+    const faculty = slot.classRecord?.faculty;
+    const division = slot.classRecord?.division;
+    const batch = division?.batch;
+
+    const courseCode = subject?.code || slot.courseCode || '—';
+    const facultyName = faculty?.name || '—';
     const faculty2Name = slot.faculty2?.name;
-    const roomName = slot.room?.name;
-    const batchName = slot.batch?.name;
+    const roomName = slot.room?.name || slot.roomName;
+    const divisionName = division ? `Div ${division.name}` : null;
+    const batchName = batch?.name;
 
     return (
         <div
@@ -169,37 +175,22 @@ export const TimetableCell: React.FC<TimetableCellProps> = ({ slot, viewMode, cl
 
             {/* Bottom: Room + Batch info */}
             <div className={cn("text-[10px] space-y-0.5 mt-auto pt-1.5 border-t border-dashed", c.border, c.darkBorder, c.subtext, c.darkSubtext)}>
-                {viewMode === 'admin' ? (
-                    <>
-                        {roomName && (
-                            <div className="flex items-center gap-1 opacity-80">
-                                <LuBuilding className={cn("w-2.5 h-2.5", c.icon, c.darkIcon)} />
-                                <span className="truncate">{roomName}</span>
-                            </div>
-                        )}
-                        {batchName && (
-                            <div className="flex items-center gap-1 opacity-60">
-                                <LuUsers className={cn("w-2.5 h-2.5", c.icon, c.darkIcon)} />
-                                <span className="truncate">{batchName}</span>
-                            </div>
-                        )}
-                    </>
-                ) : (
-                    <>
-                        {batchName && (
-                            <div className="flex items-center gap-1 font-medium">
-                                <LuUsers className={cn("w-2.5 h-2.5", c.icon, c.darkIcon)} />
-                                <span className="truncate">{batchName}</span>
-                            </div>
-                        )}
-                        {roomName && (
-                            <div className="flex items-center gap-1 opacity-80">
-                                <LuBuilding className={cn("w-2.5 h-2.5", c.icon, c.darkIcon)} />
-                                <span className="truncate">{roomName}</span>
-                            </div>
-                        )}
-                    </>
-                )}
+                <div className="flex flex-col gap-0.5">
+                    {roomName && (
+                        <div className={`flex items-center gap-1 ${viewMode === 'admin' ? 'opacity-80' : 'opacity-80'}`}>
+                            <LuBuilding className={cn("w-2.5 h-2.5", c.icon, c.darkIcon)} />
+                            <span className="truncate">{roomName}</span>
+                        </div>
+                    )}
+                    {(divisionName || batchName) && (
+                        <div className={`flex items-center gap-1 ${viewMode === 'admin' ? 'opacity-60' : 'font-medium'}`}>
+                            <LuUsers className={cn("w-2.5 h-2.5", c.icon, c.darkIcon)} />
+                            <span className="truncate">
+                                {divisionName}{batchName && ` (${batchName})`}
+                            </span>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

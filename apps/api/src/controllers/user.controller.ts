@@ -44,26 +44,115 @@ const validateAccess = (actor: any, target: any) => {
 
 export const getUsers = async (req: Request, res: Response) => {
     try {
-        const filter = getScopedFilter(req);
-        const users = await prisma.user.findMany({
-            where: filter,
-            select: {
-                id: true,
-                username: true,
-                email: true,
-                role: true,
-                phoneNumber: true,
-                address: true,
-                isActive: true,
-                createdAt: true,
-                lastLogin: true,
-                universityId: true,
-                entityId: true,
-                university: { select: { shortName: true } }
-            },
-            orderBy: { createdAt: 'desc' }
-        });
-        res.json(users);
+        const { universityId, departmentId, courseId, batchId, search, page = '1', limit = '10' } = req.query as any;
+        const pageNumber = parseInt(page);
+        const limitNumber = parseInt(limit);
+        const skip = (pageNumber - 1) * limitNumber;
+        const take = limitNumber;
+
+        const scopedFilter = getScopedFilter(req);
+        
+        // Build the where clause
+        const where: any = {
+            ...scopedFilter,
+        };
+
+        // Explicit filter overrides or additions
+        if (universityId && (!scopedFilter.universityId || scopedFilter.universityId === universityId)) {
+            where.universityId = universityId;
+        }
+
+        // Hierarchical filtering (Department & Course)
+        const hierarchicalFilters: any[] = [];
+
+        if (departmentId || courseId) {
+            hierarchicalFilters.push({
+                OR: [
+                    // 1. Check Faculty link
+                    {
+                        faculty: {
+                            some: {
+                                ...(departmentId ? { departments: { some: { departmentId } } } : {}),
+                                ...(courseId ? { subjects: { some: { courseId } } } : {})
+                            }
+                        }
+                    },
+                    // 2. Check Student link
+                    {
+                        student: {
+                            is: {
+                                ...(departmentId ? { departmentId } : {}),
+                                ...(courseId ? { department: { courses: { some: { id: courseId } } } } : {}),
+                                ...(batchId ? { batchId } : {})
+                            }
+                        }
+                    },
+                    // 3. User might be DEPT_ADMIN
+                    ...(departmentId ? [{ role: 'DEPT_ADMIN', entityId: departmentId }] : [])
+                ]
+            });
+        }
+
+        if (hierarchicalFilters.length > 0) {
+            where.AND = hierarchicalFilters;
+        }
+
+        // Search logic
+        if (search) {
+            const searchTerms = { contains: search, mode: 'insensitive' };
+            where.AND = [
+                ...(where.AND || []),
+                {
+                    OR: [
+                        { username: searchTerms },
+                        { email: searchTerms },
+                        { phoneNumber: searchTerms },
+                        { faculty: { some: { name: searchTerms } } },
+                        { student: { name: searchTerms } }
+                    ]
+                }
+            ];
+        }
+
+        const [users, total] = await Promise.all([
+            prisma.user.findMany({
+                where,
+                select: {
+                    id: true,
+                    username: true,
+                    email: true,
+                    role: true,
+                    phoneNumber: true,
+                    isActive: true,
+                    createdAt: true,
+                    lastLogin: true,
+                    universityId: true,
+                    entityId: true,
+                    university: { select: { name: true, shortName: true } },
+                    faculty: { 
+                        select: { 
+                            name: true, 
+                            designation: true,
+                            departments: { select: { department: { select: { name: true } } } }
+                        } 
+                    },
+                    student: { 
+                        select: { 
+                            name: true, 
+                            enrollmentNo: true, 
+                            department: { select: { name: true } },
+                            batch: { select: { name: true } }
+                        } 
+                    }
+                },
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take
+            }),
+            prisma.user.count({ where })
+        ]);
+
+        res.json({ users, total });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Failed to retrieve users' });

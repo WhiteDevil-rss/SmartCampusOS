@@ -16,15 +16,21 @@ export const TimetableTooltip: React.FC<TimetableTooltipProps> = ({ slot, onClos
     const colorKey = resolveSessionColor(slot);
     const c = SESSION_COLORS[colorKey];
 
-    const courseCode = slot.course?.code || slot.courseCode || '—';
-    const courseName = slot.course?.name || slot.courseName || '—';
-    const facultyName = slot.faculty?.name || slot.facultyName || '—';
+    const subject = slot.classRecord?.subject;
+    const faculty = slot.classRecord?.faculty;
+    const division = slot.classRecord?.division;
+    const batch = division?.batch;
+
+    const courseCode = subject?.code || slot.courseCode || '—';
+    const courseName = subject?.name || slot.courseName || '—';
+    const facultyName = faculty?.name || slot.facultyName || '—';
     const faculty2Name = slot.faculty2?.name;
     const roomName = slot.room?.name || slot.roomName || '—';
     const roomType = slot.room?.type || '';
-    const batchName = slot.batch?.name || slot.batchName || '—';
-    const sessionTypeName = slot.sessionType?.name || slot.slotType || '—';
-    const batchStrength = slot.batch?.strength;
+    const divisionName = division ? `Division ${division.name}` : '—';
+    const batchName = batch?.name || '—';
+    const sessionTypeName = slot.sessionType?.name || slot.slotType || subject?.type || '—';
+    const batchStrength = division?.students?.length || batch?.strength;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 dark:bg-black/40 backdrop-blur-sm" onClick={onClose}>
@@ -62,9 +68,9 @@ export const TimetableTooltip: React.FC<TimetableTooltipProps> = ({ slot, onClos
                 <div className="px-5 py-4 space-y-3">
                     <DetailRow icon={<LuUser className="w-4 h-4" />} label="Faculty" value={faculty2Name ? `${facultyName} / ${faculty2Name}` : facultyName} />
                     <DetailRow icon={<LuBuilding className="w-4 h-4" />} label="Room" value={roomType ? `${roomName} (${roomType})` : roomName} />
-                    <DetailRow icon={<LuUsers className="w-4 h-4" />} label="Batch" value={batchName} />
+                    <DetailRow icon={<LuUsers className="w-4 h-4" />} label="Division (Batch)" value={`${divisionName} (${batchName})`} />
                     <DetailRow icon={<LuBookOpen className="w-4 h-4" />} label="Session Type" value={sessionTypeName} />
-                    {batchStrength && (
+                    {batchStrength > 0 && (
                         <DetailRow icon={<LuHash className="w-4 h-4" />} label="Students" value={String(batchStrength)} />
                     )}
                     {slot.basketId && (

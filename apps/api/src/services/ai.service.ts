@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const AI_ENGINE_URL = process.env.AI_ENGINE_URL || 'http://localhost:5001';
+const AI_ENGINE_URL = process.env.AI_ENGINE_URL || 'http://localhost:5000';
 
 export const callAiEngine = async (payload: any) => {
     try {
@@ -20,6 +20,16 @@ export const callAiEngine = async (payload: any) => {
             throw new Error(`AI Engine Error: ${errMsg}`);
         }
         throw new Error('Failed to reach AI Engine');
+    }
+};
+
+export const predictResourceUsage = async (payload: any) => {
+    try {
+        const response = await axios.post(`${AI_ENGINE_URL}/forecast`, payload);
+        return response.data;
+    } catch (error: any) {
+        console.error('AI Forecast Error:', error.message);
+        throw new Error('Failed to fetch resource forecast');
     }
 };
 

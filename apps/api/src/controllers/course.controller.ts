@@ -19,13 +19,29 @@ export const getCourses = async (req: AuthRequest, res: Response) => {
         if (departmentId) filters.departmentId = departmentId;
 
         // Default fallback to user's scope if no query params
-        if (req.user!.role === 'UNI_ADMIN' && !universityId) filters.universityId = req.user!.universityId;
-        if (req.user!.role === 'DEPT_ADMIN' && !departmentId) filters.departmentId = req.user!.entityId;
+        if (req.user!.role === 'UNI_ADMIN' && !universityId) {
+            if (req.user!.universityId) {
+                filters.universityId = req.user!.universityId;
+            } else {
+                return res.json([]);
+            }
+        }
+        if (req.user!.role === 'DEPT_ADMIN' && !departmentId) {
+            if (req.user!.entityId) {
+                filters.departmentId = req.user!.entityId;
+            } else {
+                return res.json([]);
+            }
+        }
 
         const courses = await prisma.course.findMany({ where: filters });
         res.json(courses);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch courses' });
+    } catch (error: any) {
+        console.error('Fetch courses error:', error);
+        res.status(500).json({ 
+            error: 'Failed to fetch courses', 
+            details: process.env.NODE_ENV === 'development' ? error.message : undefined 
+        });
     }
 };
 
@@ -44,7 +60,8 @@ export const getCourseById = async (req: AuthRequest, res: Response) => {
         }
 
         res.json(course);
-    } catch (error) {
+    } catch (error: any) {
+        console.error('Fetch course detail error:', error);
         res.status(500).json({ error: 'Failed to fetch course' });
     }
 };

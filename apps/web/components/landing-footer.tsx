@@ -1,86 +1,150 @@
 import React from 'react';
 import Link from 'next/link';
-import { LuShieldCheck } from 'react-icons/lu';
+import { ShieldCheck, Activity, Globe, Users, Terminal, Cpu, Zap, Heart } from 'lucide-react';
+import { SiX, SiLinkedin, SiGithub } from 'react-icons/si';
+import { cn } from '@/lib/utils';
 
 export function LandingFooter() {
     return (
-        <footer className="bg-background border-t border-border pt-32 pb-12 px-6 lg:px-12 font-sans relative overflow-hidden">
-            <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/5 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
+        <footer className="bg-[#020817] border-t border-white/5 pt-32 pb-12 px-6 lg:px-12 font-sans relative overflow-hidden">
+            {/* Ambient Background Glows */}
+            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px] pointer-events-none opacity-50" />
+            <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[150px] pointer-events-none opacity-50" />
+            
+            {/* Subtle Grid Overlay */}
+            <div className="absolute inset-0 opacity-[0.02] z-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
 
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24 relative z-10">
-                {/* Column 1: Info & Brand */}
-                <div className="space-y-8">
-                    <Link href="/" className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:border-primary/50 transition-all font-black text-primary">
-                            <span className="material-symbols-outlined text-[24px]">hub</span>
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 mb-32 relative z-10">
+                {/* Column 1: Institutional Brand */}
+                <div className="space-y-10">
+                    <Link href="/" className="flex items-center gap-4 group">
+                        <div className="w-12 h-12 rounded-[1.25rem] bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:border-primary/50 transition-all duration-500 shadow-[0_0_20px_rgba(0,112,255,0.15)]">
+                            <Terminal className="w-6 h-6 text-primary group-hover:rotate-12 transition-transform" />
                         </div>
-                        <span className="text-2xl font-black tracking-tighter font-space-grotesk text-slate-900 dark:text-white">
+                        <span className="text-2xl font-black tracking-tighter font-space-grotesk text-slate-100">
                             Smart<span className="text-primary italic">OS</span>
                         </span>
                     </Link>
-                    <p className="text-text-secondary text-sm leading-relaxed font-medium">
-                        The definitive orchestration platform for modern educational institutions. Cryptographic integrity for every academic record.
+                    <p className="text-slate-500 text-[13px] leading-relaxed font-medium max-w-[280px]">
+                        The definitive orchestration platform for <span className="text-slate-300">modern educational excellence</span>. Orchestrating institutional intelligence with cryptographic precision.
                     </p>
                     <div className="flex items-center gap-4">
-                        <div className="w-8 h-8 rounded-lg bg-surface border border-border flex items-center justify-center text-text-muted hover:text-primary transition-colors cursor-pointer">
-                            <span className="material-symbols-outlined text-lg">public</span>
-                        </div>
-                        <div className="w-8 h-8 rounded-lg bg-surface border border-border flex items-center justify-center text-text-muted hover:text-primary transition-colors cursor-pointer">
-                            <span className="material-symbols-outlined text-lg">groups</span>
-                        </div>
+                        {[
+                            { icon: SiX, href: "https://twitter.com" },
+                            { icon: SiLinkedin, href: "https://linkedin.com" },
+                            { icon: SiGithub, href: "https://github.com" }
+                        ].map((social, i) => (
+                            <Link 
+                                key={i}
+                                href={social.href} 
+                                target="_blank" 
+                                className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-center text-slate-500 hover:text-primary transition-all hover:scale-110 active:scale-95 group shadow-sm"
+                            >
+                                <social.icon className="w-4 h-4" />
+                            </Link>
+                        ))}
                     </div>
                 </div>
 
-                {/* Column 2: Platform */}
-                <div className="space-y-6">
-                    <h3 className="text-slate-900 dark:text-white font-black uppercase tracking-[0.2em] text-[10px]">Platform</h3>
-                    <ul className="space-y-4">
-                        <li><Link href="/solutions" className="text-text-secondary hover:text-primary transition-all text-sm font-bold">Solutions Architecture</Link></li>
-                        <li><Link href="/admissions" className="text-text-secondary hover:text-primary transition-all text-sm font-bold">Admission Engine</Link></li>
-                        <li><Link href="/verify" className="text-text-secondary hover:text-primary transition-all text-sm font-bold">Trust Verification</Link></li>
+                {/* Column 2: Ecosystem */}
+                <div className="space-y-8">
+                    <h3 className="text-slate-400 font-black uppercase tracking-[0.3em] text-[10px] font-space-grotesk border-l-2 border-primary pl-4">Ecosystem</h3>
+                    <ul className="space-y-5">
+                        {[
+                            { name: 'Command Hub', href: '/solutions' },
+                            { name: 'Admission Engine', href: '/admissions' },
+                            { name: 'Faculty Services', href: '/faculty-panel' },
+                            { name: 'Identity Trust', href: '/verify' }
+                        ].map((link) => (
+                            <li key={link.name}>
+                                <Link href={link.href} className="text-slate-500 hover:text-primary transition-all text-sm font-bold uppercase tracking-widest text-[11px] block group">
+                                    <span className="group-hover:translate-x-1 inline-block transition-transform duration-300">{link.name}</span>
+                                </Link>
+                            </li>
+                        ))}
                     </ul>
                 </div>
 
-                {/* Column 3: Company */}
-                <div className="space-y-6">
-                    <h3 className="text-slate-900 dark:text-white font-black uppercase tracking-[0.2em] text-[10px]">Resources</h3>
-                    <ul className="space-y-4">
-                        <li><Link href="/about-us" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-all text-sm font-bold">Institutional Overview</Link></li>
-                        <li><Link href="/careers" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-all text-sm font-bold flex items-center gap-2">Engineering <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase tracking-wider">Join Us</span></Link></li>
-                        <li><Link href="/contact" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-all text-sm font-bold">Support Concierge</Link></li>
+                {/* Column 3: Governance */}
+                <div className="space-y-8">
+                    <h3 className="text-slate-400 font-black uppercase tracking-[0.3em] text-[10px] font-space-grotesk border-l-2 border-blue-500 pl-4">Governance</h3>
+                    <ul className="space-y-5">
+                        {[
+                            { name: 'Institutional Profile', href: '/about-us' },
+                            { name: 'Engineering Core', href: '/careers', badge: 'Join' },
+                            { name: 'Direct Terminal', href: '/contact' },
+                            { name: 'Network Analytics', href: '/department/analytics' }
+                        ].map((link) => (
+                            <li key={link.name}>
+                                <Link href={link.href} className="text-slate-500 hover:text-primary transition-all text-sm font-bold uppercase tracking-widest text-[11px] flex items-center gap-3 group">
+                                    <span className="group-hover:translate-x-1 inline-block transition-transform duration-300">{link.name}</span>
+                                    {link.badge && (
+                                        <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[8px] font-black uppercase tracking-wider group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                                            {link.badge}
+                                        </span>
+                                    )}
+                                </Link>
+                            </li>
+                        ))}
                     </ul>
                 </div>
 
-                {/* Column 4: Compliance */}
-                <div className="space-y-6">
-                    <h3 className="text-slate-900 dark:text-white font-black uppercase tracking-[0.2em] text-[10px]">Legal & Trust</h3>
-                    <ul className="space-y-4">
-                        <li><Link href="/legal" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-all text-sm font-bold">Legal Framework</Link></li>
-                        <li><Link href="/privacy-policy" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-all text-sm font-bold">Data Privacy</Link></li>
-                        <li><Link href="/security" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-all text-sm font-bold flex items-center gap-2">Security Audit <LuShieldCheck className="text-emerald-500 w-4 h-4" /></Link></li>
+                {/* Column 4: Security Stack */}
+                <div className="space-y-8">
+                    <h3 className="text-slate-400 font-black uppercase tracking-[0.3em] text-[10px] font-space-grotesk border-l-2 border-slate-700 pl-4">Security Stack</h3>
+                    <ul className="space-y-5">
+                        {[
+                            { name: 'Protocol Framework', href: '/legal' },
+                            { name: 'Privacy Encryption', href: '/privacy-policy' },
+                            { name: 'Audit Compliance', href: '/security', icon: ShieldCheck }
+                        ].map((link) => (
+                            <li key={link.name}>
+                                <Link href={link.href} className="text-slate-500 hover:text-primary transition-all text-sm font-bold uppercase tracking-widest text-[11px] flex items-center gap-3 group">
+                                    <span className="group-hover:translate-x-1 inline-block transition-transform duration-300">{link.name}</span>
+                                    {link.icon && <link.icon className="text-emerald-500 w-3.5 h-3.5 opacity-50 group-hover:opacity-100 group-hover:rotate-12 transition-all" />}
+                                </Link>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>
 
-            <div className="max-w-7xl mx-auto border-t border-border pt-12 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-                <div className="flex items-center gap-6">
-                    <p className="text-slate-400 font-bold text-xs">
-                        &copy; {new Date().getFullYear()} SmartCampus Operating System v4.0.0
-                    </p>
-                    <div className="hidden md:flex items-center gap-2 text-[10px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-widest">
-                        Handcrafted by <span className="text-slate-500 dark:text-slate-400">Zembaa Solution</span>
+            {/* Bottom Utility Bar */}
+            <div className="max-w-7xl mx-auto border-t border-white/5 pt-16 flex flex-col md:flex-row items-center justify-between gap-10 relative z-10">
+                <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                    <div className="flex flex-col items-center md:items-start gap-1">
+                        <p className="text-slate-600 font-black text-[10px] uppercase tracking-widest">
+                            &copy; {new Date().getFullYear()} SmartCampus OS Suite V4.2.0-PRIME
+                        </p>
+                        <div className="flex items-center gap-2 text-[9px] font-black text-slate-800 uppercase tracking-[0.3em]">
+                            Authenticated by <span className="text-slate-700 underline decoration-primary/30">Zembaa Quantum Solutions</span>
+                        </div>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        <span className="text-emerald-500 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest">All Nodes Operational</span>
+                <div className="flex items-center gap-10">
+                    <div className="flex items-center gap-4 bg-white/[0.02] border border-white/5 px-4 py-2 rounded-2xl shadow-inner">
+                        <div className="flex items-center gap-3">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 outline outline-2 outline-emerald-500/20"></span>
+                            </span>
+                            <span className="text-emerald-500/80 text-[10px] font-black uppercase tracking-[0.2em] italic">Mesh Status: Optimal</span>
+                        </div>
+                        <div className="w-px h-4 bg-white/5" />
+                        <div className="flex items-center gap-2">
+                             <Cpu className="w-3.5 h-3.5 text-slate-700" />
+                             <span className="text-slate-700 text-[10px] font-black uppercase tracking-[0.2em]">0.04ms</span>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Final Touch: Made with Heart */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 opacity-10">
+                 <Zap className="w-3 h-3 text-primary" />
+                 <span className="text-[8px] font-black uppercase tracking-[0.5em] text-slate-400 italic">Redefining Education One Node At A Time</span>
+                 <Heart className="w-3 h-3 text-rose-500" />
             </div>
         </footer>
     );

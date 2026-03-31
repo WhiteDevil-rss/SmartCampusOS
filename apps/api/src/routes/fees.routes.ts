@@ -4,7 +4,10 @@ import {
     getFeeStructures,
     createFeeStructure,
     processFeePayment,
-    getStudentPayments
+    getStudentPayments,
+    getFinancialAudit,
+    getEligibleGrants,
+    applyForGrant
 } from '../controllers/finance.controller';
 
 const router = Router();
@@ -16,7 +19,11 @@ router.get('/structures', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN'])
 router.post('/structures', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN']), createFeeStructure);
 
 // Fee Payments
-router.post('/pay', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN', 'STUDENT']), processFeePayment);
 router.get('/student/:studentId', requireRole(['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN', 'STUDENT']), getStudentPayments);
+
+// AI Auditor & Scholarships
+router.get('/audit/:feeStructureId', requireRole(['STUDENT']), getFinancialAudit);
+router.get('/grants/eligible', requireRole(['STUDENT']), getEligibleGrants);
+router.post('/grants/apply', requireRole(['STUDENT']), applyForGrant);
 
 export default router;

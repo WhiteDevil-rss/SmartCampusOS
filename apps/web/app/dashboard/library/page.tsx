@@ -93,20 +93,20 @@ export default function LibraryDashboard() {
 
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
-                            <h1 className="text-3xl font-black text-text-primary tracking-tight flex items-center gap-3">
-                                <div className="p-2.5 bg-primary/10 rounded-xl text-primary">
+                            <h1 className="text-3xl font-heading font-black text-white tracking-tight flex items-center gap-3">
+                                <div className="p-2.5 bg-primary/10 rounded-xl text-primary border border-primary/20 shadow-sm">
                                     <LuLibrary className="w-6 h-6" />
                                 </div>
                                 Central Library
                             </h1>
-                            <p className="text-text-secondary mt-2 font-medium">
+                            <p className="text-muted mt-2 font-medium">
                                 Manage book inventory, track active student loans, and process returns.
                             </p>
                         </div>
                         <div className="flex gap-3">
                             <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
                                 <DialogTrigger asChild>
-                                    <Button className="gap-2 bg-primary hover:bg-primary-dark text-white shadow-md glow-button">
+                                    <Button className="gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-md">
                                         <LuPlus className="w-4 h-4" /> Add New Book
                                     </Button>
                                 </DialogTrigger>
@@ -181,13 +181,13 @@ export default function LibraryDashboard() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
                         {/* Active Loans Panel */}
-                        <Card className="glass-card shadow-lg h-full flex flex-col overflow-hidden">
-                            <CardHeader className="bg-primary/5 pb-4 border-b border-border">
-                                <CardTitle className="text-primary flex items-center gap-2">
+                        <Card className="bg-surface border-border shadow-sm h-full flex flex-col overflow-hidden">
+                            <CardHeader className="bg-background/50 pb-4 border-b border-border p-6 flex flex-col justify-center">
+                                <CardTitle className="text-primary font-heading font-black flex items-center gap-2">
                                     <LuBookCopy className="w-5 h-5" />
                                     Active Loans ({loans.length})
                                 </CardTitle>
-                                <CardDescription className="text-text-muted">Books currently checked out by students.</CardDescription>
+                                <CardDescription className="text-muted font-medium mt-1">Books currently checked out by students.</CardDescription>
                             </CardHeader>
                             <CardContent className="p-0 flex-1 overflow-auto max-h-[600px] custom-scrollbar">
                                 {loading ? (
@@ -204,18 +204,18 @@ export default function LibraryDashboard() {
                                         {loans.map(loan => {
                                             const isOverdue = new Date(loan.dueDate) < new Date();
                                             return (
-                                                <div key={loan.id} className="p-5 hover:bg-primary/5 transition-colors flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+                                                <div key={loan.id} className="p-5 hover:bg-surface-hover transition-colors flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
                                                     <div>
-                                                        <div className="font-bold text-text-primary line-clamp-1">{loan.book.title}</div>
-                                                        <div className="text-xs text-text-secondary mt-1 flex items-center gap-2">
-                                                            <span className="font-medium text-primary">{loan.student.enrollmentNo}</span>
-                                                            <span className="text-text-disabled">&bull;</span>
-                                                            <span>{loan.student.name}</span>
+                                                        <div className="font-bold text-white line-clamp-1">{loan.book.title}</div>
+                                                        <div className="text-xs text-muted mt-1 flex items-center gap-2">
+                                                            <span className="font-bold text-primary">{loan.student.enrollmentNo}</span>
+                                                            <span className="text-muted opacity-50">&bull;</span>
+                                                            <span className="font-medium">{loan.student.name}</span>
                                                         </div>
-                                                        <div className={`text-xs mt-2 font-medium flex items-center gap-1.5 ${isOverdue ? 'text-accent-red' : 'text-text-secondary'}`}>
+                                                        <div className={`text-xs mt-2 font-bold flex items-center gap-1.5 ${isOverdue ? 'text-red-400' : 'text-muted'}`}>
                                                             <LuCalendarDays className="w-3.5 h-3.5" />
                                                             Due: {format(new Date(loan.dueDate), 'MMM dd, yyyy')}
-                                                            {isOverdue && <Badge variant="destructive" className="text-[10px] ml-1 h-4 bg-accent-red">OVERDUE</Badge>}
+                                                            {isOverdue && <Badge variant="outline" className="text-[10px] ml-1 h-4 bg-red-500/10 text-red-500 border-red-500/20">OVERDUE</Badge>}
                                                         </div>
                                                     </div>
                                                     <Button variant={isOverdue ? "destructive" : "outline"} size="sm" className="shrink-0 gap-2 w-full sm:w-auto" onClick={() => handleReturn(loan.id)}>
@@ -230,21 +230,21 @@ export default function LibraryDashboard() {
                         </Card>
 
                         {/* Inventory Panel */}
-                        <Card className="glass-card shadow-lg h-full flex flex-col overflow-hidden">
-                            <CardHeader className="bg-surface pb-4 border-b border-border">
+                        <Card className="bg-surface border-border shadow-sm h-full flex flex-col overflow-hidden">
+                            <CardHeader className="bg-background/50 pb-4 border-b border-border p-6 flex flex-col justify-center">
                                 <CardTitle className="flex flex-col sm:flex-row justify-between sm:items-center gap-4">
-                                    <div className="flex items-center gap-2 text-text-primary">
-                                        <LuBook className="w-5 h-5 text-text-muted" />
+                                    <div className="flex items-center gap-2 text-white font-heading font-black">
+                                        <LuBook className="w-5 h-5 text-primary" />
                                         Inventory Catalog
                                     </div>
                                     <div className="relative">
-                                        <LuSearch className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+                                        <LuSearch className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
                                         <input
                                             type="text"
                                             placeholder="Search catalog..."
                                             value={searchQuery}
                                             onChange={e => setSearchQuery(e.target.value)}
-                                            className="text-sm pl-9 pr-4 py-1.5 w-full sm:w-[200px] bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-text-primary placeholder:text-text-disabled"
+                                            className="text-sm pl-9 pr-4 py-2 w-full sm:w-[220px] bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-white placeholder:text-muted"
                                         />
                                     </div>
                                 </CardTitle>
@@ -262,17 +262,17 @@ export default function LibraryDashboard() {
                                 ) : (
                                     <div className="divide-y divide-border">
                                         {filteredBooks.map(book => (
-                                            <div key={book.id} className="p-4 flex justify-between items-center hover:bg-surface transition-colors">
+                                            <div key={book.id} className="p-4 flex justify-between items-center hover:bg-surface-hover transition-colors">
                                                 <div>
-                                                    <div className="font-bold text-sm text-text-primary line-clamp-1">{book.title}</div>
-                                                    <div className="text-xs text-text-secondary mt-0.5">{book.author} | {book.category}</div>
-                                                    <div className="text-[10px] text-text-disabled font-mono mt-1">ISBN: {book.isbn}</div>
+                                                    <div className="font-bold text-sm text-white line-clamp-1">{book.title}</div>
+                                                    <div className="text-xs text-muted font-medium mt-0.5">{book.author} | <span className="text-primary">{book.category}</span></div>
+                                                    <div className="text-[10px] text-muted opacity-60 font-mono mt-1 font-bold">ISBN: {book.isbn}</div>
                                                 </div>
                                                 <div className="text-right flex flex-col items-end gap-1">
-                                                    <Badge variant={book.availableCopies > 0 ? "secondary" : "outline"} className={book.availableCopies > 0 ? 'bg-accent-green/10 text-accent-green border-accent-green/20' : 'bg-accent-red/10 text-accent-red border-accent-red/20'}>
+                                                    <Badge variant="outline" className={book.availableCopies > 0 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 font-bold' : 'bg-red-500/10 text-red-400 border-red-500/20 font-bold'}>
                                                         {book.availableCopies} available
                                                     </Badge>
-                                                    <span className="text-[10px] text-text-disabled font-medium">of {book.totalCopies} total</span>
+                                                    <span className="text-[10px] text-muted font-bold">of {book.totalCopies} total</span>
                                                 </div>
                                             </div>
                                         ))}

@@ -1,0 +1,10 @@
+src/app.ts(8,32): error TS6059: File '/Users/shivam/Downloads/Current Projects/SmartCampusOS/packages/types/src/index.ts' is not under 'rootDir' '/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/api/src'. 'rootDir' is expected to contain all source files.
+  The file is in the program because:
+    Imported via '@smartcampus-os/types' from file '/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/api/src/app.ts'
+    Imported via '@smartcampus-os/types' from file '/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/api/src/middlewares/auth.middleware.ts'
+    Imported via '@smartcampus-os/types' from file '/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/api/src/controllers/audit-log.controller.ts'
+    Imported via '@smartcampus-os/types' from file '/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/api/src/controllers/assignment.controller.ts'
+    Imported via '@smartcampus-os/types' from file '/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/api/src/controllers/material.controller.ts'
+    Imported via '@smartcampus-os/types' from file '/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/api/src/routes/permission.routes.ts'
+    Imported via '@smartcampus-os/types' from file '/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/api/src/controllers/marks.controller.ts'
+    Imported via '@smartcampus-os/types' from file '/Users/shivam/Downloads/Current Projects/SmartCampusOS/apps/api/src/routes/marks.routes.ts'

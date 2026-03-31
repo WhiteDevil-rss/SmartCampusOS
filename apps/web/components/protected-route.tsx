@@ -60,7 +60,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
                             </svg>
                         </div>
                         <div className="text-red-600 dark:text-red-400 font-bold text-xl font-display">Access Denied</div>
-                        <p className="text-sm text-slate-600 dark:text-text-muted">You don't have permission to access this area.</p>
+                        <p className="text-sm text-slate-600 dark:text-text-muted">You don&apos;t have permission to access this area.</p>
                         <button
                             onClick={() => router.push('/login')}
                             className="w-full mt-4 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-bold shadow-lg shadow-red-500/30 transition-all uppercase tracking-wider"

@@ -23,15 +23,18 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
     const [showFilters, setShowFilters] = useState(false);
     const [tooltipSlot, setTooltipSlot] = useState<any>(null); // eslint-disable-line @typescript-eslint/no-explicit-any
 
-    // ── Extract unique batches ──────────────────────────────────────────
-    const uniqueBatches = useMemo(() => {
-        const batchMap = new Map<string, any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+    // ── Extract unique divisions ────────────────────────────────────────
+    const uniqueDivisions = useMemo(() => {
+        const divisionMap = new Map<string, any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
         slots.forEach(s => {
-            if (!s.isBreak && s.batch && !s.batchId?.startsWith('ELECTIVE_')) {
-                batchMap.set(s.batchId, s.batch);
+            if (!s.isBreak && s.classRecord?.division) {
+                divisionMap.set(s.classRecord.divisionId, {
+                    ...s.classRecord.division,
+                    batch: s.classRecord.division.batch
+                });
             }
         });
-        return Array.from(batchMap.values());
+        return Array.from(divisionMap.values());
     }, [slots]);
 
     // ── Extract unique session types ────────────────────────────────────
@@ -39,7 +42,7 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
         const types = new Set<string>();
         slots.forEach(s => {
             if (!s.isBreak) {
-                const t = s.slotType || s.sessionType?.name || s.course?.type || 'Theory';
+                const t = s.slotType || s.sessionType?.name || s.classRecord?.subject?.type || 'Theory';
                 types.add(t);
             }
         });
@@ -93,12 +96,12 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
                 return;
             }
 
-            const matchesBatch = selectedBatch === 'ALL' || s.batchId === selectedBatch;
-            const matchesFaculty = viewMode === 'admin' || (viewMode === 'faculty' && (s.facultyId === facultyId || s.faculty2Id === facultyId));
+            const matchesDivision = selectedBatch === 'ALL' || s.classRecord?.divisionId === selectedBatch;
+            const matchesFaculty = viewMode === 'admin' || (viewMode === 'faculty' && (s.classRecord?.facultyId === facultyId));
             const matchesDay = selectedDay === 'ALL' || s.dayOfWeek === parseInt(selectedDay);
-            const matchesSession = selectedSessionType === 'ALL' || (s.slotType || s.sessionType?.name || s.course?.type || '').toUpperCase().includes(selectedSessionType.toUpperCase());
+            const matchesSession = selectedSessionType === 'ALL' || (s.slotType || s.sessionType?.name || s.classRecord?.subject?.type || '').toUpperCase().includes(selectedSessionType.toUpperCase());
 
-            if (matchesBatch && matchesFaculty && matchesDay && matchesSession) {
+            if (matchesDivision && matchesFaculty && matchesDay && matchesSession) {
                 if (map.has(s.dayOfWeek) && map.get(s.dayOfWeek)!.has(s.slotNumber)) {
                     map.get(s.dayOfWeek)!.get(s.slotNumber)!.push(s);
                 }
@@ -116,20 +119,20 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
 
     return (
         <div className="flex flex-col space-y-4">
-            {/* ── Batch Tabs ──────────────────────────────────────────────── */}
-            {viewMode === 'admin' && uniqueBatches.length > 0 && (
+            {/* ── Division Tabs ──────────────────────────────────────────────── */}
+            {viewMode === 'admin' && uniqueDivisions.length > 0 && (
                 <div className="flex items-center gap-1 p-1.5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-slate-200 dark:border-border-hover rounded-xl shadow-sm overflow-x-auto print:hidden">
                     <TabButton
                         active={selectedBatch === 'ALL'}
                         onClick={() => setSelectedBatch('ALL')}
-                        label="All Batches"
+                        label="All Divisions"
                     />
-                    {uniqueBatches.map(b => (
+                    {uniqueDivisions.map(div => (
                         <TabButton
-                            key={b.id}
-                            active={selectedBatch === b.id}
-                            onClick={() => setSelectedBatch(b.id)}
-                            label={b.name}
+                            key={div.id}
+                            active={selectedBatch === div.id}
+                            onClick={() => setSelectedBatch(div.id)}
+                            label={`${div.batch?.name || 'No Batch'} - Div ${div.name}`}
                         />
                     ))}
 
@@ -260,7 +263,7 @@ export const TimetableGrid: React.FC<TimetableGridProps> = ({ slots, config, vie
                                                                     const baseline = baselineSlots.find((b: any) =>
                                                                         b.dayOfWeek === slot.dayOfWeek &&
                                                                         b.slotNumber === slot.slotNumber &&
-                                                                        b.batchId === slot.batchId
+                                                                        b.divisionId === slot.divisionId
                                                                     );
                                                                     if (!baseline) diffStatus = 'new';
                                                                     else if (baseline.facultyId !== slot.facultyId || baseline.roomId !== slot.roomId) diffStatus = 'changed';

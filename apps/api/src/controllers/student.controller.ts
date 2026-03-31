@@ -16,6 +16,10 @@ export const getStudentProfile = async (req: AuthRequest, res: Response) => {
                 department: true,
                 batch: true,
                 program: true,
+                divisionAssignments: {
+                    where: { status: 'ACTIVE' },
+                    include: { division: true }
+                }
             }
         });
 

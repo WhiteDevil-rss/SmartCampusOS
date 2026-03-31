@@ -29,6 +29,7 @@ interface FeePayment {
 }
 
 export function StudentFeesDashboard() {
+    const [searchQuery, setSearchQuery] = useState('');
     const [structures, setStructures] = useState<FeeStructure[]>([]);
     const [payments, setPayments] = useState<FeePayment[]>([]);
     const [loading, setLoading] = useState(true);
@@ -103,8 +104,6 @@ export function StudentFeesDashboard() {
             showToast('error', 'Failed to generate receipt');
         }
     };
-
-    const [searchQuery, setSearchQuery] = useState('');
 
     const filteredPayments = payments.filter(p => 
         p.transactionId?.toLowerCase().includes(searchQuery.toLowerCase()) ||

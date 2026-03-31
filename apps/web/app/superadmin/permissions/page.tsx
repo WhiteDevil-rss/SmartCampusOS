@@ -167,7 +167,7 @@ export default function PermissionsPage() {
                                                                             <button
                                                                                 disabled={isSaving || role === 'SUPER_ADMIN'}
                                                                                 onClick={() => handleTogglePermission(role, module, action, isAllowed)}
-                                                                                className={`w-12 h-6 rounded-full relative transition-all ${isAllowed ? 'bg-primary shadow-[0_0_15px_rgba(99,102,241,0.3)]' : 'bg-surface border border-border'} ${role === 'SUPER_ADMIN' ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer active:scale-95'}`}
+                                                                                className={`w-12 h-6 rounded-full relative transition-all ${isAllowed ? 'bg-primary shadow-glow' : 'bg-surface border border-border'} ${role === 'SUPER_ADMIN' ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer active:scale-95'}`}
                                                                             >
                                                                                 <div className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow-md transition-all ${isAllowed ? 'right-1' : 'left-1 bg-slate-600'}`} />
                                                                             </button>

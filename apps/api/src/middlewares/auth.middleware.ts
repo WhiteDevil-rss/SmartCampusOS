@@ -54,7 +54,8 @@ export const authenticate = async (req: AuthRequest, res: Response, next: NextFu
         });
 
         if (!user) {
-            return res.status(401).json({ error: 'User not registered in local database' });
+            console.warn(`Auth Middleware: Rejected login for email: ${email || 'none'} (uid: ${uid}). Not found in local database.`);
+            return res.status(401).json({ error: `User not registered in local database. Please add ${email || uid} via Prisma Studio.` });
         }
 
         // If user found by email but firebaseUid not set, sync it

@@ -142,22 +142,22 @@ export default function NaacDashboard() {
     return (
         <ProtectedRoute allowedRoles={['UNI_ADMIN']}>
             <DashboardLayout navItems={UNI_ADMIN_NAV} title="Accreditation Desk">
-                <div className="relative mb-10 overflow-hidden rounded-[2.5rem] bg-slate-950 p-10 border border-white/5 shadow-2xl">
+                <div className="relative mb-10 overflow-hidden rounded-[2.5rem] bg-surface p-10 border border-border shadow-2xl">
                     <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-indigo-500/10 to-transparent blur-3xl opacity-50"></div>
                     <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                         <div>
                             <div className="flex items-center gap-3 mb-2">
-                                <Badge className="bg-neon-cyan/20 text-neon-cyan border-neon-cyan/30 text-[10px] uppercase font-black px-3">Live Integration</Badge>
-                                <span className="text-white/40 text-[10px] font-black uppercase tracking-widest">Self-Study Report v4.0</span>
+                                <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px] uppercase font-black px-3">Live Integration</Badge>
+                                <span className="text-muted text-[10px] font-black uppercase tracking-widest">Self-Study Report v4.0</span>
                             </div>
-                            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-2 underline decoration-neon-cyan/30 underline-offset-8">NAAC Intelligence</h1>
-                            <p className="text-indigo-200/60 font-medium max-w-xl">Autonomous orchestration of institutional metrics across all criteria for accreditation excellence.</p>
+                            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-2 underline decoration-primary/30 underline-offset-8 font-heading">NAAC Intelligence</h1>
+                            <p className="text-muted font-medium max-w-xl">Autonomous orchestration of institutional metrics across all criteria for accreditation excellence.</p>
                         </div>
                         <div className="flex gap-4">
-                            <Button variant="ghost" className="h-14 px-6 rounded-2xl border border-white/10 text-white/70 hover:bg-white/5 hover:text-white font-bold transition-all" onClick={exportExcel}>
+                            <Button variant="ghost" className="h-14 px-6 rounded-2xl border border-border text-muted hover:bg-surface-hover hover:text-white font-bold transition-all" onClick={exportExcel}>
                                 <LuFileText className="w-5 h-5 mr-3" /> Export Dataset
                             </Button>
-                            <Button className="h-14 px-8 rounded-2xl bg-white text-slate-900 hover:bg-indigo-50 font-black shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all" onClick={exportPDF}>
+                            <Button className="h-14 px-8 rounded-2xl bg-white text-black hover:bg-primary/90 hover:text-white font-black shadow-lg transition-all" onClick={exportPDF}>
                                 <LuDownload className="w-5 h-5 mr-3" /> Generate SSR
                             </Button>
                         </div>
@@ -197,44 +197,44 @@ export default function NaacDashboard() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* Criterion 1: Curricular */}
-                    <Card className="bg-slate-900/40 border-white/5 backdrop-blur-xl shadow-2xl rounded-[2rem] overflow-hidden">
-                        <CardHeader className="bg-white/[0.02] border-b border-white/5 p-8">
+                    <Card className="bg-surface border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                        <CardHeader className="bg-surface-hover/20 border-b border-border p-8">
                             <div className="flex justify-between items-center">
                                 <div className="flex items-center gap-4">
                                     <div className="p-3 bg-indigo-500/10 rounded-2xl border border-indigo-500/20">
                                         <LuLibrary className="w-6 h-6 text-indigo-400" />
                                     </div>
                                     <div>
-                                        <CardTitle className="text-xl font-black text-white">Curricular Aspects</CardTitle>
-                                        <CardDescription className="text-indigo-300/40 font-bold uppercase tracking-widest text-[10px] mt-1">Criterion I &bull; Academic Architecture</CardDescription>
+                                        <CardTitle className="text-xl font-black text-white font-heading">Curricular Aspects</CardTitle>
+                                        <CardDescription className="text-indigo-400/80 font-bold uppercase tracking-widest text-[10px] mt-1">Criterion I &bull; Academic Architecture</CardDescription>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">Weightage</div>
+                                    <div className="text-[10px] font-black text-muted uppercase tracking-widest">Weightage</div>
                                     <div className="text-2xl font-black text-indigo-400 underline">W: 100</div>
                                 </div>
                             </div>
                         </CardHeader>
                         <CardContent className="p-8">
                             <div className="grid grid-cols-3 gap-6 mb-10">
-                                <div className="p-6 bg-white/[0.03] border border-white/5 rounded-3xl group hover:border-indigo-500/30 transition-all">
-                                    <p className="text-4xl font-black text-white group-hover:text-indigo-400 transition-colors">{cData.curricularAspects.totalPrograms}</p>
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mt-2">Active Programs</p>
+                                <div className="p-6 bg-surface-hover/30 border border-border rounded-3xl group hover:border-indigo-500/50 transition-all">
+                                    <p className="text-4xl font-black text-white group-hover:text-indigo-400 transition-colors font-heading">{cData.curricularAspects.totalPrograms}</p>
+                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mt-2">Active Programs</p>
                                 </div>
-                                <div className="p-6 bg-white/[0.03] border border-white/5 rounded-3xl group hover:border-indigo-500/30 transition-all">
-                                    <p className="text-4xl font-black text-white group-hover:text-indigo-400 transition-colors">{cData.curricularAspects.totalCourses}</p>
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mt-2">Mapped Courses</p>
+                                <div className="p-6 bg-surface-hover/30 border border-border rounded-3xl group hover:border-indigo-500/50 transition-all">
+                                    <p className="text-4xl font-black text-white group-hover:text-indigo-400 transition-colors font-heading">{cData.curricularAspects.totalCourses}</p>
+                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mt-2">Mapped Courses</p>
                                 </div>
-                                <div className="p-6 bg-white/[0.03] border border-white/5 rounded-3xl group hover:border-indigo-500/30 transition-all">
-                                    <p className="text-4xl font-black text-white group-hover:text-indigo-400 transition-colors">{cData.curricularAspects.totalDepartments}</p>
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mt-2">Active Depts</p>
+                                <div className="p-6 bg-surface-hover/30 border border-border rounded-3xl group hover:border-indigo-500/50 transition-all">
+                                    <p className="text-4xl font-black text-white group-hover:text-indigo-400 transition-colors font-heading">{cData.curricularAspects.totalDepartments}</p>
+                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mt-2">Active Depts</p>
                                 </div>
                             </div>
                             <div className="h-[300px] relative">
                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                     <div className="text-center">
-                                        <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">Global</p>
-                                        <p className="text-2xl font-black text-white">Catalog</p>
+                                        <p className="text-[10px] font-black text-muted uppercase tracking-widest">Global</p>
+                                        <p className="text-2xl font-black text-white font-heading">Catalog</p>
                                     </div>
                                 </div>
                                 <ResponsiveContainer width="100%" height="100%">
@@ -267,34 +267,34 @@ export default function NaacDashboard() {
 
                     {/* Criterion 4 & 5 Combined View */}
                     <div className="space-y-8">
-                        <Card className="bg-slate-900/40 border-white/5 backdrop-blur-xl shadow-2xl rounded-[2rem] overflow-hidden">
-                            <CardHeader className="bg-white/[0.02] border-b border-white/5 p-8 pb-4">
+                        <Card className="bg-surface border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                            <CardHeader className="bg-surface-hover/20 border-b border-border p-8 pb-4">
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-4">
                                         <div className="p-3 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
                                             <LuBuilding2 className="w-6 h-6 text-emerald-400" />
                                         </div>
                                         <div>
-                                            <CardTitle className="text-xl font-black text-white">Infrastructure</CardTitle>
-                                            <CardDescription className="text-emerald-300/40 font-bold uppercase tracking-widest text-[10px] mt-1">Criterion IV &bull; Capacity</CardDescription>
+                                            <CardTitle className="text-xl font-black text-white font-heading">Infrastructure</CardTitle>
+                                            <CardDescription className="text-emerald-400/80 font-bold uppercase tracking-widest text-[10px] mt-1">Criterion IV &bull; Capacity</CardDescription>
                                         </div>
                                     </div>
                                     <div className="text-2xl font-black text-emerald-400 opacity-50 underline">W: 100</div>
                                 </div>
                             </CardHeader>
                             <CardContent className="p-8 grid grid-cols-2 gap-6">
-                                <div className="flex flex-col gap-4 p-6 bg-white/[0.03] border border-white/5 rounded-3xl relative group overflow-hidden transition-all hover:border-emerald-500/30">
+                                <div className="flex flex-col gap-4 p-6 bg-surface-hover/30 border border-border rounded-3xl relative group overflow-hidden transition-all hover:border-emerald-500/50">
                                     <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><LuBuilding2 className="w-24 h-24" /></div>
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Main Classrooms</p>
-                                    <p className="text-5xl font-black text-white">{cData.infrastructure.classrooms}</p>
+                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest">Main Classrooms</p>
+                                    <p className="text-5xl font-black text-white font-heading">{cData.infrastructure.classrooms}</p>
                                     <div className="flex items-center gap-2 text-[10px] font-black text-emerald-400 uppercase tracking-widest">
                                         <LuTrendingUp className="w-3 h-3" /> Fully Optimized
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-4 p-6 bg-white/[0.03] border border-white/5 rounded-3xl relative group overflow-hidden transition-all hover:border-indigo-500/30">
+                                <div className="flex flex-col gap-4 p-6 bg-surface-hover/30 border border-border rounded-3xl relative group overflow-hidden transition-all hover:border-indigo-500/50">
                                     <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity"><LuActivity className="w-24 h-24" /></div>
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Reseach Labs</p>
-                                    <p className="text-5xl font-black text-white">{cData.infrastructure.labs}</p>
+                                    <p className="text-[10px] font-black text-muted uppercase tracking-widest">Reseach Labs</p>
+                                    <p className="text-5xl font-black text-white font-heading">{cData.infrastructure.labs}</p>
                                     <div className="flex items-center gap-2 text-[10px] font-black text-indigo-400 uppercase tracking-widest">
                                         <LuTrendingUp className="w-3 h-3" /> High Utilization
                                     </div>
@@ -302,16 +302,16 @@ export default function NaacDashboard() {
                             </CardContent>
                         </Card>
 
-                        <Card className="bg-slate-900/40 border-white/5 backdrop-blur-xl shadow-2xl rounded-[2rem] overflow-hidden">
-                            <CardHeader className="bg-white/[0.02] border-b border-white/5 p-8 pb-4">
+                        <Card className="bg-surface border-border shadow-2xl rounded-[2.5rem] overflow-hidden">
+                            <CardHeader className="bg-surface-hover/20 border-b border-border p-8 pb-4">
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-4">
                                         <div className="p-3 bg-amber-500/10 rounded-2xl border border-amber-500/20">
                                             <LuBriefcase className="w-6 h-6 text-amber-400" />
                                         </div>
                                         <div>
-                                            <CardTitle className="text-xl font-black text-white">Student Support</CardTitle>
-                                            <CardDescription className="text-amber-300/40 font-bold uppercase tracking-widest text-[10px] mt-1">Criterion V &bull; Outcome Analysis</CardDescription>
+                                            <CardTitle className="text-xl font-black text-white font-heading">Student Support</CardTitle>
+                                            <CardDescription className="text-amber-400/80 font-bold uppercase tracking-widest text-[10px] mt-1">Criterion V &bull; Outcome Analysis</CardDescription>
                                         </div>
                                     </div>
                                     <div className="text-2xl font-black text-amber-400 opacity-50 underline">W: 140</div>
@@ -321,19 +321,19 @@ export default function NaacDashboard() {
                                 <div className="flex items-center justify-between p-6 bg-amber-500/10 border border-amber-500/20 rounded-3xl mb-8 relative overflow-hidden group">
                                     <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-amber-500/20 to-transparent blur-2xl"></div>
                                     <div className="relative z-10">
-                                        <p className="text-[10px] font-black text-amber-300/60 uppercase tracking-widest">Active Recruiting Partners</p>
-                                        <p className="text-5xl font-black text-white mt-1">{cData.studentSupport.totalRecruitingCompanies}</p>
+                                        <p className="text-[10px] font-black text-amber-300/80 uppercase tracking-widest">Active Recruiting Partners</p>
+                                        <p className="text-5xl font-black text-white mt-1 font-heading">{cData.studentSupport.totalRecruitingCompanies}</p>
                                     </div>
                                     <LuBriefcase className="w-16 h-16 text-amber-400/20 relative z-10 group-hover:scale-110 transition-transform" />
                                 </div>
 
                                 <div className="space-y-4">
-                                    <p className="text-[10px] font-black uppercase text-white/20 tracking-[0.3em] mb-4">Elite Industrial Placements</p>
+                                    <p className="text-[10px] font-black uppercase text-muted tracking-[0.3em] mb-4">Elite Industrial Placements</p>
                                     <div className="grid grid-cols-1 gap-3">
                                         {cData.studentSupport.topRecruiters.map((company: any, i: number) => (
-                                            <div key={i} className="flex justify-between items-center p-4 bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all rounded-2xl group">
+                                            <div key={i} className="flex justify-between items-center p-4 bg-surface-hover/20 border border-border hover:border-border/80 transition-all rounded-2xl group">
                                                 <span className="font-bold text-white/80 group-hover:text-white transition-colors">{company.name}</span>
-                                                <Badge className="bg-white/5 text-white/60 border-white/10 font-mono text-[10px] px-3">{company.hires} Hires</Badge>
+                                                <Badge className="bg-surface border-border text-muted font-mono text-[10px] px-3">{company.hires} Hires</Badge>
                                             </div>
                                         ))}
                                     </div>
@@ -349,26 +349,26 @@ export default function NaacDashboard() {
 
 function MetricCard({ title, value, icon: Icon, criterion, color }: { title: string, value: string | number, icon: any, criterion: string, color: 'cyan' | 'indigo' | 'emerald' | 'amber' }) {
     const colorMap = {
-        cyan: 'text-neon-cyan bg-neon-cyan/10 border-neon-cyan/20',
+        cyan: 'text-primary bg-primary/10 border-primary/20',
         indigo: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
         emerald: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
         amber: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
     };
 
     return (
-        <Card className="bg-slate-900/40 border-white/5 backdrop-blur-lg rounded-[2rem] overflow-hidden group hover:bg-slate-900/60 transition-all duration-500">
+        <Card className="bg-surface border-border rounded-[2.5rem] overflow-hidden group hover:bg-surface-hover/50 transition-all duration-500">
             <CardContent className="p-8">
                 <div className="flex justify-between items-start mb-6">
                     <div className={`p-4 rounded-2xl border ${colorMap[color]} group-hover:scale-110 transition-transform duration-500`}>
                         <Icon className="w-6 h-6" />
                     </div>
                     <div className="text-right">
-                        <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">{criterion}</span>
+                        <span className="text-[10px] font-black text-muted uppercase tracking-[0.2em]">{criterion}</span>
                     </div>
                 </div>
                 <div>
-                    <p className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">{title}</p>
-                    <p className="text-4xl font-black text-white tracking-tight">{value}</p>
+                    <p className="text-[10px] font-black text-muted uppercase tracking-widest mb-1">{title}</p>
+                    <p className="text-4xl font-black text-white tracking-tight font-heading">{value}</p>
                 </div>
             </CardContent>
         </Card>

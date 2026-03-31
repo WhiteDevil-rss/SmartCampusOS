@@ -2,7 +2,8 @@
 
 import { ProtectedRoute } from '@/components/protected-route';
 import { DashboardLayout } from '@/components/dashboard-layout';
-import { LuPlus, LuTrash2, LuPencil, LuSearch, LuBookOpen, LuSettings } from 'react-icons/lu';
+import { LuPlus, LuTrash2, LuPencil, LuSearch, LuBookOpen, LuSettings, LuPower, LuKeyRound } from 'react-icons/lu';
+import { UserListView } from '@/components/users/user-list-view';
 import { useEffect, useState, useCallback } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/lib/store/useAuthStore';
@@ -53,8 +54,9 @@ interface Course {
 
 export default function DeptFacultyDashboard() {
     const { user } = useAuthStore();
-    const [faculties, setFaculties] = useState<Faculty[]>([]);
-    const [searchTerm, setSearchTerm] = useState('');
+    const [refreshKey, setRefreshKey] = useState(0);
+    const triggerRefresh = () => setRefreshKey(prev => prev + 1);
+
     const [loading, setLoading] = useState(true);
     const { confirmState, closeConfirm, askConfirm } = useConfirm();
     const { toast, showToast, hideToast } = useToast();
@@ -82,19 +84,16 @@ export default function DeptFacultyDashboard() {
     const fetchData = useCallback(async () => {
         if (!user?.entityId) return;
         try {
-            // Build query params — only include universityId if it's set (uni admins)
             const params = new URLSearchParams();
             if (user.universityId) params.set('universityId', user.universityId);
             if (user.entityId) params.set('departmentId', user.entityId);
 
-            const [facRes, deptRes, coursesRes] = await Promise.all([
-                api.get(`/faculty?${params.toString()}`),
+            const [deptRes, coursesRes] = await Promise.all([
                 user.universityId
                     ? api.get(`/universities/${user.universityId}/departments`)
-                    : api.get(`/faculty`).then(() => ({ data: [] })).catch(() => ({ data: [] })),
+                    : Promise.resolve({ data: [] }),
                 api.get(`/courses?${params.toString()}`)
             ]);
-            setFaculties(facRes.data);
             setDepartments(deptRes.data);
             setCourses(coursesRes.data);
         } catch (e) {
@@ -108,12 +107,7 @@ export default function DeptFacultyDashboard() {
         fetchData();
     }, [fetchData]);
 
-    const filtered = faculties.filter(fac =>
-        !searchTerm ||
-        fac.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        fac.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (fac.designation && fac.designation.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+
 
     const handleCreateFaculty = async () => {
         try {
@@ -121,7 +115,7 @@ export default function DeptFacultyDashboard() {
             await api.post(`/faculty`, payload);
             setIsAddOpen(false);
             setNewFacForm({ name: '', email: '', designation: '', password: '', phone: '' });
-            fetchData();
+            triggerRefresh();
             showToast('success', 'Faculty provisioned successfully!');
         } catch (e) {
             const errorMsg = (e as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to provision faculty.';
@@ -134,7 +128,7 @@ export default function DeptFacultyDashboard() {
         try {
             await api.put(`/faculty/${selectedFacId}`, editFacForm);
             setIsEditOpen(false);
-            fetchData();
+            triggerRefresh();
             showToast('success', 'Faculty updated successfully!');
         } catch (e) {
             const errorMsg = (e as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to update faculty.';
@@ -147,7 +141,7 @@ export default function DeptFacultyDashboard() {
         try {
             await api.put(`/faculty/${selectedFacId}`, { subjectIds: assignSubjectsForm });
             setIsAssignOpen(false);
-            fetchData();
+            triggerRefresh();
             showToast('success', 'Subjects assigned successfully!');
         } catch (e) {
             const errorMsg = (e as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to assign subjects.';
@@ -160,7 +154,7 @@ export default function DeptFacultyDashboard() {
         try {
             await api.put(`/faculty/${selectedFacId}`, constraintsForm);
             setIsConstraintsOpen(false);
-            fetchData();
+            triggerRefresh();
             showToast('success', 'Constraints updated successfully!');
         } catch (e) {
             const errorMsg = (e as { response?: { data?: { error?: string } } }).response?.data?.error || 'Failed to update constraints.';
@@ -176,7 +170,7 @@ export default function DeptFacultyDashboard() {
             onConfirm: async () => {
                 try {
                     await api.delete(`/faculty/${id}`);
-                    fetchData();
+                    triggerRefresh();
                 } catch {
                     showToast('error', 'Failed to delete faculty.');
                 }
@@ -184,120 +178,132 @@ export default function DeptFacultyDashboard() {
         });
     };
 
+    const handleToggleStatus = async (id: string, currentStatus: boolean) => {
+        try {
+            await api.patch(`/users/${id}/status`, { isActive: !currentStatus });
+            triggerRefresh();
+        } catch {
+            showToast('error', 'Failed to update access status');
+        }
+    };
+
+    const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState<any>(null);
+    const [newPass, setNewPass] = useState('');
+
+    const handleResetPassword = (user: any) => {
+        setSelectedUser(user);
+        setIsResetPasswordOpen(true);
+    };
+
+    const handleResetPasswordSubmit = async () => {
+        try {
+            await api.post(`/users/${selectedUser.id}/reset-password`, { password: newPass });
+            setIsResetPasswordOpen(false);
+            setNewPass('');
+            showToast('success', 'Password reset successful');
+        } catch {
+            showToast('error', 'Failed to reset password');
+        }
+    };
+
     return (
         <ProtectedRoute allowedRoles={['DEPT_ADMIN']}>
             <DashboardLayout navItems={DEPT_ADMIN_NAV} title="Department Faculty">
                 <ConfirmDialog state={confirmState} onClose={closeConfirm} />
                 <Toast toast={toast} onClose={hideToast} />
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                    <div>
-                        <h2 className="text-2xl font-bold tracking-tight text-slate-800 dark:text-text-primary">Faculty Directory</h2>
-                        <p className="text-text-secondary dark:text-text-muted">Manage all registered teaching bodies and scheduling constraints for your department.</p>
-                    </div>
-                    <div className="flex gap-2 w-full sm:w-auto">
-                        <div className="flex items-center gap-2 border border-slate-200 dark:border-border-hover bg-slate-50 dark:bg-slate-900/50 rounded-lg px-3 py-2 shadow-sm w-full sm:w-64">
-                            <LuSearch className="w-4 h-4 text-text-muted dark:text-text-secondary shrink-0" />
-                            <Input
-                                placeholder="Search faculty..."
-                                className="border-0 bg-transparent p-0 flex-1 w-full outline-none focus:outline-none ring-0 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none text-sm placeholder:text-text-muted dark:placeholder:text-text-secondary text-slate-800 dark:text-text-primary caret-slate-900 dark:caret-white"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-                        </div>
-                        <Button onClick={() => setIsAddOpen(true)} className="bg-primary shadow-md hover:bg-primary/90 text-text-primary shrink-0">
-                            <LuPlus className="w-4 h-4 mr-2" /> Register Faculty
-                        </Button>
-                    </div>
+                <UserListView 
+                    key={refreshKey}
+                    title="Faculty Directory"
+                    description="Institutional roster of educators and departmental academic personnel."
+                    initialFilters={{ 
+                        universityId: user?.universityId || undefined,
+                        departmentId: user?.entityId || undefined
+                    }}
+                    onEdit={(u: any) => {
+                        const f = u.faculty?.[0];
+                        if (!f) return;
+                        setSelectedFacId(f.id);
+                        setEditFacForm({
+                            name: f.name,
+                            email: f.email,
+                            designation: f.designation || '',
+                            departmentIds: u.faculty?.map((fac: any) => fac.departmentId) || []
+                        });
+                        setIsEditOpen(true);
+                    }}
+                    onToggleStatus={(u: any) => handleToggleStatus(u.id, u.isActive)}
+                    onResetPassword={(u: any) => handleResetPassword(u)}
+                    renderActions={(u: any) => {
+                        const f = u.faculty?.[0];
+                        if (!f) return null;
+                        return (
+                            <>
+                                <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    onClick={() => {
+                                        setSelectedFacId(f.id);
+                                        setAssignSubjectsForm(f.subjects?.map((s: any) => s.courseId) || []);
+                                        setIsAssignOpen(true);
+                                    }}
+                                    className="grow rounded-xl bg-slate-50/50 dark:bg-surface/50 font-black text-[10px] uppercase border border-slate-200 dark:border-border hover:bg-emerald-500/10 hover:text-emerald-500 hover:border-emerald-500/30 transition-all h-10"
+                                >
+                                    Subjects
+                                </Button>
+                                <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    onClick={() => {
+                                        setSelectedFacId(f.id);
+                                        setConstraintsForm({ availability: f.availability || {} });
+                                        setIsConstraintsOpen(true);
+                                    }}
+                                    className="grow rounded-xl bg-slate-50/50 dark:bg-surface/50 font-black text-[10px] uppercase border border-slate-200 dark:border-border hover:bg-indigo-500/10 hover:text-indigo-500 hover:border-indigo-500/30 transition-all h-10"
+                                >
+                                    Constraints
+                                </Button>
+                            </>
+                        );
+                    }}
+                />
+
+                <div className="fixed bottom-8 right-8 z-50">
+                    <Button 
+                        onClick={() => setIsAddOpen(true)} 
+                        className="bg-primary hover:bg-primary/90 text-text-primary h-14 w-14 rounded-full shadow-[0_0_30px_rgba(57,193,239,0.3)] border-4 border-white dark:border-slate-900 group transition-all hover:scale-110"
+                    >
+                        <LuPlus className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" />
+                    </Button>
                 </div>
 
-                {loading ? (
-                    <div className="flex justify-center p-12"><div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin" /></div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {filtered.map(fac => (
-                            <Card key={fac.id} className="glass-card shadow-sm border-slate-200 dark:border-border-hover hover:shadow-md transition-shadow overflow-hidden group">
-                                <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 dark:from-indigo-500/10 to-indigo-50/30 dark:to-transparent border-slate-100 dark:border-border">
-                                    <CardTitle className="flex items-start justify-between">
-                                        <div className="flex flex-col">
-                                            <span className="font-semibold text-lg text-slate-800 dark:text-slate-200">{fac.name}</span>
-                                            <CardDescription className="line-clamp-1 mt-1 font-medium text-emerald-600 dark:text-emerald-400">{fac.designation || 'Lecturer'}</CardDescription>
-                                            <div className="flex flex-wrap gap-1 mt-1">
-                                                {fac.departments?.map((fd) => (
-                                                    <span key={fd.departmentId} className="px-2 py-0.5 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-text-muted text-[10px] font-bold rounded-full flex items-center uppercase tracking-tight border dark:border-slate-700">
-                                                        {departments.find(d => d.id === fd.departmentId)?.shortName || '???'}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="pt-4 pb-4">
-                                    <div className="flex justify-between text-sm text-slate-600 dark:text-text-muted mb-2">
-                                        <span className="text-text-secondary dark:text-text-secondary text-xs font-semibold uppercase tracking-wider">Contact</span>
-                                        <span className="font-medium text-slate-700 dark:text-text-muted">{fac.email}</span>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2 mt-5">
-                                        <Button
-                                            variant="outline"
-                                            className="grow text-slate-600 dark:text-text-muted hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border-slate-200 dark:border-border-hover dark:bg-transparent px-2"
-                                            size="sm"
-                                            onClick={() => {
-                                                setSelectedFacId(fac.id);
-                                                setEditFacForm({
-                                                    name: fac.name, email: fac.email, designation: fac.designation || '',
-                                                    departmentIds: fac.departments?.map((d) => d.departmentId) || [],
-                                                });
-                                                setIsEditOpen(true);
-                                            }}
-                                        >
-                                            <LuPencil className="w-3.5 h-3.5 mr-1.5" /> Edit
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            className="grow text-slate-600 dark:text-text-muted hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 border-slate-200 dark:border-border-hover dark:bg-transparent px-2"
-                                            size="sm"
-                                            onClick={() => {
-                                                setSelectedFacId(fac.id);
-                                                setAssignSubjectsForm(fac.subjects?.map(s => s.courseId) || []);
-                                                setIsAssignOpen(true);
-                                            }}
-                                        >
-                                            <LuBookOpen className="w-3.5 h-3.5 mr-1.5" /> Subjects
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            className="grow text-slate-600 dark:text-text-muted hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 border-slate-200 dark:border-border-hover dark:bg-transparent px-2"
-                                            size="sm"
-                                            onClick={() => {
-                                                setSelectedFacId(fac.id);
-                                                setConstraintsForm({
-                                                    availability: fac.availability || {}
-                                                });
-                                                setIsConstraintsOpen(true);
-                                            }}
-                                        >
-                                            <LuSettings className="w-3.5 h-3.5 mr-1.5" /> Constraints
-                                        </Button>
-                                        <Button
-                                            variant="outline"
-                                            className="grow text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/30 hover:bg-red-50 dark:hover:bg-red-500/10 dark:bg-transparent px-2"
-                                            size="sm"
-                                            onClick={() => handleDeleteFaculty(fac.id)}
-                                        >
-                                            <LuTrash2 className="w-3.5 h-3.5 mr-1.5" /> Delete
-                                        </Button>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        ))}
-
-                        {filtered.length === 0 && (
-                            <div className="col-span-full py-12 text-center text-text-secondary dark:text-text-muted glass-card rounded-xl border border-dashed border-slate-300 dark:border-border-hover">
-                                {searchTerm ? `No results found for "${searchTerm}"` : 'No faculty members found. Provision teaching personnel to construct schedules.'}
+                {/* Reset Password Modal */}
+                <Dialog open={isResetPasswordOpen} onOpenChange={setIsResetPasswordOpen}>
+                    <DialogContent className="sm:max-w-md glass-card dark:border-border-hover shadow-2xl">
+                        <DialogHeader>
+                            <DialogTitle className="text-xl font-bold flex items-center">
+                                <LuKeyRound className="w-5 h-5 mr-3 text-amber-500" /> Security Override
+                            </DialogTitle>
+                            <DialogDescription>Reset the master key for this faculty identity node.</DialogDescription>
+                        </DialogHeader>
+                        <div className="py-6 space-y-4">
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase font-black text-text-muted tracking-widest ml-1">New Master Secret</label>
+                                <Input 
+                                    type="password" 
+                                    className="h-12 bg-slate-50 dark:bg-surface border-border rounded-xl font-bold"
+                                    placeholder="Enter new portal access key..." 
+                                    value={newPass} 
+                                    onChange={(e) => setNewPass(e.target.value)} 
+                                />
                             </div>
-                        )}
-                    </div>
-                )}
+                        </div>
+                        <DialogFooter className="gap-2 sm:gap-0">
+                            <Button variant="ghost" onClick={() => setIsResetPasswordOpen(false)} className="rounded-xl font-bold">Cancel</Button>
+                            <Button onClick={handleResetPasswordSubmit} disabled={!newPass} className="bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold shadow-lg shadow-amber-500/20">Authorize Change</Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
 
                 {/* Add Faculty Modal */}
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
@@ -480,7 +486,7 @@ export default function DeptFacultyDashboard() {
                                         course.name.toLowerCase().includes(subjectSearchTerm.toLowerCase()) ||
                                         course.code.toLowerCase().includes(subjectSearchTerm.toLowerCase())
                                     ).length === 0 && (
-                                            <span className="text-text-secondary dark:text-text-muted text-sm italic text-center py-4">No results for "{subjectSearchTerm}"</span>
+                                            <span className="text-text-secondary dark:text-text-muted text-sm italic text-center py-4">No results for &ldquo;{subjectSearchTerm}&rdquo;</span>
                                         )}
                                 </div>
                             </div>
@@ -500,7 +506,7 @@ export default function DeptFacultyDashboard() {
                         <DialogHeader>
                             <DialogTitle className="dark:text-text-primary">Professional Constraints</DialogTitle>
                             <DialogDescription className="dark:text-text-muted">
-                                Define availability constraints for {faculties.find(f => f.id === selectedFacId)?.name}.
+                                Define availability constraints for this faculty member.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-6 py-4">

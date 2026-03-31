@@ -31,54 +31,54 @@ function ProgramFormFields({
 }) {
     return (
         <div className="space-y-4 py-4">
-            {error && <div className="p-3 bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/30 rounded-lg text-sm">{error}</div>}
+            {error && <div className="p-3 bg-red-500/10 text-red-500 border border-red-500/30 rounded-lg text-sm">{error}</div>}
             <div className="space-y-2">
-                <label className="text-sm font-medium dark:text-text-muted">Full Program Name</label>
+                <label className="text-sm font-medium text-muted">Full Program Name</label>
                 <Input
                     placeholder="e.g. Master of Computer Application"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
+                    className="bg-background/50 border-border-hover text-white"
                 />
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium dark:text-text-muted">Short Name / Code</label>
+                    <label className="text-sm font-medium text-muted">Short Name / Code</label>
                     <Input
                         placeholder="e.g. MCA"
                         value={form.shortName}
                         onChange={(e) => setForm({ ...form, shortName: e.target.value.toUpperCase() })}
-                        className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
+                        className="bg-background/50 border-border-hover text-white"
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-medium dark:text-text-muted">Program Type</label>
+                    <label className="text-sm font-medium text-muted">Program Type</label>
                     <select
-                        className="w-full h-10 rounded-md border border-input bg-background dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
+                        className="w-full h-10 rounded-md border border-input bg-background/50 border-border-hover text-white px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                         value={form.type}
                         onChange={(e) => setForm({ ...form, type: e.target.value })}
                     >
-                        {PROGRAM_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                        {PROGRAM_TYPES.map(t => <option key={t} value={t} className="bg-surface text-white">{t}</option>)}
                     </select>
                 </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium dark:text-text-muted">Duration (Years)</label>
+                    <label className="text-sm font-medium text-muted">Duration (Years)</label>
                     <Input
                         type="number" min="1" max="6"
                         value={form.duration}
                         onChange={(e) => setForm({ ...form, duration: parseInt(e.target.value) || 2 })}
-                        className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
+                        className="bg-background/50 border-border-hover text-white"
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-sm font-medium dark:text-text-muted">Total Semesters</label>
+                    <label className="text-sm font-medium text-muted">Total Semesters</label>
                     <Input
                         type="number" min="1" max="12"
                         value={form.totalSems}
                         onChange={(e) => setForm({ ...form, totalSems: parseInt(e.target.value) || 4 })}
-                        className="dark:bg-slate-900/50 dark:border-border-hover dark:text-text-primary"
+                        className="bg-background/50 border-border-hover text-white"
                     />
                 </div>
             </div>
@@ -87,10 +87,10 @@ function ProgramFormFields({
 }
 
 const typeColors: Record<string, string> = {
-    PG: 'bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-500/30 font-bold',
-    UG: 'bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-500/30 font-bold',
-    Diploma: 'bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-500/30 font-bold',
-    'Ph.D': 'bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30 font-bold',
+    PG: 'bg-purple-500/10 text-purple-400 border-purple-500/20 font-bold',
+    UG: 'bg-blue-500/10 text-blue-400 border-blue-500/20 font-bold',
+    Diploma: 'bg-amber-500/10 text-amber-400 border-amber-500/20 font-bold',
+    'Ph.D': 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 font-bold',
 };
 
 interface Program {
@@ -188,20 +188,20 @@ export default function UniversityPrograms() {
                 <Toast toast={toast} onClose={hideToast} />
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
-                        <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-text-primary">Programs Directory</h2>
-                        <p className="text-text-secondary dark:text-text-muted">Configure and manage degree programs across the entire university.</p>
+                        <h2 className="text-2xl font-bold tracking-tight text-white font-heading font-black">Programs Directory</h2>
+                        <p className="text-muted">Configure and manage degree programs across the entire university.</p>
                     </div>
                     <div className="flex gap-2 w-full sm:w-auto">
-                        <div className="flex items-center gap-2 glass border rounded-lg px-3 py-2 shadow-sm w-full sm:w-64">
-                            <LuSearch className="w-4 h-4 text-text-muted dark:text-text-secondary shrink-0" />
+                        <div className="flex items-center gap-2 bg-surface border border-border rounded-lg px-3 py-2 shadow-sm w-full sm:w-64">
+                            <LuSearch className="w-4 h-4 text-muted shrink-0" />
                             <Input
                                 placeholder="Search programs..."
-                                className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm placeholder:text-text-muted dark:placeholder:text-text-secondary dark:text-text-primary"
+                                className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm placeholder:text-muted/50 text-white"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-                        <Button onClick={() => { setError(''); setIsAddOpen(true); }} className="bg-primary shadow-md hover:bg-primary/90">
+                        <Button onClick={() => { setError(''); setIsAddOpen(true); }} className="bg-primary shadow-md hover:bg-primary/90 text-primary-foreground font-bold">
                             <LuPlus className="w-4 h-4 mr-2" /> Add Program
                         </Button>
                     </div>
@@ -212,57 +212,57 @@ export default function UniversityPrograms() {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filtered.map(prog => (
-                            <Card key={prog.id} className="glass-card shadow-sm border-slate-200 dark:border-border-hover hover:shadow-md transition-shadow overflow-hidden group">
-                                <CardHeader className="pb-3 border-b bg-gradient-to-r from-slate-50 dark:from-indigo-500/10 to-indigo-50/30 dark:to-transparent border-slate-100 dark:border-border">
+                            <Card key={prog.id} className="bg-surface shadow-sm border-border hover:border-primary/50 transition-colors overflow-hidden group">
+                                <CardHeader className="pb-3 border-b bg-surface-hover border-border p-5">
                                     <div className="flex justify-between items-start">
                                         <div className="flex-1 min-w-0 pr-2">
-                                            <CardTitle className="text-base font-bold text-slate-800 dark:text-slate-200 leading-tight line-clamp-2">{prog.name}</CardTitle>
-                                            <CardDescription className="font-mono font-bold text-sm mt-1 text-indigo-600 dark:text-indigo-400">{prog.shortName}</CardDescription>
+                                            <CardTitle className="text-base font-bold text-white font-heading leading-tight line-clamp-2">{prog.name}</CardTitle>
+                                            <CardDescription className="font-mono font-bold text-sm mt-1 text-primary">{prog.shortName}</CardDescription>
                                         </div>
-                                        <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded-md border shrink-0 ${typeColors[prog.type] || 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-text-muted border-slate-200 dark:border-slate-700'}`}>
+                                        <span className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded-md border shrink-0 ${typeColors[prog.type] || 'bg-surface border-border text-muted'}`}>
                                             {prog.type}
                                         </span>
                                     </div>
                                 </CardHeader>
-                                <CardContent className="pt-4 pb-4">
-                                    <div className="grid grid-cols-2 gap-3 mb-4">
-                                        <div className="flex items-center gap-2 text-slate-600 dark:text-text-muted">
-                                            <LuClock className="w-4 h-4 text-text-muted dark:text-text-secondary" />
+                                <CardContent className="pt-5 pb-5 px-5">
+                                    <div className="grid grid-cols-2 gap-3 mb-5">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 rounded-md bg-background border border-border"><LuClock className="w-4 h-4 text-primary" /></div>
                                             <div>
-                                                <div className="text-[10px] text-text-muted dark:text-text-secondary font-bold uppercase">Duration</div>
-                                                <div className="text-sm font-semibold dark:text-text-muted">{prog.duration} {prog.duration === 1 ? 'Year' : 'Years'}</div>
+                                                <div className="text-[10px] text-muted font-bold uppercase tracking-wider">Duration</div>
+                                                <div className="text-sm font-semibold text-white">{prog.duration} {prog.duration === 1 ? 'Year' : 'Years'}</div>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-2 text-slate-600 dark:text-text-muted">
-                                            <LuLayers className="w-4 h-4 text-text-muted dark:text-text-secondary" />
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 rounded-md bg-background border border-border"><LuLayers className="w-4 h-4 text-primary" /></div>
                                             <div>
-                                                <div className="text-[10px] text-text-muted dark:text-text-secondary font-bold uppercase">Semesters</div>
-                                                <div className="text-sm font-semibold dark:text-text-muted">{prog.totalSems} Sem</div>
+                                                <div className="text-[10px] text-muted font-bold uppercase tracking-wider">Semesters</div>
+                                                <div className="text-sm font-semibold text-white">{prog.totalSems} Sem</div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <Button variant="outline" size="sm" className="w-1/2 text-slate-600 dark:text-text-muted hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 border-slate-200 dark:border-border-hover dark:bg-transparent"
+                                    <div className="flex gap-3">
+                                        <Button variant="outline" size="sm" className="w-1/2 text-muted hover:text-white border-border hover:bg-surface-hover font-bold font-heading bg-transparent"
                                             onClick={() => {
                                                 setSelectedId(prog.id);
                                                 setEditForm({ name: prog.name, shortName: prog.shortName, type: prog.type, duration: prog.duration, totalSems: prog.totalSems });
                                                 setError('');
                                                 setIsEditOpen(true);
                                             }}>
-                                            <LuPencil className="w-4 h-4 mr-1" /> Edit
+                                            <LuPencil className="w-4 h-4 mr-1.5" /> Edit
                                         </Button>
-                                        <Button variant="outline" size="sm" className="w-1/2 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/30 hover:bg-red-50 dark:hover:bg-red-500/10 dark:bg-transparent"
+                                        <Button variant="outline" size="sm" className="w-1/2 text-red-500 border-red-500/20 hover:bg-red-500/10 hover:text-red-400 font-bold font-heading bg-transparent"
                                             onClick={() => handleDelete(prog.id)}>
-                                            <LuTrash2 className="w-4 h-4 mr-1" /> Delete
+                                            <LuTrash2 className="w-4 h-4 mr-1.5" /> Delete
                                         </Button>
                                     </div>
                                 </CardContent>
                             </Card>
                         ))}
                         {filtered.length === 0 && (
-                            <div className="col-span-full py-16 text-center text-text-secondary dark:text-text-muted glass-card rounded-xl border-dashed border-2 border-slate-200 dark:border-border-hover">
-                                <LuGraduationCap className="w-12 h-12 text-text-muted dark:text-slate-600 mx-auto mb-3" />
-                                <h3 className="text-lg font-semibold text-slate-700 dark:text-text-muted">{searchTerm ? `No results for "${searchTerm}"` : 'No programs registered'}</h3>
+                            <div className="col-span-full py-16 text-center text-muted bg-surface rounded-xl border-dashed border-2 border-border/50">
+                                <LuGraduationCap className="w-12 h-12 text-muted/30 mx-auto mb-3" />
+                                <h3 className="text-lg font-semibold text-white">{searchTerm ? `No results for "${searchTerm}"` : 'No programs registered'}</h3>
                                 <p className="text-sm mt-1">{searchTerm ? 'Try a different search term' : 'Add degree programs to the university academic catalog.'}</p>
                             </div>
                         )}
@@ -270,23 +270,23 @@ export default function UniversityPrograms() {
                 )}
 
                 <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
-                    <DialogContent className="sm:max-w-md glass-card dark:border-border-hover">
-                        <DialogHeader><DialogTitle className="dark:text-text-primary">Register Academic Program</DialogTitle></DialogHeader>
+                    <DialogContent className="sm:max-w-md bg-surface border-border">
+                        <DialogHeader><DialogTitle className="text-white font-heading font-black">Register Academic Program</DialogTitle></DialogHeader>
                         <ProgramFormFields form={addForm} setForm={setAddForm} error={error} />
-                        <DialogFooter className="border-t dark:border-border pt-4">
-                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsAddOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleCreate} disabled={!addForm.name || !addForm.shortName}>Save Program</Button>
+                        <DialogFooter className="border-t border-border pt-4">
+                            <Button variant="outline" className="border-border text-muted hover:bg-surface-hover hover:text-white" onClick={() => setIsAddOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold" onClick={handleCreate} disabled={!addForm.name || !addForm.shortName}>Save Program</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
 
                 <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-                    <DialogContent className="sm:max-w-md glass-card dark:border-border-hover">
-                        <DialogHeader><DialogTitle className="dark:text-text-primary">Edit Program Details</DialogTitle></DialogHeader>
+                    <DialogContent className="sm:max-w-md bg-surface border-border">
+                        <DialogHeader><DialogTitle className="text-white font-heading font-black">Edit Program Details</DialogTitle></DialogHeader>
                         <ProgramFormFields form={editForm} setForm={setEditForm} error={error} />
-                        <DialogFooter className="border-t dark:border-border pt-4">
-                            <Button variant="outline" className="dark:border-border-hover dark:text-text-muted dark:hover:bg-slate-800" onClick={() => setIsEditOpen(false)}>Cancel</Button>
-                            <Button className="bg-primary hover:bg-primary/90 text-text-primary" onClick={handleEdit} disabled={!editForm.name || !editForm.shortName}>Commit Revisions</Button>
+                        <DialogFooter className="border-t border-border pt-4">
+                            <Button variant="outline" className="border-border text-muted hover:bg-surface-hover hover:text-white" onClick={() => setIsEditOpen(false)}>Cancel</Button>
+                            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold" onClick={handleEdit} disabled={!editForm.name || !editForm.shortName}>Commit Revisions</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

@@ -194,7 +194,7 @@ export default function SpecialTimetablePage() {
                                 Exclusions
                             </CardTitle>
                             <CardDescription className="text-xs leading-relaxed dark:text-text-muted">
-                                Select staff or rooms unavailable for the contingency matrix.
+                                Select staff or rooms unavailable for the contingency framework.
                             </CardDescription>
                         </CardHeader>
 
@@ -437,7 +437,7 @@ export default function SpecialTimetablePage() {
                                 onClick={handleGenerateSpecial}
                                 disabled={generating || (excludedIds.size === 0 && excludedRoomIds.size === 0)}
                             >
-                                {generating ? <><LuLoaderCircle className="w-4 h-4 mr-2 animate-spin" /> Remapping Engine...</> : <><LuZap className="w-4 h-4 mr-2" /> Generate Special TT</>}
+                                {generating ? <><LuLoaderCircle className="w-4 h-4 mr-2 animate-spin" /> Strategic Engine...</> : <><LuZap className="w-4 h-4 mr-2" /> Generate Contingency Plan</>}
                             </Button>
                         </div>
                     </Card>
@@ -502,7 +502,7 @@ export default function SpecialTimetablePage() {
                                 <div className="w-24 h-24 bg-white dark:bg-[#0a0a0c] rounded-3xl shadow-sm flex items-center justify-center mb-6 border border-slate-100 dark:border-border-hover group hover:scale-110 transition-transform duration-500">
                                     <LuZap className="w-10 h-10 text-indigo-200 dark:text-neon-cyan/40 group-hover:text-indigo-500 dark:group-hover:text-neon-cyan transition-colors" />
                                 </div>
-                                <h3 className="text-xl font-black text-slate-800 dark:text-text-primary mb-2">Matrix Ready for Generation</h3>
+                                <h3 className="text-xl font-black text-slate-800 dark:text-text-primary mb-2 italic uppercase tracking-tighter">Planning Hub Ready</h3>
                                 <p className="text-text-secondary dark:text-text-muted text-sm max-w-sm text-center mb-8">
                                     A baseline timetable exists. Select exclusions on the left and trigger the AI engine to generate a conflict-free contingency plan.
                                 </p>
@@ -522,7 +522,7 @@ export default function SpecialTimetablePage() {
                                         </div>
                                         <div>
                                             <div className="text-[10px] uppercase font-black text-text-muted dark:text-text-secondary tracking-wider">Active Slots</div>
-                                            <div className="text-lg font-black text-slate-800 dark:text-slate-200">{baselineTimetable.slots.length} Matrix Blocks</div>
+                                            <div className="text-lg font-black text-slate-800 dark:text-slate-200">{baselineTimetable.slots.length} Scheduled Slots</div>
                                         </div>
                                     </div>
                                 </div>
@@ -534,7 +534,7 @@ export default function SpecialTimetablePage() {
                                 <div className="w-20 h-20 bg-red-50 dark:bg-red-900/20 rounded-full flex items-center justify-center mb-6">
                                     <LuTriangleAlert className="w-10 h-10 text-red-300 dark:text-red-400" />
                                 </div>
-                                <h3 className="text-xl font-black text-slate-800 dark:text-text-primary mb-2 font-display">No Baseline Matrix Found</h3>
+                                <h3 className="text-xl font-black text-slate-800 dark:text-text-primary mb-2 font-display uppercase italic tracking-tighter">Registry Baseline Absent</h3>
                                 <p className="text-text-secondary dark:text-text-muted text-sm max-w-md text-center">
                                     The Special Timetable generator requires an existing active timetable to calculate differences and maintain continuity. Please generate a <span className="font-bold text-slate-800 dark:text-text-primary">Regular Timetable</span> first.
                                 </p>

@@ -11,30 +11,42 @@ export interface FacultyStats {
     todaySchedule: any[];
 }
 
+export interface FacultyProfile {
+    id: string;
+    name: string;
+    email: string;
+    designation: string;
+}
+
 export function useFacultyData() {
     const { user } = useAuthStore();
     const [stats, setStats] = useState<FacultyStats | null>(null);
+    const [profile, setProfile] = useState<FacultyProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         if (!user || user.role !== 'FACULTY') return;
 
-        const fetchStats = async () => {
+        const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await api.get('/faculty/stats');
-                setStats(response.data);
+                const [statsRes, profileRes] = await Promise.all([
+                    api.get('/faculty/stats'),
+                    api.get(`/faculty/${user.entityId}`)
+                ]);
+                setStats(statsRes.data);
+                setProfile(profileRes.data);
             } catch (err: any) {
-                console.error('Failed to fetch faculty stats:', err);
-                setError(err.response?.data?.error || 'Failed to load faculty stats');
+                console.error('Failed to fetch faculty data:', err);
+                setError(err.response?.data?.error || 'Failed to load faculty data');
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchStats();
+        fetchData();
     }, [user]);
 
-    return { stats, loading, error };
+    return { stats, profile, loading, error };
 }

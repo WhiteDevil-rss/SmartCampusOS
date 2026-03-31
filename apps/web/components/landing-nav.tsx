@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/lib/store/useAuthStore";
 import { ThemeToggle } from "./theme-toggle";
+import { Activity, ShieldCheck, Menu, X, ArrowRight } from "lucide-react";
 
 const navLinks = [
     { label: "Solutions", href: "/solutions" },
@@ -47,7 +48,7 @@ export function LandingNav() {
             <Link href="/" className="flex items-center gap-3 group relative">
                 <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center border border-primary/20 group-hover:border-primary/50 transition-all duration-500 shadow-inner overflow-hidden">
                     <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
-                    <span className="material-symbols-outlined text-primary text-2xl group-hover:scale-110 transition-transform relative z-10">hub</span>
+                    <Activity className="text-primary w-6 h-6 group-hover:scale-110 transition-transform relative z-10" />
                 </div>
                 <div className="flex flex-col">
                     <span className="text-2xl font-black tracking-tighter leading-none font-space-grotesk text-slate-900 dark:text-white group-hover:text-primary transition-colors">
@@ -96,7 +97,7 @@ export function LandingNav() {
                         href="/verify"
                         className="flex items-center gap-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 px-4 py-2 text-sm font-black transition-all hover:bg-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
                     >
-                        Verify <span className="material-symbols-outlined text-[18px]">verified_user</span>
+                        Verify <ShieldCheck className="w-[18px] h-[18px]" />
                     </Link>
                 </div>
 
@@ -137,7 +138,7 @@ export function LandingNav() {
                         onClick={() => setMobileOpen(!mobileOpen)}
                         aria-label="Toggle menu"
                     >
-                        <span className="material-symbols-outlined text-2xl">{mobileOpen ? 'close' : 'menu'}</span>
+                        {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
                     </button>
                 </div>
             </div>
@@ -154,7 +155,7 @@ export function LandingNav() {
                                 className="text-3xl font-black text-slate-900 dark:text-white hover:text-primary transition-colors py-2 flex items-center justify-between group"
                             >
                                 {link.label}
-                                <span className="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0">arrow_forward</span>
+                                <ArrowRight className="opacity-0 group-hover:opacity-100 transition-all -translate-x-4 group-hover:translate-x-0 w-6 h-6" />
                             </Link>
                         ))}
                     </div>

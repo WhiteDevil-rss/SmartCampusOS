@@ -36,7 +36,15 @@ api.interceptors.request.use(async (config: any) => {
 });
 
 api.interceptors.response.use(
-    (response: any) => response,
+    (response: any) => {
+        // Log 200 null for debugging (optional, but good for "graceful" tracking)
+        if (response.status === 200 && response.data === null) {
+            if (process.env.NODE_ENV === 'development') {
+                console.info(`[API Graceful State] ${response.config.method?.toUpperCase()} ${response.config.url} returned null`);
+            }
+        }
+        return response;
+    },
     async (error: any) => {
         const originalRequest = error.config;
 
@@ -49,32 +57,35 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        // If 401 and it hasn't been retried yet
-        if (error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
+        // Handle specific status codes for UX
+        const status = error.response.status;
+        const msg = error.response.data?.message || error.response.data?.error || 'Unknown Error';
 
+        if (status >= 500) {
+            console.error(`[API Server Error] ${status}: ${msg}`);
+            // Potential global toast trigger here if store available
+        } else if (status === 404) {
+             console.warn(`[API Missing] ${error.config.url} not found`);
+        }
+
+        // If 401 and it hasn't been retried yet
+        if (status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
             try {
                 const user = auth.currentUser;
                 if (user) {
                     console.log('API: Token expired, attempting refresh...');
-                    // Force refresh the token
                     const newToken = await user.getIdToken(true);
-
-                    // Update the authorization header
                     originalRequest.headers.Authorization = `Bearer ${newToken}`;
-
-                    // Retry the original request
                     return api(originalRequest);
                 }
             } catch (refreshError) {
                 console.error('API: Token refresh failed:', refreshError);
             }
 
-            // If refresh fails or no user, sign out
             console.warn('Unauthorized access detected. Current path:', typeof window !== 'undefined' ? window.location.pathname : 'unknown');
             await auth.signOut();
             if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
-                console.log('Redirecting to login due to failed auth/token...');
                 window.location.href = '/login';
             }
         }

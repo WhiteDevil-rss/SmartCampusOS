@@ -2,6 +2,8 @@ import { Response } from 'express';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
 import { Prisma } from '@prisma/client';
+import * as financialAuditor from '../services/financial-auditor.service';
+import * as scholarshipService from '../services/scholarship.service';
 
 // --- FEES MANAGEMENT ---
 
@@ -10,8 +12,8 @@ export const getFeeStructures = async (req: AuthRequest, res: Response) => {
         const { universityId, programId } = req.query;
         const where: any = {};
 
-        if (universityId) where.universityId = universityId as string;
-        if (programId) where.programId = programId as string;
+        if (universityId) where.universityId = typeof universityId === 'string' ? universityId : (universityId as any)[0];
+        if (programId) where.programId = typeof programId === 'string' ? programId : (programId as any)[0];
 
         const structures = await prisma.feeStructure.findMany({
             where,
@@ -91,6 +93,118 @@ export const getStudentPayments = async (req: AuthRequest, res: Response) => {
     }
 };
 
+// --- AI FINANCIAL AUDITOR ---
+
+export const getFinancialAudit = async (req: AuthRequest, res: Response) => {
+    try {
+        const feeStructureId = req.params.feeStructureId as string;
+        const studentId = req.user?.entityId;
+
+        if (!studentId) {
+            return res.status(400).json({ error: 'Student context required' });
+        }
+
+        const student = await prisma.student.findUnique({
+            where: { id: studentId },
+            include: { results: true, attendance: true, feePayments: true }
+        });
+
+        const feeStructure = await prisma.feeStructure.findUnique({
+            where: { id: feeStructureId }
+        });
+
+        if (!student || !feeStructure) {
+            return res.status(404).json({ error: 'Data not found' });
+        }
+
+        // Calculate basic context for AI
+        const latestResult = student.results[0];
+        const attendanceRate = student.attendance.length > 0
+            ? (student.attendance.filter(a => a.status === 'PRESENT').length / student.attendance.length) * 100
+            : 0;
+
+        const totalPaid = student.feePayments.reduce((acc, p) => acc + p.amount, 0);
+
+        const audit = await financialAuditor.explainFeeStructure(feeStructure, {
+            studentName: student.name,
+            program: 'Your Program', // Could fetch properly if needed
+            semester: feeStructure.semester,
+            currentSgpa: latestResult?.sgpa || 0,
+            attendanceRate,
+            totalPaid,
+            totalPending: feeStructure.totalAmount - totalPaid
+        });
+
+        res.json(audit);
+    } catch (error: any) {
+        console.error('Financial Audit Error:', error);
+        res.status(500).json({ error: 'Failed to generate financial audit' });
+    }
+};
+
+// --- SCHOLARSHIP MANAGEMENT ---
+
+export const getEligibleGrants = async (req: AuthRequest, res: Response) => {
+    try {
+        const studentId = req.user?.entityId;
+
+        if (!studentId) {
+            return res.status(400).json({ error: 'Student context required' });
+        }
+
+        const student = await prisma.student.findUnique({
+            where: { id: studentId },
+            include: { results: true, attendance: true, feePayments: true }
+        });
+
+        if (!student) return res.status(404).json({ error: 'Student not found' });
+
+        const scholarships = await scholarshipService.getScholarshipsForUniversity(student.universityId);
+
+        // Context for AI Matcher
+        const latestResult = student.results[0];
+        const attendanceRate = student.attendance.length > 0
+            ? (student.attendance.filter(a => a.status === 'PRESENT').length / student.attendance.length) * 100
+            : 0;
+
+        const matches = await financialAuditor.matchScholarships(scholarships, {
+            studentName: student.name,
+            program: 'Your Program',
+            semester: 1, // Fallback
+            currentSgpa: latestResult?.sgpa || 0,
+            attendanceRate,
+            totalPaid: 0,
+            totalPending: 0
+        });
+
+        // Combine AI insights with DB records
+        const enrichedScholarships = scholarships.map(s => ({
+            ...s,
+            aiMatch: matches.find(m => m.scholarshipId === s.id) || null
+        })).sort((a, b) => (b.aiMatch?.matchScore || 0) - (a.aiMatch?.matchScore || 0));
+
+        res.json(enrichedScholarships);
+    } catch (error: any) {
+        console.error('Eligible Grants Error:', error);
+        res.status(500).json({ error: 'Failed to fetch eligible grants' });
+    }
+};
+
+export const applyForGrant = async (req: AuthRequest, res: Response) => {
+    try {
+        const { scholarshipId } = req.body;
+        const studentId = req.user?.entityId;
+
+        if (!studentId) return res.status(400).json({ error: 'Student identity required' });
+
+        const application = await scholarshipService.applyForScholarship(studentId, scholarshipId);
+        res.status(201).json(application);
+    } catch (error: any) {
+        console.error('Apply for Grant Error:', error.message);
+        res.status(400).json({ error: error.message });
+    }
+};
+
 // --- PAYROLL MANAGEMENT ---
 
 export const getPayrollConfigs = async (req: AuthRequest, res: Response) => {
@@ -102,7 +216,7 @@ export const getPayrollConfigs = async (req: AuthRequest, res: Response) => {
             where: {
                 universityId: universityId as string,
                 departments: departmentId ? {
-                    some: { departmentId: departmentId as string }
+                    some: { departmentId: typeof departmentId === 'string' ? departmentId : (departmentId as any)[0] }
                 } : undefined
             },
             include: {

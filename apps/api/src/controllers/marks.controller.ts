@@ -305,7 +305,7 @@ export const raiseComplaint = async (req: AuthRequest, res: Response) => {
             }
         });
 
-        if (!student) return res.status(404).json({ error: 'Student not found' });
+        if (!student) return res.status(200).json(null);
 
         const complaint = await prisma.marksComplaint.create({
             data: {
@@ -363,7 +363,7 @@ export const applyForReassessment = async (req: AuthRequest, res: Response) => {
             }
         });
 
-        if (!student) return res.status(404).json({ error: 'Student not found' });
+        if (!student) return res.status(200).json(null);
 
         const request = await prisma.reassessmentRequest.create({
             data: {

@@ -1,16 +1,41 @@
 'use client';
 
 import { ProtectedRoute } from '@/components/protected-route';
-import { DashboardLayout } from '@/components/dashboard-layout';
-import { LuUsers, LuBookOpen, LuCalendar, LuCircleAlert, LuArrowRight, LuBadgeCheck, LuClock, LuFileText } from 'react-icons/lu';
+import { V2DashboardLayout } from '@/components/v2/layout/dashboard-layout';
+import { 
+  Users, 
+  BookOpen, 
+  Calendar, 
+  AlertCircle, 
+  ArrowRight, 
+  BadgeCheck, 
+  Clock, 
+  FileText,
+  Activity,
+  Zap,
+  ShieldAlert,
+  Layers,
+  ArrowRightLeft,
+  ChevronRight,
+  TrendingUp,
+  History
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import { api } from '@/lib/api';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { 
+  StatCard, 
+  GlassCard, 
+  GlassCardHeader, 
+  GlassCardTitle, 
+  GlassCardDescription, 
+  GlassCardContent 
+} from '@/components/v2/shared/cards';
+import { IndustrialButton } from '@/components/v2/shared/inputs';
 import { useAuthStore } from '@/lib/store/useAuthStore';
-
-import { DEPT_ADMIN_NAV } from '@/lib/constants/nav-config';
+import { GreetingCard } from '@/components/v2/shared/greeting-card';
+import { cn } from '@/lib/utils';
+import { CampusPulse } from '@/components/v2/dashboard/campus-pulse';
 
 interface Timetable {
     id: string;
@@ -19,6 +44,7 @@ interface Timetable {
 
 export default function DeptAdminDashboard() {
     const { user } = useAuthStore();
+    const router = useRouter();
     const [stats, setStats] = useState({ faculty: 0, courses: 0, batches: 0, students: 0 });
     const [pendingActions, setPendingActions] = useState({ requests: 0, complaints: 0, leaves: 0 });
     const [loading, setLoading] = useState(true);
@@ -35,7 +61,6 @@ export default function DeptAdminDashboard() {
                 api.get(`/v2/service-requests/admin?universityId=${user?.universityId}&departmentId=${user?.entityId}`).catch(() => ({ data: { length: 0 } })),
             ]);
 
-            // For simplicity, we'll fetch complaints and flags too
             const [compRes, flagRes] = await Promise.all([
                 api.get(`/v2/complaints/admin?universityId=${user?.universityId}`).catch(() => ({ data: [] })),
                 api.get(`/v2/student/attendance/flags/admin?universityId=${user?.universityId}&departmentId=${user?.entityId}`).catch(() => ({ data: [] }))
@@ -71,159 +96,132 @@ export default function DeptAdminDashboard() {
 
     return (
         <ProtectedRoute allowedRoles={['DEPT_ADMIN']}>
-            <DashboardLayout navItems={DEPT_ADMIN_NAV} title={`Welcome, ${user?.username || 'User'}`}>
-                {loading ? (
-                    <div className="flex justify-center p-12"><div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent animate-spin rounded-full"></div></div>
-                ) : (
-                    <>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            <Card className="glass-card hover:shadow-[0_8px_32px_0_rgba(99,102,241,0.2)] dark:hover:shadow-[0_8px_32px_0_rgba(99,102,241,0.3)] transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden border-slate-200 dark:border-border-hover">
-                                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 dark:from-indigo-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0 relative z-10">
-                                    <CardTitle className="text-sm font-semibold text-slate-600 dark:text-text-muted">Department Faculty</CardTitle>
-                                    <div className="p-2 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-xl group-hover:bg-indigo-500/20 dark:group-hover:bg-indigo-500/30 transition-colors">
-                                        <LuUsers className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="relative z-10">
-                                    <div className="text-3xl font-extrabold text-slate-900 dark:text-text-primary tracking-tight">{stats.faculty}</div>
-                                </CardContent>
-                            </Card>
+            <V2DashboardLayout title={`Department Administration: ${user?.username || 'Administrator'}`}>
+                <div className="space-y-10 pb-24">
+                    {/* Department Greeting */}
+                    <GreetingCard 
+                        name={user?.username || 'Administrator'}
+                        role="Department Admin"
+                        stats={[
+                            { label: "Active Faculty", value: stats.faculty, icon: Users },
+                            { label: "Pending Actions", value: pendingActions.requests + pendingActions.complaints + pendingActions.leaves, icon: Activity }
+                        ]}
+                        quickAction={{
+                            label: "Update Timetable",
+                            onClick: () => router.push('/department/timetables')
+                        }}
+                    />
 
-                            <Card className="glass-card hover:shadow-[0_8px_32px_0_rgba(168,85,247,0.2)] dark:hover:shadow-[0_8px_32px_0_rgba(168,85,247,0.3)] transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden border-slate-200 dark:border-border-hover">
-                                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 dark:from-purple-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0 relative z-10">
-                                    <CardTitle className="text-sm font-semibold text-slate-600 dark:text-text-muted">Department Subjects</CardTitle>
-                                    <div className="p-2 bg-purple-500/10 dark:bg-purple-500/20 rounded-xl group-hover:bg-purple-500/20 dark:group-hover:bg-purple-500/30 transition-colors">
-                                        <LuBookOpen className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="relative z-10">
-                                    <div className="text-3xl font-extrabold text-slate-900 dark:text-text-primary tracking-tight">{stats.courses}</div>
-                                </CardContent>
-                            </Card>
+                    {/* Humanized Department Metrics */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <StatCard 
+                            title="Faculty Strength" 
+                            value={stats.faculty} 
+                            change={2} 
+                            icon={Users} 
+                            changeDescription="active educators"
+                        />
+                        <StatCard 
+                            title="Course Catalog" 
+                            value={stats.courses} 
+                            change={5} 
+                            icon={BookOpen} 
+                            changeDescription="registry verified"
+                        />
+                        <StatCard 
+                            title="Academic Segments" 
+                            value={stats.batches} 
+                            change={0} 
+                            icon={Layers} 
+                            changeDescription="stable cohorts"
+                        />
+                        <StatCard 
+                            title="Student Population" 
+                            value={stats.students} 
+                            change={14} 
+                            icon={Users} 
+                            changeDescription="verified accounts"
+                        />
+                    </div>
 
-                            <Card className="glass-card hover:shadow-[0_8px_32px_0_rgba(16,185,129,0.2)] dark:hover:shadow-[0_8px_32px_0_rgba(16,185,129,0.3)] transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden border-slate-200 dark:border-border-hover">
-                                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 dark:from-emerald-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0 relative z-10">
-                                    <CardTitle className="text-sm font-semibold text-slate-600 dark:text-text-muted">Active Batches</CardTitle>
-                                    <div className="p-2 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-xl group-hover:bg-emerald-500/20 dark:group-hover:bg-emerald-500/30 transition-colors">
-                                        <LuUsers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                        {/* Pending Actions Feed */}
+                        <GlassCard className="lg:col-span-2 rounded-[3rem] border-primary/10">
+                            <GlassCardHeader className="p-8 pb-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="space-y-1">
+                                        <h3 className="text-2xl font-black font-space-grotesk text-slate-100 flex items-center gap-3">
+                                            <ShieldAlert className="text-primary w-6 h-6" />
+                                            Pending Actions
+                                        </h3>
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Items requiring administrative verification</p>
                                     </div>
-                                </CardHeader>
-                                <CardContent className="relative z-10">
-                                    <div className="text-3xl font-extrabold text-slate-900 dark:text-text-primary tracking-tight">{stats.batches}</div>
-                                </CardContent>
-                            </Card>
-
-                            <Card className="glass-card hover:shadow-[0_8px_32px_0_rgba(249,115,22,0.2)] dark:hover:shadow-[0_8px_32px_0_rgba(249,115,22,0.3)] transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden border-slate-200 dark:border-border-hover transition-all cursor-pointer"
-                                onClick={() => window.location.href = '/department/students'}>
-                                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 dark:from-orange-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                                <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0 relative z-10">
-                                    <CardTitle className="text-sm font-semibold text-slate-600 dark:text-text-muted">Total Students</CardTitle>
-                                    <div className="p-2 bg-orange-500/10 dark:bg-orange-500/20 rounded-xl group-hover:bg-orange-500/20 dark:group-hover:bg-orange-500/30 transition-colors">
-                                        <LuUsers className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="relative z-10">
-                                    <div className="text-3xl font-extrabold text-slate-900 dark:text-text-primary tracking-tight">{stats.students}</div>
-                                </CardContent>
-                            </Card>
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-                            <Card className="lg:col-span-2 glass-card border-slate-200 dark:border-border-hover">
-                                <CardHeader>
-                                    <div className="flex items-center justify-between">
-                                        <CardTitle className="text-xl font-bold flex items-center gap-2">
-                                            <LuCircleAlert className="text-amber-500" />
-                                            Pending Administrative Actions
-                                        </CardTitle>
-                                        <Badge variant="outline" className="bg-amber-500/10 text-amber-600 border-amber-500/20">
-                                            {pendingActions.requests + pendingActions.complaints + pendingActions.leaves} Priority Items
-                                        </Badge>
-                                    </div>
-                                </CardHeader>
-                                <CardContent className="space-y-4">
-                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border dark:border-border flex flex-col justify-between h-32 hover:border-indigo-500/50 transition-colors cursor-pointer"
-                                            onClick={() => window.location.href = '/department/helpdesk'}>
-                                            <div className="flex justify-between items-start">
-                                                <div className="p-2 bg-blue-500/10 rounded-lg text-blue-600"><LuFileText className="w-4 h-4" /></div>
-                                                <LuArrowRight className="w-4 h-4 text-text-muted" />
+                                </div>
+                            </GlassCardHeader>
+                            <GlassCardContent className="p-8">
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                    {[
+                                        { label: 'Support Tickets', value: pendingActions.requests, icon: FileText, color: 'text-blue-500', href: '/department/helpdesk' },
+                                        { label: 'Student Concerns', value: pendingActions.complaints, icon: AlertCircle, color: 'text-primary', href: '/department/helpdesk' },
+                                        { label: 'Presence Alerts', value: pendingActions.leaves, icon: Clock, color: 'text-emerald-500', href: '/department/leave' },
+                                    ].map((action) => (
+                                        <div 
+                                            key={action.label}
+                                            onClick={() => router.push(action.href)}
+                                            className="p-6 rounded-[2rem] bg-white/[0.03] border border-white/5 hover:border-primary/40 hover:bg-primary/[0.02] transition-all duration-300 cursor-pointer group shadow-lg shadow-black/20"
+                                        >
+                                            <div className="flex justify-between items-start mb-6">
+                                                <div className={`p-3 bg-white/5 rounded-2xl ${action.color} group-hover:bg-primary/10 transition-all`}>
+                                                    <action.icon className="w-5 h-5" />
+                                                </div>
+                                                <ArrowRight className="w-4 h-4 text-slate-700 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
                                             </div>
                                             <div>
-                                                <div className="text-2xl font-bold">{pendingActions.requests}</div>
-                                                <div className="text-xs text-text-secondary font-medium">Service Requests</div>
+                                                <div className="text-3xl font-black text-slate-100 tracking-tighter font-space-grotesk">{action.value}</div>
+                                                <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">{action.label}</div>
                                             </div>
                                         </div>
+                                    ))}
+                                </div>
+                            </GlassCardContent>
+                        </GlassCard>
 
-                                        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border dark:border-border flex flex-col justify-between h-32 hover:border-rose-500/50 transition-colors cursor-pointer"
-                                            onClick={() => window.location.href = '/department/helpdesk'}>
-                                            <div className="flex justify-between items-start">
-                                                <div className="p-2 bg-rose-500/10 rounded-lg text-rose-600"><LuCircleAlert className="w-4 h-4" /></div>
-                                                <LuArrowRight className="w-4 h-4 text-text-muted" />
+                        {/* Department Services */}
+                        <GlassCard className="rounded-[3rem] border-primary/10">
+                            <GlassCardHeader className="p-8 pb-4">
+                                <h3 className="text-2xl font-black font-space-grotesk text-slate-100">Department Services</h3>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Frequent administrative modules</p>
+                            </GlassCardHeader>
+                            <GlassCardContent className="p-8 space-y-4">
+                                {[
+                                    { label: 'Modify Timetable', icon: Calendar, color: 'text-indigo-500', href: '/department/timetables' },
+                                    { label: 'Verify Finance', icon: BadgeCheck, color: 'text-emerald-500', href: '/department/finance' },
+                                    { label: 'Student Logistics', icon: ArrowRightLeft, color: 'text-primary', href: '/department/student-transfers' },
+                                    { label: 'Active Classes', icon: BookOpen, color: 'text-blue-500', href: '/department/classes' },
+                                    { label: 'Risk Analytics', icon: ShieldAlert, color: 'text-rose-500', href: '/department/students/risk' },
+                                ].map((op) => (
+                                    <button 
+                                        key={op.label}
+                                        onClick={() => router.push(op.href)}
+                                        className="w-full flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 hover:bg-primary/[0.03] hover:border-primary/20 transition-all duration-300 group shadow-md"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className={cn("p-2 rounded-xl bg-white/5", op.color)}>
+                                                <op.icon className="w-4 h-4" />
                                             </div>
-                                            <div>
-                                                <div className="text-2xl font-bold">{pendingActions.complaints}</div>
-                                                <div className="text-xs text-text-secondary font-medium">Student Grievances</div>
-                                            </div>
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] group-hover:text-slate-100 transition-colors">{op.label}</span>
                                         </div>
+                                        <ChevronRight className="w-3 h-3 text-slate-700 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-0.5" />
+                                    </button>
+                                ))}
+                            </GlassCardContent>
+                        </GlassCard>
+                    </div>
 
-                                        <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border dark:border-border flex flex-col justify-between h-32 hover:border-emerald-500/50 transition-colors cursor-pointer"
-                                            onClick={() => window.location.href = '/department/leave'}>
-                                            <div className="flex justify-between items-start">
-                                                <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-600"><LuClock className="w-4 h-4" /></div>
-                                                <LuArrowRight className="w-4 h-4 text-text-muted" />
-                                            </div>
-                                            <div>
-                                                <div className="text-2xl font-bold">{pendingActions.leaves}</div>
-                                                <div className="text-xs text-text-secondary font-medium">Attendance Flags</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            <Card className="glass-card border-slate-200 dark:border-border-hover">
-                                <CardHeader>
-                                    <CardTitle className="text-lg font-bold">Quick Operations</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-3">
-                                    <Button variant="outline" className="w-full justify-start h-12 rounded-xl group" onClick={() => window.location.href = '/department/timetables'}>
-                                        <LuCalendar className="mr-3 h-5 w-5 text-indigo-500" />
-                                        <span>Update Timetable</span>
-                                        <LuArrowRight className="ml-auto w-4 h-4 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                                    </Button>
-                                    <Button variant="outline" className="w-full justify-start h-12 rounded-xl group" onClick={() => window.location.href = '/department/finance'}>
-                                        <LuBadgeCheck className="mr-3 h-5 w-5 text-emerald-500" />
-                                        <span>Verify Collections</span>
-                                        <LuArrowRight className="ml-auto w-4 h-4 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                                    </Button>
-                                    <Button variant="outline" className="w-full justify-start h-12 rounded-xl group" onClick={() => window.location.href = '/department/students/risk'}>
-                                        <LuCircleAlert className="mr-3 h-5 w-5 text-rose-500" />
-                                        <span>Risk Analytics</span>
-                                        <LuArrowRight className="ml-auto w-4 h-4 opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </div>
-
-
-                        <div className="mt-8">
-                            <h2 className="text-xl font-bold text-slate-900 dark:text-text-primary mb-4">Latest Schedule Overview</h2>
-                            {!latestTimetable && (
-                                <Card className="glass-card border-dashed">
-                                    <CardContent className="flex flex-col items-center justify-center p-8 text-text-secondary dark:text-text-muted">
-                                        <LuCalendar className="w-12 h-12 text-text-muted dark:text-slate-600 mb-3" />
-                                        <p>No active timetable generated yet.</p>
-                                    </CardContent>
-                                </Card>
-                            )}
-                        </div>
-                    </>
-                )}
-            </DashboardLayout>
+                    {/* Institutional Pulse - Real-time Risk Telemetry */}
+                    <CampusPulse departmentId={user?.entityId ?? undefined} className="mt-10" />
+                </div>
+            </V2DashboardLayout>
         </ProtectedRoute>
     );
 }
