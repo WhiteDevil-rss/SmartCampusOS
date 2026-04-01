@@ -23,6 +23,16 @@ export const callAiEngine = async (payload: any) => {
     }
 };
 
+export const getAiResponse = async (path: string, data: any) => {
+    try {
+        const response = await axios.post(`${AI_ENGINE_URL}${path}`, data);
+        return response.data;
+    } catch (error: any) {
+        console.error(`AI Engine Error (${path}):`, error.message);
+        return null; // Return null to allow for graceful fallback in controllers
+    }
+};
+
 export const predictResourceUsage = async (payload: any) => {
     try {
         const response = await axios.post(`${AI_ENGINE_URL}/forecast`, payload);
@@ -30,6 +40,26 @@ export const predictResourceUsage = async (payload: any) => {
     } catch (error: any) {
         console.error('AI Forecast Error:', error.message);
         throw new Error('Failed to fetch resource forecast');
+    }
+};
+
+export const matchAlumni = async (payload: any) => {
+    try {
+        const response = await axios.post(`${AI_ENGINE_URL}/match/alumni`, payload);
+        return response.data;
+    } catch (error: any) {
+        console.error('AI Alumni Matching Error:', error.message);
+        throw new Error('Failed to fetch alumni matches');
+    }
+};
+
+export const predictInventoryDepletion = async (payload: any) => {
+    try {
+        const response = await axios.post(`${AI_ENGINE_URL}/inventory/forecast`, payload);
+        return response.data;
+    } catch (error: any) {
+        console.error('AI Inventory Forecast Error:', error.message);
+        throw new Error('Failed to fetch inventory depletion forecast');
     }
 };
 

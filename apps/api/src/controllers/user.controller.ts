@@ -155,7 +155,7 @@ export const getUsers = async (req: Request, res: Response) => {
         res.json({ users, total });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Failed to retrieve users' });
+        res.status(500).json({ success: false, message: 'Failed to retrieve users' });
     }
 };
 
@@ -166,10 +166,10 @@ export const createUser = async (req: Request, res: Response) => {
 
         // Scoping for creation
         if (actor.role === 'UNI_ADMIN' && universityId !== actor.universityId) {
-            return res.status(403).json({ error: 'Scope mismatch: Cannot create for other university' });
+            return res.status(403).json({ success: false, message: 'Scope mismatch: Cannot create for other university' });
         }
         if (actor.role === 'DEPT_ADMIN' && (universityId !== actor.universityId || entityId !== actor.entityId)) {
-            return res.status(403).json({ error: 'Scope mismatch: Cannot create for other department' });
+            return res.status(403).json({ success: false, message: 'Scope mismatch: Cannot create for other department' });
         }
 
         const user = await userService.createUser({
@@ -179,7 +179,7 @@ export const createUser = async (req: Request, res: Response) => {
         res.status(201).json(user);
     } catch (err: any) {
         console.error(err);
-        res.status(400).json({ error: err.message || 'Failed to create user' });
+        res.status(400).json({ success: false, message: err.message || 'Failed to create user' });
     }
 };
 
@@ -198,14 +198,14 @@ export const updateUserStatus = async (req: Request, res: Response) => {
 
         // Prevent self-disabling for admins to avoid locking themselves out
         if (actor.id === id && isActive === false && (actor.role === 'SUPERADMIN' || actor.role === 'UNI_ADMIN')) {
-            return res.status(403).json({ error: 'You cannot disable your own admin account' });
+            return res.status(403).json({ success: false, message: 'You cannot disable your own admin account' });
         }
 
         const user = await userService.toggleUserStatus(id, isActive, actor.id);
         res.json(user);
     } catch (err: any) {
         console.error(err);
-        res.status(400).json({ error: err.message || 'Failed to update user status' });
+        res.status(400).json({ success: false, message: err.message || 'Failed to update user status' });
     }
 };
 
@@ -215,8 +215,8 @@ export const resetUserPassword = async (req: Request, res: Response) => {
         const { newPassword } = req.body;
         const actor = (req as any).user;
 
-        if (!newPassword || newPassword.length < 6) {
-            return res.status(400).json({ error: 'Password must be at least 6 characters' });
+        if (!newPassword || newPassword.length < 8) {
+            return res.status(400).json({ success: false, message: 'Password must be at least 8 characters' });
         }
 
         const targetUser = await prisma.user.findUnique({ where: { id } });
@@ -230,7 +230,7 @@ export const resetUserPassword = async (req: Request, res: Response) => {
         res.json({ message: 'Password reset successfully' });
     } catch (err: any) {
         console.error(err);
-        res.status(400).json({ error: err.message || 'Failed to reset password' });
+        res.status(400).json({ success: false, message: err.message || 'Failed to reset password' });
     }
 };
 
@@ -258,7 +258,7 @@ export const updateUser = async (req: Request, res: Response) => {
         res.json(user);
     } catch (err: any) {
         console.error(err);
-        res.status(400).json({ error: err.message || 'Failed to update user' });
+        res.status(400).json({ success: false, message: err.message || 'Failed to update user' });
     }
 };
 
@@ -279,10 +279,10 @@ export const deleteUser = async (req: Request, res: Response) => {
         }
 
         await userService.deleteUser(id, actor.id);
-        res.json({ message: 'User deleted successfully' });
+        res.json({ success: true, message: 'User deleted successfully' });
     } catch (err: any) {
         console.error(err);
-        res.status(400).json({ error: err.message || 'Failed to delete user' });
+        res.status(400).json({ success: false, message: err.message || 'Failed to delete user' });
     }
 };
 
@@ -300,7 +300,7 @@ export const getProfile = async (req: Request, res: Response) => {
             }
         });
 
-        if (!user) return res.status(404).json({ error: 'User not found' });
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
         // If user is faculty, fetch faculty details too
         let facultyDetails = null;
@@ -320,6 +320,39 @@ export const getProfile = async (req: Request, res: Response) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Failed to retrieve profile' });
+        res.status(500).json({ success: false, message: 'Failed to retrieve profile' });
+    }
+};
+
+export const searchUsers = async (req: Request, res: Response) => {
+    try {
+        const { query } = req.query as any;
+        if (!query || query.length < 2) {
+            return res.json([]);
+        }
+
+        const scopedFilter = getScopedFilter(req);
+
+        const users = await prisma.user.findMany({
+            where: {
+                ...scopedFilter,
+                OR: [
+                    { username: { contains: query, mode: 'insensitive' } },
+                    { email: { contains: query, mode: 'insensitive' } },
+                ],
+            },
+            select: {
+                id: true,
+                username: true,
+                email: true,
+                role: true,
+            },
+            take: 10,
+        });
+
+        res.json(users);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to search users' });
     }
 };

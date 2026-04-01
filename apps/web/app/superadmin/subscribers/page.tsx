@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { ConfirmDialog, useConfirm } from '@/components/ui/confirm-dialog';
 import { Toast, useToast } from '@/components/ui/toast-alert';
 import { cn } from '@/lib/utils';
+import { SuperAdminPageHeader } from '@/components/superadmin/page-header';
 
 interface Subscriber {
     id: string;
@@ -197,16 +198,22 @@ export default function SuperAdminSubscribers() {
                 <ConfirmDialog state={confirmState} onClose={closeConfirm} />
                 <Toast toast={toast} onClose={hideToast} />
 
-                {/* Header & Export Action */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                    <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-text-primary glow-sm">Audience Directory</h2>
-                        <p className="text-slate-600 dark:text-text-muted mt-1">Manage newsletter subscribers, handle unsubscriptions, and export data.</p>
-                    </div>
-                    <Button onClick={handleExport} className="bg-emerald-500 hover:bg-emerald-600 text-text-primary font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all">
-                        <LuDownload className="w-4 h-4 mr-2" /> Export to Excel
-                    </Button>
-                </div>
+                <SuperAdminPageHeader
+                    eyebrow="Audience operations"
+                    title="Subscriber directory"
+                    description="Review opt-ins, manage list health, and export clean audience data for campaigns and compliance."
+                    icon={<LuMailOpen className="h-6 w-6" />}
+                    actions={
+                        <Button onClick={handleExport} className="h-11 rounded-2xl px-5 font-bold">
+                            <LuDownload className="mr-2 h-4 w-4" /> Export
+                        </Button>
+                    }
+                    stats={[
+                        { label: 'Total', value: stats.total },
+                        { label: 'Active', value: stats.active },
+                        { label: 'Unsubscribed', value: stats.unsubscribed },
+                    ]}
+                />
 
                 {/* Metrics Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

@@ -7,7 +7,8 @@ import {
     resetUserPassword,
     updateUser,
     deleteUser,
-    getProfile
+    getProfile,
+    searchUsers
 } from '../controllers/user.controller';
 
 const router = Router();
@@ -15,6 +16,7 @@ const router = Router();
 // Only SUPERADMIN can manage all users directly
 router.use(authenticate);
 router.get('/me', getProfile);
+router.get('/search', searchUsers);
 router.put('/profile', (req, res) => {
     (req.params as any).id = (req as any).user.id;
     return updateUser(req, res);

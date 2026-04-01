@@ -2,7 +2,7 @@ import prisma from '../lib/prisma';
 import axios from 'axios';
 
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434/api/generate';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3.2';
 
 export const getClassAnalytics = async (facultyId: string, courseId: string) => {
     // 1. Fetch batches that have this course and faculty in their timetable

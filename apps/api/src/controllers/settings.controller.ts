@@ -33,13 +33,20 @@ export const updateSettings = async (req: Request, res: Response) => {
             autoBackups
         } = req.body;
 
+        if (sessionTimeout !== undefined) {
+            const parsedSessionTimeout = Number(sessionTimeout);
+            if (!Number.isFinite(parsedSessionTimeout) || parsedSessionTimeout < 1 || parsedSessionTimeout > 1440) {
+                return res.status(400).json({ error: 'Session timeout must be between 1 and 1440 minutes.' });
+            }
+        }
+
         const settings = await prisma.globalSettings.update({
             where: { id: 'system-config' },
             data: {
                 platformName,
                 supportEmail,
                 maintenanceMode,
-                sessionTimeout: sessionTimeout ? parseInt(sessionTimeout) : undefined,
+                sessionTimeout: sessionTimeout !== undefined ? parseInt(String(sessionTimeout), 10) : undefined,
                 mfaEnabled,
                 logRetention,
                 autoBackups

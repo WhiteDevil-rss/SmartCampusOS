@@ -4,6 +4,9 @@ import { firebaseAdmin } from '../lib/firebase-admin';
 import prisma from '../lib/prisma';
 import { logAction } from '../lib/logger';
 
+const PASSWORD_COMPLEXITY =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
 export interface CreateUserData {
     username: string;
     email: string;
@@ -39,6 +42,10 @@ export class UserService {
 
         if (!phoneNumber) {
             throw new Error('Contact number is mandatory for all new users');
+        }
+
+        if (password && !PASSWORD_COMPLEXITY.test(password)) {
+            throw new Error('Password must be at least 8 characters and include uppercase, lowercase, number, and special character');
         }
 
         // Check for existing user
@@ -94,6 +101,7 @@ export class UserService {
                     address,
                     universityId: universityId || null,
                     entityId: entityId || null,
+                    passwordChangedAt: new Date(),
                 }
             });
 
@@ -193,6 +201,16 @@ export class UserService {
             data: { isActive }
         });
 
+        if (!isActive) {
+            await this.prisma.userSession.updateMany({
+                where: { userId: id, invalidatedAt: null },
+                data: {
+                    invalidatedAt: new Date(),
+                    invalidatedReason: 'account-disabled'
+                }
+            });
+        }
+
         await logAction({
             userId: actorId,
             action: 'TOGGLE_USER_STATUS',
@@ -230,6 +248,10 @@ export class UserService {
         const user = await this.prisma.user.findUnique({ where: { id } });
         if (!user) throw new Error('User not found');
 
+        if (!PASSWORD_COMPLEXITY.test(newPassword)) {
+            throw new Error('Password must be at least 8 characters and include uppercase, lowercase, number, and special character');
+        }
+
         if (user.firebaseUid) {
             await firebaseAdmin.auth().updateUser(user.firebaseUid, {
                 password: newPassword
@@ -239,7 +261,21 @@ export class UserService {
         const passwordHash = await bcrypt.hash(newPassword, 12);
         await this.prisma.user.update({
             where: { id },
-            data: { passwordHash }
+            data: {
+                passwordHash,
+                passwordChangedAt: new Date(),
+                sessionVersion: { increment: 1 },
+                failedLoginAttempts: 0,
+                lockedUntil: null
+            }
+        });
+
+        await this.prisma.userSession.updateMany({
+            where: { userId: id, invalidatedAt: null },
+            data: {
+                invalidatedAt: new Date(),
+                invalidatedReason: 'password-reset'
+            }
         });
 
         await logAction({

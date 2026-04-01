@@ -11,7 +11,7 @@ export interface Notification {
     id: string;
     title: string;
     message: string;
-    category: 'ACADEMIC' | 'ATTENDANCE' | 'FEES' | 'SYSTEM';
+    category: 'ACADEMIC' | 'ATTENDANCE' | 'FEES' | 'SYSTEM' | 'SOCIAL' | 'MAINTENANCE' | 'EXAM';
     isRead: boolean;
     link?: string;
     createdAt: string;

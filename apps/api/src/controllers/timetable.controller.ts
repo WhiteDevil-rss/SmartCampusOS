@@ -23,7 +23,7 @@ export const generateTimetable = async (req: AuthRequest, res: Response) => {
             generationType = 'NORMAL',
             lockedSlots = []
         } = req.body;
-        let { config } = req.body;
+        const { config } = req.body;
 
         if (req.user!.role === 'DEPT_ADMIN' && req.user!.entityId !== departmentId) {
             return res.status(403).json({ error: 'Forbidden' });

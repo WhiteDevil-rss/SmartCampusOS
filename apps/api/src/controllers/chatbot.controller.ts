@@ -2,23 +2,21 @@ import { Response } from 'express';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
 
-// We will simulate passing this to the Python AI Engine by wrapping it in a simple mock for now, 
-// similar to the timetable engine approach but directly responding.
-// In production, this would make an axios call to the Python microservice.
+import axios from 'axios';
+
+const AI_ENGINE_URL = process.env.AI_ENGINE_URL || 'http://localhost:5000';
+
 const generateAiResponse = async (query: string, studentContext: any): Promise<string> => {
-    const keywords = ['syllabus', 'exam', 'attendance', 'deadline', 'drop', 'sgpa'];
-
-    if (query.toLowerCase().includes('attendance')) {
-        return `Based on your records, you are enrolled in ${studentContext.program}. Remember, SmartCampus OS mandates adherence to institutional attendance policies (typically 75%). If you have medical reasons, please submit an official service request via the portal.`;
+    try {
+        const response = await axios.post(`${AI_ENGINE_URL}/chat`, {
+            message: query,
+            context: studentContext
+        });
+        return response.data.reply;
+    } catch (error) {
+        console.error('AI Engine Connection Error:', error);
+        return 'The AI Assistant is currently experiencing high load. Please try again in a few minutes.';
     }
-    if (query.toLowerCase().includes('sgpa') || query.toLowerCase().includes('grade')) {
-        return `Your academic records are tracked semester by semester. To improve your SGPA, focus on completing assignments on time, as they carry significant weight in the internal evaluation.`;
-    }
-    if (query.toLowerCase().includes('syllabus')) {
-        return `You can find the detailed syllabus for the ${studentContext.program} program under the 'Study Materials' section of your dashboard.`;
-    }
-
-    return `I am the SmartCampus OS Assistant. I can help you with questions regarding your courses, attendance, assignments, and institutional policies. Please feel free to ask a specific question!`;
 };
 
 export const askQuestion = async (req: AuthRequest, res: Response) => {

@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../generated/client';
 import * as financialAuditor from '../services/financial-auditor.service';
 import * as scholarshipService from '../services/scholarship.service';
 

@@ -67,8 +67,17 @@ export function UserFilterBar({ onFilterChange, initialFilters }: UserFilterBarP
         const deptId = filters.departmentId;
         const uniId = filters.universityId;
         if (deptId && deptId !== 'all' && uniId) {
-            api.get(`/universities/${uniId}/departments/${deptId}/courses`).then(({ data }) => setCourses(data));
-            api.get(`/batches?departmentId=${deptId}`).then(({ data }) => setBatches(data));
+            api.get('/courses', {
+                params: {
+                    universityId: uniId,
+                    departmentId: deptId,
+                },
+            })
+                .then(({ data }) => setCourses(Array.isArray(data) ? data : []))
+                .catch(() => setCourses([]));
+            api.get(`/batches?departmentId=${deptId}`)
+                .then(({ data }) => setBatches(Array.isArray(data) ? data : []))
+                .catch(() => setBatches([]));
         } else {
             setCourses([]);
             setBatches([]);

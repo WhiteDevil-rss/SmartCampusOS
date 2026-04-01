@@ -12,7 +12,7 @@ async function main() {
             platformName: 'Zembaa.AI Scheduler',
             supportEmail: 'support@zembaa.ai',
             maintenanceMode: false,
-            sessionTimeout: 600,
+            sessionTimeout: 10,
             mfaEnabled: false,
             logRetention: '30',
             autoBackups: false,

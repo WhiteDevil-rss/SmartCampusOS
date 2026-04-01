@@ -8,6 +8,7 @@ export interface FacultyStats {
     totalStudents: number;
     pendingAssignments: number;
     unreadMessages: number;
+    pendingReviews: number;
     todaySchedule: any[];
 }
 

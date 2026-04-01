@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/lib/store/useAuthStore";
 import { ThemeToggle } from "./theme-toggle";
 import { Activity, ShieldCheck, Menu, X, ArrowRight } from "lucide-react";
+import { getFrontendRoleHint, getRoleHomePath } from "@/lib/api";
 
 const navLinks = [
     { label: "Solutions", href: "/solutions" },
@@ -26,15 +27,10 @@ export function LandingNav() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const getDashboardPath = () => {
-        if (!user) return "/dashboard";
-        switch (user.role) {
-            case 'UNI_ADMIN': return "/dashboard";
-            case 'DEPT_ADMIN': return "/department";
-            case 'FACULTY': return "/faculty-panel";
-            default: return "/dashboard";
-        }
-    };
+    const authEntryPath = useMemo(
+        () => getRoleHomePath(user?.role || getFrontendRoleHint()),
+        [user?.role]
+    );
 
     return (
         <header
@@ -105,26 +101,26 @@ export function LandingNav() {
 
                 <div className="flex items-center gap-4">
                     {isAuthenticated ? (
-                        <Link
-                            href={getDashboardPath()}
-                            className="bg-primary text-white px-6 py-2.5 rounded-2xl text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-[0_10px_20px_rgba(99,102,241,0.2)] hover:shadow-[0_15px_30px_rgba(99,102,241,0.3)]"
+                        <a
+                            href={authEntryPath}
+                            className="hidden md:flex bg-primary text-white px-6 py-2.5 rounded-2xl text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-[0_10px_20px_rgba(99,102,241,0.2)] hover:shadow-[0_15px_30px_rgba(99,102,241,0.3)]"
                         >
                             Portal Access
-                        </Link>
+                        </a>
                     ) : (
                         <div className="flex items-center gap-3">
-                            <Link
-                                href="/login"
+                            <a
+                                href={authEntryPath}
                                 className="hidden md:inline-flex text-sm font-black text-slate-500 dark:text-text-muted hover:text-primary transition-colors"
                             >
                                 Login
-                            </Link>
-                            <Link
-                                href="/login?tab=register"
+                            </a>
+                            <a
+                                href={authEntryPath}
                                 className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-7 py-3 rounded-2xl text-sm font-black transition-all hover:scale-105 active:scale-95 shadow-xl hover:shadow-2xl"
                             >
                                 Get Started
-                            </Link>
+                            </a>
                         </div>
                     )}
                     
@@ -165,13 +161,13 @@ export function LandingNav() {
                             <Link href="/admissions" onClick={() => setMobileOpen(false)} className="h-14 flex items-center justify-center rounded-2xl border border-primary/30 text-primary font-black">Admissions</Link>
                             <Link href="/verify" onClick={() => setMobileOpen(false)} className="h-14 flex items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-black">Verify</Link>
                         </div>
-                        <Link
-                            href="/login"
+                        <a
+                            href={authEntryPath}
                             onClick={() => setMobileOpen(false)}
                             className="w-full h-16 flex items-center justify-center rounded-3xl bg-primary text-white text-lg font-black shadow-lg shadow-primary/20"
                         >
                             Open SmartOS Portal
-                        </Link>
+                        </a>
                         <div className="flex justify-center pt-4">
                             <ThemeToggle />
                         </div>

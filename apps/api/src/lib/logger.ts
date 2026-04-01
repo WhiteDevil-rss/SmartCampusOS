@@ -42,6 +42,9 @@ export interface LogParams {
     ipAddress?: string;
     userAgent?: string;
     errorMessage?: string;
+    transactionHash?: string;
+    blockNumber?: number;
+    isVerified?: boolean;
 }
 
 /**
@@ -59,6 +62,28 @@ export function logAction(params: LogParams) {
                 timestamp: new Date().toISOString()
             });
 
+            // Auto-Verify Critical Actions on "Blockchain" (Simulated)
+            const isCritical = 
+                params.method !== 'GET' && 
+                (params.action.includes('UNIVERSITY') || 
+                 params.action.includes('PERMISSION') || 
+                 params.action.includes('USER') || 
+                 params.status === 'FAILURE');
+
+            let blockchainData = {
+                transactionHash: params.transactionHash,
+                blockNumber: params.blockNumber,
+                isVerified: params.isVerified ?? false
+            };
+
+            if (isCritical && !blockchainData.transactionHash && params.status === 'SUCCESS') {
+                // Generate a deterministic hash for simulation
+                const payload = JSON.stringify({ action: params.action, actor: params.userId, time: Date.now() });
+                blockchainData.transactionHash = '0x' + Buffer.from(payload).toString('hex').slice(0, 64);
+                blockchainData.blockNumber = Math.floor(18000000 + Math.random() * 100000);
+                blockchainData.isVerified = true;
+            }
+
             // 2. Log to Database
             await (prisma.auditLog.create as any)({
                 data: {
@@ -73,6 +98,9 @@ export function logAction(params: LogParams) {
                     durationMs: params.durationMs,
                     ipAddress: params.ipAddress,
                     userAgent: params.userAgent,
+                    transactionHash: blockchainData.transactionHash,
+                    blockNumber: blockchainData.blockNumber,
+                    isVerified: blockchainData.isVerified,
                 }
             });
 

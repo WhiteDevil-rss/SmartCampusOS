@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { useToast, Toast } from '@/components/ui/toast-alert';
 import { useConfirm, ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { SUPERADMIN_NAV } from '@/lib/constants/nav-config';
+import { SuperAdminPageHeader } from '@/components/superadmin/page-header';
 
 interface University {
     id: string;
@@ -130,19 +131,22 @@ export default function SuperAdminDashboard() {
     return (
         <ProtectedRoute allowedRoles={['SUPERADMIN']}>
             <DashboardLayout navItems={navItems} title="Super Admin Dashboard">
-
-                <div className="flex justify-between items-center mb-10 relative z-20">
-                    <div>
-                        <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-text-primary glow-sm">Institutions Matrix</h2>
-                        <p className="text-slate-600 dark:text-text-muted mt-1 font-medium">Manage global university partitions securely via the Neural Constraint Solver matrix.</p>
-                    </div>
-                    <Button
-                        onClick={() => setIsAddUniOpen(true)}
-                        className="bg-neon-cyan text-slate-900 font-black shadow-[0_0_20px_rgba(57,193,239,0.4)] hover:shadow-[0_0_35px_rgba(57,193,239,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 h-11 px-6 rounded-xl border border-transparent hover:border-border-hover"
-                    >
-                        <LuPlus className="w-5 h-5 mr-1.5" /> Provision Partition
-                    </Button>
-                </div>
+                <SuperAdminPageHeader
+                    eyebrow="Platform topology"
+                    title="University workspaces"
+                    description="Provision, rename, and retire institutional partitions from a single systems view."
+                    icon={<LuBuilding2 className="h-6 w-6" />}
+                    actions={
+                        <Button onClick={() => setIsAddUniOpen(true)} className="h-11 rounded-2xl px-5 font-bold">
+                            <LuPlus className="mr-2 h-4 w-4" /> Add University
+                        </Button>
+                    }
+                    stats={[
+                        { label: 'Total Institutions', value: universities.length },
+                        { label: 'Active Records', value: universities.reduce((sum, uni) => sum + (uni._count?.faculty || 0), 0) },
+                        { label: 'Live Status', value: 'Healthy' },
+                    ]}
+                />
 
                 {loading ? (
                     <div className="flex justify-center p-12"><div className="w-12 h-12 rounded-full border-4 border-neon-cyan border-t-transparent animate-spin shadow-[0_0_20px_rgba(57,193,239,0.3)]" /></div>

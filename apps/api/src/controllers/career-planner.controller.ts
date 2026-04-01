@@ -49,12 +49,14 @@ export const generateStudyPlan = async (req: AuthRequest, res: Response) => {
         ));
 
         const aiContext: CareerAIContext = {
+            studentId: student.id,
             studentName: student.name.split(' ')[0], // First name for personalization
             program: student.program.name,
             semester: student.batch.semester ?? (lastResult?.semester ?? 1) + 1,
             currentSgpa,
             attendanceRate,
-            completedCourses: completedCourses.slice(0, 10) // Limit to top 10 for prompt efficiency
+            completedCourses: completedCourses.slice(0, 10), // Limit to top 10 for prompt efficiency
+            academicYear: student.batch.year ?? new Date().getFullYear().toString()
         };
 
         // 3. Generate Intelligence

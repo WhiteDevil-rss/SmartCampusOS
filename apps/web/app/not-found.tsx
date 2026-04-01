@@ -19,7 +19,7 @@ export default function NotFound() {
             </div>
 
             {/* Matrix/Grid Overlay */}
-            <div className="absolute inset-0 opacity-[0.03] z-1 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
+            <div className="absolute inset-0 opacity-[0.03] z-1 pointer-events-none bg-[url('/noise.svg')] mix-blend-overlay" />
             <div className="absolute inset-0 z-1 pointer-events-none" style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
 
             {/* Floating Terminal Lines */}

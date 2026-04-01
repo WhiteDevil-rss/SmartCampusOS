@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { AuthRequest } from '../middlewares/auth.middleware';
+import { AuthRequest } from '../types/auth';
 import { blockchainService } from '../services/blockchain.service';
 
 /**

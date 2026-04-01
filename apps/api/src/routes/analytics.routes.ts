@@ -8,6 +8,7 @@ import {
     updateIntervention,
     getClassInsights,
     getDepartmentRiskMap,
+    getDepartmentCompliance,
     triggerBulkIntervention,
     simulatePolicy
 } from '../controllers/analytics.controller';
@@ -22,7 +23,7 @@ router.get('/department', requireRole(['DEPT_ADMIN', 'SUPERADMIN']), getDepartme
 router.get('/sentinel', requireRole(['STUDENT']), getStudentSentinel);
 router.get('/faculty/class-insights/:courseId', requireRole(['FACULTY', 'DEPT_ADMIN']), getClassInsights);
 router.post('/faculty/simulate-policy', requireRole(['FACULTY', 'DEPT_ADMIN']), simulatePolicy);
-router.get('/admin/department-risk-map/:departmentId?', requireRole(['DEPT_ADMIN', 'UNI_ADMIN']), getDepartmentRiskMap);
+router.get(['/admin/department-risk-map', '/admin/department-risk-map/:departmentId'], requireRole(['DEPT_ADMIN', 'UNI_ADMIN']), getDepartmentRiskMap);
 router.get('/:departmentId/risk', requireRole(['DEPT_ADMIN', 'UNI_ADMIN', 'FACULTY']), getStudentAtRisk);
 router.get('/:departmentId/trends', requireRole(['DEPT_ADMIN', 'UNI_ADMIN']), getResultTrends);
 router.get('/:departmentId/forecast', requireRole(['DEPT_ADMIN', 'UNI_ADMIN']), getResourceForecast);

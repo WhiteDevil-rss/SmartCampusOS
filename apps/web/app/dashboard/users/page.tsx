@@ -126,8 +126,8 @@ export default function UniversityUsers() {
     };
 
     const handleResetPassword = async () => {
-        if (!selectedUserId || newPassword.length < 6) {
-            showToast('error', 'Password must be at least 6 characters');
+        if (!selectedUserId || newPassword.length < 8) {
+            showToast('error', 'Password must be at least 8 characters');
             return;
         }
         try {

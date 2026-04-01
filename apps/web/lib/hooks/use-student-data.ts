@@ -33,6 +33,14 @@ export function useStudentData() {
     useEffect(() => {
         if (!user) return;
 
+        if (user.role !== 'STUDENT') {
+            setProfile(null);
+            setStats(null);
+            setError(null);
+            setLoading(false);
+            return;
+        }
+
         const fetchData = async () => {
             try {
                 setLoading(true);

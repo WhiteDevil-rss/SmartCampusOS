@@ -24,8 +24,9 @@ export function SentinelPanel() {
         else setLoading(true);
 
         try {
-            const res = await api.get('/analytics/sentinel');
-            setData(res.data);
+            const endpoint = isRefresh ? '/v2/analytics/sentinel?refresh=true' : '/v2/analytics/sentinel';
+            const response = await api.get(endpoint);
+            setData(response.data);
         } catch (error) {
             console.error('Failed to fetch Sentinel data:', error);
         } finally {
@@ -65,7 +66,7 @@ export function SentinelPanel() {
                             {refreshing && <RefreshCw className="w-4 h-4 animate-spin text-indigo-400" />}
                         </h2>
                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 italic">
-                            AI-Powered Early Warning System • Powered by llama3
+                            AI-Powered Early Warning System • Powered by llama3.2
                         </p>
                     </div>
                 </div>
@@ -82,11 +83,17 @@ export function SentinelPanel() {
                 </Button>
             </div>
 
-            <RiskRadar 
-                score={data.risk.score}
-                level={data.risk.riskLevel}
-                factors={data.risk.factors}
-            />
+            {data.risk ? (
+                <RiskRadar 
+                    score={data.risk.score}
+                    level={data.risk.riskLevel}
+                    factors={data.risk.factors}
+                />
+            ) : (
+                <div className="p-6 bg-slate-900/50 border border-slate-800 rounded-3xl text-center">
+                    <p className="text-sm text-slate-400">No baseline analysis available yet. Recalculate to generate initial risk profile.</p>
+                </div>
+            )}
 
             <div className="space-y-6">
                 <div className="flex items-center gap-2 px-1">

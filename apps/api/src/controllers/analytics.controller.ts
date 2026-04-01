@@ -1,8 +1,9 @@
 import { Response } from 'express';
 import prisma from '../lib/prisma';
-import { AuthRequest } from '../middlewares/auth.middleware';
+import { AuthRequest } from '../types/auth';
 import { predictResourceUsage } from '../services/ai.service';
 import * as sentinelService from '../services/academic-sentinel.service';
+import * as governanceService from '../services/governance.service';
 import * as facultyIntelligence from '../services/faculty-intelligence.service';
 
 /**
@@ -157,14 +158,10 @@ export const getStudentSentinel = async (req: AuthRequest, res: Response) => {
  */
 export const updateIntervention = async (req: AuthRequest, res: Response) => {
     try {
-        const { interventionId } = req.params;
+        const interventionId = req.params.interventionId as string;
         const { status } = req.body;
         
-        if (typeof interventionId !== 'string') {
-           return res.status(400).json({ error: 'Invalid intervention ID' });
-        }
-        
-        const updated = await sentinelService.updateInterventionStatus(interventionId, status as string);
+        const updated = await sentinelService.updateInterventionStatus(String(interventionId), status as string);
         res.json(updated);
     } catch (error: any) {
         res.status(400).json({ error: error.message });
@@ -381,20 +378,29 @@ export const getClassInsights = async (req: AuthRequest, res: Response) => {
 };
 
 /**
- * Phase 16: Admin Command Center - Get department-wide risk map
+ * Phase 27: Integrated Governance - Get department-wide risk orbit
  */
 export const getDepartmentRiskMap = async (req: AuthRequest, res: Response) => {
     try {
         const departmentId = (req.params.departmentId as string) || (req.user?.entityId as string);
-        if (!departmentId) {
-            return res.status(400).json({ error: 'Department ID missing' });
+        
+        if (departmentId) {
+            const profile = await governanceService.calculateDepartmentRisk(departmentId);
+            const riskMap = {
+                timestamp: new Date().toISOString(),
+                totalDepartments: 1,
+                criticalDepartments: profile.riskLevel === 'CRITICAL' ? 1 : 0,
+                elevatedDepartments: profile.riskLevel === 'ELEVATED' ? 1 : 0,
+                profiles: [profile]
+            };
+            return res.json({ success: true, data: riskMap });
         }
 
-        const riskMap = await facultyIntelligence.getDepartmentRiskMap(departmentId);
-        res.json(riskMap);
-    } catch (error) {
-        console.error('Department Risk Map Failed:', error);
-        res.status(500).json({ error: 'Failed to generate department risk map' });
+        const riskMap = await governanceService.getUniversityRiskMap();
+        res.json({ success: true, data: riskMap });
+    } catch (error: any) {
+        console.error('[GET_DEPT_RISK_MAP_ERROR]:', error);
+        res.status(500).json({ success: false, error: error.message });
     }
 };
 
@@ -450,5 +456,23 @@ export const simulatePolicy = async (req: AuthRequest, res: Response) => {
     } catch (error: any) {
         console.error('Simulation Matrix Failed:', error);
         res.status(500).json({ error: error.message });
+    }
+};
+
+/**
+ * Get detailed compliance audit for a department
+ */
+export const getDepartmentCompliance = async (req: AuthRequest, res: Response) => {
+    try {
+        const departmentId = req.params.departmentId as string;
+        if (!departmentId) {
+            return res.status(400).json({ error: 'Department ID is required' });
+        }
+
+        const audit = await governanceService.runComplianceAudit(departmentId);
+        res.json({ success: true, data: audit });
+    } catch (error: any) {
+        console.error('[GET_DEPT_COMPLIANCE_ERROR]:', error);
+        res.status(500).json({ success: false, error: error.message });
     }
 };

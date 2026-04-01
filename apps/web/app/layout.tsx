@@ -1,22 +1,25 @@
-import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
-import "./globals.css";
-import { AuthProvider } from "@/components/auth-provider";
-import { ThemeProvider } from "@/components/theme-provider";
+import type { Metadata } from 'next';
+import { Space_Grotesk, Inter } from 'next/font/google';
+import './globals.css';
+import { AuthProvider } from '@/components/auth-provider';
+import { SessionActivityGuard } from '@/components/session-activity-guard';
+import { ThemeProvider } from '@/components/theme-provider';
+import ToastWrapper from '@/components/ui/toast-wrapper';
+import { Toaster } from 'sonner';
 
 const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
 });
 
 const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+  subsets: ['latin'],
+  variable: '--font-inter',
 });
 
 export const metadata: Metadata = {
-  title: "SmartCampus OS",
-  description: "AI-Powered University Operating System - Advanced Management for Modern Education",
+  title: 'SmartCampus OS',
+  description: 'AI-Powered University Operating System - Advanced Management for Modern Education',
 };
 
 export default function RootLayout({
@@ -40,7 +43,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <Toaster richColors closeButton position="top-right" />
+            <ToastWrapper>
+              <SessionActivityGuard />
+              {children}
+            </ToastWrapper>
           </ThemeProvider>
         </AuthProvider>
       </body>

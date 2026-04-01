@@ -300,7 +300,7 @@ export const getFacultyStats = async (req: AuthRequest, res: Response) => {
 
         const today = new Date().getDay(); // 0=Sun, 1=Mon...
 
-        const [subjectsCount, todayLectures, totalStudents, pendingAssignments, unreadThreads] = await Promise.all([
+        const [subjectsCount, todayLectures, totalStudents, pendingAssignments, unreadThreads, pendingReviews] = await Promise.all([
             prisma.facultySubject.count({ where: { facultyId } }),
             prisma.timetableSlot.findMany({
                 where: { facultyId, dayOfWeek: today === 0 ? 7 : today },
@@ -326,6 +326,9 @@ export const getFacultyStats = async (req: AuthRequest, res: Response) => {
                     participants: { some: { id: req.user!.id } },
                     updatedAt: { gte: new Date(Date.now() - 24 * 60 * 60 * 1000) } // Simplified "recent activity" for unread proxy
                 }
+            }),
+            prisma.researchReview.count({ 
+                where: { reviewerId: facultyId, status: 'PENDING' } 
             })
         ]);
 
@@ -335,6 +338,7 @@ export const getFacultyStats = async (req: AuthRequest, res: Response) => {
             totalStudents: totalStudents,
             pendingAssignments,
             unreadMessages: unreadThreads,
+            pendingReviews,
             todaySchedule: todayLectures
         });
     } catch (error) {

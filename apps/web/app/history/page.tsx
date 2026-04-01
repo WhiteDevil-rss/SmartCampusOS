@@ -198,7 +198,7 @@ export default function HistoryPage() {
     };
 
     return (
-        <ProtectedRoute allowedRoles={['SUPERADMIN', 'UNI_ADMIN', 'DEPT_ADMIN', 'FACULTY', 'STUDENT']}>
+        <ProtectedRoute allowedRoles={['SUPERADMIN', 'UNI_ADMIN', 'COLLEGE_ADMIN', 'DEPT_ADMIN', 'FACULTY', 'STUDENT']}>
             <DashboardLayout navItems={getNavItems()} title="Message History">
                 <div className="max-w-6xl mx-auto space-y-8 pb-20">
                     {/* Header Card */}

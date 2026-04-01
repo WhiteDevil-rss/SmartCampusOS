@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { motion, Variants } from "framer-motion";
-import { api } from '@/lib/api';
+import { api, getFrontendRoleHint, getRoleHomePath } from '@/lib/api';
+import { useAuthStore } from '@/lib/store/useAuthStore';
 import { 
   GlassCard, 
   GlassCardHeader, 
@@ -35,8 +36,10 @@ import {
 
 export default function Home() {
   const router = useRouter();
+  const { user } = useAuthStore();
   const [mounted, setMounted] = useState(false);
   const [verifyHash, setVerifyHash] = useState('');
+  const authEntryPath = getRoleHomePath(user?.role || getFrontendRoleHint());
 
   // Inquiry Form State
   const [inquiryData, setInquiryData] = useState({
@@ -154,12 +157,12 @@ export default function Home() {
                             variants={itemVariants}
                             className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6 w-full max-w-4xl mx-auto"
                         >
-                            <Link
-                                href="/login?tab=register"
+                            <a
+                                href={authEntryPath}
                                 className="w-full sm:w-auto flex items-center justify-center gap-3 rounded-[1.5rem] bg-primary text-white px-12 py-5 text-xl font-black transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-primary/20"
                             >
                                 Get Started Today <ArrowRight className="w-6 h-6" />
-                            </Link>
+                            </a>
                             
                             <button
                                 onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
@@ -395,12 +398,12 @@ export default function Home() {
                     </div>
 
                     <div className="mt-32 text-center">
-                        <Link
-                            href="/login?tab=register"
+                        <a
+                            href={authEntryPath}
                             className="inline-flex items-center gap-3 rounded-[1.5rem] bg-primary text-white px-12 py-5 text-xl font-black transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-primary/40 group"
                         >
                             Begin Transformation <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                        </Link>
+                        </a>
                     </div>
                 </div>
             </section>

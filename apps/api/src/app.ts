@@ -5,7 +5,6 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
-import { ScheduleConfig } from '@smartcampus-os/types';
 import authRoutes from './routes/auth.routes';
 import universityRoutes from './routes/university.routes';
 import departmentRoutes from './routes/department.routes';
@@ -20,23 +19,45 @@ import programRoutes from './routes/program.routes';
 import { createServer } from 'http';
 import { socketService } from './services/socket.service';
 import { checkAiHealth } from './services/ai.service';
+import { monitoringService } from './services/monitoring.service';
 
-import { auditLogger } from './middleware/audit-logger.middleware';
+import { auditLogger } from './middlewares/audit-logger.middleware';
+import {
+    csrfProtection,
+    ensureSettingsRow,
+    sanitizeRequest,
+} from './middlewares/security.middleware';
+import { enforceApiAuthentication, requireRole } from './middlewares/auth.middleware';
 
 const app = express();
 const port = process.env.PORT || 8000;
 
 app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: process.env.CORS_ORIGIN?.split(',') || ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token']
 }));
 app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" }
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    hsts: process.env.NODE_ENV === 'production' ? undefined : false,
+    contentSecurityPolicy: false,
+    frameguard: { action: 'deny' },
+    referrerPolicy: { policy: 'no-referrer' },
 }));
 app.use(compression());
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
+app.use(ensureSettingsRow);
+app.use(sanitizeRequest);
+app.use(enforceApiAuthentication);
+app.use(csrfProtection);
 app.use(auditLogger);
+
+// Throughput Monitoring Middleware
+app.use((req, res, next) => {
+    monitoringService.incrementRequestCount();
+    next();
+});
 
 app.get('/health', (req: express.Request, res: express.Response) => {
     res.json({ status: 'ok', service: 'nepscheduler-api' });
@@ -45,6 +66,15 @@ app.get('/health', (req: express.Request, res: express.Response) => {
 app.get('/v1/ai-health', async (req: express.Request, res: express.Response) => {
     const health = await checkAiHealth();
     res.json(health);
+});
+
+app.get('/v2/monitoring/metrics', requireRole(['SUPERADMIN']), async (req, res) => {
+    try {
+        const metrics = await monitoringService.getCurrentMetrics();
+        res.status(200).json(metrics);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to collect monitoring metrics' });
+    }
 });
 
 import auditLogRoutes from './routes/audit-log.routes';
@@ -94,6 +124,17 @@ import divisionRoutes from './routes/division.routes';
 import classRoutes from './routes/class.routes';
 import studentTransferRoutes from './routes/student-transfer.routes';
 import collaborationRoutes from './routes/collaboration.routes';
+import researchRoutes from './routes/research.routes';
+import synergyRoutes from './routes/synergy.routes';
+import institutionalRoutes from './routes/institutional.routes';
+import governanceRoutes from './routes/governance.routes';
+import careerRoutes from './routes/career.routes';
+import maintenanceRoutes from './routes/maintenance.routes';
+import notificationPreferenceRoutes from './routes/notification-preference.routes';
+import alumniRoutes from './routes/alumni.routes';
+import inventoryRoutes from './routes/inventory.routes';
+import securityRoutes from './routes/security.routes';
+
 
 app.use('/v1/auth', authRoutes);
 app.use('/v1/universities/:universityId/departments', departmentRoutes);
@@ -158,6 +199,17 @@ app.use('/v2/divisions', divisionRoutes);
 app.use('/v2/classes', classRoutes);
 app.use('/v2/student-transfers', studentTransferRoutes);
 app.use('/v2/collaboration', collaborationRoutes);
+app.use('/v2/research', researchRoutes);
+app.use('/v2/synergy', synergyRoutes);
+app.use('/v2/institutional', institutionalRoutes);
+app.use('/v2/governance', governanceRoutes);
+app.use('/v2/career-intelligence', careerRoutes);
+app.use('/v2/maintenance', maintenanceRoutes);
+app.use('/v2/notifications', notificationPreferenceRoutes);
+app.use('/v2/alumni', alumniRoutes);
+app.use('/v2/inventory', inventoryRoutes);
+app.use('/v2/security', securityRoutes);
+
 
 // Health Check
 import { cacheService } from './services/redis.service';
@@ -167,10 +219,13 @@ app.get('/v2/health', async (req, res) => {
     try {
         const dbStatus = await prisma.$queryRaw`SELECT 1`.then(() => 'online').catch(() => 'offline');
         const aiStatus = await checkAiHealth();
-        const redisStatus = await cacheService.get('health-check').then(() => 'online').catch(() => 'offline');
+        const redisStatus = cacheService.getStatus();
 
-        res.json({
-            status: dbStatus === 'online' && aiStatus.reachable ? 'healthy' : 'degraded',
+        const isHealthy = dbStatus === 'online' && aiStatus.reachable;
+        const statusCode = isHealthy ? 200 : 503;
+
+        res.status(statusCode).json({
+            status: isHealthy ? 'healthy' : 'degraded',
             services: {
                 database: dbStatus,
                 aiEngine: aiStatus.status,
@@ -192,4 +247,42 @@ socketService.initialize(server);
 
 server.listen(port, () => {
     console.log(`API Server running on port ${port}`);
+    monitoringService.start();
 });
+
+// --- GRACEFUL SHUTDOWN HANDLERS ---
+const gracefulShutdown = async (signal: string) => {
+    console.log(`\n[${signal}] Shutdown signal received. Closing SmartCampusOS API...`);
+    
+    // Stop accepting new connections
+    server.close(async () => {
+        console.log('[HTTP] Server stopped.');
+        
+        try {
+            // Orchestrated Draining
+            console.log('[Drain] Disconnecting Socket.io...');
+            await socketService.close();
+            
+            console.log('[Drain] Closing Redis pool...');
+            await cacheService.disconnect();
+            
+            console.log('[Drain] Disconnecting Prisma...');
+            await prisma.$disconnect();
+            
+            console.log(`[Success] Clean exit. System time: ${new Date().toISOString()}`);
+            process.exit(0);
+        } catch (err) {
+            console.error('[Error] Problem during graceful shutdown:', err);
+            process.exit(1);
+        }
+    });
+
+    // Forced Timeout Protection (10s)
+    setTimeout(() => {
+        console.error('[Timeout] Forced shutdown after 10s.');
+        process.exit(1);
+    }, 10000);
+};
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));

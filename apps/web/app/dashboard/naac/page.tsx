@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,7 @@ import {
     LuDownload, LuLibrary, LuUsers, LuBuilding2,
     LuBriefcase, LuGraduationCap, LuActivity, LuFileText, LuTrendingUp
 } from 'react-icons/lu';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import jspdf from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
@@ -21,15 +22,49 @@ import * as XLSX from 'xlsx';
 
 const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#3b82f6'];
 
+function ChartFrame({
+    height,
+    children,
+}: {
+    height: number;
+    children: (size: { width: number; height: number }) => ReactNode;
+}) {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const [width, setWidth] = useState(0);
+
+    useEffect(() => {
+        const element = containerRef.current;
+        if (!element) return;
+
+        const updateWidth = () => {
+            setWidth(element.getBoundingClientRect().width);
+        };
+
+        updateWidth();
+
+        const observer = new ResizeObserver(() => {
+            updateWidth();
+        });
+
+        observer.observe(element);
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
+    return (
+        <div ref={containerRef} className="w-full" style={{ height }}>
+            {width > 0 ? children({ width, height }) : null}
+        </div>
+    );
+}
+
 export default function NaacDashboard() {
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         try {
             const res = await api.get('/v2/accreditation/naac');
             setData(res.data.data);
@@ -38,7 +73,11 @@ export default function NaacDashboard() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     const exportPDF = () => {
         if (!data) return;
@@ -237,30 +276,32 @@ export default function NaacDashboard() {
                                         <p className="text-2xl font-black text-white font-heading">Catalog</p>
                                     </div>
                                 </div>
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <PieChart>
-                                        <Pie
-                                            data={cData.curricularAspects.programStudentDistribution}
-                                            cx="50%" cy="50%"
-                                            innerRadius={80} outerRadius={110}
-                                            paddingAngle={8} dataKey="total"
-                                            stroke="none"
-                                        >
-                                            {cData.curricularAspects.programStudentDistribution.map((entry: any, index: number) => (
-                                                <Cell
-                                                    key={`cell-${index}`}
-                                                    fill={COLORS[index % COLORS.length]}
-                                                    className="outline-none hover:opacity-80 transition-opacity cursor-pointer"
-                                                />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip
-                                            contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', color: '#fff' }}
-                                            itemStyle={{ fontWeight: 'bold' }}
-                                        />
-                                        <Legend verticalAlign="bottom" height={36} wrapperStyle={{ paddingTop: '20px', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '10px' }} />
-                                    </PieChart>
-                                </ResponsiveContainer>
+                                <ChartFrame height={300}>
+                                    {({ width, height }) => (
+                                        <PieChart width={width} height={height}>
+                                            <Pie
+                                                data={cData.curricularAspects.programStudentDistribution}
+                                                cx="50%" cy="50%"
+                                                innerRadius={80} outerRadius={110}
+                                                paddingAngle={8} dataKey="total"
+                                                stroke="none"
+                                            >
+                                                {cData.curricularAspects.programStudentDistribution.map((entry: any, index: number) => (
+                                                    <Cell
+                                                        key={`cell-${index}`}
+                                                        fill={COLORS[index % COLORS.length]}
+                                                        className="outline-none hover:opacity-80 transition-opacity cursor-pointer"
+                                                    />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip
+                                                contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '1rem', color: '#fff' }}
+                                                itemStyle={{ fontWeight: 'bold' }}
+                                            />
+                                            <Legend verticalAlign="bottom" height={36} wrapperStyle={{ paddingTop: '20px', fontWeight: 'bold', textTransform: 'uppercase', fontSize: '10px' }} />
+                                        </PieChart>
+                                    )}
+                                </ChartFrame>
                             </div>
                         </CardContent>
                     </Card>

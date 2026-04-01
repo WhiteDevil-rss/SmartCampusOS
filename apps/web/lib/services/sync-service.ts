@@ -68,7 +68,7 @@ class MessageSyncService {
 
             // Download new
             const all = await offlineStore.getAllMessages();
-            const lastSyncAt = all.length > 0 ? all[0].sent_at : new Date(0).toISOString();
+            const lastSyncAt = (all.length > 0 && all[0].sent_at) ? all[0].sent_at : new Date(0).toISOString();
 
             const remoteResponse = await api.get(`/v2/history/sync/download?since=${lastSyncAt}`);
             const remoteMessages = remoteResponse.data.messages;

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getPermissions, updatePermission, getSubscriptionControls, updateSubscriptionControl } from '../controllers/permission.controller';
+import { getPermissions, updatePermission, getSubscriptionControls, updateSubscriptionControl, createSubscriptionControl } from '../controllers/permission.controller';
 import { authenticate, requireRole } from '../middlewares/auth.middleware';
 import { UserRole } from '@smartcampus-os/types';
 
@@ -13,6 +13,7 @@ router.get('/permissions', getPermissions);
 router.post('/permissions', updatePermission);
 
 router.get('/subscriptions', getSubscriptionControls);
+router.post('/subscriptions', createSubscriptionControl);
 router.put('/subscriptions/:id', updateSubscriptionControl);
 
 export default router;

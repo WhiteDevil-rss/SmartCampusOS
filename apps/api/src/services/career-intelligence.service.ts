@@ -1,86 +1,80 @@
 import axios from 'axios';
+import prisma from '../lib/prisma';
 
 /**
- * Career Intelligence Service — v1.0.0
- * Orchestrates AI-driven career pathing and growth milestones using local Ollama.
+ * Career Intelligence Service — v2.0.0
+ * Orchestrates AI-driven career pathing by delegating to the centralized Python AI Engine.
  */
 
-const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
-const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'llama3';
+const AI_ENGINE_URL = process.env.AI_ENGINE_URL || 'http://localhost:5000';
 
 export interface CareerAIContext {
+    studentId: string;
     studentName: string;
     program: string;
     semester: number;
     currentSgpa: number;
     attendanceRate: number;
     completedCourses: string[];
+    academicYear: string;
 }
 
 export const generateCareerIntelligence = async (context: CareerAIContext) => {
-    const prompt = `
-        System: You are an expert Academic Advisor and Career Coach at a high-tech university.
-        Task: Analyze the student's academic profile and provide a strategic career roadmap in JSON format.
-        
-        Student Context:
-        - Name: ${context.studentName}
-        - Program: ${context.program}
-        - Current Semester: ${context.semester}
-        - Academic Standing: SGPA ${context.currentSgpa.toFixed(2)}
-        - Engagement: ${context.attendanceRate.toFixed(1)}% attendance
-        - Completed Coursework: ${context.completedCourses.join(', ')}
-
-        Constraint: Response MUST be a valid JSON object with the following structure:
-        {
-            "careerTrack": "Name of recommended track (e.g., Full-Stack, Data Science)",
-            "optimalityScore": 0-100 (based on compatibility with grades),
-            "skillGap": ["Skill 1", "Skill 2"],
-            "nextMilestone": {
-                "title": "Immediate goal",
-                "difficulty": "Easy/Medium/Hard"
-            },
-            "growthOrbit": [
-                { "phase": "Semester X", "focus": "Description", "badge": "Icon-Name" }
-            ]
-        }
-    `;
-
     try {
-        const response = await axios.post(`${OLLAMA_URL}/api/generate`, {
-            model: OLLAMA_MODEL,
-            prompt: prompt,
-            stream: false,
-            format: 'json',
-            options: {
-                temperature: 0.7,
-                top_p: 0.9,
-                num_predict: 800
+        const auditData = {
+            studentName: context.studentName,
+            program: context.program,
+            semester: context.semester,
+            currentSgpa: context.currentSgpa,
+            attendanceRate: context.attendanceRate,
+            completedCourses: context.completedCourses
+        };
+
+        const response = await axios.post(`${AI_ENGINE_URL}/career/audit`, auditData);
+        const aiResult = response.data;
+
+        // Persist the result in the database
+        const savedAudit = await prisma.careerPathAudit.create({
+            data: {
+                studentId: context.studentId,
+                careerTrack: aiResult.careerTrack,
+                optimalityScore: aiResult.optimalityScore,
+                skillGap: aiResult.skillGap,
+                nextMilestone: aiResult.nextMilestone,
+                growthOrbit: aiResult.growthOrbit,
+                academicYear: context.academicYear
             }
         });
 
-        // Ollama returns a top-level JSON with "response" containing the actual stringified JSON
-        if (response.data && response.data.response) {
-            return JSON.parse(response.data.response);
-        }
-        
-        throw new Error('Invalid response format from AI engine');
+        return { ...aiResult, auditId: savedAudit.id };
 
     } catch (error: any) {
-        console.error('Ollama Generation Failed:', error.message);
+        console.error('AI Engine Career Audit Failed:', error.message);
         
-        // Fallback Mock in case of service failure
-        return {
-            careerTrack: "Full-Stack Development (Fallback)",
-            optimalityScore: 85,
-            skillGap: ["Advanced TypeScript", "Docker"],
+        // Fallback for reliability
+        const fallbackResult = {
+            careerTrack: "Analysis Pending (Engine Busy)",
+            optimalityScore: 0,
+            skillGap: ["System connectivity check required"],
             nextMilestone: {
-                "title": "Complete Cloud Deployment Lab",
-                "difficulty": "Medium"
+                "title": "Retrying AI Pathing Synchronization",
+                "difficulty": "Low"
             },
-            growthOrbit: [
-                { "phase": "Semester 5", "focus": "Systems Architecture", "badge": "target" },
-                { "phase": "Semester 6", "focus": "Industry Internship", "badge": "briefcase" }
-            ]
+            growthOrbit: []
         };
+
+        const savedFallback = await prisma.careerPathAudit.create({
+            data: {
+                studentId: context.studentId,
+                careerTrack: fallbackResult.careerTrack,
+                optimalityScore: fallbackResult.optimalityScore,
+                skillGap: fallbackResult.skillGap,
+                nextMilestone: fallbackResult.nextMilestone,
+                growthOrbit: fallbackResult.growthOrbit,
+                academicYear: context.academicYear
+            }
+        });
+
+        return { ...fallbackResult, auditId: savedFallback.id };
     }
 };

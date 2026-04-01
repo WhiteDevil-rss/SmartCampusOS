@@ -91,3 +91,29 @@ export const updateSubscriptionControl = async (req: Request, res: Response) => 
         res.status(500).json({ error: 'Failed to update subscription control' });
     }
 };
+
+// Create Subscription Control
+export const createSubscriptionControl = async (req: Request, res: Response) => {
+    try {
+        const { userId, canSubscribe, subscriptionLimit, autoRenew } = req.body;
+
+        if (!userId) {
+            return res.status(400).json({ error: 'userId is required' });
+        }
+
+        const control = await prisma.subscriptionControl.create({
+            data: {
+                userId,
+                canSubscribe: canSubscribe ?? true,
+                subscriptionLimit: subscriptionLimit ?? 100,
+                autoRenew: autoRenew ?? false,
+            },
+            include: { user: { select: { email: true, username: true } } }
+        });
+
+        res.status(201).json({ message: 'Subscription control created successfully', control });
+    } catch (error) {
+        console.error('Error creating subscription control:', error);
+        res.status(500).json({ error: 'Failed to create subscription control' });
+    }
+};

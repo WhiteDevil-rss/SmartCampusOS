@@ -12,7 +12,7 @@ export function LandingFooter() {
             <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[150px] pointer-events-none opacity-50" />
             
             {/* Subtle Grid Overlay */}
-            <div className="absolute inset-0 opacity-[0.02] z-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
+            <div className="absolute inset-0 opacity-[0.02] z-0 pointer-events-none bg-[url('/noise.svg')] mix-blend-overlay" />
 
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 mb-32 relative z-10">
                 {/* Column 1: Institutional Brand */}

@@ -2,7 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useNotifications, Notification } from '@/lib/hooks/use-notifications';
-import { LuBell, LuCheckCheck, LuTrash2, LuCircle, LuExternalLink, LuX } from 'react-icons/lu';
+import { 
+    LuBell, LuCheckCheck, LuTrash2, LuCircle, 
+    LuExternalLink, LuX, LuUsers, LuWrench, 
+    LuShield, LuSettings 
+} from 'react-icons/lu';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -47,7 +51,20 @@ export function NotificationCenter() {
         ACADEMIC: 'text-blue-500 bg-blue-500/10',
         ATTENDANCE: 'text-amber-500 bg-amber-500/10',
         FEES: 'text-emerald-500 bg-emerald-500/10',
-        SYSTEM: 'text-primary bg-primary/10'
+        SYSTEM: 'text-primary bg-primary/10',
+        SOCIAL: 'text-purple-500 bg-purple-500/10',
+        MAINTENANCE: 'text-rose-500 bg-rose-500/10',
+        EXAM: 'text-indigo-500 bg-indigo-500/10'
+    };
+
+    const getCategoryIcon = (category: string) => {
+        switch (category) {
+            case 'ACADEMIC': return <LuBell className="w-4 h-4" />;
+            case 'SOCIAL': return <LuUsers className="w-4 h-4" />;
+            case 'MAINTENANCE': return <LuWrench className="w-4 h-4" />;
+            case 'EXAM': return <LuShield className="w-4 h-4" />;
+            default: return <LuBell className="w-4 h-4" />;
+        }
     };
 
     const dropdownContent = (
@@ -69,42 +86,49 @@ export function NotificationCenter() {
                     >
                         <div
                             ref={dropdownRef}
-                            className="w-[calc(100vw-2rem)] max-w-md max-h-[80vh] overflow-hidden bg-white dark:bg-slate-900 backdrop-blur-2xl border border-slate-200 dark:border-white/10 rounded-[2rem] shadow-2xl flex flex-col pointer-events-auto"
+                            className="w-[calc(100vw-2rem)] max-w-md max-h-[80vh] overflow-hidden bg-white dark:bg-slate-900 backdrop-blur-2xl border border-slate-200 dark:border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col pointer-events-auto"
                         >
                             {/* Header */}
-                            <div className="p-5 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.02]">
+                            <div className="p-6 border-b border-slate-100 dark:border-white/5 flex items-center justify-between bg-slate-50/50 dark:bg-white/[0.02]">
                                 <div>
-                                    <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">Notifications</h3>
+                                    <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Notification Hub</h3>
                                     <p className="text-[10px] font-black uppercase tracking-widest text-primary/70">{unreadCount} Unread Messages</p>
                                 </div>
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1.5">
+                                    <Link href="/settings/notifications" onClick={() => setIsOpen(false)}>
+                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-xl hover:bg-slate-200 dark:hover:bg-white/5">
+                                            <LuSettings className="w-4 h-4 text-slate-500" />
+                                        </Button>
+                                    </Link>
                                     <Button
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => markAsRead()}
-                                        className="h-8 rounded-lg text-[10px] font-black uppercase tracking-wider gap-1.5 hover:bg-primary/10 hover:text-primary"
+                                        className="h-8 rounded-xl text-[10px] font-black uppercase tracking-wider px-3 hover:bg-primary/10 hover:text-primary transition-all"
                                     >
-                                        <LuCheckCheck className="w-3.5 h-3.5" />
                                         Read All
                                     </Button>
-                                    <button onClick={() => setIsOpen(false)} className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-white/5 transition-colors">
-                                        <LuX className="w-4 h-4 text-text-muted" />
+                                    <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-xl hover:bg-slate-200 dark:hover:bg-white/5 transition-colors">
+                                        <LuX className="w-5 h-5 text-slate-400" />
                                     </button>
                                 </div>
                             </div>
 
                             {/* List */}
-                            <div className="flex-1 overflow-y-auto p-3 space-y-2 custom-scrollbar min-h-[200px]">
+                            <div className="flex-1 overflow-y-auto p-4 space-y-3 custom-scrollbar min-h-[300px]">
                                 {loading ? (
-                                    Array(3).fill(0).map((_, i) => (
-                                        <div key={i} className="h-24 rounded-2xl bg-slate-100 dark:bg-white/5 animate-pulse" />
+                                    Array(4).fill(0).map((_, i) => (
+                                        <div key={i} className="h-24 rounded-3xl bg-slate-100 dark:bg-white/5 animate-pulse" />
                                     ))
                                 ) : notifications.length === 0 ? (
-                                    <div className="py-10 text-center space-y-3">
-                                        <div className="w-16 h-16 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center mx-auto">
-                                            <LuBell className="w-8 h-8 text-slate-300 dark:text-white/10" />
+                                    <div className="py-20 text-center space-y-4">
+                                        <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-white/5 flex items-center justify-center mx-auto ring-1 ring-white/5 shadow-inner">
+                                            <LuBell className="w-10 h-10 text-slate-300 dark:text-white/10" />
                                         </div>
-                                        <p className="text-sm font-bold text-text-muted">All caught up!</p>
+                                        <div>
+                                            <p className="text-base font-bold text-slate-900 dark:text-white">Crystal Clear</p>
+                                            <p className="text-xs font-medium text-slate-500">No new alerts at this time.</p>
+                                        </div>
                                     </div>
                                 ) : (
                                     notifications.map((notification) => (
@@ -112,29 +136,36 @@ export function NotificationCenter() {
                                             key={notification.id}
                                             onClick={() => setSelectedMessage(notification)}
                                             className={cn(
-                                                "p-4 rounded-2xl border transition-all duration-300 group relative cursor-pointer",
+                                                "p-5 rounded-3xl border transition-all duration-300 group relative cursor-pointer",
                                                 notification.isRead
-                                                    ? "bg-transparent border-transparent grayscale-[0.5] opacity-70"
-                                                    : "bg-white dark:bg-white/[0.03] border-slate-100 dark:border-white/10 shadow-sm hover:border-primary/30"
+                                                    ? "bg-transparent border-transparent grayscale-[0.8] opacity-60"
+                                                    : "bg-white dark:bg-white/[0.04] border-slate-100 dark:border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] dark:hover:bg-white/[0.06] hover:border-primary/20"
                                             )}
                                         >
                                             <div className="flex gap-4">
-                                                <div className={cn("p-2.5 h-fit rounded-xl shrink-0", categoryStyles[notification.category as keyof typeof categoryStyles] || categoryStyles.SYSTEM)}>
-                                                    <LuBell className="w-4 h-4" />
+                                                <div className={cn("p-3 h-fit rounded-2xl shrink-0 transition-transform group-hover:scale-110", categoryStyles[notification.category as keyof typeof categoryStyles] || categoryStyles.SYSTEM)}>
+                                                    {getCategoryIcon(notification.category)}
                                                 </div>
-                                                <div className="flex-1 min-w-0 space-y-1">
+                                                <div className="flex-1 min-w-0 space-y-1.5">
                                                     <div className="flex items-center justify-between">
                                                         <h4 className="text-sm font-black text-slate-900 dark:text-white truncate pr-4">
                                                             {notification.title}
                                                         </h4>
-                                                        {!notification.isRead && <LuCircle className="w-2 h-2 fill-primary text-primary shrink-0" />}
+                                                        {!notification.isRead && (
+                                                            <div className="w-2 h-2 bg-primary rounded-full shadow-[0_0_8px_rgba(37,99,235,0.8)]" />
+                                                        )}
                                                     </div>
-                                                    <p className="text-xs font-medium text-text-secondary dark:text-text-muted leading-relaxed line-clamp-2">
+                                                    <p className="text-xs font-medium text-slate-500 dark:text-slate-400 leading-relaxed line-clamp-2">
                                                         {typeof notification.message === 'object' ? JSON.stringify(notification.message) : notification.message}
                                                     </p>
-                                                    <p className="text-[9px] font-black uppercase tracking-widest text-text-muted pt-1">
-                                                        {format(new Date(notification.createdAt), 'MMM d, h:mm a')}
-                                                    </p>
+                                                    <div className="flex items-center justify-between pt-2">
+                                                        <p className="text-[9px] font-black uppercase tracking-[0.15em] text-slate-500">
+                                                            {format(new Date(notification.createdAt), 'MMM d • h:mm a')}
+                                                        </p>
+                                                        <div className="text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/5 text-slate-500">
+                                                            {notification.category}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 

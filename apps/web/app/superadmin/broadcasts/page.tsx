@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Toast, useToast } from '@/components/ui/toast-alert';
 import { LuSend } from 'react-icons/lu';
+import { SuperAdminPageHeader } from '@/components/superadmin/page-header';
 
 export default function SuperAdminBroadcasts() {
     const [loading, setLoading] = useState(false);
@@ -64,12 +65,17 @@ export default function SuperAdminBroadcasts() {
             <DashboardLayout navItems={SUPERADMIN_NAV} title="Broadcast Messaging">
                 <Toast toast={toast} onClose={hideToast} />
 
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                    <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-text-primary glow-sm">Global Broadcasts</h2>
-                        <p className="text-slate-600 dark:text-text-muted mt-1">Send targeted announcements and critical alerts instantly to users natively.</p>
-                    </div>
-                </div>
+                <SuperAdminPageHeader
+                    eyebrow="Comms control"
+                    title="Global broadcasts"
+                    description="Ship targeted alerts, institutional notices, and platform-wide messaging from one composition surface."
+                    icon={<LuSend className="h-6 w-6" />}
+                    stats={[
+                        { label: 'Audience Mode', value: targetType },
+                        { label: 'Category', value: category },
+                        { label: 'State', value: loading ? 'Sending' : 'Ready' },
+                    ]}
+                />
 
                 <div className="max-w-3xl">
                     <Card className="bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-xl rounded-2xl">

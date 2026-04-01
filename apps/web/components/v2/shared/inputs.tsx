@@ -211,3 +211,18 @@ export const ModernInput: React.FC<ModernInputProps> = ({
     </div>
   );
 };
+
+// Aliases for Industrial theme consistency 
+export const IndustrialInput = ModernInput;
+
+export const IndustrialSelect: React.FC<any> = ({ children, className, ...props }) => (
+  <select
+    className={cn(
+      "w-full bg-[#0a1120]/80 backdrop-blur-xl border border-white/5 rounded-xl px-4 py-4 text-slate-100 outline-none font-mono text-sm focus:border-primary/30 transition-all appearance-none cursor-pointer",
+      className
+    )}
+    {...props}
+  >
+    {children}
+  </select>
+);

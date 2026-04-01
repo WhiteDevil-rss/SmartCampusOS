@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -29,47 +29,47 @@ body {
 
 @layer base {
   :root {
-    --background: #f8fafc;
+    --background: #fdfcff;
     --surface: #ffffff;
-    --card: rgba(255, 255, 255, 0.7);
-    --card-hover: rgba(255, 255, 255, 0.9);
-    --surface-hover: rgba(255, 255, 255, 0.95);
+    --card: rgba(255, 255, 255, 0.85);
+    --card-hover: rgba(255, 255, 255, 0.95);
+    --surface-hover: rgba(248, 250, 252, 0.8);
 
-    /* Primary - Deep Blue / Indigo for light theme */
-    --primary: #3730a3;
-    --primary-dark: #312e81;
-    --primary-light: #6366f1;
-    --primary-glow: rgba(55, 48, 163, 0.15);
+    /* Primary - Global Indigo */
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --primary-light: #818cf8;
+    --primary-glow: rgba(99, 102, 241, 0.15);
 
-    /* Secondary - Light tech blue */
-    --secondary: #0284c7;
-    --secondary-dark: #0369a1;
-    --secondary-light: #38bdf8;
-    --secondary-glow: rgba(2, 132, 199, 0.15);
+    /* Secondary - Refined Slate/Technical Blue */
+    --secondary: #64748b;
+    --secondary-dark: #475569;
+    --secondary-light: #94a3b8;
+    --secondary-glow: rgba(100, 116, 139, 0.1);
 
     /* Accents */
-    --accent-red: #e11d48;
-    --accent-yellow: #d97706;
-    --accent-green: #059669;
-    --accent-orange: #ea580c;
+    --accent-red: #f43f5e;
+    --accent-yellow: #f59e0b;
+    --accent-green: #10b981;
+    --accent-orange: #f97316;
     --neon-cyan: #06b6d4;
     --neon-purple: #8b5cf6;
 
     /* Borders & UI Elements */
-    --border: rgba(15, 23, 42, 0.1);
-    --border-hover: rgba(15, 23, 42, 0.2);
+    --border: rgba(226, 232, 240, 0.8);
+    --border-hover: rgba(203, 213, 225, 1);
 
-    /* Typography */
+    /* Typography - Adjusted for WCAG 2.2 AA Compliance (4.5:1 contrast) */
     --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --text-muted: #64748b;
-    --text-disabled: #94a3b8;
+    --text-secondary: #2f3e53;   /* Increased contrast from #334155 */
+    --text-muted: #596677;        /* Increased contrast from #64748b */
+    --text-disabled: #8b9db2;     /* Adjusted for consistency */
 
     /* Radius */
     --radius-s: 8px;
-    --radius-m: 12px;
-    --radius-l: 16px;
-    --radius-xl: 32px;
+    --radius-m: 14px;
+    --radius-l: 20px;
+    --radius-xl: 36px;
 
     /* Z-Index System */
     --z-dropdown: 1000;
@@ -83,41 +83,41 @@ body {
   }
 
   .dark {
-    --background: #020817;
-    --surface: #0a1120;
-    --card: rgba(10, 17, 32, 0.4);
-    --card-hover: rgba(15, 23, 42, 0.6);
-    --surface-hover: rgba(15, 23, 42, 0.8);
+    --background: #030712;
+    --surface: #0f172a;
+    --card: rgba(15, 23, 42, 0.6);
+    --card-hover: rgba(30, 41, 59, 0.8);
+    --surface-hover: rgba(30, 41, 59, 0.5);
 
-    /* Primary - Vibrant Blue for the new Navy theme */
-    --primary: #0070ff;
-    --primary-dark: #0056cc;
-    --primary-light: #338eff;
-    --primary-glow: rgba(0, 112, 255, 0.3);
+    /* Primary - Vibrant Indigo for Dark theme */
+    --primary: #818cf8;
+    --primary-dark: #6366f1;
+    --primary-light: #a5b4fc;
+    --primary-glow: rgba(129, 140, 248, 0.3);
 
     /* Secondary - Cyan for technical contrast */
-    --secondary: #00d1ff;
-    --secondary-dark: #00a3cc;
-    --secondary-light: #33daff;
-    --secondary-glow: rgba(0, 209, 255, 0.3);
+    --secondary: #22d3ee;
+    --secondary-dark: #0891b2;
+    --secondary-light: #67e8f9;
+    --secondary-glow: rgba(34, 211, 238, 0.2);
 
-    /* Accents - Retain semantic roles but slightly shift to match Navy */
-    --accent-red: #ff3366;
-    --accent-yellow: #ffcc00;
-    --accent-green: #00ffaa;
-    --accent-orange: #ff8800;
+    /* Accents */
+    --accent-red: #fb7185;
+    --accent-yellow: #fbbf24;
+    --accent-green: #34d399;
+    --accent-orange: #fb923c;
     --neon-cyan: #22d3ee;
-    --neon-purple: #a78bfa;
+    --neon-purple: #c084fc;
 
     /* Borders & UI Elements */
-    --border: rgba(255, 255, 255, 0.05);
-    --border-hover: rgba(255, 255, 255, 0.12);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.15);
 
     /* Typography */
-    --text-primary: #f0f4f8;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --text-disabled: #475569;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-disabled: #64748b;
   }
 }
 
@@ -148,22 +148,60 @@ body {
     @apply backdrop-blur-[10px] border border-border;
   }
 
-  .mesh-gradient {
+  .mesh-gradient-premium {
     background-color: var(--background);
     background-image:
-      radial-gradient(at 0% 0%, var(--primary-glow) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, var(--secondary-glow) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, var(--primary-glow) 0px, transparent 50%),
-      radial-gradient(at 0% 100%, var(--secondary-glow) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, color-mix(in srgb, var(--primary) 15%, transparent) 0px, transparent 55%),
+      radial-gradient(at 100% 0%, color-mix(in srgb, var(--secondary) 15%, transparent) 0px, transparent 55%),
+      radial-gradient(at 80% 50%, color-mix(in srgb, var(--neon-purple) 10%, transparent) 0px, transparent 45%),
+      radial-gradient(at 0% 100%, color-mix(in srgb, var(--primary) 15%, transparent) 0px, transparent 55%),
+      radial-gradient(at 100% 100%, color-mix(in srgb, var(--secondary) 15%, transparent) 0px, transparent 55%);
+    background-attachment: fixed;
+    /* GPU Acceleration to prevent jank on lower-end hardware */
+    will-change: transform, background-position;
+    transform: translateZ(0); 
   }
 
-  .glow-button {
-    box-shadow: 0 0 15px rgba(0, 112, 255, 0.3);
-    @apply transition-all;
+  .glass-panel {
+    @apply backdrop-blur-2xl border border-white/10 shadow-xl;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
   }
 
-  .glow-button:hover {
-    box-shadow: 0 0 25px rgba(0, 112, 255, 0.5);
+  .glass-panel-dark {
+    @apply backdrop-blur-3xl border border-white/5 shadow-2xl;
+    background: linear-gradient(
+      145deg,
+      rgba(15, 23, 42, 0.6) 0%,
+      rgba(15, 23, 42, 0.4) 100%
+    );
+  }
+
+  .glow-border {
+    position: relative;
+  }
+
+  .glow-border::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--primary), transparent, var(--secondary));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.5;
+    transition: opacity 300ms ease;
+  }
+
+  .glow-border:hover::after {
+    opacity: 1;
   }
 }
 
@@ -285,8 +323,12 @@ body {
 }
 
 body {
-  @apply bg-background text-text-primary;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  @apply bg-background text-text-primary antialiased;
+  font-family: 'Fira Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+code, pre, .font-mono {
+  font-family: 'Fira Code', monospace;
 }
 
 /* View Transitions API */

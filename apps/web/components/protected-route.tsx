@@ -1,41 +1,65 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/useAuthStore';
 import { LuLoader } from 'react-icons/lu';
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
-    allowedRoles: Array<'SUPERADMIN' | 'UNI_ADMIN' | 'DEPT_ADMIN' | 'FACULTY' | 'STUDENT' | 'APPROVAL_ADMIN'>;
+    allowedRoles: string[];
 }
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
-    const { user, isAuthenticated, hasHydrated, isAuthReady } = useAuthStore();
     const router = useRouter();
+    const pathname = usePathname();
+    const { user, isAuthenticated, hasHydrated, isAuthReady } = useAuthStore();
+    const redirectingRef = useRef(false);
+
+    const redirectTo = useCallback((path: string) => {
+        if (redirectingRef.current || pathname === path) return;
+        redirectingRef.current = true;
+        router.replace(path);
+    }, [pathname, router]);
+
+    const getRoleRedirect = useCallback((role?: string | null) => {
+        switch (role) {
+            case 'SUPERADMIN':
+                return '/superadmin';
+            case 'UNI_ADMIN':
+            case 'COLLEGE_ADMIN':
+                return '/dashboard';
+            case 'DEPT_ADMIN':
+                return '/department';
+            case 'FACULTY':
+                return '/faculty-panel';
+            case 'STUDENT':
+            case 'PARENT':
+                return '/student';
+            case 'LIBRARIAN':
+            case 'PLACEMENT_OFFICER':
+                return '/dashboard';
+            case 'APPROVAL_ADMIN':
+                return '/approval';
+            default:
+                return '/login';
+        }
+    }, []);
 
     useEffect(() => {
-        // Wait for hydration and Firebase initialization before doing anything
         if (!hasHydrated || !isAuthReady) return;
 
+        redirectingRef.current = false;
+
         if (!isAuthenticated || !user) {
-            router.push('/login');
+            redirectTo('/login');
             return;
         }
 
-        if (!allowedRoles.includes(user.role)) {
-            // Redirect to correct dashboard or fallback
-            switch (user.role as string) {
-                case 'SUPERADMIN': router.push('/superadmin'); break;
-                case 'UNI_ADMIN': router.push('/dashboard'); break;
-                case 'DEPT_ADMIN': router.push('/department'); break;
-                case 'FACULTY': router.push('/faculty-panel'); break;
-                case 'STUDENT': router.push('/student'); break;
-                case 'APPROVAL_ADMIN': router.push('/approval'); break;
-                default: router.push('/login');
-            }
+        if (!allowedRoles.includes(user.role as string)) {
+            redirectTo(getRoleRedirect(user.role));
         }
-    }, [isAuthenticated, user, router, allowedRoles, hasHydrated, isAuthReady]);
+    }, [allowedRoles, getRoleRedirect, hasHydrated, isAuthReady, isAuthenticated, redirectTo, user]);
 
     // If auth is strictly known to be failed or unauthorized, show specific states
     if (hasHydrated && isAuthReady) {
@@ -50,7 +74,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
             );
         }
 
-        if (!allowedRoles.includes(user.role)) {
+        if (!allowedRoles.includes(user.role as string)) {
             return (
                 <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#0a0a0c] p-4">
                     <div className="text-center space-y-4 glass-card bg-white/80 dark:bg-red-900/10 border border-red-200 dark:border-red-500/20 p-8 rounded-2xl shadow-2xl max-w-sm w-full">
@@ -62,7 +86,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
                         <div className="text-red-600 dark:text-red-400 font-bold text-xl font-display">Access Denied</div>
                         <p className="text-sm text-slate-600 dark:text-text-muted">You don&apos;t have permission to access this area.</p>
                         <button
-                            onClick={() => router.push('/login')}
+                            onClick={() => redirectTo('/login')}
                             className="w-full mt-4 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-bold shadow-lg shadow-red-500/30 transition-all uppercase tracking-wider"
                         >
                             Return to Login

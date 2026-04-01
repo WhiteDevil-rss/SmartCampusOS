@@ -10,6 +10,7 @@ import {
     MessageCircle,
     User,
     HelpCircle,
+    Zap
 } from 'lucide-react';
 import { FacultyDashboard } from '@/components/faculty/faculty-dashboard';
 
@@ -22,6 +23,7 @@ export const facultyNavItems = [
     { title: 'Academics', href: '/faculty/academics', icon: <BookOpen className="w-5 h-5" /> },
     { title: 'Assignments', href: '/faculty/assignments', icon: <ClipboardList className="w-5 h-5" /> },
     { title: 'Messages', href: '/faculty/messages', icon: <MessageCircle className="w-5 h-5" /> },
+    { title: 'Research Hub', href: '/faculty/research', icon: <Zap className="w-5 h-5" /> },
     { title: 'Support', href: '/faculty/support', icon: <HelpCircle className="w-5 h-5" /> },
     { title: 'My Profile', href: '/faculty/profile', icon: <User className="w-5 h-5" /> },
 ];

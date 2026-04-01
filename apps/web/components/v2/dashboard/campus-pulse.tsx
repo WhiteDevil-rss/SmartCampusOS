@@ -99,6 +99,14 @@ export const CampusPulse: React.FC<CampusPulseProps> = ({ departmentId, classNam
     return 'from-emerald-500 to-teal-500';
   };
 
+  const factors = riskData?.factors ?? [];
+  const normalizedScore = Number.isFinite(riskData?.normalizedScore) ? riskData!.normalizedScore : 0;
+  const safetyScore = Math.max(0, Math.min(100, 100 - normalizedScore));
+  const impacts = (riskData?.impacts ?? []).map((impact) => ({
+    ...impact,
+    score: Number.isFinite(impact?.score) ? impact.score : 0,
+  }));
+
   return (
     <div className={cn("space-y-6", className)}>
       <div className="flex items-center justify-between">
@@ -145,19 +153,19 @@ export const CampusPulse: React.FC<CampusPulseProps> = ({ departmentId, classNam
             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Safety Index</span>
             <div className="flex items-baseline gap-2 mt-1">
               <h3 className="text-3xl font-black text-slate-100 font-space-grotesk">
-                {loading ? "..." : riskData ? 100 - riskData.normalizedScore : "--"}
+                {loading ? "..." : riskData ? safetyScore : "--"}
               </h3>
               <span className="text-xs font-bold text-slate-500">/ 100</span>
             </div>
-            <p className="text-[10px] text-slate-500 mt-1 italic">Inverse mortality projection based on {riskData?.factors.length || 0} vectors</p>
+            <p className="text-[10px] text-slate-500 mt-1 italic">Inverse mortality projection based on {factors.length} vectors</p>
           </GlassCardHeader>
           <GlassCardContent className="pt-4">
             <div className="relative h-4 w-full bg-slate-900/50 rounded-full overflow-hidden border border-white/5">
               <motion.div 
                 initial={{ width: 0 }}
-                animate={{ width: `${loading ? 0 : riskData ? 100 - riskData.normalizedScore : 0}%` }}
+                animate={{ width: `${loading ? 0 : riskData ? safetyScore : 0}%` }}
                 className={cn("absolute inset-y-0 left-0 bg-gradient-to-r transition-all duration-1000", 
-                  getScoreColor(riskData?.normalizedScore || 0)
+                  getScoreColor(normalizedScore)
                 )}
               />
             </div>
@@ -206,7 +214,7 @@ export const CampusPulse: React.FC<CampusPulseProps> = ({ departmentId, classNam
                   <div key={i} className="aspect-square rounded-3xl bg-white/5 animate-pulse border border-white/5" />
                 ))
               ) : (
-                riskData?.impacts.map((impact) => (
+                impacts.map((impact) => (
                   <div 
                     key={impact.category}
                     className="p-4 rounded-3xl bg-white/[0.03] border border-white/5 flex flex-col items-center justify-center gap-3 group hover:border-primary/30 transition-all cursor-crosshair relative overflow-hidden"

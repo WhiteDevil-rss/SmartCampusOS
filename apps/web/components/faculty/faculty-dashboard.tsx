@@ -1,29 +1,27 @@
 'use client';
 
-import React from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useFacultyData } from '@/lib/hooks/use-faculty-data';
 import { ClassSentinel } from './class-sentinel';
-import { 
-  Users, 
-  BookOpen, 
-  Clock, 
-  Calendar, 
-  ArrowRight, 
-  FileText, 
-  MessageSquare, 
-  TrendingUp, 
-  AlertCircle,
-  GraduationCap,
-  CalendarDays,
-  ChevronRight,
-  ClipboardCheck,
-  History,
-  MemoryStick,
-  Activity,
-  MessagesSquare,
-  Sparkles,
-  Zap
+import {
+    Users,
+    BookOpen,
+    Clock,
+    ArrowRight,
+    FileText,
+    MessageSquare,
+    TrendingUp,
+    AlertCircle,
+    GraduationCap,
+    CalendarDays,
+    ChevronRight,
+    ClipboardCheck,
+    History,
+    Activity,
+    MessagesSquare,
+    Sparkles,
+    Zap,
+    Trophy
 } from 'lucide-react';
 import Link from 'next/link';
 import { GlassCard, StatCard } from '@/components/v2/shared/cards';
@@ -31,6 +29,10 @@ import { IndustrialButton } from '@/components/v2/shared/inputs';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { GreetingCard } from '@/components/v2/shared/greeting-card';
+import { ResearchNexus } from './research-nexus';
+import { SynergyHub } from './synergy-hub';
+import { GrantControlCenter } from './grant-control-center';
+import { ReviewWorkspace } from './review-workspace';
 
 export function FacultyDashboard() {
     const { stats, loading, error, profile } = useFacultyData() as any;
@@ -75,7 +77,7 @@ export function FacultyDashboard() {
     return (
         <div className="space-y-10 pb-24">
             {/* Command Greeting */}
-            <GreetingCard 
+            <GreetingCard
                 name={profile?.name || 'Professor'}
                 role="Faculty"
                 stats={[
@@ -89,36 +91,36 @@ export function FacultyDashboard() {
             />
 
             {/* Humanized Faculty Stats */}
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
             >
-                <StatCard 
-                    title="Active Courses" 
-                    value={stats?.totalSubjects || 0} 
+                <StatCard
+                    title="Active Courses"
+                    value={stats?.totalSubjects || 0}
                     change={0}
                     changeDescription="Current Semester"
                     icon={BookOpen}
                 />
-                <StatCard 
-                    title="Time in Hall" 
-                    value={stats?.lecturesToday || 0} 
+                <StatCard
+                    title="Time in Hall"
+                    value={stats?.lecturesToday || 0}
                     suffix=" Sessions"
                     change={12}
                     changeDescription="utilization"
                     icon={Clock}
                 />
-                <StatCard 
-                    title="Pending Reviews" 
-                    value={stats?.pendingAssignments || 0} 
+                <StatCard
+                    title="Pending Reviews"
+                    value={stats?.pendingAssignments || 0}
                     change={-5}
                     changeDescription="progress"
                     icon={ClipboardCheck}
                 />
-                <StatCard 
-                    title="Inbox Status" 
-                    value={stats?.unreadMessages || 0} 
+                <StatCard
+                    title="Inbox Status"
+                    value={stats?.unreadMessages || 0}
                     change={0}
                     icon={MessageSquare}
                 />
@@ -131,9 +133,9 @@ export function FacultyDashboard() {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.1 }}
                 >
-                    <ClassSentinel 
-                        courseId={stats.todaySchedule[0].courseId} 
-                        courseName={stats.todaySchedule[0].course.name} 
+                    <ClassSentinel
+                        courseId={stats.todaySchedule[0].courseId}
+                        courseName={stats.todaySchedule[0].course.name}
                     />
                 </motion.div>
             )}
@@ -141,7 +143,7 @@ export function FacultyDashboard() {
             {/* Primary Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 {/* Schedule Hub */}
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 }}
@@ -184,9 +186,9 @@ export function FacultyDashboard() {
                                             </div>
                                         </div>
                                         <Link href={`/faculty-panel/attendance?slot=${slot.id}`}>
-                                            <IndustrialButton 
-                                                variant="outline" 
-                                                size="sm" 
+                                            <IndustrialButton
+                                                variant="outline"
+                                                size="sm"
                                                 className="opacity-0 group-hover:opacity-100 transition-all shrink-0 rounded-xl uppercase font-black tracking-widest text-[9px]"
                                             >
                                                 Mark Presence <ArrowRight className="ml-2 w-3 h-3" />
@@ -207,8 +209,32 @@ export function FacultyDashboard() {
                     </GlassCard>
                 </motion.div>
 
+                {/* Research & Publication Nexus */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                    className="space-y-6"
+                >
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-primary/10 rounded-lg border border-primary/20">
+                                <Trophy className="w-4 h-4 text-primary" />
+                            </div>
+                            <h2 className="text-xl font-black uppercase tracking-tighter text-slate-100">
+                                Research & Publication Nexus
+                            </h2>
+                        </div>
+                    </div>
+                    <ResearchNexus />
+                    <SynergyHub />
+                    <GrantControlCenter />
+                    <ReviewWorkspace />
+                </motion.div>
+
+
                 {/* Services Hub */}
-                <motion.div 
+                <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
@@ -223,7 +249,7 @@ export function FacultyDashboard() {
                                 Faculty Services
                             </h2>
                         </div>
-                        
+
                         <div className="grid grid-cols-1 gap-3">
                             {[
                                 { title: 'Exam Registry', href: '/faculty-panel/exams', icon: GraduationCap, label: 'Manage Assessments' },
@@ -259,19 +285,19 @@ export function FacultyDashboard() {
                                 <div className="text-xl font-black text-primary italic">98.2%</div>
                             </div>
                             <p className="text-sm text-slate-400 mb-8 leading-relaxed font-medium">
-                                Your current assignment is optimized for peak pedagogy. 
+                                Your current assignment is optimized for peak pedagogy.
                                 <span className="text-primary/70"> Zero constraint violations detected by CP-SAT solver.</span>
                             </p>
                             <div className="space-y-4">
                                 <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: '98.2%' }}
                                         transition={{ duration: 1.5, ease: "easeOut" }}
                                         className="h-full bg-primary shadow-[0_0_15px_rgba(57,193,239,0.5)]"
                                     />
                                 </div>
-                                <IndustrialButton 
+                                <IndustrialButton
                                     variant="primary"
                                     className="w-full uppercase font-black tracking-widest text-[10px] h-14 rounded-2xl shadow-[0_0_30px_rgba(57,193,239,0.2)]"
                                 >
@@ -290,7 +316,7 @@ export function FacultyDashboard() {
                             </div>
                             <h3 className="text-2xl font-black uppercase tracking-tight text-slate-100 mb-2 font-space-grotesk">Student Actions</h3>
                             <p className="text-sm text-slate-400 mb-8 leading-relaxed font-medium">All student requests are currently synchronized. No urgent authorizations detected.</p>
-                            <IndustrialButton 
+                            <IndustrialButton
                                 variant="outline"
                                 className="w-full uppercase font-black tracking-widest text-[10px] h-14 rounded-2xl border-emerald-500/20 hover:border-emerald-500/40 hover:bg-emerald-500/5 text-emerald-500"
                             >

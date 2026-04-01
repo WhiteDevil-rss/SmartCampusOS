@@ -26,17 +26,25 @@ model University {
   verificationRequests  VerificationRequest[]
   admissionApplications AdmissionApplication[]
   batches               Batch[]
+  assets                CampusAsset[]
   complaints            Complaint[]
   courses               Course[]
   departments           Department[]
+  emergencyAlerts       EmergencyAlert[]
   events                Event[]
   faculty               Faculty[]
+  inventory             InventoryItem[]
+  patrolRoutes          PatrolRoute[]
+  procurements          ProcurementRequest[]
   programs              Program[]
   resources             Resource[]
+  scholarships          Scholarship[]
+  incidents             SecurityIncident[]
   students              Student[]
   timetables            Timetable[]
   users                 User[]
-  scholarships          Scholarship[]
+  vendors               Vendor[]
+  visitorLogs           VisitorLog[]
 
   @@map("universities")
 }
@@ -54,16 +62,19 @@ model Department {
   admissionApplications AdmissionApplication[]
   admissionInquiries    AdmissionInquiry[]
   batches               Batch[]
+  auditLogs             BudgetAuditLog[]
+  complianceAudits      ComplianceAudit[]
   courses               Course[]
+  budgets               DepartmentBudget[]
   university            University             @relation(fields: [universityId], references: [id], onDelete: Cascade)
   electiveBaskets       ElectiveBasket[]
   faculty               FacultyDepartment[]
   programs              Program[]
   sessionTypes          SessionType[]
   students              Student[]
+  studyGroups           StudyGroup[]
   timeBlocks            TimeBlock[]
   timetables            Timetable[]
-  studyGroups           StudyGroup[]
 
   @@index([universityId])
   @@map("departments")
@@ -102,16 +113,18 @@ model Faculty {
   payrollConfig    PayrollConfig?        @relation(fields: [payrollConfigId], references: [id])
   university       University            @relation(fields: [universityId], references: [id], onDelete: Cascade)
   user             User?                 @relation(fields: [userId], references: [id])
+  audits           FacultyAudit[]
   departments      FacultyDepartment[]
   feedback         FacultyFeedback[]
   subjects         FacultySubject[]
+  publications     Publication[]
   quizzes          Quiz[]
+  grants           ResearchGrant[]
+  reviews          ResearchReview[]      @relation("FacultyReviews")
   studyMaterials   StudyMaterial[]
   timetableChanges TimetableChange[]
   faculty2Slots    TimetableSlot[]       @relation("Faculty2Slots")
   timetableSlots   TimetableSlot[]
-  publications     Publication[]
-  grants           ResearchGrant[]
 
   @@index([universityId])
   @@map("faculties")
@@ -150,7 +163,7 @@ model Publication {
   id              String   @id @default(uuid())
   facultyId       String
   title           String
-  abstract        String?  @db.Text
+  abstract        String?
   journal         String?
   doi             String?  @unique
   publicationDate DateTime
@@ -166,44 +179,139 @@ model Publication {
 }
 
 model ResearchGrant {
-  id          String    @id @default(uuid())
-  facultyId   String
-  title       String
-  agency      String
-  amount      Float
-  status      String    @default("PENDING") // PENDING, ACTIVE, COMPLETED, REJECTED
-  description String?   @db.Text
-  startDate   DateTime
-  endDate     DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  faculty     Faculty   @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  id               String             @id @default(uuid())
+  facultyId        String
+  title            String
+  agency           String
+  amount           Float
+  status           String             @default("PROPOSAL_DRAFT")
+  description      String?
+  proposalBody     String?
+  budgetBreakdown  Json?
+  reviewComments   Json?
+  startDate        DateTime
+  endDate          DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  ethicalClearance EthicalClearance?
+  expenditures     GrantExpenditure[]
+  faculty          Faculty            @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  reviews          ResearchReview[]
+  resourceBookings ResourceBooking[]
 
   @@index([facultyId])
   @@map("research_grants")
 }
 
+model ResearchReview {
+  id             String        @id @default(uuid())
+  grantId        String
+  reviewerId     String
+  score          Int           @default(0)
+  recommendation String?
+  rubric         Json?
+  comments       String?
+  status         String        @default("PENDING")
+  isAnonymous    Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  grant          ResearchGrant @relation(fields: [grantId], references: [id], onDelete: Cascade)
+  reviewer       Faculty       @relation("FacultyReviews", fields: [reviewerId], references: [id])
+
+  @@index([grantId])
+  @@index([reviewerId])
+  @@map("research_reviews")
+}
+
+model GrantExpenditure {
+  id          String        @id @default(uuid())
+  grantId     String
+  amount      Float
+  description String
+  category    String
+  date        DateTime      @default(now())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  grant       ResearchGrant @relation(fields: [grantId], references: [id], onDelete: Cascade)
+
+  @@index([grantId])
+  @@map("grant_expenditures")
+}
+
+model EthicalClearance {
+  id             String        @id @default(uuid())
+  grantId        String        @unique
+  status         String        @default("PENDING")
+  submissionDate DateTime      @default(now())
+  approvalDate   DateTime?
+  reviewerNotes  String?
+  riskScore      Int           @default(0)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  grant          ResearchGrant @relation(fields: [grantId], references: [id], onDelete: Cascade)
+
+  @@map("ethical_clearances")
+}
+
+model FacultyAudit {
+  id              String   @id @default(uuid())
+  facultyId       String
+  auditorId       String?
+  academicYear    String
+  semester        Int
+  overallScore    Float
+  researchImpact  Float
+  teachingScore   Float
+  aiSummary       String
+  recommendations String
+  status          String   @default("DRAFT")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  faculty         Faculty  @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+
+  @@index([facultyId])
+  @@map("faculty_audits")
+}
+
+model CurriculumAudit {
+  id             String   @id @default(uuid())
+  courseId       String
+  academicYear   String
+  alignmentScore Float
+  gapAnalysis    String
+  identifiedGaps Json?
+  suggestions    String
+  status         String   @default("PENDING")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  course         Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+  @@map("curriculum_audits")
+}
+
 model Course {
-  id               String           @id @default(uuid())
+  id               String            @id @default(uuid())
   departmentId     String?
   universityId     String
   name             String
   code             String
   program          String?
-  credits          Int              @default(4)
-  weeklyHrs        Int              @default(4)
+  credits          Int               @default(4)
+  weeklyHrs        Int               @default(4)
   semester         Int?
-  type             String           @default("Theory")
-  sessionTypeId    String?
-  labDuration      Int              @default(60)
+  type             String            @default("Theory")
+  createdAt        DateTime          @default(now())
+  isElective       Boolean           @default(false)
+  labDuration      Int               @default(60)
   requiredRoomType String?
-  isElective       Boolean          @default(false)
-  createdAt        DateTime         @default(now())
+  sessionTypeId    String?
   assignments      Assignment[]
   classes          Class[]
-  department       Department?      @relation(fields: [departmentId], references: [id])
-  sessionType      SessionType?     @relation("CourseToSessionType", fields: [sessionTypeId], references: [id])
-  university       University       @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  department       Department?       @relation(fields: [departmentId], references: [id])
+  sessionType      SessionType?      @relation("CourseToSessionType", fields: [sessionTypeId], references: [id])
+  university       University        @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  curriculumAudits CurriculumAudit[]
   electiveOptions  ElectiveOption[]
   facultySubjects  FacultySubject[]
   quizzes          Quiz[]
@@ -246,7 +354,12 @@ model Resource {
   floor            String?
   building         String?
   createdAt        DateTime          @default(now())
+  status           String            @default("AVAILABLE")
+  isResearchOnly   Boolean           @default(false)
+  specifications   Json?             @default("{}")
+  requiresApproval Boolean           @default(false)
   primaryDivisions Division[]
+  bookings         ResourceBooking[]
   university       University        @relation(fields: [universityId], references: [id], onDelete: Cascade)
   timetableChanges TimetableChange[]
   timetableSlots   TimetableSlot[]
@@ -257,12 +370,12 @@ model Resource {
 model Program {
   id                    String                 @id @default(uuid())
   universityId          String
-  departmentId          String?
   name                  String
   shortName             String
   type                  String
   duration              Int                    @default(2)
   totalSems             Int                    @default(4)
+  departmentId          String?
   feeStructures         FeeStructure[]
   admissionApplications AdmissionApplication[]
   department            Department?            @relation(fields: [departmentId], references: [id])
@@ -281,8 +394,8 @@ model TimeBlock {
   endTime        String
   duration       Int
   isBreak        Boolean         @default(false)
-  slotNumber     Int             @default(1)
   createdAt      DateTime        @default(now())
+  slotNumber     Int             @default(1)
   department     Department      @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   timetableSlots TimetableSlot[]
 
@@ -394,18 +507,18 @@ model TimetableSlot {
   endTime            String
   courseId           String?
   facultyId          String?
-  faculty2Id         String?
   roomId             String?
-  divisionId         String
   batchId            String?
-  blockId            String?
-  sessionTypeId      String?
   isBreak            Boolean             @default(false)
   slotType           String              @default("THEORY")
-  isElective         Boolean             @default(false)
   basketId           String?
+  isElective         Boolean             @default(false)
   optionId           String?
+  blockId            String?
+  faculty2Id         String?
+  sessionTypeId      String?
   classId            String?
+  divisionId         String
   attendanceSessions AttendanceSession[]
   timetableChanges   TimetableChange[]
   batch              Batch?              @relation(fields: [batchId], references: [id])
@@ -423,70 +536,114 @@ model TimetableSlot {
 }
 
 model User {
-  id                   String                 @id @default(uuid())
-  username             String                 @unique
-  email                String?                @unique
-  passwordHash         String?
-  firebaseUid          String?                @unique
-  role                 String
-  entityId             String?
-  universityId         String?
-  phoneNumber          String?
-  address              String?
-  isActive             Boolean                @default(true)
-  createdAt            DateTime               @default(now())
-  lastLogin            DateTime?
-  fcmToken             String?
-  reviewerApplications AdmissionApplication[] @relation("ReviewerApplications")
-  assignedInquiries    AdmissionInquiry[]     @relation("AssignedInquiries")
-  logs                 AuditLog[]
-  faculty              Faculty[]
-  messageHistory       MessageHistory[]
-  syncLogs             MessageSyncLog[]
-  messages             Message[]
-  notifications        Notification[]
-  permissions          Permission[]
-  performedTransfers   StudentTransferLog[]   @relation("PerformedTransfers")
-  addedSubscribers     Subscriber[]           @relation("UserSubscribers")
-  subscription         SubscriptionControl?
-  student              Student?
-  university           University?            @relation(fields: [universityId], references: [id], onDelete: Cascade)
-  threads              ChatThread[]           @relation("ThreadParticipants")
+  id                      String                   @id @default(uuid())
+  username                String                   @unique
+  email                   String?                  @unique
+  passwordHash            String?
+  firebaseUid             String?                  @unique
+  role                    String
+  entityId                String?
+  universityId            String?
+  phoneNumber             String?
+  address                 String?
+  isActive                Boolean                  @default(true)
+  createdAt               DateTime                 @default(now())
+  lastLogin               DateTime?
+  fcmToken                String?
+  failedLoginAttempts     Int                      @default(0)
+  lockedUntil             DateTime?
+  passwordChangedAt       DateTime                 @default(now())
+  sessionVersion          Int                      @default(0)
+  lastActivityAt          DateTime?
+  reviewerApplications    AdmissionApplication[]   @relation("ReviewerApplications")
+  assignedInquiries       AdmissionInquiry[]       @relation("AssignedInquiries")
+  logs                    AuditLog[]
+  receivedConnectRequests ConnectRequest[]         @relation("Receiver")
+  sentConnectRequests     ConnectRequest[]         @relation("Sender")
+  faculty                 Faculty[]
+  assignedMaintenance     MaintenanceTicket[]      @relation("AssignedMaintenance")
+  messageHistory          MessageHistory[]
+  syncLogs                MessageSyncLog[]
+  messages                Message[]
+  notificationLogs        NotificationLog[]
+  notificationPreferences NotificationPreference[]
+  notifications           Notification[]
+  patrolAssignments       PatrolRoute[]            @relation("PatrolOfficer")
+  permissions             Permission[]
+  procurementsApproved    ProcurementRequest[]     @relation("ApprovedBy")
+  procurementsRequested   ProcurementRequest[]     @relation("RequestedBy")
+  resourceBookings        ResourceBooking[]
+  assignedIncidents       SecurityIncident[]       @relation("AssignedTo")
+  reportedIncidents       SecurityIncident[]       @relation("ReportedBy")
+  stockActions            StockLog[]               @relation("PerformedBy")
+  performedTransfers      StudentTransferLog[]     @relation("PerformedTransfers")
+  student                 Student?
+  addedSubscribers        Subscriber[]             @relation("UserSubscribers")
+  subscription            SubscriptionControl?
+  sessions                UserSession[]
+  university              University?              @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  visitorHosts            VisitorLog[]             @relation("Host")
+  threads                 ChatThread[]             @relation("ThreadParticipants")
 
   @@map("users")
 }
 
 model AuditLog {
-  id         String   @id @default(uuid())
-  userId     String?
-  action     String
-  entityType String?
-  entityId   String?
-  changes    Json?
-  status     String   @default("SUCCESS")
-  endpoint   String?
-  method     String?
-  durationMs Int?
-  ipAddress  String?
-  userAgent  String?
-  createdAt  DateTime @default(now())
-  user       User?    @relation(fields: [userId], references: [id])
+  id              String   @id @default(uuid())
+  userId          String?
+  action          String
+  entityType      String?
+  entityId        String?
+  changes         Json?
+  status          String   @default("SUCCESS")
+  endpoint        String?
+  method          String?
+  durationMs      Int?
+  ipAddress       String?
+  userAgent       String?
+  createdAt       DateTime @default(now())
+  blockNumber     Int?
+  isVerified      Boolean  @default(false)
+  transactionHash String?
+  user            User?    @relation(fields: [userId], references: [id])
 
   @@map("audit_logs")
 }
 
 model GlobalSettings {
-  id              String   @id @default("system-config")
-  platformName    String   @default("SmartCampus OS")
-  supportEmail    String   @default("support@smartcampus.ac.in")
-  maintenanceMode Boolean  @default(false)
-  sessionTimeout  Int      @default(600)
-  mfaEnabled      Boolean  @default(false)
-  logRetention    String   @default("30")
-  autoBackups     Boolean  @default(false)
-  updatedAt       DateTime @updatedAt
+  id                     String   @id @default("system-config")
+  platformName           String   @default("SmartCampus OS")
+  supportEmail           String   @default("support@smartcampus.ac.in")
+  maintenanceMode        Boolean  @default(false)
+  sessionTimeout         Int      @default(10)
+  mfaEnabled             Boolean  @default(false)
+  logRetention           String   @default("30")
+  autoBackups            Boolean  @default(false)
+  updatedAt              DateTime @updatedAt
+  loginAttemptLimit      Int      @default(5)
+  lockoutDurationMinutes Int      @default(15)
+  sessionWarningMinutes  Int      @default(2)
 
   @@map("global_settings")
+}
+
+model UserSession {
+  id                String    @id @default(uuid())
+  userId            String
+  sessionToken      String    @unique
+  csrfToken         String
+  createdAt         DateTime  @default(now())
+  expiresAt         DateTime
+  lastActivityAt    DateTime  @default(now())
+  invalidatedAt     DateTime?
+  invalidatedReason String?
+  ipAddress         String?
+  userAgent         String?
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("user_sessions")
 }
 
 model Inquiry {
@@ -496,11 +653,11 @@ model Inquiry {
   contactNumber String?
   organization  String?
   message       String?
-  source        String?  @default("get_started_popup")
   status        String   @default("NEW")
   ipAddress     String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  source        String?  @default("get_started_popup")
 
   @@map("inquiries")
 }
@@ -571,15 +728,29 @@ model Student {
   programId           String
   admissionYear       Int
   photoUrl            String?
+  userId              String?                     @unique
+  currentCompany      String?
+  currentRole         String?
+  industryExperience  Json?
+  isAlumnus           Boolean                     @default(false)
+  skills              Json?
   bookLoans           BookLoan[]
   feePayments         FeePayment[]
   placementRecord     PlacementRecord?
+  interventions       AcademicIntervention[]
+  academicRisk        AcademicRisk?
   submissions         AssignmentSubmission[]
   attendanceFlags     AttendanceFlag[]
   attendance          AttendanceRecord[]
+  careerAudits        CareerPathAudit[]
+  sharedResources     CollaborationResource[]
   complaints          Complaint[]
   facultyFeedback     FacultyFeedback[]
+  grantApplications   GrantApplication[]
+  industryReadiness   IndustryReadiness?
   marksComplaints     MarksComplaint[]
+  mentorProfile       MentorProfile?
+  mentorshipsAsMentee MentorshipRelation[]        @relation("MenteeRelation")
   quizAttempts        QuizAttempt[]
   reassessments       ReassessmentRequest[]
   results             Result[]
@@ -591,15 +762,8 @@ model Student {
   department          Department                  @relation(fields: [departmentId], references: [id])
   program             Program                     @relation(fields: [programId], references: [id])
   university          University                  @relation(fields: [universityId], references: [id])
-  userId              String?                     @unique
   user                User?                       @relation(fields: [userId], references: [id])
-  grantApplications   GrantApplication[]
-  academicRisk        AcademicRisk?
-  interventions       AcademicIntervention[]
-  mentorProfile       MentorProfile?
-  mentorshipsAsMentee MentorshipRelation[]        @relation("MenteeRelation")
   studyGroupMembers   StudyGroupMember[]
-  sharedResources     CollaborationResource[]
 
   @@index([universityId, departmentId, batchId])
   @@map("students")
@@ -774,8 +938,8 @@ model Scholarship {
   isActive     Boolean            @default(true)
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
-  university   University         @relation(fields: [universityId], references: [id], onDelete: Cascade)
   applications GrantApplication[]
+  university   University         @relation(fields: [universityId], references: [id], onDelete: Cascade)
 
   @@map("scholarships")
 }
@@ -784,7 +948,7 @@ model GrantApplication {
   id            String      @id @default(uuid())
   studentId     String
   scholarshipId String
-  status        String      @default("PENDING") // PENDING, APPROVED, REJECTED, DISBURSED
+  status        String      @default("PENDING")
   appliedAt     DateTime    @default(now())
   approvedAt    DateTime?
   disbursedAt   DateTime?
@@ -799,9 +963,9 @@ model GrantApplication {
 model AcademicRisk {
   id           String   @id @default(uuid())
   studentId    String   @unique
-  riskLevel    String // SAFE, AT_RISK, CRITICAL
-  score        Float // 0-100 index (Higher = Higher Risk)
-  factors      Json // Detailed breakdown of risk factors (e.g. {attendance: -15, sgpaTrend: -10})
+  riskLevel    String
+  score        Float
+  factors      Json
   lastAnalyzed DateTime @default(now())
   student      Student  @relation(fields: [studentId], references: [id])
 
@@ -813,8 +977,8 @@ model AcademicIntervention {
   studentId    String
   title        String
   description  String
-  status       String    @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED
-  type         String // TUTORIAL, COUNSELING, RESOURCE
+  status       String    @default("PENDING")
+  type         String
   prescribedBy String    @default("AI_SENTINEL")
   createdAt    DateTime  @default(now())
   completedAt  DateTime?
@@ -828,7 +992,7 @@ model MentorProfile {
   studentId   String               @unique
   isActive    Boolean              @default(true)
   bio         String?
-  expertise   Json // Array of subject codes/names
+  expertise   Json
   rating      Float                @default(5.0)
   totalHours  Int                  @default(0)
   createdAt   DateTime             @default(now())
@@ -844,12 +1008,12 @@ model MentorshipRelation {
   mentorProfileId String
   menteeId        String
   subject         String
-  status          String        @default("ACTIVE") // ACTIVE, COMPLETED, CANCELLED
+  status          String        @default("ACTIVE")
   startedAt       DateTime      @default(now())
   completedAt     DateTime?
   notes           String?
-  mentorProfile   MentorProfile @relation(fields: [mentorProfileId], references: [id])
   mentee          Student       @relation("MenteeRelation", fields: [menteeId], references: [id])
+  mentorProfile   MentorProfile @relation(fields: [mentorProfileId], references: [id])
 
   @@map("mentorship_relations")
 }
@@ -863,9 +1027,9 @@ model StudyGroup {
   isPrivate    Boolean                 @default(false)
   createdAt    DateTime                @default(now())
   updatedAt    DateTime                @updatedAt
-  department   Department              @relation(fields: [departmentId], references: [id])
-  members      StudyGroupMember[]
   resources    CollaborationResource[]
+  members      StudyGroupMember[]
+  department   Department              @relation(fields: [departmentId], references: [id])
 
   @@map("study_groups")
 }
@@ -874,7 +1038,7 @@ model StudyGroupMember {
   id        String     @id @default(uuid())
   groupId   String
   studentId String
-  role      String     @default("MEMBER") // ADMIN, MEMBER
+  role      String     @default("MEMBER")
   joinedAt  DateTime   @default(now())
   group     StudyGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
   student   Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
@@ -895,8 +1059,8 @@ model CollaborationResource {
   rating        Float       @default(0.0)
   downloadCount Int         @default(0)
   createdAt     DateTime    @default(now())
-  student       Student     @relation(fields: [studentId], references: [id])
   group         StudyGroup? @relation(fields: [groupId], references: [id])
+  student       Student     @relation(fields: [studentId], references: [id])
 
   @@map("collaboration_resources")
 }
@@ -1132,12 +1296,12 @@ model Complaint {
   category     String
   subject      String
   description  String
-  recipient    String?
   status       String     @default("OPEN")
   isAnonymous  Boolean    @default(false)
   resolution   String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+  recipient    String?
   student      Student?   @relation(fields: [studentId], references: [id])
   university   University @relation(fields: [universityId], references: [id])
 
@@ -1396,4 +1560,342 @@ model StudentTransferLog {
   toDivision     Division  @relation("ToTransfers", fields: [toDivisionId], references: [id])
 
   @@map("student_transfer_logs")
+}
+
+model ResourceBooking {
+  id         String         @id @default(uuid())
+  resourceId String
+  userId     String
+  grantId    String?
+  startTime  DateTime
+  endTime    DateTime
+  purpose    String
+  status     String         @default("PENDING")
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  grant      ResearchGrant? @relation(fields: [grantId], references: [id])
+  resource   Resource       @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([resourceId, startTime, endTime])
+  @@map("resource_bookings")
+}
+
+model DepartmentBudget {
+  id              String     @id @default(uuid())
+  departmentId    String
+  fiscalYear      String
+  totalAllocation Float      @default(0)
+  currentSpending Float      @default(0)
+  reserveAmount   Float      @default(0)
+  status          String     @default("ACTIVE")
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  department      Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@unique([departmentId, fiscalYear])
+  @@map("department_budgets")
+}
+
+model BudgetAuditLog {
+  id            String     @id @default(uuid())
+  departmentId  String
+  expenditureId String?
+  amount        Float
+  category      String
+  riskScore     Int        @default(0)
+  riskReason    String?
+  flaggedBy     String     @default("SYSTEM_AI")
+  status        String     @default("PENDING_REVIEW")
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  department    Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@index([departmentId, status])
+  @@map("budget_audit_logs")
+}
+
+model CareerPathAudit {
+  id              String   @id @default(uuid())
+  studentId       String
+  careerTrack     String
+  optimalityScore Int
+  skillGap        Json
+  nextMilestone   Json
+  growthOrbit     Json
+  academicYear    String
+  createdAt       DateTime @default(now())
+  student         Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@map("career_path_audits")
+}
+
+model IndustryReadiness {
+  id                 String   @id @default(uuid())
+  studentId          String   @unique
+  technicalScore     Int
+  softSkillsScore    Int
+  experienceScore    Int
+  overallReadiness   Float
+  gapAnalysis        String
+  lastAnalyzed       DateTime @default(now())
+  collaborationScore Int      @default(0)
+  innovationScore    Int      @default(0)
+  student            Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@map("industry_readiness_metrics")
+}
+
+model ComplianceAudit {
+  id           String     @id @default(uuid())
+  departmentId String
+  checkDate    DateTime   @default(now())
+  score        Float
+  status       String
+  results      Json
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@map("compliance_audits")
+}
+
+model CampusAsset {
+  id           String              @id @default(uuid())
+  universityId String
+  name         String
+  type         String
+  location     String
+  status       String              @default("OPERATIONAL")
+  healthScore  Int                 @default(100)
+  lastService  DateTime            @default(now())
+  nextService  DateTime?
+  iotDeviceId  String?             @unique
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  university   University          @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  tickets      MaintenanceTicket[]
+
+  @@map("campus_assets")
+}
+
+model MaintenanceTicket {
+  id           String      @id @default(uuid())
+  assetId      String
+  description  String
+  severity     String      @default("LOW")
+  status       String      @default("OPEN")
+  assignedToId String?
+  aiPriority   Float       @default(0.0)
+  resolution   String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  asset        CampusAsset @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  assignedTo   User?       @relation("AssignedMaintenance", fields: [assignedToId], references: [id])
+
+  @@map("maintenance_tickets")
+}
+
+model NotificationPreference {
+  id        String   @id @default(uuid())
+  userId    String
+  category  String
+  channels  Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, category])
+  @@map("notification_preferences")
+}
+
+model NotificationLog {
+  id           String   @id @default(uuid())
+  userId       String
+  channel      String
+  category     String?
+  status       String   @default("SENT")
+  payload      Json
+  errorMessage String?
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_logs")
+}
+
+model ConnectRequest {
+  id         String   @id @default(uuid())
+  senderId   String
+  receiverId String
+  message    String?
+  status     String   @default("PENDING")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  receiver   User     @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender     User     @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@map("connect_requests")
+}
+
+model InventoryItem {
+  id           String               @id @default(uuid())
+  universityId String
+  name         String
+  description  String?
+  category     String
+  stockLevel   Float                @default(0)
+  unit         String
+  minThreshold Float                @default(10)
+  costPerUnit  Float                @default(0)
+  expiryDate   DateTime?
+  location     String?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  university   University           @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  procurements ProcurementRequest[]
+  logs         StockLog[]
+
+  @@index([universityId])
+  @@map("inventory_items")
+}
+
+model Vendor {
+  id           String               @id @default(uuid())
+  universityId String
+  name         String
+  email        String?
+  phone        String?
+  address      String?
+  category     String
+  rating       Float                @default(5.0)
+  isActive     Boolean              @default(true)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  procurements ProcurementRequest[]
+  university   University           @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  @@index([universityId])
+  @@map("vendors")
+}
+
+model ProcurementRequest {
+  id            String        @id @default(uuid())
+  universityId  String
+  itemId        String
+  vendorId      String?
+  quantity      Float
+  totalCost     Float?
+  status        String        @default("PENDING")
+  priority      String        @default("MEDIUM")
+  requestedById String
+  approvedById  String?
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  approvedBy    User?         @relation("ApprovedBy", fields: [approvedById], references: [id])
+  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  requestedBy   User          @relation("RequestedBy", fields: [requestedById], references: [id])
+  university    University    @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  vendor        Vendor?       @relation(fields: [vendorId], references: [id])
+
+  @@index([universityId, itemId])
+  @@map("procurement_requests")
+}
+
+model StockLog {
+  id            String        @id @default(uuid())
+  itemId        String
+  quantity      Float
+  type          String
+  reason        String?
+  performedById String
+  createdAt     DateTime      @default(now())
+  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  performedBy   User          @relation("PerformedBy", fields: [performedById], references: [id])
+
+  @@index([itemId])
+  @@map("stock_logs")
+}
+
+model SecurityIncident {
+  id           String     @id @default(uuid())
+  universityId String
+  title        String
+  description  String
+  type         String
+  status       String     @default("OPEN")
+  severity     String     @default("MEDIUM")
+  location     String
+  latitude     Float?
+  longitude    Float?
+  reportedById String
+  assignedToId String?
+  aiPriority   Int        @default(5)
+  aiSummary    String?
+  resolution   String?
+  resolvedAt   DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  assignedTo   User?      @relation("AssignedTo", fields: [assignedToId], references: [id])
+  reportedBy   User       @relation("ReportedBy", fields: [reportedById], references: [id])
+  university   University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  @@index([universityId, status])
+  @@map("security_incidents")
+}
+
+model EmergencyAlert {
+  id           String     @id @default(uuid())
+  universityId String
+  senderId     String
+  title        String
+  message      String
+  scope        String     @default("CAMPUS_WIDE")
+  targetArea   String?
+  type         String
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  university   University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  @@index([universityId, isActive])
+  @@map("emergency_alerts")
+}
+
+model PatrolRoute {
+  id           String     @id @default(uuid())
+  universityId String
+  name         String
+  points       Json
+  officerId    String?
+  status       String     @default("INACTIVE")
+  startTime    DateTime?
+  endTime      DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  officer      User?      @relation("PatrolOfficer", fields: [officerId], references: [id])
+  university   University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  @@index([universityId, officerId])
+  @@map("patrol_routes")
+}
+
+model VisitorLog {
+  id           String     @id @default(uuid())
+  universityId String
+  visitorName  String
+  purpose      String
+  checkInTime  DateTime   @default(now())
+  checkOutTime DateTime?
+  hostId       String
+  idType       String?
+  idNumber     String?
+  status       String     @default("IN_CAMPUS")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  host         User       @relation("Host", fields: [hostId], references: [id])
+  university   University @relation(fields: [universityId], references: [id], onDelete: Cascade)
+
+  @@index([universityId, hostId])
+  @@map("visitor_logs")
 }

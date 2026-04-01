@@ -207,8 +207,77 @@ exports.Prisma.ResearchGrantScalarFieldEnum = {
   amount: 'amount',
   status: 'status',
   description: 'description',
+  proposalBody: 'proposalBody',
+  budgetBreakdown: 'budgetBreakdown',
+  reviewComments: 'reviewComments',
   startDate: 'startDate',
   endDate: 'endDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ResearchReviewScalarFieldEnum = {
+  id: 'id',
+  grantId: 'grantId',
+  reviewerId: 'reviewerId',
+  score: 'score',
+  recommendation: 'recommendation',
+  rubric: 'rubric',
+  comments: 'comments',
+  status: 'status',
+  isAnonymous: 'isAnonymous',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GrantExpenditureScalarFieldEnum = {
+  id: 'id',
+  grantId: 'grantId',
+  amount: 'amount',
+  description: 'description',
+  category: 'category',
+  date: 'date',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EthicalClearanceScalarFieldEnum = {
+  id: 'id',
+  grantId: 'grantId',
+  status: 'status',
+  submissionDate: 'submissionDate',
+  approvalDate: 'approvalDate',
+  reviewerNotes: 'reviewerNotes',
+  riskScore: 'riskScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FacultyAuditScalarFieldEnum = {
+  id: 'id',
+  facultyId: 'facultyId',
+  auditorId: 'auditorId',
+  academicYear: 'academicYear',
+  semester: 'semester',
+  overallScore: 'overallScore',
+  researchImpact: 'researchImpact',
+  teachingScore: 'teachingScore',
+  aiSummary: 'aiSummary',
+  recommendations: 'recommendations',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CurriculumAuditScalarFieldEnum = {
+  id: 'id',
+  courseId: 'courseId',
+  academicYear: 'academicYear',
+  alignmentScore: 'alignmentScore',
+  gapAnalysis: 'gapAnalysis',
+  identifiedGaps: 'identifiedGaps',
+  suggestions: 'suggestions',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -224,11 +293,11 @@ exports.Prisma.CourseScalarFieldEnum = {
   weeklyHrs: 'weeklyHrs',
   semester: 'semester',
   type: 'type',
-  sessionTypeId: 'sessionTypeId',
+  createdAt: 'createdAt',
+  isElective: 'isElective',
   labDuration: 'labDuration',
   requiredRoomType: 'requiredRoomType',
-  isElective: 'isElective',
-  createdAt: 'createdAt'
+  sessionTypeId: 'sessionTypeId'
 };
 
 exports.Prisma.BatchScalarFieldEnum = {
@@ -250,18 +319,22 @@ exports.Prisma.ResourceScalarFieldEnum = {
   capacity: 'capacity',
   floor: 'floor',
   building: 'building',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  status: 'status',
+  isResearchOnly: 'isResearchOnly',
+  specifications: 'specifications',
+  requiresApproval: 'requiresApproval'
 };
 
 exports.Prisma.ProgramScalarFieldEnum = {
   id: 'id',
   universityId: 'universityId',
-  departmentId: 'departmentId',
   name: 'name',
   shortName: 'shortName',
   type: 'type',
   duration: 'duration',
-  totalSems: 'totalSems'
+  totalSems: 'totalSems',
+  departmentId: 'departmentId'
 };
 
 exports.Prisma.TimeBlockScalarFieldEnum = {
@@ -272,8 +345,8 @@ exports.Prisma.TimeBlockScalarFieldEnum = {
   endTime: 'endTime',
   duration: 'duration',
   isBreak: 'isBreak',
-  slotNumber: 'slotNumber',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  slotNumber: 'slotNumber'
 };
 
 exports.Prisma.SessionTypeScalarFieldEnum = {
@@ -348,18 +421,18 @@ exports.Prisma.TimetableSlotScalarFieldEnum = {
   endTime: 'endTime',
   courseId: 'courseId',
   facultyId: 'facultyId',
-  faculty2Id: 'faculty2Id',
   roomId: 'roomId',
-  divisionId: 'divisionId',
   batchId: 'batchId',
-  blockId: 'blockId',
-  sessionTypeId: 'sessionTypeId',
   isBreak: 'isBreak',
   slotType: 'slotType',
-  isElective: 'isElective',
   basketId: 'basketId',
+  isElective: 'isElective',
   optionId: 'optionId',
-  classId: 'classId'
+  blockId: 'blockId',
+  faculty2Id: 'faculty2Id',
+  sessionTypeId: 'sessionTypeId',
+  classId: 'classId',
+  divisionId: 'divisionId'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -376,7 +449,12 @@ exports.Prisma.UserScalarFieldEnum = {
   isActive: 'isActive',
   createdAt: 'createdAt',
   lastLogin: 'lastLogin',
-  fcmToken: 'fcmToken'
+  fcmToken: 'fcmToken',
+  failedLoginAttempts: 'failedLoginAttempts',
+  lockedUntil: 'lockedUntil',
+  passwordChangedAt: 'passwordChangedAt',
+  sessionVersion: 'sessionVersion',
+  lastActivityAt: 'lastActivityAt'
 };
 
 exports.Prisma.AuditLogScalarFieldEnum = {
@@ -392,7 +470,10 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   durationMs: 'durationMs',
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  blockNumber: 'blockNumber',
+  isVerified: 'isVerified',
+  transactionHash: 'transactionHash'
 };
 
 exports.Prisma.GlobalSettingsScalarFieldEnum = {
@@ -404,7 +485,24 @@ exports.Prisma.GlobalSettingsScalarFieldEnum = {
   mfaEnabled: 'mfaEnabled',
   logRetention: 'logRetention',
   autoBackups: 'autoBackups',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  loginAttemptLimit: 'loginAttemptLimit',
+  lockoutDurationMinutes: 'lockoutDurationMinutes',
+  sessionWarningMinutes: 'sessionWarningMinutes'
+};
+
+exports.Prisma.UserSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sessionToken: 'sessionToken',
+  csrfToken: 'csrfToken',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt',
+  lastActivityAt: 'lastActivityAt',
+  invalidatedAt: 'invalidatedAt',
+  invalidatedReason: 'invalidatedReason',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent'
 };
 
 exports.Prisma.InquiryScalarFieldEnum = {
@@ -414,11 +512,11 @@ exports.Prisma.InquiryScalarFieldEnum = {
   contactNumber: 'contactNumber',
   organization: 'organization',
   message: 'message',
-  source: 'source',
   status: 'status',
   ipAddress: 'ipAddress',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  source: 'source'
 };
 
 exports.Prisma.SubscriberScalarFieldEnum = {
@@ -476,7 +574,12 @@ exports.Prisma.StudentScalarFieldEnum = {
   programId: 'programId',
   admissionYear: 'admissionYear',
   photoUrl: 'photoUrl',
-  userId: 'userId'
+  userId: 'userId',
+  currentCompany: 'currentCompany',
+  currentRole: 'currentRole',
+  industryExperience: 'industryExperience',
+  isAlumnus: 'isAlumnus',
+  skills: 'skills'
 };
 
 exports.Prisma.AttendanceSessionScalarFieldEnum = {
@@ -878,12 +981,12 @@ exports.Prisma.ComplaintScalarFieldEnum = {
   category: 'category',
   subject: 'subject',
   description: 'description',
-  recipient: 'recipient',
   status: 'status',
   isAnonymous: 'isAnonymous',
   resolution: 'resolution',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  recipient: 'recipient'
 };
 
 exports.Prisma.ChatThreadScalarFieldEnum = {
@@ -1071,6 +1174,256 @@ exports.Prisma.StudentTransferLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ResourceBookingScalarFieldEnum = {
+  id: 'id',
+  resourceId: 'resourceId',
+  userId: 'userId',
+  grantId: 'grantId',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  purpose: 'purpose',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DepartmentBudgetScalarFieldEnum = {
+  id: 'id',
+  departmentId: 'departmentId',
+  fiscalYear: 'fiscalYear',
+  totalAllocation: 'totalAllocation',
+  currentSpending: 'currentSpending',
+  reserveAmount: 'reserveAmount',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BudgetAuditLogScalarFieldEnum = {
+  id: 'id',
+  departmentId: 'departmentId',
+  expenditureId: 'expenditureId',
+  amount: 'amount',
+  category: 'category',
+  riskScore: 'riskScore',
+  riskReason: 'riskReason',
+  flaggedBy: 'flaggedBy',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CareerPathAuditScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  careerTrack: 'careerTrack',
+  optimalityScore: 'optimalityScore',
+  skillGap: 'skillGap',
+  nextMilestone: 'nextMilestone',
+  growthOrbit: 'growthOrbit',
+  academicYear: 'academicYear',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.IndustryReadinessScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  technicalScore: 'technicalScore',
+  softSkillsScore: 'softSkillsScore',
+  experienceScore: 'experienceScore',
+  overallReadiness: 'overallReadiness',
+  gapAnalysis: 'gapAnalysis',
+  lastAnalyzed: 'lastAnalyzed',
+  collaborationScore: 'collaborationScore',
+  innovationScore: 'innovationScore'
+};
+
+exports.Prisma.ComplianceAuditScalarFieldEnum = {
+  id: 'id',
+  departmentId: 'departmentId',
+  checkDate: 'checkDate',
+  score: 'score',
+  status: 'status',
+  results: 'results'
+};
+
+exports.Prisma.CampusAssetScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  name: 'name',
+  type: 'type',
+  location: 'location',
+  status: 'status',
+  healthScore: 'healthScore',
+  lastService: 'lastService',
+  nextService: 'nextService',
+  iotDeviceId: 'iotDeviceId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MaintenanceTicketScalarFieldEnum = {
+  id: 'id',
+  assetId: 'assetId',
+  description: 'description',
+  severity: 'severity',
+  status: 'status',
+  assignedToId: 'assignedToId',
+  aiPriority: 'aiPriority',
+  resolution: 'resolution',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationPreferenceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  category: 'category',
+  channels: 'channels',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.NotificationLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  channel: 'channel',
+  category: 'category',
+  status: 'status',
+  payload: 'payload',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ConnectRequestScalarFieldEnum = {
+  id: 'id',
+  senderId: 'senderId',
+  receiverId: 'receiverId',
+  message: 'message',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InventoryItemScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  stockLevel: 'stockLevel',
+  unit: 'unit',
+  minThreshold: 'minThreshold',
+  costPerUnit: 'costPerUnit',
+  expiryDate: 'expiryDate',
+  location: 'location',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.VendorScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+  category: 'category',
+  rating: 'rating',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProcurementRequestScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  itemId: 'itemId',
+  vendorId: 'vendorId',
+  quantity: 'quantity',
+  totalCost: 'totalCost',
+  status: 'status',
+  priority: 'priority',
+  requestedById: 'requestedById',
+  approvedById: 'approvedById',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StockLogScalarFieldEnum = {
+  id: 'id',
+  itemId: 'itemId',
+  quantity: 'quantity',
+  type: 'type',
+  reason: 'reason',
+  performedById: 'performedById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SecurityIncidentScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  status: 'status',
+  severity: 'severity',
+  location: 'location',
+  latitude: 'latitude',
+  longitude: 'longitude',
+  reportedById: 'reportedById',
+  assignedToId: 'assignedToId',
+  aiPriority: 'aiPriority',
+  aiSummary: 'aiSummary',
+  resolution: 'resolution',
+  resolvedAt: 'resolvedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EmergencyAlertScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  senderId: 'senderId',
+  title: 'title',
+  message: 'message',
+  scope: 'scope',
+  targetArea: 'targetArea',
+  type: 'type',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PatrolRouteScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  name: 'name',
+  points: 'points',
+  officerId: 'officerId',
+  status: 'status',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.VisitorLogScalarFieldEnum = {
+  id: 'id',
+  universityId: 'universityId',
+  visitorName: 'visitorName',
+  purpose: 'purpose',
+  checkInTime: 'checkInTime',
+  checkOutTime: 'checkOutTime',
+  hostId: 'hostId',
+  idType: 'idType',
+  idNumber: 'idNumber',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1111,6 +1464,11 @@ exports.Prisma.ModelName = {
   FacultySubject: 'FacultySubject',
   Publication: 'Publication',
   ResearchGrant: 'ResearchGrant',
+  ResearchReview: 'ResearchReview',
+  GrantExpenditure: 'GrantExpenditure',
+  EthicalClearance: 'EthicalClearance',
+  FacultyAudit: 'FacultyAudit',
+  CurriculumAudit: 'CurriculumAudit',
   Course: 'Course',
   Batch: 'Batch',
   Resource: 'Resource',
@@ -1126,6 +1484,7 @@ exports.Prisma.ModelName = {
   User: 'User',
   AuditLog: 'AuditLog',
   GlobalSettings: 'GlobalSettings',
+  UserSession: 'UserSession',
   Inquiry: 'Inquiry',
   Subscriber: 'Subscriber',
   Permission: 'Permission',
@@ -1181,7 +1540,26 @@ exports.Prisma.ModelName = {
   Division: 'Division',
   Class: 'Class',
   StudentDivisionAssignment: 'StudentDivisionAssignment',
-  StudentTransferLog: 'StudentTransferLog'
+  StudentTransferLog: 'StudentTransferLog',
+  ResourceBooking: 'ResourceBooking',
+  DepartmentBudget: 'DepartmentBudget',
+  BudgetAuditLog: 'BudgetAuditLog',
+  CareerPathAudit: 'CareerPathAudit',
+  IndustryReadiness: 'IndustryReadiness',
+  ComplianceAudit: 'ComplianceAudit',
+  CampusAsset: 'CampusAsset',
+  MaintenanceTicket: 'MaintenanceTicket',
+  NotificationPreference: 'NotificationPreference',
+  NotificationLog: 'NotificationLog',
+  ConnectRequest: 'ConnectRequest',
+  InventoryItem: 'InventoryItem',
+  Vendor: 'Vendor',
+  ProcurementRequest: 'ProcurementRequest',
+  StockLog: 'StockLog',
+  SecurityIncident: 'SecurityIncident',
+  EmergencyAlert: 'EmergencyAlert',
+  PatrolRoute: 'PatrolRoute',
+  VisitorLog: 'VisitorLog'
 };
 
 /**

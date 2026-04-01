@@ -94,3 +94,6 @@ apps/api/src/check_*.ts
 apps/api/src/debug.ts
 apps/ai-engine/test_*.py
 apps/web/test-results/
+text-*.js
+check_*.js
+query.js

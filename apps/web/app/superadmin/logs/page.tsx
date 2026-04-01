@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { SUPERADMIN_NAV } from '@/lib/constants/nav-config';
 import { format } from 'date-fns';
+import { SuperAdminPageHeader } from '@/components/superadmin/page-header';
 
 interface Log {
     id: string;
@@ -39,6 +40,9 @@ interface Log {
     endpoint?: string;
     userAgent?: string;
     changes?: Record<string, unknown>;
+    transactionHash?: string;
+    blockNumber?: number;
+    isVerified?: boolean;
 }
 
 export default function AuditLogsPage() {
@@ -109,13 +113,11 @@ export default function AuditLogsPage() {
             'UPDATE_UNIVERSITY': 'Update University',
         };
 
-        // Try exact match or check if it starts with the method + space
         if (mapping[action]) return mapping[action];
 
-        // Remove UUIDs and technical prefixes for cleaner display if no mapping
         return action
             .replace(/POST |PUT |DELETE |PATCH |\/v1\//g, '')
-            .replace(/\/[a-f0-9-]{36}/g, '') // remove UUIDs
+            .replace(/\/[a-f0-9-]{36}/g, '')
             .replace(/\//g, ' ')
             .trim()
             .split(' ')
@@ -123,21 +125,31 @@ export default function AuditLogsPage() {
             .join(' ');
     };
 
+    const verifiedCount = logs.filter(l => l.isVerified).length;
+    const healthScore = logs.length > 0 ? Math.round((verifiedCount / logs.length) * 100) : 100;
+
     const navItems = SUPERADMIN_NAV;
 
     return (
         <ProtectedRoute allowedRoles={['SUPERADMIN']}>
             <DashboardLayout navItems={navItems} title="System Audit Logs">
 
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
-                    <div>
-                        <h2 className="text-3xl font-bold text-slate-900 dark:text-text-primary glow-sm">Audit Trail</h2>
-                        <p className="text-slate-600 dark:text-text-muted mt-1 text-sm">Monitor every administrative action across the platform.</p>
-                    </div>
-                    <Button onClick={handleExport} variant="ghost" className="flex items-center gap-2 text-slate-900 dark:text-text-primary bg-slate-100 dark:bg-surface border border-slate-200 dark:border-border-hover hover:bg-slate-200 dark:hover:bg-surface-hover rounded-xl font-bold">
-                        <LuDownload className="w-4 h-4" /> Export CSV
-                    </Button>
-                </div>
+                <SuperAdminPageHeader
+                    eyebrow="On-Chain Forensics"
+                    title="Audit trail"
+                    description="Inspect privileged actions backed by immutable blockchain proof. Tracing every critical identity mutation across the platform."
+                    icon={<LuShield className="h-6 w-6" />}
+                    actions={
+                        <Button onClick={handleExport} variant="outline" className="h-11 rounded-2xl px-5 font-bold">
+                            <LuDownload className="mr-2 h-4 w-4" /> Export CSV
+                        </Button>
+                    }
+                    stats={[
+                        { label: 'Blockchain Health', value: `${healthScore}%` },
+                        { label: 'Verified Anchors', value: verifiedCount },
+                        { label: 'System Integrity', value: 'High' },
+                    ]}
+                />
 
                 <Card className="mb-8 bg-white dark:bg-slate-900/40 border-slate-200 dark:border-border backdrop-blur-md shadow-xl dark:shadow-2xl overflow-hidden rounded-2xl">
                     <CardHeader className="pb-6 border-b border-slate-200 dark:border-border bg-slate-50 dark:bg-surface">
@@ -174,7 +186,7 @@ export default function AuditLogsPage() {
                                         <th className="px-6 py-5 font-bold uppercase tracking-wider">Timestamp</th>
                                         <th className="px-6 py-5 font-bold uppercase tracking-wider">Action</th>
                                         <th className="px-6 py-5 font-bold uppercase tracking-wider">Actor</th>
-                                        <th className="px-6 py-5 font-bold uppercase tracking-wider">Target</th>
+                                        <th className="px-6 py-5 font-bold uppercase tracking-wider">Verify</th>
                                         <th className="px-6 py-5 font-bold uppercase tracking-wider">Status</th>
                                         <th className="px-6 py-5 font-bold uppercase tracking-wider text-right">Details</th>
                                     </tr>
@@ -203,8 +215,18 @@ export default function AuditLogsPage() {
                                             <td className="px-6 py-4 font-medium text-slate-600">
                                                 {log.user?.username || log.userId?.split('-')[0] || 'System'}
                                             </td>
-                                            <td className="px-6 py-4 text-xs text-slate-600 truncate max-w-[150px]">
-                                                {log.entityId || '-'}
+                                            <td className="px-6 py-4">
+                                                {log.isVerified ? (
+                                                    <div className="flex items-center gap-1.5 text-neon-cyan group cursor-help">
+                                                        <LuShield className="w-4 h-4" />
+                                                        <span className="text-[10px] font-black uppercase tracking-tighter">Verified</span>
+                                                    </div>
+                                                ) : (
+                                                    <div className="flex items-center gap-1.5 text-text-muted">
+                                                        <LuInfo className="w-4 h-4 opacity-40" />
+                                                        <span className="text-[10px] font-bold uppercase tracking-tighter opacity-40">Unverified</span>
+                                                    </div>
+                                                )}
                                             </td>
                                             <td className="px-6 py-4">
                                                 {log.status === 'SUCCESS' ? (
@@ -292,6 +314,34 @@ export default function AuditLogsPage() {
                                         </p>
                                     </div>
                                 </div>
+
+                                {selectedLog.isVerified && (
+                                    <div className="p-5 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 shadow-[0_0_20px_rgba(16,185,129,0.05)] relative overflow-hidden group">
+                                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                            <LuShield className="w-20 h-20 text-emerald-500" />
+                                        </div>
+                                        <div className="flex items-center gap-2 text-[10px] uppercase font-black text-emerald-500 tracking-widest mb-4">
+                                            <LuShield className="w-3.5 h-3.5" /> Immutable Blockchain Proof
+                                        </div>
+                                        <div className="space-y-4">
+                                            <div>
+                                                <span className="text-[10px] uppercase font-black text-text-secondary tracking-widest block mb-1">Transaction Hash</span>
+                                                <div className="flex items-center gap-2 font-mono text-[10px] text-emerald-400 bg-black/40 p-2 rounded-lg border border-emerald-500/20 break-all">
+                                                    {selectedLog.transactionHash}
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <div>
+                                                    <span className="text-[10px] uppercase font-black text-text-secondary tracking-widest block mb-1">Block Height</span>
+                                                    <span className="font-mono text-sm text-text-primary font-bold">#{selectedLog.blockNumber}</span>
+                                                </div>
+                                                <Button size="sm" variant="outline" className="h-8 text-[10px] font-black uppercase rounded-lg border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10">
+                                                    View on Explorer
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <div className="p-5 rounded-2xl bg-surface border border-border shadow-inner">
                                     <div className="flex items-center gap-2 text-[10px] uppercase font-black text-text-secondary tracking-widest mb-4">

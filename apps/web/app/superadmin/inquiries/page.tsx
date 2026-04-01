@@ -16,6 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ConfirmDialog, useConfirm } from '@/components/ui/confirm-dialog';
 import { Toast, useToast } from '@/components/ui/toast-alert';
 import { cn } from '@/lib/utils';
+import { SuperAdminPageHeader } from '@/components/superadmin/page-header';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -257,26 +258,23 @@ export default function SuperAdminInquiries() {
                 <ConfirmDialog state={confirmState} onClose={closeConfirm} />
                 <Toast toast={toast} onClose={hideToast} />
 
-                {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
-                    <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-text-primary glow-sm flex items-center gap-3">
-                            <LuMailOpen className="w-7 h-7 text-neon-cyan" />
-                            Inquiries
-                        </h2>
-                        <p className="text-slate-600 dark:text-text-muted mt-1">
-                            Manage leads captured from the landing page. Total: <strong>{total}</strong>
-                        </p>
-                    </div>
-                    <Button
-                        onClick={handleExport}
-                        disabled={exporting}
-                        className="bg-neon-cyan text-slate-900 font-bold shadow-[0_0_15px_rgba(57,193,239,0.4)] hover:shadow-[0_0_25px_rgba(57,193,239,0.6)] transition-all flex items-center gap-2"
-                    >
-                        <LuDownload className={cn('w-4 h-4', exporting && 'animate-bounce')} />
-                        {exporting ? 'Exporting…' : 'Export Excel'}
-                    </Button>
-                </div>
+                <SuperAdminPageHeader
+                    eyebrow="Lead intelligence"
+                    title="Inbound inquiries"
+                    description="Triage interest captured from public surfaces, qualify follow-up, and keep conversions visible."
+                    icon={<LuMailOpen className="h-6 w-6" />}
+                    actions={
+                        <Button onClick={handleExport} disabled={exporting} className="h-11 rounded-2xl px-5 font-bold">
+                            <LuDownload className={cn('mr-2 h-4 w-4', exporting && 'animate-bounce')} />
+                            {exporting ? 'Exporting…' : 'Export'}
+                        </Button>
+                    }
+                    stats={[
+                        { label: 'Total', value: total },
+                        { label: 'Selected', value: selectedIds.length },
+                        { label: 'Page', value: `${page}/${totalPages}` },
+                    ]}
+                />
 
                 {/* Filters */}
                 <div className="flex flex-col sm:flex-row gap-3 mb-6">

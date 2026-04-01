@@ -89,7 +89,7 @@ export const broadcastNotification = async (req: AuthRequest, res: Response) => 
         }
 
         const sender = req.user!;
-        let where: any = {
+        const where: any = {
             isActive: true,
             id: { not: sender.id }
         };

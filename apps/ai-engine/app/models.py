@@ -231,3 +231,173 @@ class ForecastResponse(BaseModel):
     status: str = "SUCCESS"
     risks: List[ResourceRisk] = []
     overallEfficiency: float = 0.0
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Synergy / Collaboration Models
+# ─────────────────────────────────────────────────────────────────────────────
+
+class FacultyResearchProfile(BaseModel):
+    facultyId: str
+    name: str
+    department: str
+    abstracts: List[str] = []
+    keywords: List[str] = []
+
+
+class SynergyMatch(BaseModel):
+    targetFacultyId: str
+    score: float                                   # 0.0 to 1.0
+    sharedKeywords: List[str] = []
+    reason: str                                    # Human-readable explanation
+
+
+class SynergyRequest(BaseModel):
+    sourceFacultyId: str
+    profiles: List[FacultyResearchProfile]
+
+
+class SynergyResponse(BaseModel):
+    matches: List[SynergyMatch] = []
+    clusters: Optional[Dict[str, List[str]]] = None # Optional groupings
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Alumni & Placement Matching Models
+# ─────────────────────────────────────────────────────────────────────────────
+
+class AlumniProfile(BaseModel):
+    studentId: str
+    userId: str
+    name: str
+    department: str
+    batch: str
+    currentCompany: Optional[str] = None
+    currentRole: Optional[str] = None
+    skills: List[str] = []
+    experience: List[Dict[str, str]] = [] # { company, role, duration }
+
+class AlumniMatch(BaseModel):
+    alumnusId: str
+    alumnusUserId: str
+    name: str
+    score: float                            # 0.0 to 1.0
+    commonSkills: List[str] = []
+    matchReason: str                        # Human-readable explanation
+
+class AlumniMatchRequest(BaseModel):
+    studentId: str
+    skills: List[str] = []
+    interestAreas: List[str] = []
+    alumniProfiles: List[AlumniProfile]
+
+class AlumniMatchResponse(BaseModel):
+    matches: List[AlumniMatch] = []
+    topSkillsInDemand: List[str] = []
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Inventory & Procurement Models
+# ─────────────────────────────────────────────────────────────────────────────
+
+class InventoryItemProfile(BaseModel):
+    id: str
+    name: str
+    category: str
+    currentStock: float
+    minThreshold: float
+    unit: str
+
+class StockUsageHistory(BaseModel):
+    itemId: str
+    quantity: float
+    timestamp: str # ISO string
+    type: str     # OUT for usage
+
+class InventoryForecast(BaseModel):
+    itemId: str
+    itemName: str
+    daysUntilDepletion: int
+    depletionDate: str # ISO string
+    recommendedOrderQty: float
+    riskLevel: str    # LOW | MEDIUM | HIGH | CRITICAL
+    reasoning: str
+
+class InventoryForecastRequest(BaseModel):
+    items: List[InventoryItemProfile]
+    usageHistory: List[StockUsageHistory] = []
+    leadTimeDays: int = 7 # Default vendor lead time
+
+class InventoryForecastResponse(BaseModel):
+    status: str = "SUCCESS"
+    forecasts: List[InventoryForecast] = []
+    criticalSummary: Optional[str] = None
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Security & Emergency Intelligence Models
+# ─────────────────────────────────────────────────────────────────────────────
+
+class SecurityIncidentDetails(BaseModel):
+    id: Optional[str] = None
+    title: str
+    description: str
+    type: str
+    location: Optional[str] = None
+    severity: Optional[str] = "MEDIUM"
+
+class SecurityIncidentAnalysis(BaseModel):
+    incidentId: Optional[str] = None
+    priority: int                   # 1 (Critical) to 10 (Low)
+    summary: str                    # AI generated brief
+    riskAssessment: str             # Deep analysis
+    recommendation: str             # Next steps for security
+    isEmergency: bool = False
+
+class SecurityIntelligenceRequest(BaseModel):
+    incidents: List[SecurityIncidentDetails]
+    timeRangeDays: int = 7
+
+class Hotspot(BaseModel):
+    location: str
+    incidentCount: int
+    primaryThreat: str
+
+class SecurityIntelligenceResponse(BaseModel):
+    status: str = "SAFE"            # SAFE | ELEVATED | CRITICAL
+    summary: str
+    hotspots: List[Hotspot] = []
+    trendAnalysis: str
+    suggestedPatrolFocus: List[str] = []
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Chat & Career Intelligence Models (v11.1.0)
+# ─────────────────────────────────────────────────────────────────────────────
+
+class ChatRequest(BaseModel):
+    message: str
+    context: Dict[str, Any] = {}
+
+class ChatResponse(BaseModel):
+    reply: str
+
+class CareerAuditRequest(BaseModel):
+    studentName: str
+    program: str
+    semester: int
+    currentSgpa: float
+    attendanceRate: float
+    completedCourses: List[str] = []
+
+class GrowthOrbitNode(BaseModel):
+    phase: str
+    focus: str
+    badge: str
+
+class CareerAuditResponse(BaseModel):
+    careerTrack: str
+    optimalityScore: float
+    skillGap: List[str]
+    nextMilestone: Dict[str, Any]
+    growthOrbit: List[GrowthOrbitNode]

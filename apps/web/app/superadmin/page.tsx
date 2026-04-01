@@ -1,21 +1,31 @@
-'use client';
+"use client";
 
+import { motion } from 'framer-motion';
 import { ProtectedRoute } from '@/components/protected-route';
-import { V2DashboardLayout } from '@/components/v2/layout/dashboard-layout';
-import { BentoGridDashboard } from '@/components/v2/dashboard/bento-grid';
+import { DashboardLayout } from '@/components/dashboard-layout';
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/lib/store/useAuthStore';
-import { 
-  Building2, 
-  Users, 
-  FileText, 
-  ShieldCheck, 
-  Activity,
-  Server,
-  Database,
-  Globe
-} from 'lucide-react';
+import { Building2, Server, ShieldCheck, Database, Activity, Zap } from 'lucide-react';
+import { SUPERADMIN_NAV } from '@/lib/constants/nav-config';
+import { SuperAdminPageHeader } from '@/components/superadmin/page-header';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { MonitoringDashboard } from '@/components/superadmin/monitoring-dashboard';
+
+const container = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1
+        }
+    }
+};
+
+const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+};
 
 export default function SuperAdminOverview() {
     const { user } = useAuthStore();
@@ -34,60 +44,34 @@ export default function SuperAdminOverview() {
         fetchStats();
     }, []);
 
-    // SuperAdmin specific data items for the Bento Grid
-    const superAdminQuickStats = [
-      {
-        title: "Total Institutions",
-        value: stats.universities,
-        change: 12, // Mocked for visual impact
-        icon: Building2,
-        changeDescription: "vs last month"
-      },
-      {
-        title: "Active Nodes",
-        value: 142,
-        change: 5.4,
-        icon: Server,
-        changeDescription: "system wide"
-      },
-      {
-        title: "Security Level",
-        value: 99.9,
-        change: 0.1,
-        suffix: "%",
-        icon: ShieldCheck,
-        changeDescription: "Uptime verified"
-      }
-    ];
-
-    const additionalSystemStats = [
-      {
-        title: "Total Faculty",
-        value: 1240,
-        change: 8.2,
-        icon: Users,
-        changeDescription: "Across 42 departments"
-      },
-      {
-        title: "Database Sync",
-        value: 100,
-        suffix: "%",
-        change: 0,
-        icon: Database,
-        changeDescription: "Real-time active"
-      }
-    ];
-
     return (
         <ProtectedRoute allowedRoles={['SUPERADMIN']}>
-            <V2DashboardLayout title={`System Console: ${user?.username || 'Super Admin'}`}>
-                <BentoGridDashboard 
-                  userName={user?.username || 'Super Admin'}
-                  role="SUPERADMIN"
-                  customMetricCards={superAdminQuickStats}
-                />
-            </V2DashboardLayout>
+            <DashboardLayout navItems={SUPERADMIN_NAV} title="Command Center">
+                <div className="flex flex-col gap-10">
+                    <SuperAdminPageHeader
+                        eyebrow="Platform intelligence"
+                        title={`Operational console for ${user?.username || 'Super Admin'}`}
+                        description="Orchestrate institutional partitions, monitor service telemetry, and enforce global security protocols from one unified surface."
+                        icon={<ShieldCheck className="h-8 w-8" />}
+                        stats={[
+                            { label: 'Institutions', value: stats.universities },
+                            { label: 'Active Nodes', value: <span className="flex items-center gap-2">142 <Activity className="h-4 w-4 text-emerald-500 animate-pulse" /></span> },
+                            { label: 'Security Score', value: <span className="text-primary italic">99.9%</span> },
+                        ]}
+                    />
+
+                    <motion.div
+                        variants={container}
+                        initial="hidden"
+                        animate="show"
+                        className="flex flex-col gap-10"
+                    >
+                        <motion.div variants={item}>
+                            <MonitoringDashboard />
+                        </motion.div>
+                    </motion.div>
+                </div>
+            </DashboardLayout>
         </ProtectedRoute>
     );
 }
-

@@ -40,7 +40,12 @@ export const syncMessages = async (req: AuthRequest, res: Response) => {
                         type: msg.type || 'NOTIFICATION',
                         link: msg.link,
                         source: msg.source || 'offline-sync',
-                        createdAt: msg.sent_at ? new Date(msg.sent_at) : (msg.createdAt ? new Date(msg.createdAt) : new Date())
+                        createdAt: (() => {
+                            const dateStr = msg.sent_at || msg.createdAt;
+                            if (!dateStr || dateStr === 'undefined') return new Date();
+                            const parsed = new Date(dateStr);
+                            return isNaN(parsed.getTime()) ? new Date() : parsed;
+                        })()
                     }))
                 });
             } catch (dbError) {
@@ -79,11 +84,18 @@ export const getLatestMessages = async (req: AuthRequest, res: Response) => {
 
         let messages: any[] = [];
         try {
+            // Validate syncTimestamp - prevent string "undefined" causing Invalid Date
+            const parsedDate = (syncTimestamp && syncTimestamp !== 'undefined') 
+                ? new Date(syncTimestamp as string) 
+                : new Date(0);
+            
+            const safeDate = isNaN(parsedDate.getTime()) ? new Date(0) : parsedDate;
+
             messages = await prisma.messageHistory.findMany({
                 where: {
                     userId,
                     createdAt: {
-                        gt: syncTimestamp ? new Date(syncTimestamp as string) : new Date(0)
+                        gt: safeDate
                     }
                 },
                 orderBy: { createdAt: 'asc' }

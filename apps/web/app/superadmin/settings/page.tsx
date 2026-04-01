@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { useState, useEffect, useCallback } from 'react';
 import { Toast, useToast } from '@/components/ui/toast-alert';
 import { api } from '@/lib/api';
+import { SuperAdminPageHeader } from '@/components/superadmin/page-header';
 
 interface SettingsData {
     platformName: string;
@@ -151,7 +152,7 @@ export default function GlobalSettingsPage() {
         platformName: 'Zembaa.AI Scheduler',
         supportEmail: 'support@zembaa.ai',
         maintenanceMode: false,
-        sessionTimeout: 600,
+        sessionTimeout: 10,
         mfaEnabled: false,
         logRetention: '30',
         autoBackups: false,
@@ -235,29 +236,32 @@ export default function GlobalSettingsPage() {
             <DashboardLayout navItems={SUPERADMIN_NAV} title="Global System Settings">
                 <Toast toast={toast} onClose={hideToast} />
 
-                <div className="flex justify-between items-center mb-10">
-                    <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-text-primary glow-sm">System Configuration</h2>
-                        <p className="text-slate-600 dark:text-text-muted mt-1">Manage global parameters, security policies, and platform-wide defaults.</p>
-                    </div>
-                    <Button
-                        onClick={handleSave}
-                        disabled={loading}
-                        className="bg-neon-cyan text-slate-900 font-black shadow-[0_0_20px_rgba(57,193,239,0.4)] hover:shadow-[0_0_35px_rgba(57,193,239,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 h-11 px-6 rounded-xl border border-transparent hover:border-border-hover disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 disabled:shadow-none"
-                    >
-                        {loading ? (
-                            <div className="flex items-center">
-                                <div className="w-4 h-4 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin mr-2" />
-                                Saving Changes...
-                            </div>
-                        ) : (
-                            <div className="flex items-center">
-                                <LuSave className="w-5 h-5 mr-1.5" />
-                                Save All Settings
-                            </div>
-                        )}
-                    </Button>
-                </div>
+                <SuperAdminPageHeader
+                    eyebrow="System policy"
+                    title="Configuration and recovery"
+                    description="Tune platform defaults, recovery routines, and security controls for every institution connected to SmartOS."
+                    icon={<LuShieldCheck className="h-6 w-6" />}
+                    actions={
+                        <Button onClick={handleSave} disabled={loading} className="h-11 rounded-2xl px-5 font-bold">
+                            {loading ? (
+                                <>
+                                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/40 border-t-primary-foreground" />
+                                    Saving...
+                                </>
+                            ) : (
+                                <>
+                                    <LuSave className="mr-2 h-4 w-4" />
+                                    Save changes
+                                </>
+                            )}
+                        </Button>
+                    }
+                    stats={[
+                        { label: 'Timeout', value: `${settings.sessionTimeout}m` },
+                        { label: 'Retention', value: `${settings.logRetention}d` },
+                        { label: 'Maintenance', value: settings.maintenanceMode ? 'On' : 'Off' },
+                    ]}
+                />
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {/* General Platform Settings */}

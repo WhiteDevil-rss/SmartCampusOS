@@ -1,0 +1,39 @@
+-- Add authentication hardening columns and user_sessions table
+
+ALTER TABLE "global_settings"
+ADD COLUMN IF NOT EXISTS "loginAttemptLimit" INTEGER NOT NULL DEFAULT 5,
+ADD COLUMN IF NOT EXISTS "lockoutDurationMinutes" INTEGER NOT NULL DEFAULT 15,
+ADD COLUMN IF NOT EXISTS "sessionWarningMinutes" INTEGER NOT NULL DEFAULT 2,
+ALTER COLUMN "sessionTimeout" SET DEFAULT 10;
+
+ALTER TABLE "users"
+ADD COLUMN IF NOT EXISTS "failedLoginAttempts" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN IF NOT EXISTS "lockedUntil" TIMESTAMPTZ,
+ADD COLUMN IF NOT EXISTS "passwordChangedAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+ADD COLUMN IF NOT EXISTS "sessionVersion" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN IF NOT EXISTS "lastActivityAt" TIMESTAMPTZ;
+
+ALTER TABLE "students"
+ADD COLUMN IF NOT EXISTS "userId" TEXT REFERENCES "users"("id") ON DELETE SET NULL;
+
+CREATE TABLE IF NOT EXISTS "user_sessions" (
+  "id" TEXT PRIMARY KEY,
+  "userId" TEXT NOT NULL REFERENCES "users"("id") ON DELETE CASCADE,
+  "sessionToken" TEXT NOT NULL UNIQUE,
+  "csrfToken" TEXT NOT NULL,
+  "createdAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "expiresAt" TIMESTAMPTZ NOT NULL,
+  "lastActivityAt" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "invalidatedAt" TIMESTAMPTZ,
+  "invalidatedReason" TEXT,
+  "ipAddress" TEXT,
+  "userAgent" TEXT
+);
+
+CREATE INDEX IF NOT EXISTS "user_sessions_userId_idx" ON "user_sessions"("userId");
+CREATE INDEX IF NOT EXISTS "user_sessions_expiresAt_idx" ON "user_sessions"("expiresAt");
+ALTER TABLE "resources"
+ADD COLUMN IF NOT EXISTS "status" TEXT NOT NULL DEFAULT 'AVAILABLE',
+ADD COLUMN IF NOT EXISTS "isResearchOnly" BOOLEAN NOT NULL DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS "specifications" JSON DEFAULT '{}'::JSON,
+ADD COLUMN IF NOT EXISTS "requiresApproval" BOOLEAN NOT NULL DEFAULT FALSE;

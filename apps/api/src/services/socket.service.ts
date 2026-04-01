@@ -52,10 +52,16 @@ class SocketService {
             socket.join(`user-${userId}`);
 
             // Join role-based rooms
-            if (user.role === 'FACULTY') socket.join(`role-faculty`);
-            if (user.role === 'STUDENT') socket.join(`role-student`);
+            const roleRoom = `role-${user.role.toLowerCase()}`;
+            socket.join(roleRoom);
+            console.log(`[Socket.io] User ${userId} joined room: ${roleRoom}`);
 
-            console.log(`[Socket.io] User ${userId} connected to notifications`);
+            if (user.role === 'SUPERADMIN') {
+                socket.join('role-superadmin'); // Legacy fallback
+                console.log(`[Socket.io] User ${userId} joined legacy superadmin room`);
+            }
+
+            console.log(`[Socket.io] User ${userId} connected to notifications with role ${user.role}`);
 
             socket.on('disconnect', () => {
                 const updatedSockets = (this.userSockets.get(userId) || []).filter(id => id !== socket.id);
@@ -96,10 +102,33 @@ class SocketService {
         this.io.of('/notifications').to(`role-${role.toLowerCase()}`).emit(event, data);
     }
 
+    broadcastGlobal(event: string, data: any) {
+        if (!this.io) return;
+        this.io.of('/notifications').emit(event, data);
+    }
+
     // Existing method preserved for compatibility
     broadcastTimetableGenerated(departmentId: string, generationDetails: any) {
         if (!this.io) return;
         this.io.of('/timetables')?.emit('schedule:updated', { departmentId, ...generationDetails });
+    }
+
+    async close() {
+        if (!this.io) return;
+        
+        console.log('[Socket.io] Shutting down socket server...');
+        
+        // Disconnect all clients from all namespaces
+        this.io.of('/').disconnectSockets(true);
+        this.io.of('/notifications').disconnectSockets(true);
+        this.io.of('/timetables').disconnectSockets(true);
+        
+        await new Promise<void>((resolve) => {
+            this.io!.close(() => {
+                console.log('[Socket.io] Socket server closed.');
+                resolve();
+            });
+        });
     }
 }
 

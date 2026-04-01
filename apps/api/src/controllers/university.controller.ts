@@ -3,10 +3,16 @@ import prisma from '../lib/prisma';
 import bcrypt from 'bcrypt';
 import { firebaseAdmin } from '../lib/firebase-admin';
 import { logAction } from '../lib/logger';
+import { cacheService } from '../services/redis.service';
+
 const hashPassword = async (password: string) => bcrypt.hash(password, 12);
 
 export const getAllUniversities = async (req: Request, res: Response) => {
     try {
+        const cacheKey = 'universities:all';
+        const cached = await cacheService.get(cacheKey);
+        if (cached) return res.json(cached);
+
         const universities = await prisma.university.findMany({
             include: {
                 _count: {
@@ -15,7 +21,7 @@ export const getAllUniversities = async (req: Request, res: Response) => {
             }
         });
 
-        // Cache for 60 seconds at browser/CDN level
+        await cacheService.set(cacheKey, universities, 300); // 5 mins cache
         res.json(universities);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch universities' });
@@ -25,11 +31,17 @@ export const getAllUniversities = async (req: Request, res: Response) => {
 export const getUniversityById = async (req: Request, res: Response) => {
     try {
         const id = req.params.id as string;
+        const cacheKey = `university:${id}`;
+        const cached = await cacheService.get(cacheKey);
+        if (cached) return res.json(cached);
+
         const university = await prisma.university.findUnique({
             where: { id },
             include: { departments: true }
         });
         if (!university) return res.status(404).json({ error: 'Not found' });
+
+        await cacheService.set(cacheKey, university, 300);
         res.json(university);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch university' });
@@ -87,6 +99,8 @@ export const createUniversity = async (req: Request, res: Response) => {
         });
 
         res.status(201).json(university);
+        // Clear caches
+        await cacheService.del('universities:all');
     } catch (error: any) {
         console.error("CREATE_UNI_ERROR:", error);
         res.status(500).json({ error: error.message || 'Failed to create university' });
@@ -115,6 +129,9 @@ export const updateUniversity = async (req: Request, res: Response) => {
         });
 
         res.json(university);
+        // Clear caches
+        await cacheService.del('universities:all');
+        await cacheService.del(`university:${id}`);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to update university' });
@@ -158,6 +175,9 @@ export const deleteUniversity = async (req: Request, res: Response) => {
         });
 
         res.status(204).send();
+        // Clear caches
+        await cacheService.del('universities:all');
+        await cacheService.del(`university:${id}`);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to delete university' });

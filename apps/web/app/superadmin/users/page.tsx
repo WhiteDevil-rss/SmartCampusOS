@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { ConfirmDialog, useConfirm } from '@/components/ui/confirm-dialog';
 import { Toast, useToast } from '@/components/ui/toast-alert';
 import { cn } from '@/lib/utils';
+import { SuperAdminPageHeader } from '@/components/superadmin/page-header';
 
 interface User {
     id: string;
@@ -103,8 +104,8 @@ export default function SuperAdminUsers() {
     };
 
     const handleResetPassword = async () => {
-        if (!selectedUserId || newPassword.length < 6) {
-            showToast('error', 'Password must be at least 6 characters.');
+        if (!selectedUserId || newPassword.length < 8) {
+            showToast('error', 'Password must be at least 8 characters.');
             return;
         }
         try {
@@ -126,15 +127,22 @@ export default function SuperAdminUsers() {
                 <ConfirmDialog state={confirmState} onClose={closeConfirm} />
                 <Toast toast={toast} onClose={hideToast} />
 
-                <div className="flex justify-between items-center mb-10">
-                    <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-text-primary glow-sm">Users Directory</h2>
-                        <p className="text-slate-600 dark:text-text-muted mt-1">Manage platform access, roles, and reset credentials securely.</p>
-                    </div>
-                    <Button onClick={() => setIsAddUserOpen(true)} className="bg-neon-cyan text-slate-900 font-bold shadow-[0_0_15px_rgba(57,193,239,0.4)] hover:shadow-[0_0_25px_rgba(57,193,239,0.6)] transition-all">
-                        <LuUserPlus className="w-4 h-4 mr-2" /> Add User
-                    </Button>
-                </div>
+                <SuperAdminPageHeader
+                    eyebrow="Identity fabric"
+                    title="Platform users and access"
+                    description="Control operator access, assign hierarchy, and rotate credentials without leaving the core admin surface."
+                    icon={<LuUsers className="h-6 w-6" />}
+                    actions={
+                        <Button onClick={() => setIsAddUserOpen(true)} className="h-11 rounded-2xl px-5 font-bold">
+                            <LuUserPlus className="mr-2 h-4 w-4" /> Add User
+                        </Button>
+                    }
+                    stats={[
+                        { label: 'Universities', value: universitiesList.length },
+                        { label: 'Role Layers', value: 5 },
+                        { label: 'Access Mode', value: 'Managed' },
+                    ]}
+                />
 
                 <UserListView 
                     key={refreshKey}
@@ -220,6 +228,8 @@ export default function SuperAdminUsers() {
                                         <option className="bg-[#0a0a0c]" value="UNI_ADMIN">University Admin</option>
                                         <option className="bg-[#0a0a0c]" value="DEPT_ADMIN">Department Admin</option>
                                         <option className="bg-[#0a0a0c]" value="FACULTY">Faculty</option>
+                                        <option className="bg-[#0a0a0c]" value="LIBRARIAN">Librarian</option>
+                                        <option className="bg-[#0a0a0c]" value="PLACEMENT_OFFICER">Placement Officer</option>
                                     </select>
                                 </div>
                                 {newUserForm.role !== 'SUPERADMIN' && (
@@ -302,6 +312,8 @@ export default function SuperAdminUsers() {
                                         <option className="bg-[#0a0a0c]" value="UNI_ADMIN">University Admin</option>
                                         <option className="bg-[#0a0a0c]" value="DEPT_ADMIN">Department Admin</option>
                                         <option className="bg-[#0a0a0c]" value="FACULTY">Faculty</option>
+                                        <option className="bg-[#0a0a0c]" value="LIBRARIAN">Librarian</option>
+                                        <option className="bg-[#0a0a0c]" value="PLACEMENT_OFFICER">Placement Officer</option>
                                     </select>
                                 </div>
                             </div>
@@ -347,25 +359,45 @@ export default function SuperAdminUsers() {
 
                 {/* Reset Password Modal */}
                 <Dialog open={isResetPasswordOpen} onOpenChange={setIsResetPasswordOpen}>
-                    <DialogContent className="sm:max-w-md">
-                        <DialogHeader>
-                            <DialogTitle>Force Password Reset</DialogTitle>
+                    <DialogContent className="sm:max-w-md bg-white dark:bg-[#0a0a0c] border border-slate-200 dark:border-border shadow-2xl rounded-[2rem] p-0 overflow-hidden">
+                        <DialogHeader className="p-8 pb-0">
+                            <DialogTitle className="text-2xl font-black text-slate-900 dark:text-text-primary tracking-tight flex items-center gap-3">
+                                <div className="p-2 bg-red-100 dark:bg-red-500/10 rounded-xl text-red-600 dark:text-red-400">
+                                    <LuKeyRound className="h-6 w-6" />
+                                </div>
+                                Credential Rotation
+                            </DialogTitle>
+                            <p className="text-slate-600 dark:text-text-muted font-medium mt-2">Force a new secure access key for this identity.</p>
                         </DialogHeader>
-                        <div className="space-y-4 py-4">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-red-600">New Secure Password</label>
+                        <div className="p-8 space-y-6">
+                            <div className="space-y-3">
+                                <label className="text-[10px] uppercase font-black text-text-secondary tracking-widest ml-1">New Secure Password</label>
                                 <Input
+                                    className="bg-surface border-border focus:border-red-500/50 h-12 rounded-xl text-text-primary font-medium"
                                     type="password"
-                                    placeholder="Enter new 6+ char password"
+                                    placeholder="8+ chars with complexity"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                 />
-                                <p className="text-xs text-text-secondary">This action cannot be undone. The user will be required to use this new credential to authenticate.</p>
+                                <div className="p-4 bg-orange-50 dark:bg-orange-500/5 border border-orange-200 dark:border-orange-500/20 rounded-xl">
+                                    <div className="flex gap-3">
+                                        <LuShieldAlert className="h-5 w-5 text-orange-600 dark:text-orange-400 shrink-0" />
+                                        <p className="text-xs text-orange-800 dark:text-orange-300 leading-relaxed">
+                                            This will immediately invalidate all active sessions for this user. They will be required to authenticate with this new key.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <DialogFooter>
-                            <Button variant="outline" onClick={() => setIsResetPasswordOpen(false)}>Cancel</Button>
-                            <Button variant="outline" className="bg-red-600 text-text-primary hover:bg-red-700 hover:text-text-primary" onClick={handleResetPassword} disabled={newPassword.length < 6}>Reset Credentials</Button>
+                        <DialogFooter className="p-8 bg-surface border-t border-border">
+                            <Button variant="ghost" onClick={() => setIsResetPasswordOpen(false)} className="text-text-muted hover:text-text-primary rounded-xl px-6 h-12 font-bold">Cancel</Button>
+                            <Button 
+                                onClick={handleResetPassword} 
+                                disabled={newPassword.length < 8}
+                                className="bg-red-600 hover:bg-red-700 text-white font-black rounded-xl px-8 h-12 shadow-[0_4px_20px_rgba(220,38,38,0.3)] transition-all"
+                            >
+                                Rotate Credentials
+                            </Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

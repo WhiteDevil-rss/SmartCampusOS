@@ -7,6 +7,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/store/useAuthStore";
+import { api } from "@/lib/api";
 import { 
   Bell, 
   Search, 
@@ -24,6 +25,8 @@ interface V2DashboardLayoutProps {
   children: React.ReactNode;
   title?: string;
 }
+
+const SIDEBAR_COLLAPSE_STORAGE_KEY = "scos_v2_sidebar_collapsed";
 
 const getRoleColor = (role: string) => {
   switch (role?.toUpperCase()) {
@@ -46,10 +49,32 @@ export function V2DashboardLayout({ children, title }: V2DashboardLayoutProps) {
   const router = useRouter();
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = React.useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = React.useState(true);
 
   const roleColor = React.useMemo(() => getRoleColor(user?.role || 'ADMIN'), [user?.role]);
 
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = window.localStorage.getItem(SIDEBAR_COLLAPSE_STORAGE_KEY);
+    if (saved !== null) {
+      setIsSidebarCollapsed(saved === "true");
+    }
+  }, []);
+
+  const toggleSidebar = React.useCallback(() => {
+    setIsSidebarCollapsed((current) => {
+      const next = !current;
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem(SIDEBAR_COLLAPSE_STORAGE_KEY, String(next));
+      }
+      return next;
+    });
+  }, []);
+
   const handleLogout = React.useCallback(async () => {
+    try {
+      await api.post("/auth/logout");
+    } catch {}
     await logout();
     router.push("/login");
   }, [logout, router]);
@@ -102,10 +127,6 @@ export function V2DashboardLayout({ children, title }: V2DashboardLayoutProps) {
               <IndustrialSidebar 
                 userName={user?.username || "Admin"}
                 userRole={user?.role || "ADMIN"}
-                onNavigate={(href) => {
-                  router.push(href);
-                  setIsMobileSidebarOpen(false);
-                }}
                 onLogout={handleLogout}
                 isMobile={true}
                 onCloseMobile={() => setIsMobileSidebarOpen(false)}
@@ -120,13 +141,17 @@ export function V2DashboardLayout({ children, title }: V2DashboardLayoutProps) {
         <IndustrialSidebar 
           userName={user?.username || "Admin"}
           userRole={user?.role || "ADMIN"}
-          onNavigate={(href) => router.push(href)}
           onLogout={handleLogout}
+          isCollapsed={isSidebarCollapsed}
+          onToggleCollapse={toggleSidebar}
         />
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0 relative z-10 overflow-hidden md:ml-20">
+      <main className={cn(
+        "flex-1 flex flex-col min-w-0 relative z-10 overflow-hidden transition-[margin] duration-300",
+        isSidebarCollapsed ? "md:ml-20" : "md:ml-[280px]"
+      )}>
         {/* V2 Header */}
         <header className="h-16 md:h-20 flex items-center justify-between px-4 md:px-8 border-b border-white/5 bg-[#020817]/40 backdrop-blur-xl shrink-0">
           <div className="flex items-center gap-3 md:gap-6">
@@ -234,7 +259,7 @@ export function V2DashboardLayout({ children, title }: V2DashboardLayoutProps) {
       </main>
 
       {/* Grid Overlay */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50 bg-[url('/noise.svg')] mix-blend-overlay" />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import prisma from '../lib/prisma';
 import { AuthRequest } from '../middlewares/auth.middleware';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '../generated/client';
 
 export const getStudentProfile = async (req: AuthRequest, res: Response) => {
     try {

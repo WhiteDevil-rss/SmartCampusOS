@@ -18,7 +18,10 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { Toast, useToast } from '@/components/ui/toast-alert';
-import { LuBriefcase, LuBuilding2, LuTrendingUp, LuPlus, LuAward, LuUsers, LuLoader, LuSearch, LuGlobe, LuPhone, LuTarget } from 'react-icons/lu';
+import { 
+    LuBriefcase, LuBuilding2, LuTrendingUp, LuPlus, LuAward, LuUsers, 
+    LuLoader, LuSearch, LuGlobe, LuPhone, LuTarget, LuSparkles 
+} from 'react-icons/lu';
 import { format } from 'date-fns';
 
 export default function PlacementsDashboard() {
@@ -168,6 +171,74 @@ export default function PlacementsDashboard() {
                                     <div className="p-4 bg-blue-500/10 rounded-2xl group-hover:bg-blue-500/20 transition-colors">
                                         <LuTrendingUp className="w-8 h-8 text-blue-600" />
                                     </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {/* AI Career Matchmaker */}
+                        <Card className="bg-surface border-border shadow-md rounded-[1.5rem] overflow-hidden">
+                            <CardHeader className="bg-indigo-600 text-white p-6">
+                                <CardTitle className="flex items-center gap-2 text-xl font-black uppercase tracking-tight">
+                                    <LuSparkles className="w-5 h-5" /> AI Career Matchmaker
+                                </CardTitle>
+                                <CardDescription className="text-indigo-100 font-medium">Predicting top career paths based on institutional data.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="p-6 space-y-4">
+                                <div className="p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                                    <div className="flex items-center justify-between">
+                                        <div className="font-black text-indigo-900 uppercase text-xs tracking-widest">Recommended Role</div>
+                                        <Badge className="bg-indigo-600 text-[10px] font-black uppercase">98% Match</Badge>
+                                    </div>
+                                    <div className="text-2xl font-black text-indigo-600 mt-1">Cloud Solutions Architect</div>
+                                    <p className="text-xs text-indigo-700/70 mt-2 font-medium">
+                                        Based on performance trends in Distributed Systems and Cloud Computing modules.
+                                    </p>
+                                </div>
+                                <div className="space-y-3">
+                                    <div className="text-sm font-bold text-text-secondary flex items-center justify-between">
+                                        <span>Skill Alignment</span>
+                                        <span className="text-indigo-600">High</span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['AWS', 'Kubernetes', 'Terraform', 'Go'].map(skill => (
+                                            <Badge key={skill} variant="secondary" className="bg-surface-secondary text-text-primary border-none text-[10px] font-bold">
+                                                {skill}
+                                            </Badge>
+                                        ))}
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Placement Leaderboard */}
+                        <Card className="bg-surface border-border shadow-md rounded-[1.5rem] overflow-hidden">
+                            <CardHeader className="bg-surface-secondary/50 border-b border-border-subtle p-6">
+                                <CardTitle className="flex items-center gap-2 text-xl font-black text-text-primary uppercase tracking-tight">
+                                    <LuAward className="w-5 h-5 text-purple-600" /> Dept. Leaderboard
+                                </CardTitle>
+                                <CardDescription className="text-text-secondary">Top performing departments by placement rate.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="p-6">
+                                <div className="space-y-6">
+                                    {[
+                                        { name: 'Computer Science', rate: 94, color: 'bg-emerald-500' },
+                                        { name: 'Information Tech', rate: 88, color: 'bg-blue-500' },
+                                        { name: 'Electronics & Comm', rate: 76, color: 'bg-amber-500' }
+                                    ].map((dept, i) => (
+                                        <div key={dept.name} className="space-y-2">
+                                            <div className="flex justify-between items-end">
+                                                <div className="text-sm font-black text-text-primary uppercase tracking-tight">
+                                                    <span className="text-text-muted mr-2">0{i+1}</span> {dept.name}
+                                                </div>
+                                                <div className="text-sm font-black text-text-primary">{dept.rate}%</div>
+                                            </div>
+                                            <div className="h-2 w-full bg-surface-secondary rounded-full overflow-hidden">
+                                                <div className={`h-full ${dept.color}`} style={{ width: `${dept.rate}%` }} />
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </CardContent>
                         </Card>

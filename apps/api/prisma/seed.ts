@@ -1,4 +1,4 @@
-import { PrismaClient } from '../src/generated/client';
+import { PrismaClient, Prisma } from '../src/generated/client';
 import bcrypt from 'bcrypt';
 import fs from 'fs';
 import path from 'path';
@@ -6,6 +6,27 @@ import crypto from 'crypto';
 import { firebaseAdmin } from '../src/lib/firebase-admin';
 
 const prisma = new PrismaClient();
+
+async function tableExists(tableName: string) {
+    const result = await prisma.$queryRaw<Array<{ name: string | null }>>(
+        Prisma.sql`SELECT to_regclass(${tableName})::text AS name`
+    );
+    return Boolean(result[0]?.name);
+}
+
+async function seedIfTableExists<T>(
+    tableName: string,
+    message: string,
+    fn: () => Promise<T>
+) {
+    const available = await tableExists(tableName);
+    if (!available) {
+        console.log(`Skipping ${message} because table "${tableName}" is not available in this database.`);
+        return null;
+    }
+
+    return fn();
+}
 
 async function syncFirebaseUser(email: string, password: string, displayName: string): Promise<string> {
     try {
@@ -41,13 +62,27 @@ async function main() {
     console.log('Initializing Global Settings...');
     await prisma.globalSettings.upsert({
         where: { id: 'system-config' },
-        update: {},
+        update: {
+            platformName: 'SmartCampus OS',
+            supportEmail: 'support@smartcampus-os.tech',
+            maintenanceMode: false,
+            sessionTimeout: 10,
+            sessionWarningMinutes: 2,
+            loginAttemptLimit: 5,
+            lockoutDurationMinutes: 15,
+            mfaEnabled: false,
+            logRetention: '30',
+            autoBackups: false,
+        },
         create: {
             id: 'system-config',
             platformName: 'SmartCampus OS',
             supportEmail: 'support@smartcampus-os.tech',
             maintenanceMode: false,
-            sessionTimeout: 600,
+            sessionTimeout: 10,
+            sessionWarningMinutes: 2,
+            loginAttemptLimit: 5,
+            lockoutDurationMinutes: 15,
             mfaEnabled: false,
             logRetention: '30',
             autoBackups: false,
@@ -149,6 +184,13 @@ async function main() {
     // 5. Resources
     console.log(`Seeding ${data.resources.length} Resources...`);
     for (const res of data.resources) {
+        const defaults = {
+            status: res.status ?? 'AVAILABLE',
+            isResearchOnly: res.isResearchOnly ?? false,
+            specifications: res.specifications ?? {},
+            requiresApproval: res.requiresApproval ?? false,
+        };
+
         await prisma.resource.upsert({
             where: { id: res.id },
             update: {
@@ -158,6 +200,7 @@ async function main() {
                 floor: res.floor,
                 building: res.building,
                 universityId: res.universityId,
+                ...defaults,
             },
             create: {
                 id: res.id,
@@ -167,6 +210,7 @@ async function main() {
                 floor: res.floor,
                 building: res.building,
                 universityId: res.universityId,
+                ...defaults,
             },
         });
     }
@@ -335,14 +379,66 @@ async function main() {
         }
     }
 
+    const ensureStudentUser = async (student: any) => {
+        const targetUserId = student.userId || student.id;
+        const userName = `${student.name.split(' ')[0].toLowerCase()}_${targetUserId.slice(0, 6)}`;
+        let email = student.email || `${userName}@student.example.edu`;
+        if (student.email) {
+            const existing = await prisma.user.findFirst({ where: { email: student.email } });
+            if (!existing) {
+                // use given email
+            } else if (existing.id !== targetUserId) {
+                email = `${userName}+${targetUserId.slice(0, 4)}@student.example.edu`;
+            }
+        }
+        const uniqueEmail = student.email ? email : `${userName}+${targetUserId.slice(0, 4)}@student.example.edu`;
+        email = uniqueEmail;
+        await prisma.user.upsert({
+            where: { id: targetUserId },
+            update: {
+                username: userName,
+                email,
+                passwordHash,
+                role: 'STUDENT',
+                universityId: student.universityId,
+                entityId: student.departmentId,
+                isActive: true,
+            },
+            create: {
+                id: targetUserId,
+                username: userName,
+                email,
+                passwordHash,
+                role: 'STUDENT',
+                universityId: student.universityId,
+                entityId: student.departmentId,
+                isActive: true,
+            },
+        });
+        return targetUserId;
+    };
+
     // 14. Students
     if (data.students) {
         console.log(`Seeding ${data.students.length} Students...`);
         for (const st of data.students) {
+            const resolvedUserId = await ensureStudentUser(st);
+            const basePayload = {
+                enrollmentNo: st.enrollmentNo,
+                name: st.name,
+                email: st.email,
+                phone: st.phone,
+                batchId: st.batchId,
+                programId: st.programId,
+                admissionYear: st.admissionYear,
+                universityId: st.universityId,
+                departmentId: st.departmentId,
+                userId: resolvedUserId,
+            };
             await prisma.student.upsert({
                 where: { id: st.id },
-                update: { enrollmentNo: st.enrollmentNo, name: st.name, email: st.email, phone: st.phone, batchId: st.batchId, programId: st.programId, admissionYear: st.admissionYear, universityId: st.universityId, departmentId: st.departmentId },
-                create: { id: st.id, enrollmentNo: st.enrollmentNo, name: st.name, email: st.email, phone: st.phone, batchId: st.batchId, programId: st.programId, admissionYear: st.admissionYear, universityId: st.universityId, departmentId: st.departmentId },
+                update: basePayload,
+                create: { id: st.id, ...basePayload },
             });
         }
     }
@@ -420,212 +516,215 @@ async function main() {
     }
 
     // 20.5 Seed Demo Results & Admissions for SaaS Verify Page Testing
-    console.log(`Seeding Results & Verification Hashes...`);
-    const demoStudents = data.students ? data.students.slice(0, 5) : [];
-    
-    // Fixed SGPA/CGPA for the first 5 students to ensure deterministic hashes for README
-    const deterministicResults = [
-        { sgpa: 8.50, cgpa: 8.25 },
-        { sgpa: 9.20, cgpa: 9.10 },
-        { sgpa: 7.80, cgpa: 7.95 },
-        { sgpa: 8.85, cgpa: 8.70 },
-        { sgpa: 9.50, cgpa: 9.45 }
-    ];
+    await seedIfTableExists('results', 'demo results and verification hashes', async () => {
+        console.log('Seeding Results & Verification Hashes...');
+        const demoStudents = data.students ? data.students.slice(0, 5) : [];
+        const admissionsAvailable = await tableExists('admission_applications');
+        const subjectResultsAvailable = await tableExists('subject_results');
 
-    for (let i = 0; i < demoStudents.length; i++) {
-        const student = demoStudents[i];
-        // --- 1. Mock Admission Application ---
-        const applicationHashString = `${student.enrollmentNo}:${student.email}:${student.id}:ADMIT_SECURE`;
-        const admitHash = crypto.createHash('sha256').update(applicationHashString).digest('hex');
-        
-        await prisma.admissionApplication.upsert({
-            where: { id: student.id },
-            update: {
-                applicationId: `ADM-2025-${student.id.substring(0, 8).toUpperCase()}`,
-                universityId: student.universityId,
-                departmentId: student.departmentId,
-                programId: student.programId,
-                applicantName: student.name,
-                email: student.email,
-                phone: student.phone || '9999999999',
-                documents: {},
-                status: 'APPROVED',
-                remarks: 'Verified by SmartCampus OS Seed',
-            },
-            create: {
-                id: student.id,
-                applicationId: `ADM-2025-${student.id.substring(0, 8).toUpperCase()}`,
-                universityId: student.universityId,
-                departmentId: student.departmentId,
-                programId: student.programId,
-                applicantName: student.name,
-                email: student.email,
-                phone: student.phone || '9999999999',
-                documents: {},
-                status: 'APPROVED',
-                remarks: 'Verified by SmartCampus OS Seed',
+        // Fixed SGPA/CGPA for the first 5 students to ensure deterministic hashes for docs and QA
+        const deterministicResults = [
+            { sgpa: 8.50, cgpa: 8.25 },
+            { sgpa: 9.20, cgpa: 9.10 },
+            { sgpa: 7.80, cgpa: 7.95 },
+            { sgpa: 8.85, cgpa: 8.70 },
+            { sgpa: 9.50, cgpa: 9.45 }
+        ];
+
+        for (let i = 0; i < demoStudents.length; i++) {
+            const student = demoStudents[i];
+            const deterministic = deterministicResults[i] || deterministicResults[deterministicResults.length - 1];
+
+            const applicationHashString = `${student.enrollmentNo}:${student.email}:${student.id}:ADMIT_SECURE`;
+            const admitHash = crypto.createHash('sha256').update(applicationHashString).digest('hex');
+
+            if (admissionsAvailable) {
+                await prisma.admissionApplication.upsert({
+                    where: { id: student.id },
+                    update: {
+                        applicationId: `ADM-2025-${student.id.substring(0, 8).toUpperCase()}`,
+                        universityId: student.universityId,
+                        departmentId: student.departmentId,
+                        programId: student.programId,
+                        applicantName: student.name,
+                        email: student.email,
+                        phone: student.phone || '9999999999',
+                        documents: {},
+                        status: 'APPROVED',
+                        remarks: 'Verified by SmartCampus OS Seed',
+                    },
+                    create: {
+                        id: student.id,
+                        applicationId: `ADM-2025-${student.id.substring(0, 8).toUpperCase()}`,
+                        universityId: student.universityId,
+                        departmentId: student.departmentId,
+                        programId: student.programId,
+                        applicantName: student.name,
+                        email: student.email,
+                        phone: student.phone || '9999999999',
+                        documents: {},
+                        status: 'APPROVED',
+                        remarks: 'Verified by SmartCampus OS Seed',
+                    }
+                });
             }
-        });
 
-        console.log(`\n🔑 Demo Admission Verify Hash for ${student.name} (${student.enrollmentNo}):\n   ${admitHash}`);
+            console.log(`\n🔑 Demo Admission Verify Hash for ${student.name} (${student.enrollmentNo}):\n   ${admitHash}`);
 
-        // --- 2. Mock Semester Result ---
-        const semester = 2; // Fixed to semester 2 for demo
-        // Get 5 courses for this program to seed SubjectResults
-        const programCourses = data.courses.slice(0, 5);
-        let totalCredits = 0;
-        let earnedPoints = 0;
-        let totalMarksObtained = 0;
-        
-        const subjectResultsData = [];
-        for (const course of programCourses) {
-            const external = Math.floor(Math.random() * (70 - 45) + 50); // Ensuring mostly passing marks
-            const internal = Math.floor(Math.random() * (25 - 15) + 15);
-            const total = external + internal;
-            
-            let grade = 'F';
-            let points = 0;
-            if (total >= 90) { grade = 'O'; points = 10; }
-            else if (total >= 80) { grade = 'A+'; points = 9; }
-            else if (total >= 70) { grade = 'A'; points = 8; }
-            else if (total >= 60) { grade = 'B+'; points = 7; }
-            else if (total >= 50) { grade = 'B'; points = 6; }
-            else if (total >= 45) { grade = 'C'; points = 5; }
-            else if (total >= 40) { grade = 'P'; points = 4; }
+            const semester = 2;
+            const programCourses = data.courses
+                .filter((course: any) => course.program === student.programId || course.semester === semester)
+                .slice(0, 5);
+            const fallbackCourses = data.courses.slice(0, 5);
+            const selectedCourses = programCourses.length > 0 ? programCourses : fallbackCourses;
 
-            totalCredits += course.credits;
-            earnedPoints += (points * course.credits);
-            totalMarksObtained += total;
-
-            subjectResultsData.push({
-                courseId: course.id,
-                internalMarks: internal,
-                externalMarks: external,
-                totalMarks: total,
-                grade: grade,
-                creditsEarned: course.credits
+            const subjectResultsData = selectedCourses.map((course: any, index: number) => {
+                const gradeTemplates = [
+                    { internal: 24, external: 62, total: 86, grade: 'A+', points: 9 },
+                    { internal: 22, external: 58, total: 80, grade: 'A+', points: 9 },
+                    { internal: 21, external: 54, total: 75, grade: 'A', points: 8 },
+                    { internal: 20, external: 49, total: 69, grade: 'B+', points: 7 },
+                    { internal: 19, external: 46, total: 65, grade: 'B+', points: 7 },
+                ];
+                const template = gradeTemplates[index % gradeTemplates.length];
+                return {
+                    courseId: course.id,
+                    internalMarks: template.internal,
+                    externalMarks: template.external,
+                    totalMarks: template.total,
+                    grade: template.grade,
+                    creditsEarned: course.credits,
+                    points: template.points,
+                };
             });
-        }
 
-        const sgpa = earnedPoints / totalCredits;
-        const cgpa = sgpa; // For demo purposes, set CGPA = SGPA if only one sem exists, or slightly lower/higher
-        
-        // Use toFixed(2) for resultHash string as standardized in previous step
-        const resultString = `${student.enrollmentNo}:${sgpa.toFixed(2)}:${cgpa.toFixed(2)}`;
-        const resultHash = crypto.createHash('sha256').update(resultString).digest('hex');
-        const txHash = `0x${crypto.createHash('sha256').update(student.enrollmentNo + '_TX_SECURE').digest('hex')}`;
+            const totalCredits = subjectResultsData.reduce((sum: number, sr: any) => sum + sr.creditsEarned, 0);
+            const derivedSgpa = totalCredits > 0
+                ? subjectResultsData.reduce((sum: number, sr: any) => sum + (sr.points * sr.creditsEarned), 0) / totalCredits
+                : deterministic.sgpa;
+            const sgpa = deterministic.sgpa;
+            const cgpa = deterministic.cgpa;
 
-        const resultRecord = await prisma.result.upsert({
-            where: { id: student.id + '-res' },
-            update: {
-                studentId: student.id,
-                programId: student.programId,
-                semester: semester,
-                academicYear: '2025-26',
-                sgpa: sgpa,
-                cgpa: cgpa,
-                status: 'PASS',
-                resultHash: resultHash,
-                blockchainTxHash: txHash,
-                publishedAt: new Date()
-            },
-            create: {
-                id: student.id + '-res',
-                studentId: student.id,
-                programId: student.programId,
-                semester: semester,
-                academicYear: '2025-26',
-                sgpa: sgpa,
-                cgpa: cgpa,
-                status: 'PASS',
-                resultHash: resultHash,
-                blockchainTxHash: txHash,
-                publishedAt: new Date()
-            }
-        });
+            const resultString = `${student.enrollmentNo}:${sgpa.toFixed(2)}:${cgpa.toFixed(2)}`;
+            const resultHash = crypto.createHash('sha256').update(resultString).digest('hex');
+            const txHash = `0x${crypto.createHash('sha256').update(student.enrollmentNo + '_TX_SECURE').digest('hex')}`;
 
-        for (const sr of subjectResultsData) {
-            await prisma.subjectResult.upsert({
-                where: { resultId_courseId: { resultId: resultRecord.id, courseId: sr.courseId } },
+            const resultRecord = await prisma.result.upsert({
+                where: { id: student.id + '-res' },
                 update: {
-                    internalMarks: sr.internalMarks,
-                    externalMarks: sr.externalMarks,
-                    totalMarks: sr.totalMarks,
-                    grade: sr.grade,
-                    creditsEarned: sr.creditsEarned
+                    studentId: student.id,
+                    programId: student.programId,
+                    semester,
+                    academicYear: '2025-26',
+                    sgpa,
+                    cgpa,
+                    status: 'PASS',
+                    resultHash,
+                    blockchainTxHash: txHash,
+                    publishedAt: new Date()
                 },
                 create: {
-                    resultId: resultRecord.id,
-                    courseId: sr.courseId,
-                    internalMarks: sr.internalMarks,
-                    externalMarks: sr.externalMarks,
-                    totalMarks: sr.totalMarks,
-                    grade: sr.grade,
-                    creditsEarned: sr.creditsEarned
+                    id: student.id + '-res',
+                    studentId: student.id,
+                    programId: student.programId,
+                    semester,
+                    academicYear: '2025-26',
+                    sgpa,
+                    cgpa,
+                    status: 'PASS',
+                    resultHash,
+                    blockchainTxHash: txHash,
+                    publishedAt: new Date()
                 }
             });
+
+            if (subjectResultsAvailable) {
+                for (const sr of subjectResultsData) {
+                    await prisma.subjectResult.upsert({
+                        where: { resultId_courseId: { resultId: resultRecord.id, courseId: sr.courseId } },
+                        update: {
+                            internalMarks: sr.internalMarks,
+                            externalMarks: sr.externalMarks,
+                            totalMarks: sr.totalMarks,
+                            grade: sr.grade,
+                            creditsEarned: sr.creditsEarned
+                        },
+                        create: {
+                            resultId: resultRecord.id,
+                            courseId: sr.courseId,
+                            internalMarks: sr.internalMarks,
+                            externalMarks: sr.externalMarks,
+                            totalMarks: sr.totalMarks,
+                            grade: sr.grade,
+                            creditsEarned: sr.creditsEarned
+                        }
+                    });
+                }
+            }
+
+            console.log(`🎓 Demo Result for ${student.name} (${student.enrollmentNo}):`);
+            console.log(`   SGPA: ${sgpa.toFixed(2)}, CGPA: ${cgpa.toFixed(2)}${Math.abs(derivedSgpa - sgpa) > 0.01 ? ` (normalized from ${derivedSgpa.toFixed(2)})` : ''}`);
+            console.log(`   Hash: ${resultHash}`);
+            console.log(`   Table Row: | **${student.name}** | \`${student.enrollmentNo}\` | \`${admitHash}\` | \`${resultHash}\` |`);
+            console.log(`   Blockchain TX: ${txHash}\n`);
         }
-        console.log(`🎓 Demo Result for ${student.name} (${student.enrollmentNo}):`);
-        console.log(`   SGPA: ${sgpa.toFixed(2)}, CGPA: ${cgpa.toFixed(2)}`);
-        console.log(`   Hash: ${resultHash}`);
-        console.log(`   Table Row: | **${student.name}** | \`${student.enrollmentNo}\` | \`${admitHash}\` | \`${resultHash}\` |`);
-        console.log(`   Blockchain TX: ${txHash}\n`);
-    }
+    });
 
     // 21. Permissions (SuperAdmin)
     const superAdminId = '9be572c4-1fc9-48c3-9b30-631316853799';
     const modules = ['USERS', 'UNIVERSITIES', 'DEPARTMENTS', 'COURSES', 'STUDENTS', 'FACULTY', 'INQUIRIES', 'SUBSCRIBERS', 'NOTIFICATIONS', 'SETTINGS'];
 
-    console.log('Seeding SuperAdmin Permissions...');
-    for (const module of modules) {
+    await seedIfTableExists('permissions', 'permission defaults', async () => {
+        console.log('Seeding SuperAdmin Permissions...');
+        for (const module of modules) {
+            await prisma.permission.upsert({
+                where: {
+                    id: `perm-superadmin-${module.toLowerCase()}-all`,
+                },
+                update: {
+                    allowed: true,
+                    action: 'ALL',
+                },
+                create: {
+                    id: `perm-superadmin-${module.toLowerCase()}-all`,
+                    userId: superAdminId,
+                    roleId: 'SUPERADMIN',
+                    module: module,
+                    action: 'ALL',
+                    allowed: true,
+                },
+            });
+        }
+
+        console.log('Seeding UNI_ADMIN Permissions...');
         await prisma.permission.upsert({
-            where: {
-                // Since we don't have a unique constraint on (userId, module, action) yet in schema
-                // we'll use a find-then-create approach or just use a stable ID for seeding
-                id: `perm-superadmin-${module.toLowerCase()}-all`,
-            },
-            update: {
-                allowed: true,
-                action: 'ALL',
-            },
+            where: { id: 'perm-uniadmin-notifications-write' },
+            update: { allowed: true, action: 'WRITE' },
             create: {
-                id: `perm-superadmin-${module.toLowerCase()}-all`,
-                userId: superAdminId,
-                roleId: 'SUPERADMIN',
-                module: module,
-                action: 'ALL',
+                id: 'perm-uniadmin-notifications-write',
+                roleId: 'UNI_ADMIN',
+                module: 'NOTIFICATIONS',
+                action: 'WRITE',
                 allowed: true,
             },
         });
-    }
 
-    console.log('Seeding UNI_ADMIN Permissions...');
-    await prisma.permission.upsert({
-        where: { id: 'perm-uniadmin-notifications-write' },
-        update: { allowed: true, action: 'WRITE' },
-        create: {
-            id: 'perm-uniadmin-notifications-write',
-            roleId: 'UNI_ADMIN',
-            module: 'NOTIFICATIONS',
-            action: 'WRITE',
-            allowed: true,
-        },
-    });
-
-    console.log('Seeding DEPT_ADMIN Permissions...');
-    await prisma.permission.upsert({
-        where: { id: 'perm-deptadmin-notifications-write' },
-        update: { allowed: true, action: 'WRITE' },
-        create: {
-            id: 'perm-deptadmin-notifications-write',
-            roleId: 'DEPT_ADMIN',
-            module: 'NOTIFICATIONS',
-            action: 'WRITE',
-            allowed: true,
-        },
+        console.log('Seeding DEPT_ADMIN Permissions...');
+        await prisma.permission.upsert({
+            where: { id: 'perm-deptadmin-notifications-write' },
+            update: { allowed: true, action: 'WRITE' },
+            create: {
+                id: 'perm-deptadmin-notifications-write',
+                roleId: 'DEPT_ADMIN',
+                module: 'NOTIFICATIONS',
+                action: 'WRITE',
+                allowed: true,
+            },
+        });
     });
 
     // 22. Job Postings — Hiring System Seed Data
+    await seedIfTableExists('job_postings', 'job postings and demo applications', async () => {
     console.log('Seeding Job Postings & Demo Applications...');
     
     const demoJobs = [
@@ -643,33 +742,33 @@ async function main() {
         { id: 'job-dept-003', title: 'Research Intern – AI/ML',   description: 'Collaborate with faculty on applied AI/ML research projects in academic resource management and intelligent scheduling systems.', type: 'INTERNSHIP', location: 'Remote / Hybrid', panelType: 'DEPARTMENT', panelId: null, departmentName: 'Computer Science', universityName: 'Veer Narmad South Gujarat University' },
     ];
 
-    for (const job of demoJobs) {
-        await prisma.jobPosting.upsert({
-            where: { id: job.id },
-            update: {
-                title: job.title,
-                description: job.description,
-                type: job.type,
-                location: job.location,
-                panelType: job.panelType,
-                departmentName: job.departmentName,
-                universityName: job.universityName,
-                isActive: true,
-            },
-            create: {
-                id: job.id,
-                title: job.title,
-                description: job.description,
-                type: job.type,
-                location: job.location,
-                panelType: job.panelType,
-                panelId: job.panelId,
-                departmentName: job.departmentName,
-                universityName: job.universityName,
-                isActive: true,
-            },
-        });
-    }
+        for (const job of demoJobs) {
+            await prisma.jobPosting.upsert({
+                where: { id: job.id },
+                update: {
+                    title: job.title,
+                    description: job.description,
+                    type: job.type,
+                    location: job.location,
+                    panelType: job.panelType,
+                    departmentName: job.departmentName,
+                    universityName: job.universityName,
+                    isActive: true,
+                },
+                create: {
+                    id: job.id,
+                    title: job.title,
+                    description: job.description,
+                    type: job.type,
+                    location: job.location,
+                    panelType: job.panelType,
+                    panelId: job.panelId,
+                    departmentName: job.departmentName,
+                    universityName: job.universityName,
+                    isActive: true,
+                },
+            });
+        }
 
     // Demo Applications for the first 3 jobs
     const demoApplicants = [
@@ -678,28 +777,31 @@ async function main() {
         { name: 'Rahul Desai',    email: 'rahul.desai@example.com',  mobile: '9988776655', jobId: 'job-dept-001' },
     ];
 
-    for (const applicant of demoApplicants) {
-        await prisma.jobApplication.upsert({
-            where: { id: `app-${applicant.jobId}` },
-            update: {
-                applicantName: applicant.name,
-                email: applicant.email,
-                mobile: applicant.mobile,
-                status: 'PENDING',
-            },
-            create: {
-                id: `app-${applicant.jobId}`,
-                jobId: applicant.jobId,
-                applicantName: applicant.name,
-                email: applicant.email,
-                mobile: applicant.mobile,
-                coverLetter: 'I am excited to apply for this position at SmartCampus OS. I believe my skills and experience make me a strong candidate.',
-                status: 'PENDING',
+        if (await tableExists('job_applications')) {
+            for (const applicant of demoApplicants) {
+                await prisma.jobApplication.upsert({
+                    where: { id: `app-${applicant.jobId}` },
+                    update: {
+                        applicantName: applicant.name,
+                        email: applicant.email,
+                        mobile: applicant.mobile,
+                        status: 'PENDING',
+                    },
+                    create: {
+                        id: `app-${applicant.jobId}`,
+                        jobId: applicant.jobId,
+                        applicantName: applicant.name,
+                        email: applicant.email,
+                        mobile: applicant.mobile,
+                        coverLetter: 'I am excited to apply for this position at SmartCampus OS. I believe my skills and experience make me a strong candidate.',
+                        status: 'PENDING',
+                    }
+                });
             }
-        });
-    }
+        }
 
-    console.log(`✅ Seeded ${demoJobs.length} jobs and ${demoApplicants.length} demo applications.`);
+        console.log(`✅ Seeded ${demoJobs.length} jobs and ${demoApplicants.length} demo applications.`);
+    });
     
     console.log('Seeding Complete! 🎉');
 }

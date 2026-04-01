@@ -5,6 +5,8 @@ import { LandingNav } from '@/components/landing-nav';
 import { LandingFooter } from '@/components/landing-footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useAuthStore } from '@/lib/store/useAuthStore';
+import { getFrontendRoleHint, getRoleHomePath } from '@/lib/api';
 import { 
     ShieldCheck, 
     Zap, 
@@ -25,7 +27,9 @@ import { GlassCard, GlassCardContent } from "@/components/ui/glass-card";
 import { cn } from '@/lib/utils';
 
 export default function SolutionsPage() {
+    const { user } = useAuthStore();
     const [activeTab, setActiveTab] = useState<'scheduling' | 'admissions' | 'records'>('scheduling');
+    const authEntryPath = getRoleHomePath(user?.role || getFrontendRoleHint());
 
     const tabs = [
         { 
@@ -238,12 +242,12 @@ export default function SolutionsPage() {
                                 The future of academic management is modular, secure, and ready for your institution today.
                             </p>
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                                <Link
-                                    href="/login?tab=register"
+                                <a
+                                    href={authEntryPath}
                                     className="w-full sm:w-auto px-12 py-5 rounded-[1.5rem] bg-primary text-white font-black text-xl hover:scale-105 transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-3"
                                 >
                                     Get Started <ArrowRight className="w-6 h-6" />
-                                </Link>
+                                </a>
                                 <Link
                                     href="/contact"
                                     className="w-full sm:w-auto px-12 py-5 rounded-[1.5rem] border border-slate-200 dark:border-white/10 bg-white/5 font-black text-xl hover:bg-white/10 transition-all text-slate-700 dark:text-slate-300"
